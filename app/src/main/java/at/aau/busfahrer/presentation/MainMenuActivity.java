@@ -59,6 +59,12 @@ public class MainMenuActivity extends AppCompatActivity {
         Intent i = new Intent(MainMenuActivity.this, EditPlayerActivity.class);
         startActivity(i);
     }
+    // click listener PlayerEdit button
+    public void onClickJoinServer(View v){
+        Intent i = new Intent(MainMenuActivity.this, JoinServerActivity.class);
+        startActivity(i);
+    }
+
 
     // remove status bar on top, fullscreen mode.
     private void hideAppTitleBar(){

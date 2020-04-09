@@ -31,6 +31,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:text="Join Server"
+        android:onClick="onClickJoinServer"
         app:layout_constraintEnd_toEndOf="@+id/start_server"
         app:layout_constraintStart_toStartOf="@+id/start_server"
         app:layout_constraintTop_toBottomOf="@+id/start_server" />
