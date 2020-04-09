@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 public class StartServerActivity extends AppCompatActivity {
 
+    EditText name;
     Spinner spinner;
-    Integer spieleranzahl;
+    Integer playercount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +23,7 @@ public class StartServerActivity extends AppCompatActivity {
         hideAppTitleBar();
         setContentView(R.layout.activity_start_server);
         initSpinnerDropDown();
+        name = findViewById(R.id.server_name);
     }
 
     // ui drop down, array values in res@strings
@@ -34,7 +37,7 @@ public class StartServerActivity extends AppCompatActivity {
 
     // button start
     public void startServer(View v){
-        spieleranzahl = Integer.valueOf(spinner.getSelectedItem().toString());
+        playercount = Integer.valueOf(spinner.getSelectedItem().toString());
         Intent i = new Intent(StartServerActivity.this, SelectCheatsActivity.class);
         startActivity(i);
     }
