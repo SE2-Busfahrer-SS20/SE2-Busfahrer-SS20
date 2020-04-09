@@ -20,7 +20,7 @@ public class DeckImpl implements Deck {
     }
 
     public CardImpl drawCard( ) {
-        //Entfernen der ersten Karte
+        //Ausgeben und entfernen der ersten Karte aus dem Deck
         return cards.remove( 0 );
     }
 
