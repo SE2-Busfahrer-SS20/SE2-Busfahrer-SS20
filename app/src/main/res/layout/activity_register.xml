@@ -37,6 +37,7 @@
         android:layout_height="45dp"
         android:layout_marginBottom="28dp"
         android:text="ERSTELLEN"
+        android:onClick="onClickCreate"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/RegisterEditPlayerName"
         app:layout_constraintStart_toStartOf="@+id/RegisterEditPlayerName" />
