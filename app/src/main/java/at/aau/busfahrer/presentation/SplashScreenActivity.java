@@ -1,7 +1,10 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
 import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,10 +22,38 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_splash_screen);
+        handleScreenSplash();
     }
 
+    // checks if a player is already known
+    // TODO: replace with database
+    public boolean isPlayerRegistered(){
+        SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
+        if((sharedPreferences.getString("Player",null) == null)){
+            return false;
+        }else{
+            return true;
+        }
+    }
 
-
+    // showing the Logo for 2 sec AND check if existing player
+    public void handleScreenSplash(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent i;
+                if (!isPlayerRegistered()) {
+                    i = new Intent(SplashScreenActivity.this,
+                            RegisterActivity.class);
+                }else {
+                    i = new Intent(SplashScreenActivity.this,
+                            MainMenuActivity.class);
+                }
+                startActivity(i);
+                finish();
+            }
+        }, 2000);
+    }
 
     // hide title bar and status bar for fullscreen mode
     private void hideAppTitleBar(){
@@ -39,9 +70,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         // notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
-
-
-
 
 
 }
