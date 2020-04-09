@@ -11,8 +11,6 @@
         android:theme="@style/menu_AppTheme"
         >
         <activity android:name=".presentation.GuessActivity" />
-        <activity android:name=".MainActivity">
-        </activity>
         <activity android:name=".presentation.RegisterActivity"
             android:screenOrientation="sensorLandscape"></activity>
         <activity android:name=".presentation.EditPlayerActivity"
