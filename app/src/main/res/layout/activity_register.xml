@@ -19,10 +19,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/RegisterHeadTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/headerRegisterPlayer" />
 
     <TextView
-        android:id="@+id/RegisterHeadTextView"
+        android:id="@+id/headerRegisterPlayer"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:text="Spieler erstellen"

@@ -6,4 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".presentation.StartServerActivity">
 
+    <TextView
+        android:id="@+id/headerStartServer"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:text="Server starten"
+        android:theme="@style/mainMenuHeadTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
