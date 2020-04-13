@@ -25,6 +25,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
 
     public GameServer() {
         server = new NetworkServerKryo();
+        registerClass(TextMessage.class);
 
     }
 

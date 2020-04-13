@@ -14,17 +14,13 @@ import shared.networking.dto.BaseMessage;
 import shared.model.Player;
 
 public class NetworkServerKryo implements NetworkServer, KryoNetComponent {
+
     private Server server;
-    protected List<Player> playerList;
     protected Callback<BaseMessage> messageCallback;
 
-   // protected Game game;
 
     public NetworkServerKryo() {
         server = new Server();
-        // game = new GameImpl(1);
-        playerList = new ArrayList<>();
-        registerClass(TextMessage.class);
     }
 
     public void registerClass(Class c) {

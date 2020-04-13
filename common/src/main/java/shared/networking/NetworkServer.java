@@ -3,9 +3,11 @@ package shared.networking;
 import java.io.IOException;
 
 import shared.networking.dto.BaseMessage;
+import shared.networking.kryonet.KryoNetComponent;
+
 import com.esotericsoftware.kryonet.Listener;
 
-public interface NetworkServer {
+public interface NetworkServer extends KryoNetComponent {
 
     /**
      * Starts the Server.
