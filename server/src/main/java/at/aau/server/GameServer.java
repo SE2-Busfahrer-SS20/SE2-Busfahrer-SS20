@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import at.aau.server.service.GameService;
 import at.aau.server.service.impl.GameServiceImpl;
+import shared.model.GameState;
 import shared.model.impl.PlayerImpl;
 import shared.networking.NetworkServer;
 import shared.networking.dto.BaseMessage;
@@ -57,5 +58,34 @@ public class GameServer extends NetworkServerKryo implements Runnable{
         thread = new Thread(this);
         thread.start();
     }
+    private void play(GameState state) {
+        switch (state) {
+            case INIT:
+                if (this.gameService.gameReady())
+                    startGame();
+                break;
+            case STARTED:
+                // TODO: implement.
+                break;
+            case LAB1:
+                // TODO: implement.
+                break;
+            case LAB2:
+                // TODO: implement.
+                break;
+            case LAB3:
+                // TODO: implement.
+                break;
+            case ENDED:
+                gameService = null;
+                break;
+        }
+    }
+
+    private void startGame() {
+        System.out.println("Game started.");
+        // TODO: implement start game.
+    }
+
 
 }
