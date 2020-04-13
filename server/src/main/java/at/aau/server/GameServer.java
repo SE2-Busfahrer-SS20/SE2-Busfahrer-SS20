@@ -87,5 +87,4 @@ public class GameServer extends NetworkServerKryo implements Runnable{
         // TODO: implement start game.
     }
 
-
 }
