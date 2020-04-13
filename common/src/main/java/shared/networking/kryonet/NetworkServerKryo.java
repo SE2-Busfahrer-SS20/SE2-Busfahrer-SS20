@@ -1,21 +1,30 @@
-package at.aau.common.networking.kryonet;
+package shared.networking.kryonet;
 
+import shared.networking.*;
+import shared.networking.dto.TextMessage;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import at.aau.common.networking.Callback;
-import at.aau.common.networking.NetworkServer;
-import at.aau.common.networking.dto.BaseMessage;
+import shared.networking.dto.BaseMessage;
+import shared.model.Player;
 
 public class NetworkServerKryo implements NetworkServer, KryoNetComponent {
     private Server server;
-    private Callback<BaseMessage> messageCallback;
+    protected List<Player> playerList;
+    protected Callback<BaseMessage> messageCallback;
+
+   // protected Game game;
 
     public NetworkServerKryo() {
         server = new Server();
+        // game = new GameImpl(1);
+        playerList = new ArrayList<>();
+        registerClass(TextMessage.class);
     }
 
     public void registerClass(Class c) {
@@ -25,13 +34,6 @@ public class NetworkServerKryo implements NetworkServer, KryoNetComponent {
     public void start() throws IOException {
         server.start();
         server.bind(NetworkConstants.TCP_PORT, NetworkConstants.UDP_PORT);
-
-        server.addListener(new Listener() {
-            public void received(Connection connection, Object object) {
-                if (messageCallback != null && object instanceof BaseMessage)
-                    messageCallback.callback((BaseMessage) object);
-            }
-        });
     }
 
     public void registerCallback(Callback<BaseMessage> callback) {
@@ -42,4 +44,10 @@ public class NetworkServerKryo implements NetworkServer, KryoNetComponent {
         for (Connection connection : server.getConnections())
             connection.sendTCP(message);
     }
+
+    @Override
+    public void addListener(Listener listener) {
+        server.addListener(listener);
+    }
+
 }

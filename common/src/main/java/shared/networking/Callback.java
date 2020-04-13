@@ -1,4 +1,4 @@
-package at.aau.common.networking;
+package shared.networking;
 
 /**
  * Used for callbacks.

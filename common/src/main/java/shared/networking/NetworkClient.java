@@ -1,8 +1,8 @@
-package at.aau.common.networking;
+package shared.networking;
 
 import java.io.IOException;
 
-import at.aau.common.networking.dto.BaseMessage;
+import shared.networking.dto.BaseMessage;
 
 public interface NetworkClient {
 

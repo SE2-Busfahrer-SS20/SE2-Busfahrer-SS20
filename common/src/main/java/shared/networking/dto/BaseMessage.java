@@ -1,4 +1,4 @@
-package at.aau.common.networking.dto;
+package shared.networking.dto;
 
 public abstract class BaseMessage {
 }

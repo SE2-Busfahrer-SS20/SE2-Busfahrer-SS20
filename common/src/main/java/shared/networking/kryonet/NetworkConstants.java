@@ -1,4 +1,4 @@
-package at.aau.common.networking.kryonet;
+package shared.networking.kryonet;
 
 class NetworkConstants {
 

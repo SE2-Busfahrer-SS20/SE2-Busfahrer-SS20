@@ -1,8 +1,9 @@
-package at.aau.common.networking;
+package shared.networking;
 
 import java.io.IOException;
 
-import at.aau.common.networking.dto.BaseMessage;
+import shared.networking.dto.BaseMessage;
+import com.esotericsoftware.kryonet.Listener;
 
 public interface NetworkServer {
 
@@ -26,5 +27,6 @@ public interface NetworkServer {
      * @param message
      */
     void broadcastMessage(BaseMessage message);
+    void addListener(Listener listener);
 
 }

@@ -1,4 +1,4 @@
-package at.aau.common.networking.kryonet;
+package shared.networking.kryonet;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -6,9 +6,9 @@ import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
 
-import at.aau.common.networking.Callback;
-import at.aau.common.networking.NetworkClient;
-import at.aau.common.networking.dto.BaseMessage;
+import shared.networking.Callback;
+import shared.networking.NetworkClient;
+import shared.networking.dto.BaseMessage;
 
 public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Client client;
