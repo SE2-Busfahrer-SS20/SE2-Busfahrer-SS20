@@ -23,10 +23,13 @@ public class GameServer extends NetworkServerKryo implements Runnable{
     private NetworkServer server;
     private GameService gameService;
 
+    // List for registered dto classes. Add needed classes to the array.
+    private Class[] classList = {TextMessage.class};
+
     public GameServer() {
         server = new NetworkServerKryo();
         registerClass(TextMessage.class);
-
+        registerClasses();
     }
 
     @Override
@@ -86,6 +89,11 @@ public class GameServer extends NetworkServerKryo implements Runnable{
     private void startGame() {
         System.out.println("Game started.");
         // TODO: implement start game.
+    }
+
+    private void registerClasses() {
+        for (Class c : classList)
+            registerClass(c);
     }
 
 }
