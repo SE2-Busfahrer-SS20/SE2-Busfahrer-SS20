@@ -5,7 +5,7 @@ import java.util.List;
 import shared.model.GameState;
 import shared.model.Player;
 
-public interface GamerService {
+public interface GameService {
     /**
      * Returns List of registered Players.
      * @return List<Player>
