@@ -8,23 +8,25 @@ import shared.model.GameState;
 import shared.model.impl.PlayerImpl;
 import shared.networking.NetworkServer;
 import shared.networking.dto.BaseMessage;
+import shared.networking.dto.CreateGameMessage;
+import shared.networking.dto.RegisterMessage;
+import shared.networking.dto.ServerActionResponse;
 import shared.networking.dto.TextMessage;
 import shared.networking.kryonet.NetworkServerKryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.minlog.Log;
 
 
 public class GameServer extends NetworkServerKryo implements Runnable{
 
-    // TODO: delete before deploy.
-    private final static int MOCK_COUNT = 1;
 
     private Thread thread;
     private NetworkServer server;
     private GameService gameService;
 
     // List for registered dto classes. Add needed classes to the array.
-    private Class[] classList = {TextMessage.class};
+    private Class[] classList = {TextMessage.class, RegisterMessage.class, CreateGameMessage.class, ServerActionResponse.class};
 
     public GameServer() {
         server = new NetworkServerKryo();
@@ -43,17 +45,28 @@ public class GameServer extends NetworkServerKryo implements Runnable{
         super.start();
         super.addListener(new Listener() {
             public void received(Connection connection, Object object) {
-                if (object instanceof BaseMessage) {
-                    if (((TextMessage) object).text.equals("createGame")) {
-                        // TODO: implement correct palyer count.
-                        gameService = new GameServiceImpl(MOCK_COUNT);
-                        System.out.println("Game created");
-                    } else if (((TextMessage) object).text.equals("registerGame")) {
-                        gameService.addPlayer(new PlayerImpl());
-                        System.out.println("Player registered.");
+                // check if the game is null, to prevent NullPointerExceptions.
+                if (gameService.getGame() == null) {
+                    if (object instanceof CreateGameMessage) {
+                        CreateGameMessage msg = (CreateGameMessage) object;
+                        gameService.createGame(msg.getPlayerCount());
+                        Log.debug("Game created.");
+                        // send result to client.
+                        connection.sendTCP(new ServerActionResponse("Game created.", true));
+                    } else if (object instanceof BaseMessage) {
+                        Log.info("Action not supported.");
+                        connection.sendTCP(new TextMessage("Action not supported."));
                     }
-                } else {
-                    // TODO: implement.
+                } else if (object instanceof BaseMessage){
+                    if (object instanceof RegisterMessage) {
+                        RegisterMessage msg = (RegisterMessage) object;
+                        if (!gameService.gameReady()) {
+                           gameService.addPlayer(new PlayerImpl(msg.getPlayerName(), connection));
+                            Log.debug("Player registered.");
+                            // send result to client.
+                            connection.sendTCP(new ServerActionResponse("Player registered.", true));
+                        }
+                    }
                 }
 
             }
@@ -84,6 +97,10 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 gameService = null;
                 break;
         }
+    }
+
+    private void addPlayer() {
+
     }
 
     private void startGame() {

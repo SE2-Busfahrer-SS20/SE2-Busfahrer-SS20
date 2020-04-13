@@ -10,26 +10,26 @@ import shared.model.Player;
 import shared.model.impl.GameImpl;
 
 public class GameServiceImpl implements GameService {
-    private List<Player> playerList;
-    private int playerCount;
+
+
     private Game game;
 
-    public GameServiceImpl(int playerCount) {
-        this.playerList = new ArrayList<>(playerCount);
-        this.playerCount = playerCount;
-        this.game = new GameImpl();
+    public GameServiceImpl() {
     }
 
 
     @Override
     public List<Player> getPlayerList() {
-        return playerList;
+        return game.getPlayerList();
     }
 
     @Override
     public boolean addPlayer(Player player) {
-        if(playerList.size() < playerCount) {
+        List<Player> playerList = getPlayerList();
+
+        if(playerList.size() < game.getPlayerCount()) {
             playerList.add(player);
+            game.setPlayerList(playerList);
             return true;
         }
         return false;
@@ -42,12 +42,12 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public int getPlayerCount() {
-        return playerCount;
+        return game.getPlayerCount();
     }
 
     @Override
     public boolean gameReady() {
-        return (playerList.size() == playerCount);
+        return (game.getPlayerList().size() == game.getPlayerCount());
     }
 
     @Override
@@ -63,6 +63,17 @@ public class GameServiceImpl implements GameService {
     @Override
     public void endGame() {
         throw new UnsupportedOperationException("Method not implemented yet.");
+    }
+
+    @Override
+    public Game getGame() {
+        return this.game;
+    }
+
+    @Override
+    public void createGame(int playerCount) {
+        if (this.game == null)
+            this.game = new GameImpl(playerCount);
     }
 
 }

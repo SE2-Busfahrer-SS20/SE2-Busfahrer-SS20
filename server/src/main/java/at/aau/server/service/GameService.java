@@ -2,6 +2,7 @@ package at.aau.server.service;
 
 import java.util.List;
 
+import shared.model.Game;
 import shared.model.GameState;
 import shared.model.Player;
 
@@ -34,4 +35,6 @@ public interface GameService {
     void nextLab();
     void startGame();
     void endGame();
+    Game getGame();
+    void createGame(int playerCount);
 }
