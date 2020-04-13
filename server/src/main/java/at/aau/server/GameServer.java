@@ -3,7 +3,6 @@ package at.aau.server;
 import java.io.IOException;
 
 import at.aau.server.service.GameService;
-import at.aau.server.service.impl.GameServiceImpl;
 import shared.model.GameState;
 import shared.model.impl.PlayerImpl;
 import shared.networking.NetworkServer;
@@ -97,10 +96,6 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 gameService = null;
                 break;
         }
-    }
-
-    private void addPlayer() {
-
     }
 
     private void startGame() {
