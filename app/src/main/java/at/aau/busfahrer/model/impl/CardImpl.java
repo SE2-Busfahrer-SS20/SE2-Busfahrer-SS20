@@ -1,5 +1,7 @@
 package at.aau.busfahrer.model.impl;
 
+import android.graphics.Color;
+
 import at.aau.busfahrer.model.Card;
 
 public class CardImpl implements Card {

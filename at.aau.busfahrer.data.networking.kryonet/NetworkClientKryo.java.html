@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NetworkClientKryo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Code$DeckImplTest.exec</a> &gt; <a href="index.source.html" class="el_package">at.aau.busfahrer.data.networking.kryonet</a> &gt; <span class="el_source">NetworkClientKryo.java</span></div><h1>NetworkClientKryo.java</h1><pre class="source lang-java linenums">package at.aau.busfahrer.data.networking.kryonet;
+
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+
+import java.io.IOException;
+
+import at.aau.busfahrer.data.networking.Callback;
+import at.aau.busfahrer.data.networking.NetworkClient;
+import at.aau.busfahrer.data.networking.dto.BaseMessage;
+
+public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
+    private Client client;
+    private Callback&lt;BaseMessage&gt; callback;
+
+<span class="nc" id="L17">    public NetworkClientKryo() {</span>
+<span class="nc" id="L18">        client = new Client();</span>
+<span class="nc" id="L19">    }</span>
+
+    public void registerClass(Class c) {
+<span class="nc" id="L22">        client.getKryo().register(c);</span>
+<span class="nc" id="L23">    }</span>
+
+    public void connect(String host) throws IOException {
+<span class="nc" id="L26">        client.start();</span>
+<span class="nc" id="L27">        client.connect(5000, host, NetworkConstants.TCP_PORT, NetworkConstants.UDP_PORT);</span>
+
+<span class="nc" id="L29">        client.addListener(new Listener() {</span>
+            public void received(Connection connection, Object object) {
+<span class="nc bnc" id="L31" title="All 4 branches missed.">                if (callback != null &amp;&amp; object instanceof BaseMessage)</span>
+<span class="nc" id="L32">                    callback.callback((BaseMessage) object);</span>
+<span class="nc" id="L33">            }</span>
+        });
+<span class="nc" id="L35">    }</span>
+
+    public void registerCallback(Callback&lt;BaseMessage&gt; callback) {
+<span class="nc" id="L38">        this.callback = callback;</span>
+<span class="nc" id="L39">    }</span>
+
+    public void sendMessage(BaseMessage message) {
+<span class="nc" id="L42">        client.sendTCP(message);</span>
+<span class="nc" id="L43">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

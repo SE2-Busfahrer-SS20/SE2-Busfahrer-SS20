@@ -8,7 +8,7 @@ import at.aau.busfahrer.model.Deck;
 public class DeckImpl implements Deck {
     private static final int NUM_CARDS_IN_DECK = 52;    //4 (Farben) * 13(Anzahl Karten pro Farbe) = 52 Karten gesamt
 
-    private ArrayList<CardImpl> cards = new ArrayList<>( ); //ArrayList, weil es viel dynamischer zu handhaben ist, als ein Array
+    public ArrayList<CardImpl> cards = new ArrayList<>( ); //ArrayList, weil es viel dynamischer zu handhaben ist, als ein Array
 
     public DeckImpl( ) {
         //Erstelle des Kartendecks
@@ -40,7 +40,10 @@ public class DeckImpl implements Deck {
             boolean exist=false;
             //Überprüfung ob Karten bereits im Deck sind.
             for(int j=0;j<size;j++) {
-                if(cards.get(j).equals(c))
+                CardImpl a = cards.get(j);
+                String card1 = a.toString();
+                String card2 = c.toString();
+                if(card1.equals(card2))
                     exist=true;
             }
             if(!exist)
