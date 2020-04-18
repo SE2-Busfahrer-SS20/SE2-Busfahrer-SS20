@@ -58,7 +58,7 @@ public class DeckImplTest {
     }
     @Test
     public void printDeckTest(){
-        ArrayList<String> strings = deck.printDeck();
+        List<String> strings = deck.printDeck();
         Assert.assertEquals(52,strings.size());
 
     }

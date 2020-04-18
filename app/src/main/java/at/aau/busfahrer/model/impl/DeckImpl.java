@@ -27,10 +27,6 @@ public class DeckImpl implements Deck {
 
     public boolean isEmpty( ) {
         return cards.size()==0;
-        /*if (cards.size()<5)
-            return true;
-        else
-            return false;*/
     }
 
     public void refill(){
@@ -54,12 +50,11 @@ public class DeckImpl implements Deck {
         Collections.shuffle( cards );
     }
 
-    public ArrayList printDeck() {
-        ArrayList<String> strings = new ArrayList<>();
+    public List printDeck() {
+        List<String> strings = new ArrayList<>();
 
         for(int i=0;i<NUM_CARDS_IN_DECK;i++){
             strings.add(cards.get(i).toString());
-            //System.out.println("#"+i+" Suit: "+cards.get(i).getSuit()+"\tRank: "+cards.get(i).getRank()+"\t\t"+cards.get(i).toString());
         }
         return strings;
     }
