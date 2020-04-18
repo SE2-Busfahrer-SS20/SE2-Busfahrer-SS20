@@ -4,15 +4,16 @@ import java.io.IOException;
 
 import shared.networking.dto.BaseMessage;
 
-public interface NetworkClient {
+public interface NetworkClient extends Runnable{
 
     /**
      * Connects to a host.
      *
      * @param host
      * @throws IOException
-     */
-    void connect(String host) throws IOException;
+     *
+     * //void connect(String host) throws IOException;
+     *
 
     /**
      * Registers a callback which gets called if a message is received.
@@ -27,5 +28,5 @@ public interface NetworkClient {
      * @param message
      */
     void sendMessage(BaseMessage message);
-
+    void start();
 }
