@@ -66,5 +66,5 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         for (Class c : CLASS_LIST)
             registerClass(c);
     }
-    
+
 }
