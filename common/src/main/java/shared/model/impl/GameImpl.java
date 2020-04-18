@@ -16,7 +16,8 @@ public class GameImpl implements Game {
 
 
     public GameImpl(int gameCount) {
-        this.playerList = new ArrayList<>(gameCount);
+        this.gameCount = gameCount;
+        this.playerList = new ArrayList<>(this.gameCount);
         this.state = GameState.INIT;
     }
 
