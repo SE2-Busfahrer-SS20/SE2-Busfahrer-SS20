@@ -11,6 +11,8 @@ import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.BaseMessage;
 
+import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
+
 public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Client client;
     private Callback<BaseMessage> callback;
@@ -23,8 +25,8 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         this.host = host;
     }
     public void registerClass(Class c) {
-        client.getKryo().register(c);
-    }
+         client.getKryo().register(c);
+   }
 
 
     public void registerCallback(Callback<BaseMessage> callback) {
@@ -39,6 +41,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     @Override
     public void run() {
         try {
+            registerClasses();
             client.start();
             client.connect(5000, host, NetworkConstants.TCP_PORT, NetworkConstants.UDP_PORT);
             client.addListener(new Listener() {
@@ -58,4 +61,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
       Thread thread = new Thread(this);
       thread.start();
     }
+
+    private void registerClasses() {
+        for (Class c : CLASS_LIST)
+            registerClass(c);
+    }
+    
 }

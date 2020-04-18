@@ -16,6 +16,8 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
+import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
+
 
 public class GameServer extends NetworkServerKryo implements Runnable{
 
@@ -24,8 +26,6 @@ public class GameServer extends NetworkServerKryo implements Runnable{
     private NetworkServer server;
     private GameService gameService;
 
-    // List for registered dto classes. Add needed classes to the array.
-    private Class[] classList = {TextMessage.class, RegisterMessage.class, CreateGameMessage.class, ServerActionResponse.class};
 
     public GameServer() {
         server = new NetworkServerKryo();
@@ -113,7 +113,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
     }
 
     private void registerClasses() {
-        for (Class c : classList)
+        for (Class c : CLASS_LIST)
             registerClass(c);
     }
 
