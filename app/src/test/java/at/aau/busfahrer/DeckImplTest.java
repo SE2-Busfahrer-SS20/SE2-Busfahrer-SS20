@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import at.aau.busfahrer.model.impl.CardImpl;
 import at.aau.busfahrer.model.impl.DeckImpl;
@@ -15,16 +16,13 @@ import static org.junit.Assert.*;
 
 
 public class DeckImplTest {
-    private ArrayList<CardImpl> cards;
+    private List<CardImpl> cards = new ArrayList<>();
     private DeckImpl deck;
 
     @Before
     public void init(){
         deck = new DeckImpl();
         cards = deck.cards;
-
-
-
     }
     @After
     public void setDown(){
@@ -45,7 +43,7 @@ public class DeckImplTest {
     }
     @Test
     public void isEmptyTestTrue(){
-        for(int i =0;i<49;i++){
+        for(int i =0;i<52;i++){
             deck.drawCard();
         }
         Assert.assertEquals(true,deck.isEmpty());
@@ -60,6 +58,8 @@ public class DeckImplTest {
     }
     @Test
     public void printDeckTest(){
-        deck.printDeck();
+        ArrayList<String> strings = deck.printDeck();
+        Assert.assertEquals(52,strings.size());
+
     }
 }

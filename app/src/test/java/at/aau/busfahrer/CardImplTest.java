@@ -10,6 +10,8 @@ import at.aau.busfahrer.model.impl.CardImpl;
 
 public class CardImplTest {
     private int codePoint;
+    private  int rank;
+    private int suit;
     @Before
     public void init(){
 
@@ -47,10 +49,18 @@ public class CardImplTest {
     }
     @Test
     public void toStringTestRankGreater10(){
-        CardImpl c = new CardImpl(11,11);
-        codePoint= 127137 + 11 * 16 + 11;
-        codePoint++;
-        String test = new String(Character.toChars(codePoint));
-        Assert.assertEquals(test,c.toString());
+        for(int i = 0;i<52;i++){
+            CardImpl c = new CardImpl(i);
+            rank = i%13;
+            suit = i/13;
+            codePoint= 127137 + suit * 16 + rank;
+            if(rank>10){
+                codePoint++;
+            }
+            String test = new String(Character.toChars(codePoint));
+            Assert.assertEquals(test,c.toString());
+
+        }
+
     }
 }

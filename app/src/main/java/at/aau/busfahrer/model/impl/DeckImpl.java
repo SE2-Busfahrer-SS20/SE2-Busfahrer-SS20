@@ -2,13 +2,14 @@ package at.aau.busfahrer.model.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import at.aau.busfahrer.model.Deck;
 
 public class DeckImpl implements Deck {
     private static final int NUM_CARDS_IN_DECK = 52;    //4 (Farben) * 13(Anzahl Karten pro Farbe) = 52 Karten gesamt
 
-    public ArrayList<CardImpl> cards = new ArrayList<>( ); //ArrayList, weil es viel dynamischer zu handhaben ist, als ein Array
+    public List<CardImpl> cards = new ArrayList<>( ); //ArrayList, weil es viel dynamischer zu handhaben ist, als ein Array
 
     public DeckImpl( ) {
         //Erstelle des Kartendecks
@@ -25,10 +26,11 @@ public class DeckImpl implements Deck {
     }
 
     public boolean isEmpty( ) {
-        if (cards.size()<5)
+        return cards.size()==0;
+        /*if (cards.size()<5)
             return true;
         else
-            return false;
+            return false;*/
     }
 
     public void refill(){
@@ -52,9 +54,13 @@ public class DeckImpl implements Deck {
         Collections.shuffle( cards );
     }
 
-    public void printDeck() {
+    public ArrayList printDeck() {
+        ArrayList<String> strings = new ArrayList<>();
+
         for(int i=0;i<NUM_CARDS_IN_DECK;i++){
-            System.out.println("#"+i+" Suit: "+cards.get(i).getSuit()+"\tRank: "+cards.get(i).getRank()+"\t\t"+cards.get(i).toString());
+            strings.add(cards.get(i).toString());
+            //System.out.println("#"+i+" Suit: "+cards.get(i).getSuit()+"\tRank: "+cards.get(i).getRank()+"\t\t"+cards.get(i).toString());
         }
+        return strings;
     }
 }
