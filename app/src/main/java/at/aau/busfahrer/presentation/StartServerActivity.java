@@ -1,5 +1,6 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -40,6 +41,10 @@ public class StartServerActivity extends AppCompatActivity {
         playercount = Integer.valueOf(spinner.getSelectedItem().toString());
         Intent i = new Intent(StartServerActivity.this, SelectCheatsActivity.class);
         startActivity(i);
+
+        // START SERVER:
+        new GameService().createGame2(playercount,name.toString());
+
     }
 
     // removes android status bar on top, for fullscreen
