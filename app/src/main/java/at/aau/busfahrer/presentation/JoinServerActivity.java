@@ -1,5 +1,6 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
+import at.aau.busfahrer.service.GameService;
 import at.aau.busfahrer.service.impl.GameServiceImpl;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 public class JoinServerActivity extends AppCompatActivity {
-    GameServiceImpl service;
+    GameService service;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
