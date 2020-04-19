@@ -4,8 +4,8 @@ public class RegisterMessage extends BaseMessage {
 
     private String playerName;
 
+    public RegisterMessage() {}
     public RegisterMessage(String playerName) {
-        super(Action.REGISTER_PLAYER);
         this.playerName = playerName;
     }
 

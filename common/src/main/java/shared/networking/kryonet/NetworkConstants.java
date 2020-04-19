@@ -1,5 +1,6 @@
 package shared.networking.kryonet;
 
+import shared.networking.dto.BaseMessage;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.ServerActionResponse;
@@ -11,6 +12,6 @@ public class NetworkConstants {
     public static final int UDP_PORT = 54777;
 
     // List for registered dto classes. Add needed classes to the array.
-    public static final Class[] CLASS_LIST = {TextMessage.class, RegisterMessage.class, CreateGameMessage.class, ServerActionResponse.class};
+    public static final Class[] CLASS_LIST = {BaseMessage.class, TextMessage.class, RegisterMessage.class, CreateGameMessage.class, ServerActionResponse.class};
 
 }

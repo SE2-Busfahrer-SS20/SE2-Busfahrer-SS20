@@ -29,9 +29,9 @@ public class GameServer extends NetworkServerKryo implements Runnable{
 
 
     public GameServer() {
-        server = new NetworkServerKryo();
+        // server = new NetworkServerKryo();
         gameService = new GameServiceImpl();
-        registerClass(TextMessage.class);
+      //  registerClass(TextMessage.class);
         registerClasses();
     }
 
@@ -54,6 +54,9 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 // check if the game is null, to prevent NullPointerExceptions.
                 if (object == null) {
                     System.out.println("Object is null");
+                } else if (object instanceof TextMessage) {
+                    System.out.println("Received TextMessage");
+                    System.out.println(((TextMessage) object).getText());
                 } else {
                     if (!gameService.gameExists()) { // in case that no game instance exists.
                         if (object instanceof CreateGameMessage) {
