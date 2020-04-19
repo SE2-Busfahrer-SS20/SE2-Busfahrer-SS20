@@ -21,7 +21,7 @@ public class GameServiceImpl implements GameService {
 
     public void createGame(int playercount, String gameName) {
 
-        // TODO: implement Create Game.
+        client.sendMessage(new CreateGameMessage(playercount, gameName));
 
     }
 }

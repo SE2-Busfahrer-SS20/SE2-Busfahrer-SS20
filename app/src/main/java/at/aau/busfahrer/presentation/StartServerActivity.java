@@ -1,5 +1,7 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
+import at.aau.busfahrer.service.GameService;
+import at.aau.busfahrer.service.impl.GameServiceImpl;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -43,7 +45,8 @@ public class StartServerActivity extends AppCompatActivity {
         startActivity(i);
 
         // START SERVER:
-        new GameService().createGame2(playercount,name.toString());
+        GameService gamesvc = new GameServiceImpl("10.0.0.3");
+        gamesvc.createGame(3, "test");
 
     }
 
