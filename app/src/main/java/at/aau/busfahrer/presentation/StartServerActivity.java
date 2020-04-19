@@ -19,7 +19,7 @@ public class StartServerActivity extends AppCompatActivity {
     EditText name;
     Spinner spinner;
     Integer playercount;
-
+    GameService gamesvc = new GameServiceImpl("10.0.0.3");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +40,13 @@ public class StartServerActivity extends AppCompatActivity {
 
     // button start
     public void startServer(View v){
+        /*
         playercount = Integer.valueOf(spinner.getSelectedItem().toString());
         Intent i = new Intent(StartServerActivity.this, SelectCheatsActivity.class);
         startActivity(i);
-
+*/
         // START SERVER:
-        GameService gamesvc = new GameServiceImpl("10.0.0.3");
+
         gamesvc.createGame(3, "test");
 
     }
