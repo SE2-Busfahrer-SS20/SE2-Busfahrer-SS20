@@ -57,8 +57,9 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                     if (!gameService.gameExists()) { // in case that no game instance exists.
                         if (object instanceof CreateGameMessage) {
                             CreateGameMessage msg = (CreateGameMessage) object;
-                            gameService.createGame(msg.getPlayerCount());
-                            Log.debug("Game created.");
+                            // gameService.createGame(msg.getPlayerCount());
+                            System.out.println("Game created.");
+                            // Log.debug("Game created.");
                             // send result to client.
                             connection.sendTCP(new ServerActionResponse("Game created.", true));
                         } else if (object instanceof BaseMessage) {
