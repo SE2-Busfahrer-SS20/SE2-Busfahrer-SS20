@@ -3,6 +3,7 @@ package at.aau.server;
 import java.io.IOException;
 
 import at.aau.server.service.GameService;
+import at.aau.server.service.impl.GameServiceImpl;
 import shared.model.GameState;
 import shared.model.impl.PlayerImpl;
 import shared.networking.NetworkServer;
@@ -29,6 +30,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
 
     public GameServer() {
         server = new NetworkServerKryo();
+        gameService = new GameServiceImpl();
         registerClass(TextMessage.class);
         registerClasses();
     }
@@ -36,7 +38,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
     @Override
     public void run() {
         while(true) {
-            if (gameService != null) {
+            if (gameService.gameExists()) {
                 play(gameService.getGameState());
             }
 
@@ -53,7 +55,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 if (object == null) {
                     System.out.println("Object is null");
                 } else {
-                    if (gameService.getGame() == null) {
+                    if (!gameService.gameExists()) { // in case that no game instance exists.
                         if (object instanceof CreateGameMessage) {
                             CreateGameMessage msg = (CreateGameMessage) object;
                             gameService.createGame(msg.getPlayerCount());

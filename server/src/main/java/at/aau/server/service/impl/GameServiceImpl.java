@@ -86,4 +86,9 @@ public class GameServiceImpl implements GameService {
             this.game = new GameImpl(playerCount);
     }
 
+    @Override
+    public boolean gameExists() {
+        return game != null;
+    }
+
 }
