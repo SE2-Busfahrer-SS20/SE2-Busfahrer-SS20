@@ -9,7 +9,7 @@ import at.aau.busfahrer.model.Deck;
 public class DeckImpl implements Deck {
     private static final int NUM_CARDS_IN_DECK = 52;    //4 (Farben) * 13(Anzahl Karten pro Farbe) = 52 Karten gesamt
 
-    public List<CardImpl> cards = new ArrayList<>( ); //ArrayList, weil es viel dynamischer zu handhaben ist, als ein Array
+    private List<CardImpl> cards = new ArrayList<>( ); //ArrayList, weil es viel dynamischer zu handhaben ist, als ein Array
 
     public DeckImpl( ) {
         //Erstelle des Kartendecks
@@ -50,12 +50,15 @@ public class DeckImpl implements Deck {
         Collections.shuffle( cards );
     }
 
-    public List printDeck() {
+    public List<String> printDeck() {
         List<String> strings = new ArrayList<>();
 
         for(int i=0;i<NUM_CARDS_IN_DECK;i++){
             strings.add(cards.get(i).toString());
         }
         return strings;
+    }
+    public List getCards(){
+        return cards;
     }
 }

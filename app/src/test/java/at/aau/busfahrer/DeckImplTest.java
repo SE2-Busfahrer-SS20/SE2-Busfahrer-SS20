@@ -22,7 +22,7 @@ public class DeckImplTest {
     @Before
     public void init(){
         deck = new DeckImpl();
-        cards = deck.cards;
+        cards = deck.getCards();
     }
     @After
     public void setDown(){
