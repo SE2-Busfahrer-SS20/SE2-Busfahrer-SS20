@@ -58,7 +58,7 @@ public class DeckImpl implements Deck {
         }
         return strings;
     }
-    public List getCards(){
+    public List<CardImpl> getCards(){
         return cards;
     }
 }
