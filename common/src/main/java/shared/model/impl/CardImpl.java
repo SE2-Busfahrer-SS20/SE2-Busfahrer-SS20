@@ -1,6 +1,6 @@
-package at.aau.busfahrer.model.impl;
+package shared.model.impl;
 
-import at.aau.busfahrer.model.Card;
+import shared.model.Card;
 
 public class CardImpl implements Card {
     private final int suit; //entspricht der Farbe: Herz, Pik, Karo, Kreuz
@@ -16,6 +16,11 @@ public class CardImpl implements Card {
         rank = rnk;
     }
 
+
+    public CardImpl() { //just for test purpose to solve error: " Caused by: com.esotericsoftware.kryo.KryoException: Class cannot be created (missing no-arg constructor): shared.model.impl.CardImpl"
+        suit = 1;   //Herz
+        rank = 1;   //Ass
+    }
     public int getSuit( )
     {
         return suit;

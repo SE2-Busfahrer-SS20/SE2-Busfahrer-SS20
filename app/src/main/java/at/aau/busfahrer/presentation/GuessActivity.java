@@ -5,32 +5,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import at.aau.busfahrer.R;
-import at.aau.busfahrer.model.Card;
-import at.aau.busfahrer.model.impl.CardImpl;
+import shared.model.Card;
+import shared.model.impl.CardImpl;
+import shared.model.impl.playersCards;
 
 public class GuessActivity extends AppCompatActivity {
-    private Card card1;
-    private Card card2;
-    private Card card3;
-    private Card card4;
 
+    private Card[] cards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        hideAppTitleBar();
         setContentView(R.layout.activity_guess);
 
-        //This screen is opened on each client after they successfully joint a game and it is their turn
+        //The cards are fetched from common
+        //till now this method only works after creating a new Game on the server
+        //Join a new game is not implemented yet
+        cards= playersCards.getCards();
 
-        //#1: The following card objects should be random cards provided by the server
-        //Just for now they are hardcoded
-        card1 = new CardImpl(0,1);
-        card2 = new CardImpl(1,1);
-        card3 = new CardImpl(2,1);
-        card4 = new CardImpl(3,1);
     }
 
     //The following 4 onClick-methodes are just relevant for Sprint 1 where we want to be able to turn each card
@@ -39,22 +37,22 @@ public class GuessActivity extends AppCompatActivity {
 
     public void onClickCard1(View v) {
         TextView tV=findViewById(R.id.tV_card1);
-        turnCard(tV, card1);
+        turnCard(tV, cards[0]);
     }
 
     public void onClickCard2(View view) {
         TextView tV=findViewById(R.id.tV_card2);
-        turnCard(tV, card2);
+        turnCard(tV, cards[1]);
     }
 
     public void onClickCard3(View view) {
         TextView tV=findViewById(R.id.tV_card3);
-        turnCard(tV, card3);
+        turnCard(tV, cards[2]);
     }
 
     public void onClickCard4(View view) {
         TextView tV=findViewById(R.id.tV_card4);
-        turnCard(tV, card4);
+        turnCard(tV, cards[3]);
     }
 
     private void turnCard(TextView tV, Card c){
@@ -69,5 +67,13 @@ public class GuessActivity extends AppCompatActivity {
             tV.setText("\uD83C\uDCA0");//set to card back side
             tV.setTextColor(Color.parseColor("#000000"));//black
         }
+    }
+
+    // removes android status bar on top, for fullscreen
+    private void hideAppTitleBar(){
+        //Remove title bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //Remove notification bar
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 }

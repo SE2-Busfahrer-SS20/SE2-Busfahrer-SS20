@@ -19,7 +19,7 @@
         android:layout_marginTop="64dp"
         android:layout_marginEnd="32dp"
         android:onClick="onStartServer"
-        android:text="Start Server"
+        android:text="Start Game"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +30,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
-        android:text="Join Server"
+        android:text="Join Game"
         android:onClick="onClickJoinServer"
         app:layout_constraintEnd_toEndOf="@+id/start_server"
         app:layout_constraintStart_toStartOf="@+id/start_server"

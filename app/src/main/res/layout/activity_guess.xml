@@ -6,21 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".presentation.GuessActivity">
 
+
     <TextView
-        android:id="@+id/tV_question"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="10dp"
-        android:gravity="center"
-        android:text="Round #1 \n Guess if the first card is red or black"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/bt_AnswerA"
+        android:id="@+id/headerStartServer"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:text="Gueass if the first card is red or black"
+        android:theme="@style/mainMenuHeadTextView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.943" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tV_card1"
@@ -28,16 +24,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="100dp"
+        android:clickable="true"
+        android:onClick="onClickCard1"
         android:text="🂠"
-        android:textSize="130sp"
         android:textColor="#000000"
+        android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tV_card2"
-        app:layout_constraintStart_toStartOf="parent"
-        android:onClick="onClickCard1"
-        android:clickable="true"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tV_card2"
@@ -45,16 +39,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="100dp"
+        android:clickable="true"
+        android:onClick="onClickCard2"
         android:text="🂠"
-        android:textSize="130sp"
         android:textColor="#000000"
+        android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tV_card3"
-        app:layout_constraintStart_toEndOf="@+id/tV_card1"
-        android:onClick="onClickCard2"
-        android:clickable="true"
-        />
+        app:layout_constraintStart_toEndOf="@+id/tV_card1" />
 
     <TextView
         android:id="@+id/tV_card3"
@@ -62,16 +54,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="100dp"
+        android:clickable="true"
+        android:onClick="onClickCard3"
         android:text="🂠"
-        android:textSize="130sp"
         android:textColor="#000000"
+        android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tV_card4"
-        app:layout_constraintStart_toEndOf="@+id/tV_card2"
-        android:onClick="onClickCard3"
-        android:clickable="true"
-        />
+        app:layout_constraintStart_toEndOf="@+id/tV_card2" />
 
     <TextView
         android:id="@+id/tV_card4"
@@ -79,41 +69,47 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="50dp"
-        android:layout_marginBottom="100dp"
         android:clickable="true"
         android:onClick="onClickCard4"
         android:text="🂠"
-        android:textSize="130sp"
         android:textColor="#000000"
+        android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tV_card3" />
 
     <Button
-        android:id="@+id/bt_AnswerA"
-        android:layout_width="160dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginBottom="10dp"
-        android:height="100sp"
-        android:background="@android:color/holo_red_dark"
-        android:text="RED"
+        android:id="@+id/bt_black"
+        android:layout_width="221dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:text="Black"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/tV_card1"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/tV_card4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.79"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
 
     <Button
-        android:id="@+id/bt_AnswerB"
-        android:layout_width="160dp"
-        android:layout_height="120dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="10dp"
-        android:height="100sp"
-        android:background="#000000"
-        android:text="BLACK"
+        android:id="@+id/bt_red"
+        android:layout_width="221dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/bg_btn_red"
+        android:text="Red"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/tV_card3"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/tV_card1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

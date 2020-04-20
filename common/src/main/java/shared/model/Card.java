@@ -1,4 +1,4 @@
-package at.aau.busfahrer.model;
+package shared.model;
 
 public interface Card {
     int getSuit();

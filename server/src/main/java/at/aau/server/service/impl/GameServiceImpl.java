@@ -3,15 +3,23 @@ package at.aau.server.service.impl;
 import java.util.List;
 
 import at.aau.server.service.GameService;
+import shared.model.Card;
+import shared.model.Deck;
 import shared.model.Game;
 import shared.model.GameState;
 import shared.model.Player;
+import shared.model.impl.CardImpl;
+import shared.model.impl.DeckImpl;
 import shared.model.impl.GameImpl;
 
 public class GameServiceImpl implements GameService {
 
 
-    private Game game;
+    private int playercout;
+    private Deck cardStack;
+    private Card[][] playercards; //Array of size: [amount of players][4]
+
+    private Game game;//Ignored for now
 
     public GameServiceImpl() {
     }
@@ -84,11 +92,31 @@ public class GameServiceImpl implements GameService {
     public void createGame(int playerCount) {
         if (this.game == null)
             this.game = new GameImpl(playerCount);
+
+
+        //till now there is only one game possible
+        //classes Game and Player are ignored
+        //Code will be extended and use them later on
+        //for now Users are identified with ID (to send cards for example)
+
+        cardStack=new DeckImpl();
+        playercards=new CardImpl[playerCount][4];
+
+        for(int i=0; i<playercards.length;i++){
+            for(int j=0; j<playercards[i].length;j++){
+                playercards[i][j]=cardStack.drawCard();
+            }
+        }
     }
 
     @Override
     public boolean gameExists() {
         return game != null;
+    }
+
+    @Override
+    public Card[] getPlayersCards(int player) {
+        return playercards[player];
     }
 
 }
