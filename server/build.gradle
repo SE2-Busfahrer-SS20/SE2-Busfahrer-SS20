@@ -1,16 +1,18 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+    }
+}
+
 plugins {
     id 'java'
 }
 
-jar {
-    manifest {
-        attributes "Main-Class": "at.aau.server.Main"
-    }
-
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'java'
 sourceCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
@@ -18,4 +20,3 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12', 'org.mockito:mockito-core:3.+'
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
 }
-
