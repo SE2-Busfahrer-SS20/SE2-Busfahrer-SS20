@@ -43,4 +43,5 @@ public interface GameService {
 
 
     Card[] getPlayersCards(int player);
+    public int joinGame();
 }

@@ -14,8 +14,8 @@ import shared.model.impl.GameImpl;
 
 public class GameServiceImpl implements GameService {
 
-
-    private int playercout;
+    private int maxPlayerCount;
+    private int playerCount;
     private Deck cardStack;
     private Card[][] playercards; //Array of size: [amount of players][4]
 
@@ -90,6 +90,9 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void createGame(int playerCount) {
+        this.maxPlayerCount=playerCount;
+        this.playerCount=1;
+
         if (this.game == null)
             this.game = new GameImpl(playerCount);
 
@@ -117,6 +120,19 @@ public class GameServiceImpl implements GameService {
     @Override
     public Card[] getPlayersCards(int player) {
         return playercards[player];
+    }
+
+    @Override
+    public int joinGame(){
+        if(playerCount<=maxPlayerCount){
+            playerCount++;
+            return playerCount;
+        }
+        else{
+            //Maximale Spieleranzahl wurde bereits erreicht
+            return -1;
+        }
+
     }
 
 }

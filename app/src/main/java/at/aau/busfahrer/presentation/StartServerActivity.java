@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import static shared.networking.kryonet.NetworkConstants.host;
+
 public class StartServerActivity extends AppCompatActivity {
 
     EditText name;
@@ -29,7 +31,7 @@ public class StartServerActivity extends AppCompatActivity {
         initSpinnerDropDown();
         name = findViewById(R.id.server_name);
 
-        gamesvc=new GameServiceImpl(("192.168.0.103"));//moved down
+        gamesvc=new GameServiceImpl(host);//moved down //IP of computer (Localhost=phone)
     }
 
     // ui drop down, array values in res@strings

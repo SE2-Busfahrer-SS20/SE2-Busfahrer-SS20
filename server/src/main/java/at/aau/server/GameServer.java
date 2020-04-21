@@ -59,29 +59,45 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                     if (!gameService.gameExists()) { // in case that no game instance exists.
                         if (object instanceof CreateGameMessage) {
                             CreateGameMessage msg = (CreateGameMessage) object;
-                            gameService.createGame(msg.getPlayerCount());           //initializes cardStack, playerCards for each player in gameService
+                            gameService.createGame(msg.getPlayerCount());     //initializes cardStack, playerCards for each player in gameService
                             System.out.println("Game created.");
                             // Log.debug("Game created.");
                             // send result to client.
 
                             //Respond with Cards of player #0
-                            ConfirmRegisterMessage cgm = new ConfirmRegisterMessage(0, gameService.getPlayersCards(0));
+                            ConfirmRegisterMessage crm = new ConfirmRegisterMessage(0, gameService.getPlayersCards(0));
                            // ConfirmRegisterMessage cgm = new ConfirmRegisterMessage();
 
-                            connection.sendTCP(cgm);//sendet ConfirmRegisterMessage an Client
+                            connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
                                                     // Diese beinhaltet die Karten des Spielers mit der ID=0
                                                     //ID=0 ist immer jener Spieler, der das Spiel startet
 
 
                             //connection.sendTCP(new ServerActionResponse("Game created.", true));
-
-
-
                         } else if (object instanceof BaseMessage) {
                             Log.info("Action not supported.");
                             connection.sendTCP(new TextMessage("Action not supported."));
                         }
-                    } else if (object instanceof BaseMessage) {
+                    }
+                    //join Game
+                    if(object instanceof RegisterMessage){
+
+                        //gameService.createGame(3);//just for test purpose to avoid creating new game in each test
+                        System.out.println("Recived Register Message");
+
+                        int ID = gameService.joinGame();
+                        if(ID!=-1){     //if game is not full
+                            System.out.println("Players ID="+ID);
+                            ConfirmRegisterMessage crm = new ConfirmRegisterMessage(ID, gameService.getPlayersCards(ID));
+                            connection.sendTCP(crm);
+                            System.out.println("New player joined game ["+ID+"]");
+                        }else{
+                            connection.sendTCP(new ServerActionResponse("Game is full!", true));
+                        }
+                    }
+
+
+                    else if (object instanceof BaseMessage) {
                         if (object instanceof RegisterMessage) {
                             RegisterMessage msg = (RegisterMessage) object;
                             if (!gameService.gameReady()) {
