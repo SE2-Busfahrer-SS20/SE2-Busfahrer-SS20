@@ -1,17 +1,11 @@
 package shared.networking.kryonet;
 
 import shared.networking.*;
-import shared.networking.dto.TextMessage;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import shared.networking.dto.BaseMessage;
-import shared.model.Player;
 
 public class NetworkServerKryo implements NetworkServer, KryoNetComponent {
 
