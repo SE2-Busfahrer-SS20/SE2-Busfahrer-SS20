@@ -78,7 +78,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                         }
                     }
                     //join Game
-                    if(object instanceof RegisterMessage){
+                    else if(object instanceof RegisterMessage){
 
                         //gameService.createGame(3);//just for test purpose to avoid creating new game in each test
                         System.out.println("Recived Register Message");
