@@ -23,7 +23,7 @@ public class GameServiceImpl implements GameService {
     private int maxPlayerCount;
     private int playerCount;
     private Card[][] playercards; //Array of size: [amount of players][4]
-
+    private Deck cardStack;
     private Game game;//Ignored for now
 
     public GameServiceImpl() {
@@ -109,7 +109,7 @@ public class GameServiceImpl implements GameService {
         //Code will be extended and use them later on
         //for now Users are identified with ID (to send cards for example)
 
-        Deck cardStack = new DeckImpl();
+        cardStack = new DeckImpl();
         playercards=new CardImpl[playerCount][4];
 
         for(int i=0; i<playercards.length;i++){
@@ -140,6 +140,16 @@ public class GameServiceImpl implements GameService {
             return -1;
         }
 
+    }
+
+    @Override
+    public Card[][] getPlayercardList() {
+        return playercards;
+    }
+
+    @Override
+    public Deck getCardStack() {
+        return cardStack;
     }
 
 }

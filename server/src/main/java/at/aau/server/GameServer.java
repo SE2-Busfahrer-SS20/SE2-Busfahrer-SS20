@@ -21,12 +21,12 @@ import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 
 public class GameServer extends NetworkServerKryo implements Runnable{
 
-
     private Thread thread;
     private GameService gameService;
 
 
     public GameServer() {
+        Log.set(Log.LEVEL_DEBUG); // set log level for Minlog.
         gameService = new GameServiceImpl();
         registerClasses();
     }
@@ -45,13 +45,14 @@ public class GameServer extends NetworkServerKryo implements Runnable{
     @Override
     public void start() throws IOException {
         super.start();
+        Log.debug("Server started successfully.");
         super.addListener(new Listener() {
             public void received(Connection connection, Object object) {
                 // check if the game is null, to prevent NullPointerExceptions.
                 if (object == null) {
-                    System.out.println("Object is null");
+                    Log.debug("Object is null");
                 } else if (object instanceof TextMessage) {
-                    System.out.println("Received TextMessage: " + ((TextMessage) object).getText());
+                    Log.debug("Received TextMessage: " + ((TextMessage) object).getText());
                 } else {
 
                     if (!gameService.gameExists()) { // in case that no game instance exists.
@@ -68,8 +69,9 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                                 connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
                                 // Diese beinhaltet die Karten des Spielers mit der ID=0
                                 //ID=0 ist immer jener Spieler, der das Spiel startet
-                                System.out.println("Game created.");
+                               Log.info("Game created.");
                             } catch (Exception ex) {
+                                Log.error(ex.toString());
                                 // TODO: implement client error response and implement error handler in client.
                             }
                         } else if (object instanceof BaseMessage) {
@@ -81,14 +83,14 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                     else if(object instanceof RegisterMessage){
 
                         //gameService.createGame(3);//just for test purpose to avoid creating new game in each test
-                        System.out.println("Recived Register Message");
+                       Log.debug("Recived Register Message");
 
                         int ID = gameService.joinGame();
                         if(ID!=-1){     //if game is not full
-                            System.out.println("Players ID="+ID);
+                            Log.debug("Players ID="+ID);
                             ConfirmRegisterMessage crm = new ConfirmRegisterMessage(ID, gameService.getPlayersCards(ID));
                             connection.sendTCP(crm);
-                            System.out.println("New player joined game ["+ID+"]");
+                            Log.debug("New player joined game ["+ID+"]");
                         }else{
                             connection.sendTCP(new ServerActionResponse("Game is full!", true)); // TODO: Action should be false in case of an error.
                         }
@@ -136,7 +138,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
     }
 
     private void startGame() {
-        System.out.println("Game started.");
+        Log.debug("Game started.");
         // TODO: implement start game.
     }
 

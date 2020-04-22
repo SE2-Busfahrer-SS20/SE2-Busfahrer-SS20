@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
@@ -16,6 +15,7 @@ import java.util.List;
 import at.aau.server.service.GameService;
 import at.aau.server.service.impl.GameServiceImpl;
 import shared.exceptions.PlayerLimitExceededException;
+import shared.model.Card;
 import shared.model.GameState;
 import shared.model.Player;
 import shared.model.impl.PlayerImpl;
@@ -96,6 +96,21 @@ public class GameServiceTest {
         assertEquals(gameService.getGame().getState(), GameState.LAB3);
     }
 
+    @Test
+    public void checkPlayerCards() throws PlayerLimitExceededException{
+        // 52 - 4 cards per player
+        int players = 4;
+        int cardsPerPlayer = 52 / players;
+        gameService.createGame(4);
+        Card[][] cardStack = gameService.getPlayercardList();
+
+        assertEquals(cardStack.length, players);
+        assertEquals(cardStack[0].length, 4);
+        assertEquals(cardStack[1].length, 4);
+        assertEquals(cardStack[2].length, 4);
+        assertEquals(cardStack[3].length, 4);
+
+    }
 
     /**
      * Destroy object to support garbage collector.

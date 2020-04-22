@@ -6,11 +6,16 @@ buildscript {
         classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
     }
 }
-
 plugins {
     id 'java'
 }
-
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'at.aau.server.Main'
+        )
+    }
+}
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
 sourceCompatibility = JavaVersion.VERSION_1_8
