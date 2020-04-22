@@ -134,7 +134,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 // TODO: implement.
                 break;
             case ENDED:
-                gameService = null;
+                // TODO: implement.
                 break;
         }
     }
