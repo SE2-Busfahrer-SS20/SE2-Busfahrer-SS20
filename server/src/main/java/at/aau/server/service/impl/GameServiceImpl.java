@@ -104,10 +104,11 @@ public class GameServiceImpl implements GameService {
             this.game = new GameImpl(playerCount);
 
 
-        //till now there is only one game possible
-        //classes Game and Player are ignored
-        //Code will be extended and use them later on
-        //for now Users are identified with ID (to send cards for example)
+        /* till now there is only one game possible
+         * classes Game and Player are ignored
+         * Code will be extended and use them later on
+         * for now Users are identified with ID (to send cards for example)
+         */
 
         cardStack = new DeckImpl();
         playercards=new CardImpl[playerCount][4];
@@ -136,7 +137,7 @@ public class GameServiceImpl implements GameService {
             return playerCount;
         }
         else{
-            //Maximale Spieleranzahl wurde bereits erreicht
+            // max player count already reached.
             return -1;
         }
 
