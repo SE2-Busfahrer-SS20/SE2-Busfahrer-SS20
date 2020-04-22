@@ -1,6 +1,6 @@
-package at.aau.busfahrer.model;
+package shared.model;
 
-import at.aau.busfahrer.model.impl.CardImpl;
+import shared.model.impl.CardImpl;
 
 public interface Deck {
     CardImpl drawCard();

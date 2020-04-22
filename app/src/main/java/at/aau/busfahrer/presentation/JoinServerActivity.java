@@ -12,25 +12,29 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import static shared.networking.kryonet.NetworkConstants.host;
+
 public class JoinServerActivity extends AppCompatActivity {
-    GameService service;
+    GameService gamesvc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_join_server);
 
+        gamesvc = new GameServiceImpl(host);
     }
 
     // click listener beitreten button
     public void onClickBeitreten(View v){
 
         Log.d("Join Button", "pressed");
-        // TODO: hard coded host should be replaced.
-        service = new GameServiceImpl("10.0.0.3");
 
         Intent i = new Intent(JoinServerActivity.this, at.aau.busfahrer.presentation.SelectCheatsActivity.class);
         startActivity(i);
+
+        //join Game
+        gamesvc.joinGame();
     }
 
     private void hideAppTitleBar(){

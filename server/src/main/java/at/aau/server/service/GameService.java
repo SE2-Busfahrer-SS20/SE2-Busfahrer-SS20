@@ -2,6 +2,7 @@ package at.aau.server.service;
 
 import java.util.List;
 
+import shared.model.Card;
 import shared.model.Game;
 import shared.model.GameState;
 import shared.model.Player;
@@ -38,4 +39,9 @@ public interface GameService {
     Game getGame();
     void createGame(int playerCount);
     boolean gameExists();
+
+
+
+    Card[] getPlayersCards(int player);
+    public int joinGame();
 }

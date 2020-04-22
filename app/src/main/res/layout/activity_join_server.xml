@@ -22,7 +22,7 @@
         android:id="@+id/headerEditplayer"
         android:layout_width="0dp"
         android:layout_height="45dp"
-        android:text="Server beitreten"
+        android:text="Spiel beitreten"
         android:theme="@style/mainMenuHeadTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
