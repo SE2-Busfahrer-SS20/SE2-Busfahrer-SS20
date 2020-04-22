@@ -90,13 +90,10 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                             connection.sendTCP(crm);
                             System.out.println("New player joined game ["+ID+"]");
                         }else{
-                            connection.sendTCP(new ServerActionResponse("Game is full!", true));
+                            connection.sendTCP(new ServerActionResponse("Game is full!", true)); // TODO: Action should be false in case of an error.
                         }
                     }
-
-
-                    else if (object instanceof BaseMessage) {
-                        if (object instanceof RegisterMessage) {
+                      else if (object instanceof RegisterMessage) {
                             RegisterMessage msg = (RegisterMessage) object;
                             if (!gameService.gameReady()) {
                                 gameService.addPlayer(new PlayerImpl(msg.getPlayerName(), connection));
@@ -105,7 +102,6 @@ public class GameServer extends NetworkServerKryo implements Runnable{
 
                                 connection.sendTCP(new ServerActionResponse("Player registered.", true));
                             }
-                        }
                     }
 
                 }
