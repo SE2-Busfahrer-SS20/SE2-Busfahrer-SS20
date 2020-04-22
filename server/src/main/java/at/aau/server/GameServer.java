@@ -3,6 +3,7 @@ package at.aau.server;
 import java.io.IOException;
 
 import at.aau.server.service.GameService;
+import at.aau.server.service.impl.GameServiceImpl;
 import shared.model.GameState;
 import shared.model.impl.PlayerImpl;
 import shared.networking.NetworkServer;
@@ -16,26 +17,29 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
+import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
+
 
 public class GameServer extends NetworkServerKryo implements Runnable{
 
 
     private Thread thread;
-    private NetworkServer server;
     private GameService gameService;
 
-    // List for registered dto classes. Add needed classes to the array.
-    private Class[] classList = {TextMessage.class, RegisterMessage.class, CreateGameMessage.class, ServerActionResponse.class};
 
     public GameServer() {
-        server = new NetworkServerKryo();
-        registerClass(TextMessage.class);
+        gameService = new GameServiceImpl();
         registerClasses();
     }
 
     @Override
     public void run() {
+        while(true) {
+            if (gameService.gameExists()) {
+                play(gameService.getGameState());
+            }
 
+        }
     }
 
     // TODO: extract Listener to Listener Factory.
@@ -45,29 +49,36 @@ public class GameServer extends NetworkServerKryo implements Runnable{
         super.addListener(new Listener() {
             public void received(Connection connection, Object object) {
                 // check if the game is null, to prevent NullPointerExceptions.
-                if (gameService.getGame() == null) {
-                    if (object instanceof CreateGameMessage) {
-                        CreateGameMessage msg = (CreateGameMessage) object;
-                        gameService.createGame(msg.getPlayerCount());
-                        Log.debug("Game created.");
-                        // send result to client.
-                        connection.sendTCP(new ServerActionResponse("Game created.", true));
-                    } else if (object instanceof BaseMessage) {
-                        Log.info("Action not supported.");
-                        connection.sendTCP(new TextMessage("Action not supported."));
-                    }
-                } else if (object instanceof BaseMessage){
-                    if (object instanceof RegisterMessage) {
-                        RegisterMessage msg = (RegisterMessage) object;
-                        if (!gameService.gameReady()) {
-                           gameService.addPlayer(new PlayerImpl(msg.getPlayerName(), connection));
-                            Log.debug("Player registered.");
+                if (object == null) {
+                    System.out.println("Object is null");
+                } else if (object instanceof TextMessage) {
+                    System.out.println("Received TextMessage: " + ((TextMessage) object).getText());
+                } else {
+                    if (!gameService.gameExists()) { // in case that no game instance exists.
+                        if (object instanceof CreateGameMessage) {
+                            CreateGameMessage msg = (CreateGameMessage) object;
+                            // gameService.createGame(msg.getPlayerCount());
+                            System.out.println("Game created.");
+                            // Log.debug("Game created.");
                             // send result to client.
-                            connection.sendTCP(new ServerActionResponse("Player registered.", true));
+                            connection.sendTCP(new ServerActionResponse("Game created.", true));
+                        } else if (object instanceof BaseMessage) {
+                            Log.info("Action not supported.");
+                            connection.sendTCP(new TextMessage("Action not supported."));
+                        }
+                    } else if (object instanceof BaseMessage) {
+                        if (object instanceof RegisterMessage) {
+                            RegisterMessage msg = (RegisterMessage) object;
+                            if (!gameService.gameReady()) {
+                                gameService.addPlayer(new PlayerImpl(msg.getPlayerName(), connection));
+                                Log.debug("Player registered.");
+                                // send result to client.
+                                connection.sendTCP(new ServerActionResponse("Player registered.", true));
+                            }
                         }
                     }
-                }
 
+                }
             }
         });
 
@@ -104,7 +115,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
     }
 
     private void registerClasses() {
-        for (Class c : classList)
+        for (Class c : CLASS_LIST)
             registerClass(c);
     }
 

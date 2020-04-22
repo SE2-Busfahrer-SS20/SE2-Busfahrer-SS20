@@ -1,5 +1,6 @@
 package shared.networking.kryonet;
 
+
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -10,22 +11,26 @@ import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.BaseMessage;
 
+import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
+
 public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Client client;
     private Callback<BaseMessage> callback;
 
+
     public NetworkClientKryo() {
         client = new Client();
+        registerClasses();
     }
-
     public void registerClass(Class c) {
-        client.getKryo().register(c);
-    }
+         client.getKryo().register(c);
+   }
 
+
+    @Override
     public void connect(String host) throws IOException {
         client.start();
         client.connect(5000, host, NetworkConstants.TCP_PORT, NetworkConstants.UDP_PORT);
-
         client.addListener(new Listener() {
             public void received(Connection connection, Object object) {
                 if (callback != null && object instanceof BaseMessage)
@@ -41,4 +46,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     public void sendMessage(BaseMessage message) {
         client.sendTCP(message);
     }
+
+    private void registerClasses() {
+        for (Class c : CLASS_LIST)
+            registerClass(c);
+    }
+
 }

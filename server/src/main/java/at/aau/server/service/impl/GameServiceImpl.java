@@ -1,6 +1,5 @@
 package at.aau.server.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import at.aau.server.service.GameService;
@@ -52,7 +51,18 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void nextLab() {
-        // TODO: implement next Lab.
+        switch (game.getState()) {
+            case STARTED:
+                game.setState(GameState.LAB1);
+                break;
+            case LAB1:
+                game.setState(GameState.LAB2);
+                break;
+            case LAB2:
+                game.setState(GameState.LAB3);
+                break;
+        }
+
     }
 
     @Override
@@ -74,6 +84,11 @@ public class GameServiceImpl implements GameService {
     public void createGame(int playerCount) {
         if (this.game == null)
             this.game = new GameImpl(playerCount);
+    }
+
+    @Override
+    public boolean gameExists() {
+        return game != null;
     }
 
 }

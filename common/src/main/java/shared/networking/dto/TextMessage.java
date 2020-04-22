@@ -4,8 +4,8 @@ public class TextMessage extends BaseMessage {
 
     private String text;
 
+    public TextMessage() { }
     public TextMessage(String text) {
-        super(Action.TEXT);
         this.text = text;
     }
 

@@ -12,7 +12,8 @@ public interface NetworkClient {
      * @param host
      * @throws IOException
      */
-    void connect(String host) throws IOException;
+     void connect(String host) throws IOException;
+
 
     /**
      * Registers a callback which gets called if a message is received.
@@ -27,5 +28,4 @@ public interface NetworkClient {
      * @param message
      */
     void sendMessage(BaseMessage message);
-
 }

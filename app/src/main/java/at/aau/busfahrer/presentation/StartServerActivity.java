@@ -1,5 +1,8 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
+import at.aau.busfahrer.service.GameService;
+import at.aau.busfahrer.service.impl.GameServiceImpl;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -16,7 +19,7 @@ public class StartServerActivity extends AppCompatActivity {
     EditText name;
     Spinner spinner;
     Integer playercount;
-
+    GameService gamesvc = new GameServiceImpl("10.0.0.3");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,9 +40,15 @@ public class StartServerActivity extends AppCompatActivity {
 
     // button start
     public void startServer(View v){
+        /*
         playercount = Integer.valueOf(spinner.getSelectedItem().toString());
         Intent i = new Intent(StartServerActivity.this, SelectCheatsActivity.class);
         startActivity(i);
+*/
+        // START SERVER:
+
+        gamesvc.createGame(3, "test");
+
     }
 
     // removes android status bar on top, for fullscreen

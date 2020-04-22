@@ -5,8 +5,8 @@ public class CreateGameMessage extends BaseMessage{
     private String gameName;
     private int playerCount;
 
+    public CreateGameMessage() {}
     public CreateGameMessage(int playerCount, String gameName) {
-        super(Action.CREATE_GAME);
         this.gameName = gameName;
         this.playerCount = playerCount;
     }

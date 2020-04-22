@@ -37,4 +37,5 @@ public interface GameService {
     void endGame();
     Game getGame();
     void createGame(int playerCount);
+    boolean gameExists();
 }
