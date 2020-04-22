@@ -3,6 +3,7 @@ package at.aau.server.service.impl;
 import java.util.List;
 
 import at.aau.server.service.GameService;
+import shared.exceptions.PlayerLimitExceededException;
 import shared.model.Card;
 import shared.model.Deck;
 import shared.model.Game;
@@ -13,6 +14,11 @@ import shared.model.impl.DeckImpl;
 import shared.model.impl.GameImpl;
 
 public class GameServiceImpl implements GameService {
+
+
+    // define constants for MAX Players
+    private final static int PLAYER_LIMIT_MAX = 8;
+    private final static int PLAYER_LIMIT_MIN = 2;
 
     private int maxPlayerCount;
     private int playerCount;
@@ -89,7 +95,9 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame(int playerCount) {
+    public void createGame(int playerCount) throws PlayerLimitExceededException {
+        if (playerCount > PLAYER_LIMIT_MAX || playerCount < PLAYER_LIMIT_MIN)
+            throw new PlayerLimitExceededException();
         this.maxPlayerCount=playerCount;
         this.playerCount=1;
 

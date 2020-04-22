@@ -1,12 +1,10 @@
 package at.aau.server;
 
 import java.io.IOException;
-
 import at.aau.server.service.GameService;
 import at.aau.server.service.impl.GameServiceImpl;
 import shared.model.GameState;
 import shared.model.impl.PlayerImpl;
-import shared.networking.NetworkServer;
 import shared.networking.dto.BaseMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
 import shared.networking.dto.CreateGameMessage;
@@ -59,21 +57,21 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                     if (!gameService.gameExists()) { // in case that no game instance exists.
                         if (object instanceof CreateGameMessage) {
                             CreateGameMessage msg = (CreateGameMessage) object;
-                            gameService.createGame(msg.getPlayerCount());     //initializes cardStack, playerCards for each player in gameService
-                            System.out.println("Game created.");
-                            // Log.debug("Game created.");
-                            // send result to client.
+                            try {
+                                gameService.createGame(msg.getPlayerCount());     //initializes cardStack, playerCards for each player in gameService
+                                // send result to client.
 
-                            //Respond with Cards of player #0
-                            ConfirmRegisterMessage crm = new ConfirmRegisterMessage(0, gameService.getPlayersCards(0));
-                           // ConfirmRegisterMessage cgm = new ConfirmRegisterMessage();
+                                //Respond with Cards of player #0
+                                ConfirmRegisterMessage crm = new ConfirmRegisterMessage(0, gameService.getPlayersCards(0));
+                                // ConfirmRegisterMessage cgm = new ConfirmRegisterMessage();
 
-                            connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
-                                                    // Diese beinhaltet die Karten des Spielers mit der ID=0
-                                                    //ID=0 ist immer jener Spieler, der das Spiel startet
-
-
-                            //connection.sendTCP(new ServerActionResponse("Game created.", true));
+                                connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
+                                // Diese beinhaltet die Karten des Spielers mit der ID=0
+                                //ID=0 ist immer jener Spieler, der das Spiel startet
+                                System.out.println("Game created.");
+                            } catch (Exception ex) {
+                                // TODO: implement client error response and implement error handler in client.
+                            }
                         } else if (object instanceof BaseMessage) {
                             Log.info("Action not supported.");
                             connection.sendTCP(new TextMessage("Action not supported."));
