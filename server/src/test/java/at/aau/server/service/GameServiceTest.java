@@ -12,7 +12,6 @@ import org.mockito.junit.MockitoRule;
 
 import java.util.List;
 
-import at.aau.server.service.GameService;
 import at.aau.server.service.impl.GameServiceImpl;
 import shared.exceptions.PlayerLimitExceededException;
 import shared.model.Card;
@@ -21,7 +20,6 @@ import shared.model.Player;
 import shared.model.impl.PlayerImpl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -45,6 +43,9 @@ public class GameServiceTest {
 
     }
 
+    /*
+     * The following code tests basic methods of GameService.
+     */
     @Test
     public void testGameExists() {
         assertFalse(gameService.gameExists());
@@ -98,18 +99,20 @@ public class GameServiceTest {
 
     @Test
     public void checkPlayerCards() throws PlayerLimitExceededException{
-        // 52 - 4 cards per player
+        // 52 - (4*PlayerCount) remaining cards in cardStack.
         int players = 4;
         int cardsPerPlayer = 52 / players;
+        // start game
         gameService.createGame(4);
+        // check card deck after dealing cards (4 cards / Player).
+        assertEquals((gameService.getCardStack()).size(), (52 - (players * 4)));
+        // check player cards.
         Card[][] cardStack = gameService.getPlayercardList();
-
         assertEquals(cardStack.length, players);
         assertEquals(cardStack[0].length, 4);
         assertEquals(cardStack[1].length, 4);
         assertEquals(cardStack[2].length, 4);
         assertEquals(cardStack[3].length, 4);
-
     }
 
     /**
