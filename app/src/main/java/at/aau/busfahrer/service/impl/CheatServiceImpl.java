@@ -85,17 +85,14 @@ public class CheatServiceImpl implements CheatService {
      */
     @Override
     public void onSensorChanged(SensorEvent event) {
+        lastUpdate = System.currentTimeMillis();
       switch (sensor.getType()){
           case Sensor.TYPE_ACCELEROMETER:
-              lastUpdate = System.currentTimeMillis();
               getAccelerometer(event);
           case Sensor.TYPE_LIGHT:
-              lastUpdate = System.currentTimeMillis();
               getLight(event);
       }
     }
-
-
 
     private void getAccelerometer(SensorEvent event){
 
@@ -106,11 +103,11 @@ public class CheatServiceImpl implements CheatService {
         float z = event.values[2];
 
         // calculate g force
-        float accelationSquareRoot = (x * x + y * y + z * z)
+        float accelerationSquareRoot = (x * x + y * y + z * z)
                 / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
 
-        if (accelationSquareRoot >= 3){
-            if(timeNow - lastUpdate < 200){
+        if (accelerationSquareRoot >= 3){
+            if(timeNow - lastUpdate < 400){
                 return;
             }
             System.out.println("Shake detected");
@@ -120,6 +117,20 @@ public class CheatServiceImpl implements CheatService {
     }
 
     private void getLight(SensorEvent event){
+
+        long timeNow = System.currentTimeMillis();
+
+        // sensor default value ~5 daylight
+        float lux = event.values[0];
+        if(lux < 2){
+            if(timeNow - lastUpdate < 400){
+                return;
+            }
+            System.out.println("dark");
+        }else{
+            return;
+        }
+
 
     }
 
