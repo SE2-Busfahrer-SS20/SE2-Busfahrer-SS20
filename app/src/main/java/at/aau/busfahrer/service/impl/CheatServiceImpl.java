@@ -9,6 +9,13 @@ import at.aau.busfahrer.service.CheatService;
 public class CheatServiceImpl implements CheatService {
 
     /*
+        Zu beginn des Spieles kann sich jeder Spieler für einen der folgenden „Sensoren“ entscheiden,
+        mit deren Auslösung er unbemerkt Schummeln kann.
+
+        *Lichtsensor
+        *Beschleunigungsensor
+        *Annährungssensor
+
     https://developer.android.com/reference/android/hardware/SensorManager
      */
 
@@ -25,6 +32,7 @@ public class CheatServiceImpl implements CheatService {
     private SensorListener sensorListener;
     private SensorManager sensorManager;
     private static Sensor sensor;
+    private long lastUpdate;
 
     // constructor
     private CheatServiceImpl(){};
@@ -39,17 +47,20 @@ public class CheatServiceImpl implements CheatService {
         this.sensorListener = sensorListener;
     }
 
-    public void setSensor(Sensor sensor){
-        this.sensor = sensor;
+    public void setSensor(int type){
+        if (type == Sensor.TYPE_ACCELEROMETER){
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        }else if(type == Sensor.TYPE_LIGHT){
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        }
     }
 
     private void onStart(){
         Log.i(TAG,"Service started");
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        if(sensorManager != null){
-            sensorManager.registerListener(this,sensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
+
     private void onPause(){
         Log.i(TAG,"Service paused");
         sensorManager.unregisterListener(this);
@@ -68,13 +79,50 @@ public class CheatServiceImpl implements CheatService {
         sensorManager = null;
     }
 
+    /*
+    Sensor Event = long timestamp , float value[] x,y,z , Sensor Obj , int accuracy
+    https://developer.android.com/guide/topics/sensors/sensors_overview#dont-block-the-onsensorchanged-method
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if(event.values[0] > 12) {
-            System.out.println("Sensor change detected");
-            sensorListener.handle();
+      switch (sensor.getType()){
+          case Sensor.TYPE_ACCELEROMETER:
+              lastUpdate = System.currentTimeMillis();
+              getAccelerometer(event);
+          case Sensor.TYPE_LIGHT:
+              lastUpdate = System.currentTimeMillis();
+              getLight(event);
+      }
+    }
+
+
+
+    private void getAccelerometer(SensorEvent event){
+
+        long timeNow = System.currentTimeMillis();
+        long timestamp = event.timestamp;
+        float x = event.values[0];
+        float y = event.values[1];
+        float z = event.values[2];
+
+        // calculate g force
+        float accelationSquareRoot = (x * x + y * y + z * z)
+                / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
+
+        if (accelationSquareRoot >= 3){
+            if(timeNow - lastUpdate < 200){
+                return;
+            }
+            System.out.println("Shake detected");
+        }else{
+            return;
         }
     }
+
+    private void getLight(SensorEvent event){
+
+    }
+
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
