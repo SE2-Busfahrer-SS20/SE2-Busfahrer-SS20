@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import at.aau.busfahrer.R;
+import at.aau.busfahrer.service.impl.CheatServiceImpl;
 import shared.model.Card;
 import shared.model.impl.CardImpl;
 import shared.model.impl.playersCards;
@@ -17,6 +18,7 @@ import shared.model.impl.playersCards;
 public class GuessActivity extends AppCompatActivity {
 
     private Card[] cards;
+    CheatServiceImpl cheatService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,12 @@ public class GuessActivity extends AppCompatActivity {
         //till now this method only works after creating a new Game on the server
         //Join a new game is not implemented yet
         cards= playersCards.getCards();
+
+        cheatService = CheatServiceImpl.getInstance();
+        cheatService.setContext(this);
+        cheatService.startListen();
+
+        // TODO -> onBackPressed() prevent going back.
 
     }
 

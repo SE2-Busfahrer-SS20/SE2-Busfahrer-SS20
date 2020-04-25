@@ -11,7 +11,7 @@ public interface CheatService extends SensorEventListener {
     void pauseListen();
     void resumeListen();
     void stopListen();
-    void setSensor(int type);
+    void setSensorType(int type);
 
     void onSensorChanged(SensorEvent event);
     void onAccuracyChanged(Sensor sensor, int accuracy);

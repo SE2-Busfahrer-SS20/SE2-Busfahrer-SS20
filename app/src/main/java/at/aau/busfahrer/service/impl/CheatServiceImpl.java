@@ -31,8 +31,9 @@ public class CheatServiceImpl implements CheatService {
     private Context context;
     private SensorListener sensorListener;
     private SensorManager sensorManager;
+    private int sensor_type;
     private static Sensor sensor;
-    private long lastUpdate;
+    public boolean isSensorListen = false;
 
     // constructor
     private CheatServiceImpl(){};
@@ -47,28 +48,35 @@ public class CheatServiceImpl implements CheatService {
         this.sensorListener = sensorListener;
     }
 
-    public void setSensor(int type){
-        if (type == Sensor.TYPE_ACCELEROMETER){
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        }else if(type == Sensor.TYPE_LIGHT){
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        }
+    public void setSensorType(int type){
+        sensor_type = type;
+    }
+    public int getSensorType(){
+        return sensor_type;
     }
 
     private void onStart(){
         Log.i(TAG,"Service started");
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        if (sensor_type == Sensor.TYPE_ACCELEROMETER){
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        }else if(sensor_type == Sensor.TYPE_LIGHT){
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        }
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        isSensorListen = true;
     }
 
     private void onPause(){
         Log.i(TAG,"Service paused");
         sensorManager.unregisterListener(this);
+        isSensorListen = false;
     }
 
     private void onResume(){
         Log.i(TAG,"Service resume");
         sensorManager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+        isSensorListen = true;
     }
 
     private void onStop(){
@@ -77,6 +85,7 @@ public class CheatServiceImpl implements CheatService {
         context = null;
         sensorListener = null;
         sensorManager = null;
+        isSensorListen = false;
     }
 
     /*
@@ -85,8 +94,7 @@ public class CheatServiceImpl implements CheatService {
      */
     @Override
     public void onSensorChanged(SensorEvent event) {
-        lastUpdate = System.currentTimeMillis();
-      switch (sensor.getType()){
+        switch (sensor.getType()){
           case Sensor.TYPE_ACCELEROMETER:
               getAccelerometer(event);
           case Sensor.TYPE_LIGHT:
@@ -94,10 +102,9 @@ public class CheatServiceImpl implements CheatService {
       }
     }
 
-    private void getAccelerometer(SensorEvent event){
+    private void getAccelerometer(SensorEvent event) {
 
-        long timeNow = System.currentTimeMillis();
-        long timestamp = event.timestamp;
+        long timestamp = event.timestamp; // in nanoseconds
         float x = event.values[0];
         float y = event.values[1];
         float z = event.values[2];
@@ -105,11 +112,7 @@ public class CheatServiceImpl implements CheatService {
         // calculate g force
         float accelerationSquareRoot = (x * x + y * y + z * z)
                 / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
-
-        if (accelerationSquareRoot >= 3){
-            if(timeNow - lastUpdate < 400){
-                return;
-            }
+        if (accelerationSquareRoot >= 2){
             System.out.println("Shake detected");
         }else{
             return;
@@ -118,19 +121,13 @@ public class CheatServiceImpl implements CheatService {
 
     private void getLight(SensorEvent event){
 
-        long timeNow = System.currentTimeMillis();
-
         // sensor default value ~5 daylight
         float lux = event.values[0];
         if(lux < 2){
-            if(timeNow - lastUpdate < 400){
-                return;
-            }
             System.out.println("dark");
         }else{
             return;
         }
-
 
     }
 
@@ -140,6 +137,9 @@ public class CheatServiceImpl implements CheatService {
     @Override
     public void setContext(Context context) {
         this.context = context;
+    }
+    public Context getContext() {
+        return context;
     }
     @Override
     public void startListen() {
