@@ -2,6 +2,7 @@ package shared.model.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import shared.model.Deck;
 import shared.model.impl.CardImpl;
@@ -9,7 +10,7 @@ import shared.model.impl.CardImpl;
 public class DeckImpl implements Deck {
     private static final int NUM_CARDS_IN_DECK = 52;    //4 (Farben) * 13(Anzahl Karten pro Farbe) = 52 Karten gesamt
 
-    private ArrayList<CardImpl> cards = new ArrayList<>( ); //ArrayList, weil es viel dynamischer zu handhaben ist, als ein Array
+    private List<CardImpl> cards = new ArrayList<>( ); //ArrayList, weil es viel dynamischer zu handhaben ist, als ein Array
 
     public DeckImpl( ) {
         //Erstelle des Kartendecks
@@ -26,10 +27,7 @@ public class DeckImpl implements Deck {
     }
 
     public boolean isEmpty( ) {
-        if (cards.size()<5)
-            return true;
-        else
-            return false;
+        return cards.size()==0;
     }
 
     public void refill(){
@@ -41,7 +39,10 @@ public class DeckImpl implements Deck {
             boolean exist=false;
             //Überprüfung ob Karten bereits im Deck sind.
             for(int j=0;j<size;j++) {
-                if(cards.get(j).equals(c))
+                CardImpl a = cards.get(j);
+                String card1 = a.toString();
+                String card2 = c.toString();
+                if(card1.equals(card2))
                     exist=true;
             }
             if(!exist)
@@ -50,10 +51,16 @@ public class DeckImpl implements Deck {
         Collections.shuffle( cards );
     }
 
-    public void printDeck() {
+    public List<String> printDeck() {
+        List<String> strings = new ArrayList<>();
+
         for(int i=0;i<NUM_CARDS_IN_DECK;i++){
-            System.out.println("#"+i+" Suit: "+cards.get(i).getSuit()+"\tRank: "+cards.get(i).getRank()+"\t\t"+cards.get(i).toString());
+            strings.add(cards.get(i).toString());
         }
+        return strings;
+    }
+    public List<CardImpl> getCards(){
+        return cards;
     }
     public int size() {
         return cards.size();

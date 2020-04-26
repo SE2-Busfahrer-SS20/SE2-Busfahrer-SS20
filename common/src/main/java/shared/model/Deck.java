@@ -1,10 +1,12 @@
 package shared.model;
 
 import shared.model.impl.CardImpl;
+import java.util.List;
+
 
 public interface Deck {
     CardImpl drawCard();
     void refill();
-    void printDeck();
     int size();
+    List<String> printDeck();
 }
