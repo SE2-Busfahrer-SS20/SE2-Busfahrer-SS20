@@ -16,10 +16,16 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
+import javax.xml.soap.Text;
+
 import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 
 
+
 public class GameServer extends NetworkServerKryo implements Runnable{
+
+    private static final String REQUEST_TEST = "request test";
+    private static final String RESPONSE_TEST = "response test";
 
     private Thread thread;
     private GameService gameService;
@@ -51,7 +57,9 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 // check if the game is null, to prevent NullPointerExceptions.
                 if (object == null) {
                     Log.debug("Object is null");
-                } else if (object instanceof TextMessage) {
+                } else if (object instanceof TextMessage && ((TextMessage) object).getText().equals(REQUEST_TEST)) {
+                    messageCallback.callback((TextMessage) object);
+                    connection.sendTCP(new TextMessage(RESPONSE_TEST));
                     Log.debug("Received TextMessage: " + ((TextMessage) object).getText());
                 } else {
 

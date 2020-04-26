@@ -1,49 +1,24 @@
 package at.aau.server;
 
-import com.esotericsoftware.kryonet.Connection;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
+
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-
-import java.util.List;
-
-import shared.exceptions.PlayerLimitExceededException;
-import shared.model.Card;
-import shared.model.GameState;
-import shared.model.Player;
-import shared.model.impl.PlayerImpl;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import shared.networking.NetworkClient;
+import shared.networking.dto.TextMessage;
+import shared.networking.kryonet.NetworkClientKryo;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+
 
 public class GameServerTest {
 
-    private final static int MAX_PLAYERS = 8;
-    private final static int MIN_PLAYERS = 8;
 
     private GameServer gameServer;
-    @Mock
-    Connection mockConnection;
-
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
-    /**
-     * Init instance of object.
-     */
-    @Before
-    public void init() {
-        gameServer = new GameServer();
-
-    }
-
-
 
     /**
      * Destroy object to support garbage collector.
@@ -51,6 +26,78 @@ public class GameServerTest {
     @After
     public void destroy() {
         gameServer = null;
+    }
+
+    private static final String REQUEST_TEST = "request test";
+    private static final String RESPONSE_TEST = "response test";
+
+    private AtomicBoolean request1Handled;
+    private AtomicBoolean request2Handled;
+    private AtomicBoolean responseHandled;
+
+    @Before
+    public void setup() {
+        gameServer = new GameServer();
+        request1Handled = new AtomicBoolean(false);
+        request2Handled = new AtomicBoolean(false);
+        responseHandled = new AtomicBoolean(false);
+    }
+
+    @Test
+    public void NetworkConnection_OneClient_SendAndReceiveText() throws IOException, InterruptedException {
+        System.out.printf("Main Thread ID: %d%n", Thread.currentThread().getId());
+
+        startServer();
+        startClient();
+
+        // wait for server and client to handle messages
+        Thread.sleep(1500);
+
+        assertTrue(request1Handled.get());
+        assertTrue(request2Handled.get());
+        assertTrue(responseHandled.get());
+    }
+
+
+
+    private void startServer() throws IOException {
+        AtomicBoolean first = new AtomicBoolean(true);
+
+        // NetworkServer server = new NetworkServerKryo();
+        // registerClassesForComponent((NetworkServerKryo)server);
+
+        gameServer.start();
+        gameServer.registerCallback(argument -> {
+                    System.out.printf("Server Thread ID: %d%n", Thread.currentThread().getId());
+
+            request1Handled.set(true);
+            assertTrue(argument instanceof TextMessage);
+
+            assertEquals(REQUEST_TEST, ((TextMessage) argument).getText());
+            request2Handled.set(true);
+
+            gameServer.broadcastMessage(new TextMessage(RESPONSE_TEST));
+                }
+        );
+    }
+
+    private void startClient() throws IOException {
+        NetworkClient client = new NetworkClientKryo();
+        // registerClassesForComponent((NetworkClientKryo)client);
+
+        client.connect("localhost");
+        client.registerCallback(argument ->
+                {
+                    System.out.printf("Client Thread ID: %d%n", Thread.currentThread().getId());
+
+                    assertTrue(argument instanceof TextMessage);
+                    assertEquals(RESPONSE_TEST, ((TextMessage) argument).getText());
+                    responseHandled.set(true);
+                }
+        );
+
+      //  client.sendMessage(new TextMessageSubClass());
+        client.sendMessage(new TextMessage(REQUEST_TEST));
     }
 
 }
