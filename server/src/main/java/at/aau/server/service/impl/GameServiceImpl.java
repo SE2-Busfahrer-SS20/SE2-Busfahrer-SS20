@@ -3,6 +3,7 @@ package at.aau.server.service.impl;
 import java.util.List;
 
 import at.aau.server.service.GameService;
+import shared.exceptions.PlayerLimitExceededException;
 import shared.model.Card;
 import shared.model.Deck;
 import shared.model.Game;
@@ -14,11 +15,15 @@ import shared.model.impl.GameImpl;
 
 public class GameServiceImpl implements GameService {
 
+
+    // define constants for MAX Players
+    private final static int PLAYER_LIMIT_MAX = 8;
+    private final static int PLAYER_LIMIT_MIN = 2;
+
     private int maxPlayerCount;
     private int playerCount;
-    private Deck cardStack;
     private Card[][] playercards; //Array of size: [amount of players][4]
-
+    private Deck cardStack;
     private Game game;//Ignored for now
 
     public GameServiceImpl() {
@@ -89,7 +94,9 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame(int playerCount) {
+    public void createGame(int playerCount) throws PlayerLimitExceededException {
+        if (playerCount > PLAYER_LIMIT_MAX || playerCount < PLAYER_LIMIT_MIN)
+            throw new PlayerLimitExceededException();
         this.maxPlayerCount=playerCount;
         this.playerCount=1;
 
@@ -97,17 +104,18 @@ public class GameServiceImpl implements GameService {
             this.game = new GameImpl(playerCount);
 
 
-        //till now there is only one game possible
-        //classes Game and Player are ignored
-        //Code will be extended and use them later on
-        //for now Users are identified with ID (to send cards for example)
+        /* till now there is only one game possible
+         * classes Game and Player are ignored
+         * Code will be extended and use them later on
+         * for now Users are identified with ID (to send cards for example)
+         */
 
-        cardStack=new DeckImpl();
+        cardStack = new DeckImpl();
         playercards=new CardImpl[playerCount][4];
 
         for(int i=0; i<playercards.length;i++){
             for(int j=0; j<playercards[i].length;j++){
-                playercards[i][j]=cardStack.drawCard();
+                playercards[i][j]= cardStack.drawCard();
             }
         }
     }
@@ -129,10 +137,20 @@ public class GameServiceImpl implements GameService {
             return playerCount;
         }
         else{
-            //Maximale Spieleranzahl wurde bereits erreicht
+            // max player count already reached.
             return -1;
         }
 
+    }
+
+    @Override
+    public Card[][] getPlayercardList() {
+        return playercards;
+    }
+
+    @Override
+    public Deck getCardStack() {
+        return cardStack;
     }
 
 }

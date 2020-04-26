@@ -55,4 +55,7 @@ public class DeckImpl implements Deck {
             System.out.println("#"+i+" Suit: "+cards.get(i).getSuit()+"\tRank: "+cards.get(i).getRank()+"\t\t"+cards.get(i).toString());
         }
     }
+    public int size() {
+        return cards.size();
+    }
 }

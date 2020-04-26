@@ -3,7 +3,7 @@ package shared.networking.kryonet;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-
+import com.esotericsoftware.minlog.Log;
 import java.io.IOException;
 
 import shared.model.impl.playersCards;
@@ -39,8 +39,12 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             public void received(Connection connection, Object object) {
 
                 if(object instanceof ConfirmRegisterMessage){
-                    System.out.println("Registration Confirmed");
-                    //Von hier aus die Karten in GameServiceImpl oder wo anders in der App zu speichern führt zu Circle-Dependencies --> Redesign -> Listener verschieben?
+                    Log.debug("Registration Confirmed");
+                    // TODO: Karten am Client speichern und mittels Callback Function die Cases behandeln.
+                    /*
+                     * Von hier aus die Karten in GameServiceImpl oder wo anders in der App
+                     * zu speichern führt zu Circle-Dependencies --> Redesign -> Listener verschieben?
+                     */
                     //Oder Karten in Common Speichern? (--> so ist es jetzt)
                     playersCards.setCards(((ConfirmRegisterMessage)object).getCards());
 
@@ -48,9 +52,9 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
                 if (callback != null && object instanceof BaseMessage) {    //Es scheint als würde die If-Bedingung am callback !=null scheitern
                     callback.callback((BaseMessage) object);
-                    System.out.println("Callback is instance of BaseMessage");
+                    Log.debug("Callback is instance of BaseMessage");
                     if(object instanceof TextMessage){
-                        System.out.println(((TextMessage)(object)).getText());
+                        Log.debug(((TextMessage)(object)).getText());
                     }
 
                 }
