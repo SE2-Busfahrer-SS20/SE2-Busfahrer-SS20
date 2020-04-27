@@ -1,5 +1,7 @@
 package at.aau.busfahrer.service.impl;
 
+import android.util.Log;
+
 import at.aau.busfahrer.presentation.GuessActivity;
 import at.aau.busfahrer.service.GameService;
 import shared.model.Card;
@@ -37,11 +39,9 @@ public class GameServiceImpl implements GameService {
                 CreateGameMessage cgm = new CreateGameMessage(pc,gN);
                 try {
                     client.connect(host);
-                    //client.sendMessage(new TextMessage("test"));
                     client.sendMessage(cgm);
                 } catch (Exception e) {
-                    System.out.println(e);
-                    e.printStackTrace();
+                    Log.e(this.getClass().getName(), "Crate Game Error", e);
                 }
             }
         });
