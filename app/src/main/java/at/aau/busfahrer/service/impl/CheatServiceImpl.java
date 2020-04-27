@@ -20,6 +20,8 @@ public class CheatServiceImpl implements CheatService {
      */
 
     private static final String TAG = "CheatServiceImpl";
+    private static final int TYPE_FAIR = 0;
+
     private static CheatServiceImpl instance;
 
     // callback for UI calls
@@ -62,9 +64,14 @@ public class CheatServiceImpl implements CheatService {
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         }else if(sensor_type == Sensor.TYPE_LIGHT){
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        }else if (sensor_type == TYPE_FAIR){
+            sensor = null;
+            isSensorListen = false;
         }
-        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-        isSensorListen = true;
+        if (sensor != null){
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+            isSensorListen = true;
+        }
     }
 
     private void onPause(){
@@ -95,10 +102,12 @@ public class CheatServiceImpl implements CheatService {
     @Override
     public void onSensorChanged(SensorEvent event) {
         switch (sensor.getType()){
-          case Sensor.TYPE_ACCELEROMETER:
+          case (Sensor.TYPE_ACCELEROMETER):
               getAccelerometer(event);
-          case Sensor.TYPE_LIGHT:
+              break;
+          case (Sensor.TYPE_LIGHT):
               getLight(event);
+              break;
       }
     }
 
@@ -120,19 +129,15 @@ public class CheatServiceImpl implements CheatService {
     }
 
     private void getLight(SensorEvent event){
-
         // sensor default value ~5 daylight
+        // todo: sensor sensitivity too high
         float lux = event.values[0];
-        if(lux < 2){
+        if(lux < 5){
             System.out.println("dark");
         }else{
             return;
         }
-
     }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
     @Override
     public void setContext(Context context) {
@@ -147,15 +152,26 @@ public class CheatServiceImpl implements CheatService {
     }
     @Override
     public void pauseListen() {
+        if(sensor_type == TYPE_FAIR){
+
+        }
         onPause();
     }
     @Override
     public void resumeListen() {
+        if(sensor_type == TYPE_FAIR){
+
+        }
         onResume();
     }
     @Override
     public void stopListen() {
+        if(sensor_type == TYPE_FAIR){
+
+        }
         onStop();
     }
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
 }
