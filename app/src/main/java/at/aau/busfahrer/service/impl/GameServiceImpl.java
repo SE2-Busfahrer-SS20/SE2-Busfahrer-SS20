@@ -23,10 +23,6 @@ public class GameServiceImpl implements GameService {
         this.host = host;
     }
 
-    public void connect() {
-        //Whats this method designated for?
-    }
-
     @Override
     public void createGame(int playercount, String gameName) {
         //Must be declared final to get accessable in inner class
@@ -60,8 +56,7 @@ public class GameServiceImpl implements GameService {
                     client.connect(host);
                     client.sendMessage(rm);
                 } catch (Exception e) {
-                    System.out.println(e);
-                    e.printStackTrace();
+                    Log.e(this.getClass().getName(), "Join Game Error", e);
                 }
             }
         });
