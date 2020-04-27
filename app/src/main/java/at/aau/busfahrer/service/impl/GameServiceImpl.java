@@ -2,15 +2,10 @@ package at.aau.busfahrer.service.impl;
 
 import android.util.Log;
 
-import at.aau.busfahrer.presentation.GuessActivity;
 import at.aau.busfahrer.service.GameService;
-import shared.model.Card;
-import shared.model.Game;
-import shared.model.impl.CardImpl;
 import shared.networking.NetworkClient;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.RegisterMessage;
-import shared.networking.dto.TextMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 
 public class GameServiceImpl implements GameService {
