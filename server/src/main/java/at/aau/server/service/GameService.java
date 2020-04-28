@@ -2,7 +2,9 @@ package at.aau.server.service;
 
 import java.util.List;
 
+import shared.exceptions.PlayerLimitExceededException;
 import shared.model.Card;
+import shared.model.Deck;
 import shared.model.Game;
 import shared.model.GameState;
 import shared.model.Player;
@@ -37,11 +39,10 @@ public interface GameService {
     void startGame();
     void endGame();
     Game getGame();
-    void createGame(int playerCount);
+    void createGame(int playerCount) throws PlayerLimitExceededException;
     boolean gameExists();
-
-
-
+    Card[][] getPlayercardList();
+    Deck getCardStack();
     Card[] getPlayersCards(int player);
     public int joinGame();
 }

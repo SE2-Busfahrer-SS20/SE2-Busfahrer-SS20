@@ -62,4 +62,7 @@ public class DeckImpl implements Deck {
     public List<CardImpl> getCards(){
         return cards;
     }
+    public int size() {
+        return cards.size();
+    }
 }

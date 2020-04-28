@@ -7,4 +7,5 @@ public interface Deck {
     CardImpl drawCard();
     void refill();
     List<String> printDeck();
+    int size();
 }
