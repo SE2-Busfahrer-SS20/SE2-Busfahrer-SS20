@@ -1,14 +1,11 @@
 package at.aau.busfahrer.service.impl;
 
-import at.aau.busfahrer.presentation.GuessActivity;
+import android.util.Log;
+
 import at.aau.busfahrer.service.GameService;
-import shared.model.Card;
-import shared.model.Game;
-import shared.model.impl.CardImpl;
 import shared.networking.NetworkClient;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.RegisterMessage;
-import shared.networking.dto.TextMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 
 public class GameServiceImpl implements GameService {
@@ -19,10 +16,6 @@ public class GameServiceImpl implements GameService {
     public GameServiceImpl(String host) {
         this.client = new NetworkClientKryo();
         this.host = host;
-    }
-
-    public void connect() {
-        //Whats this method designated for?
     }
 
     @Override
@@ -37,11 +30,9 @@ public class GameServiceImpl implements GameService {
                 CreateGameMessage cgm = new CreateGameMessage(pc,gN);
                 try {
                     client.connect(host);
-                    //client.sendMessage(new TextMessage("test"));
                     client.sendMessage(cgm);
                 } catch (Exception e) {
-                    System.out.println(e);
-                    e.printStackTrace();
+                    Log.e(this.getClass().getName(), "Crate Game Error", e);
                 }
             }
         });
@@ -60,8 +51,7 @@ public class GameServiceImpl implements GameService {
                     client.connect(host);
                     client.sendMessage(rm);
                 } catch (Exception e) {
-                    System.out.println(e);
-                    e.printStackTrace();
+                    Log.e(this.getClass().getName(), "Join Game Error", e);
                 }
             }
         });
