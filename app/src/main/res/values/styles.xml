@@ -1,11 +1,42 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="menu_AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">#FF6E40</item>
+        <item name="editTextStyle">@style/menuEditText</item>
+        <item name="buttonStyle">@style/button_black</item>
+    </style>
+
+    <!-- global set themes and styles for the main menu -->
+    <style name="menuEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/bg_edit_text</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:padding">2dp</item>
+        <item name ="android:imeOptions">flagNoExtractUi</item>
+    </style>
+    <style name="button_black" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/bg_btn_black</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="button_orange" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/bg_btn_orange</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="mainMenuHeadTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/bg_head_orange</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:gravity">center_horizontal|center_vertical</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
 </resources>
