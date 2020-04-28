@@ -1,11 +1,10 @@
-package at.aau.busfahrer;
+package at.aau.common.shared.model;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import at.aau.busfahrer.model.impl.CardImpl;
+import shared.model.impl.CardImpl;
 
 
 public class CardImplTest {
