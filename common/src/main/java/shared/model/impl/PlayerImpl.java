@@ -7,6 +7,7 @@ import shared.model.Player;
 public class PlayerImpl implements Player {
     private String name;
     private Connection connection;
+    private int count;
 
     public PlayerImpl(String name, Connection connection) {
         this.name = name;
@@ -21,5 +22,15 @@ public class PlayerImpl implements Player {
     @Override
     public Connection getConnection() {
         return connection;
+    }
+
+    @Override
+    public int getCount() {
+        return count;
+    }
+
+    @Override
+    public void setCount(int newCount) {
+        this.count = newCount;
     }
 }

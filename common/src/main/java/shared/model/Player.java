@@ -7,5 +7,7 @@ public interface Player {
 
     String getName();
     Connection getConnection();
+    int getCount();
+    void setCount(int newCount);
 
 }

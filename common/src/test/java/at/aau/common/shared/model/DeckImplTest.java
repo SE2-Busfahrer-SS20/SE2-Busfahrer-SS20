@@ -1,4 +1,4 @@
-package at.aau.busfahrer;
+package at.aau.common.shared.model;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -8,11 +8,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.aau.busfahrer.model.impl.CardImpl;
-import at.aau.busfahrer.model.impl.DeckImpl;
-import at.aau.busfahrer.model.impl.DeckImpl.*;
-
-import static org.junit.Assert.*;
+import shared.model.impl.CardImpl;
+import shared.model.impl.DeckImpl;
 
 
 public class DeckImplTest {
