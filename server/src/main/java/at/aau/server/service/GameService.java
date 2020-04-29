@@ -22,6 +22,8 @@ public interface GameService {
      * @return boolean status,  false in case of a full List.
      */
     boolean addPlayer(Player player);
+    boolean addPlayer(String name, String MACAdress);
+
 
     /**
      *
@@ -39,10 +41,10 @@ public interface GameService {
     void startGame();
     void endGame();
     Game getGame();
-    void createGame(int playerCount) throws PlayerLimitExceededException;
+    void createGame() throws PlayerLimitExceededException;
     boolean gameExists();
-    Card[][] getPlayercardList();
-    Deck getCardStack();
+    //Card[][] getPlayercardList();
+    // Deck getCardStack();
     Card[] getPlayersCards(int player);
     public int joinGame();
 }

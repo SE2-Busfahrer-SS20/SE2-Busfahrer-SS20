@@ -2,7 +2,7 @@ package at.aau.busfahrer.service;
 
 public interface GameService {
 
-    void createGame(int playercount, String gameName);
+    void createGame(int playercount);
 
-    void joinGame();
+    void joinGame(String name);
 }

@@ -18,7 +18,6 @@ import static shared.networking.kryonet.NetworkConstants.host;
 
 public class StartServerActivity extends AppCompatActivity {
 
-    EditText name;
     Spinner spinner;
     Integer playercount;
     GameService gamesvc;
@@ -29,7 +28,6 @@ public class StartServerActivity extends AppCompatActivity {
         hideAppTitleBar();
         setContentView(R.layout.activity_start_server);
         initSpinnerDropDown();
-        name = findViewById(R.id.server_name);
 
         gamesvc=new GameServiceImpl(host);//moved down //IP of computer (Localhost=phone)
     }
@@ -50,7 +48,7 @@ public class StartServerActivity extends AppCompatActivity {
         startActivity(i);
 
         // START SERVER:
-        gamesvc.createGame(playercount, name.toString());
+        gamesvc.createGame(playercount);
 
     }
 

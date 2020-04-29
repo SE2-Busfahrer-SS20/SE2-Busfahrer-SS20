@@ -30,7 +30,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
-        android:text="Join Game"
+        android:text="PLAY GAME"
         android:onClick="onClickJoinServer"
         app:layout_constraintEnd_toEndOf="@+id/start_server"
         app:layout_constraintStart_toStartOf="@+id/start_server"

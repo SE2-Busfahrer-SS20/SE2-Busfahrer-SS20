@@ -9,4 +9,6 @@ public interface Game {
     int getPlayerCount();
     List<Player> getPlayerList();
     void setPlayerList(List<Player> playerList);
+    boolean addPlayer(String name, String MACAdress);
+    Card[] getPlayersCards(int player);
 }

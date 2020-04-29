@@ -12,17 +12,17 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import static shared.networking.kryonet.NetworkConstants.host;
+import static shared.networking.kryonet.NetworkConstants.host;//Das oder ganzes Interface löschen
 
 public class JoinServerActivity extends AppCompatActivity {
-    GameService gamesvc;
+    GameService gamesvc;//Das oder ganzes Interface löschen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_join_server);
 
-        gamesvc = new GameServiceImpl(host);
+        gamesvc = new GameServiceImpl(host);//Das oder ganzes Interface löschen
     }
 
     // click listener beitreten button
@@ -34,7 +34,7 @@ public class JoinServerActivity extends AppCompatActivity {
         startActivity(i);
 
         //join Game
-        gamesvc.joinGame();
+       // gamesvc.joinGame();//Das oder ganzes Interface löschen
     }
 
     private void hideAppTitleBar(){

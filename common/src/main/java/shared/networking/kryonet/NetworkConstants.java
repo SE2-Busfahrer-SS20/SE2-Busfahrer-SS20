@@ -22,7 +22,7 @@ public class NetworkConstants {
             ServerActionResponse.class,
             ConfirmRegisterMessage.class,
 
-            shared.model.impl.CardImpl[].class,//because it says to do so in Error message???!!
+            shared.model.impl.CardImpl[].class,
             shared.model.impl.CardImpl.class
 
     };

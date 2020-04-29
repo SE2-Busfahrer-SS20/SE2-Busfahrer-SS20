@@ -1,21 +1,32 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
+import at.aau.busfahrer.service.GameService;
+import at.aau.busfahrer.service.impl.GameServiceImpl;
+import shared.networking.dto.RegisterMessage;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import static shared.networking.kryonet.NetworkConstants.host;
 
 public class MainMenuActivity extends AppCompatActivity {
+    GameService gamesvc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_main_menu);
+        gamesvc = new GameServiceImpl(host);
     }
 
       // click listener about button
@@ -63,6 +74,20 @@ public class MainMenuActivity extends AppCompatActivity {
     public void onClickJoinServer(View v){
         Intent i = new Intent(MainMenuActivity.this, JoinServerActivity.class);
         startActivity(i);
+
+        //SEND REGISTERMESSAGE TO SERVER
+
+
+        SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String name=sharedPreferences.getString("Player","name");
+
+        gamesvc.joinGame(name);
+
+
+
+
+
     }
 
 

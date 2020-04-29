@@ -12,10 +12,11 @@ import shared.model.Player;
 import shared.model.impl.CardImpl;
 import shared.model.impl.DeckImpl;
 import shared.model.impl.GameImpl;
+import shared.model.impl.PlayerImpl;
 
 public class GameServiceImpl implements GameService {
 
-
+/*OVE EVERYTHING FROM HERE ..
     // define constants for MAX Players
     private final static int PLAYER_LIMIT_MAX = 8;
     private final static int PLAYER_LIMIT_MIN = 2;
@@ -24,18 +25,22 @@ public class GameServiceImpl implements GameService {
     private int playerCount;
     private Card[][] playercards; //Array of size: [amount of players][4]
     private Deck cardStack;
-    private Game game;//Ignored for now
+TO HERE INTO GAME OBJECT!!!
+ */
+
+    private Game game;
+
 
     public GameServiceImpl() {
     }
 
 
-    @Override
+    @Override//Player list was moved into game object
     public List<Player> getPlayerList() {
         return game.getPlayerList();
     }
 
-    @Override
+    @Override   //Remove this method
     public boolean addPlayer(Player player) {
         List<Player> playerList = getPlayerList();
 
@@ -46,6 +51,14 @@ public class GameServiceImpl implements GameService {
         }
         return false;
     }
+
+
+
+    public boolean addPlayer(String name, String MACAdress){
+         return game.addPlayer(name, MACAdress);
+    }
+
+
 
     @Override
     public GameState getGameState() {
@@ -94,30 +107,9 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame(int playerCount) throws PlayerLimitExceededException {
-        if (playerCount > PLAYER_LIMIT_MAX || playerCount < PLAYER_LIMIT_MIN)
-            throw new PlayerLimitExceededException();
-        this.maxPlayerCount=playerCount;
-        this.playerCount=1;
-
-        if (this.game == null)
-            this.game = new GameImpl(playerCount);
-
-
-        /* till now there is only one game possible
-         * classes Game and Player are ignored
-         * Code will be extended and use them later on
-         * for now Users are identified with ID (to send cards for example)
-         */
-
-        cardStack = new DeckImpl();
-        playercards=new CardImpl[playerCount][4];
-
-        for(int i=0; i<playercards.length;i++){
-            for(int j=0; j<playercards[i].length;j++){
-                playercards[i][j]= cardStack.drawCard();
-            }
-        }
+    public void createGame() throws PlayerLimitExceededException {
+        game=new GameImpl();
+              //Only one game possible
     }
 
     @Override
@@ -127,12 +119,13 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Card[] getPlayersCards(int player) {
-        return playercards[player];
+        return game.getPlayersCards(player);
     }
 
-    @Override
+
+    @Override//Maybee not needed anymore
     public int joinGame(){
-        if(playerCount<=maxPlayerCount){
+       if(playerCount<=maxPlayerCount){
             playerCount++;
             return playerCount;
         }
@@ -143,14 +136,6 @@ public class GameServiceImpl implements GameService {
 
     }
 
-    @Override
-    public Card[][] getPlayercardList() {
-        return playercards;
-    }
 
-    @Override
-    public Deck getCardStack() {
-        return cardStack;
-    }
 
 }
