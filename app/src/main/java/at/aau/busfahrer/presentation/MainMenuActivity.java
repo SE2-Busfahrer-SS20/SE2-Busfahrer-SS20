@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import static shared.networking.kryonet.NetworkConstants.host;
-
 public class MainMenuActivity extends AppCompatActivity {
     GameService gamesvc;
 
@@ -22,7 +20,7 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_main_menu);
-        gamesvc = new GameServiceImpl(host);
+        gamesvc = GameServiceImpl.getInstance();
     }
 
       // click listener about button
@@ -76,7 +74,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         gamesvc.playGame(name);
 
-        Intent i = new Intent(MainMenuActivity.this, WaitActivity.class);
+        Intent i = new Intent(MainMenuActivity.this, SelectCheatsActivity.class);
         startActivity(i);
 
 

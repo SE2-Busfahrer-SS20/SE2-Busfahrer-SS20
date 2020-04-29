@@ -17,24 +17,10 @@ import shared.model.impl.PlayerImpl;
 
 public class GameServiceImpl implements GameService {
 
-/*OVE EVERYTHING FROM HERE ..
-    // define constants for MAX Players
-    private final static int PLAYER_LIMIT_MAX = 8;
-    private final static int PLAYER_LIMIT_MIN = 2;
-
-    private int maxPlayerCount;
-    private int playerCount;
-    private Card[][] playercards; //Array of size: [amount of players][4]
-    private Deck cardStack;
-TO HERE INTO GAME OBJECT!!!
- */
-
     private Game game;
-
 
     public GameServiceImpl() {
     }
-
 
     @Override//Player list was moved into game object
     public List<Player> getPlayerList() {
@@ -52,8 +38,6 @@ TO HERE INTO GAME OBJECT!!!
         }
         return false;
     }
-
-
 
     public Player addPlayer(String name, String MACAdress, Connection connection){
          return game.addPlayer(name, MACAdress, connection);
@@ -93,6 +77,8 @@ TO HERE INTO GAME OBJECT!!!
     @Override
     public void startGame() {
         this.game.setState(GameState.STARTED);
+        //send start game message to each client
+
     }
 
     @Override

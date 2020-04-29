@@ -1,5 +1,7 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
+import at.aau.busfahrer.service.GameService;
+import at.aau.busfahrer.service.impl.GameServiceImpl;
 import shared.model.impl.playersStorage;
 
 
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 
 public class WaitActivity extends AppCompatActivity {
 
+    GameService gamesvc;
     private boolean wait=true;
     Thread updatePlayerList = new Thread(){
         public void run(){
@@ -59,6 +62,8 @@ public class WaitActivity extends AppCompatActivity {
         hideAppTitleBar();
         setContentView(R.layout.activity_wait);
 
+        gamesvc = GameServiceImpl.getInstance();
+
         //Change visability
         LinearLayout playerList = findViewById(R.id.playerList);
         Button bt_start = findViewById(R.id.bt_start);
@@ -73,17 +78,17 @@ public class WaitActivity extends AppCompatActivity {
             logo.setVisibility(View.VISIBLE);
         }
 
-
         //check if other clients join server
         updatePlayerList.start();
     }
 
     // click listener start game button
     public void onClickStartGame(View v){
-        Intent i = new Intent(WaitActivity.this, at.aau.busfahrer.presentation.SelectCheatsActivity.class);
+        Intent i = new Intent(WaitActivity.this, GuessActivity.class);
 
         wait=false;//To terminate busy waiting
 
+        gamesvc.startGame();
         startActivity(i);
 
     }

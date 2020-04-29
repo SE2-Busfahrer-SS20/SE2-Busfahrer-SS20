@@ -1,32 +1,31 @@
 package at.aau.busfahrer.service.impl;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-
-import at.aau.busfahrer.presentation.GuessActivity;
 import at.aau.busfahrer.service.GameService;
-import shared.model.Card;
-import shared.model.Game;
-import shared.model.impl.CardImpl;
 import shared.networking.NetworkClient;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.RegisterMessage;
-import shared.networking.dto.TextMessage;
+import shared.networking.dto.StartGameMessage;
 import shared.networking.kryonet.NetworkClientKryo;
-
-import static android.content.Context.MODE_PRIVATE;
-import static androidx.core.content.ContextCompat.getSystemService;
 
 public class GameServiceImpl implements GameService {
 
     private NetworkClient client;
     private String host;
     //send this to Server !
-    public GameServiceImpl(String host) {
+
+    //SINGLETON PATTERN
+    private static GameServiceImpl Instance;
+
+    public static GameService getInstance(){
+        if(GameServiceImpl.Instance==null){
+            GameServiceImpl.Instance=new GameServiceImpl();
+        }
+        return GameServiceImpl.Instance;
+    }
+
+    private GameServiceImpl() {
         this.client = new NetworkClientKryo();
-        this.host = host;
+        this.host = shared.networking.kryonet.NetworkConstants.host;
     }
 
     public void connect() {
@@ -52,7 +51,6 @@ public class GameServiceImpl implements GameService {
             }
         });
         thread.start();
-
     }
 
     @Override
@@ -72,7 +70,18 @@ public class GameServiceImpl implements GameService {
             }
         });
         thread.start();
+    }
 
+    @Override
+    public void startGame(){
+        StartGameMessage sgm = new StartGameMessage();
+        try {
+            client.connect(host);
+            client.sendMessage(sgm);
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
     }
 
 
@@ -84,6 +93,8 @@ public class GameServiceImpl implements GameService {
         */
         return "MACAdress";
     }
+
+
 
 
 }

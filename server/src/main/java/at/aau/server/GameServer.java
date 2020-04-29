@@ -1,6 +1,8 @@
 package at.aau.server;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import at.aau.server.service.GameService;
 import at.aau.server.service.impl.GameServiceImpl;
 import shared.model.GameState;
@@ -12,6 +14,7 @@ import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.ServerActionResponse;
+import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.TextMessage;
 import shared.networking.kryonet.NetworkServerKryo;
 import com.esotericsoftware.kryonet.Connection;
@@ -115,6 +118,10 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                         else{
                         connection.sendTCP(new ServerActionResponse("Game is full!", false));
                         }
+                    }
+                    else if(object instanceof StartGameMessage){
+                        Log.debug("Start Game");
+
                     }
 
                 }

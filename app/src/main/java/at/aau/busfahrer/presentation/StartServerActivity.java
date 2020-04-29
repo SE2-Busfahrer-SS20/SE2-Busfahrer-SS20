@@ -29,7 +29,7 @@ public class StartServerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start_server);
         initSpinnerDropDown();
 
-        gamesvc=new GameServiceImpl(host);//moved down //IP of computer (Localhost=phone)
+        gamesvc=GameServiceImpl.getInstance();
     }
 
     // ui drop down, array values in res@strings
