@@ -6,6 +6,7 @@ import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.ServerActionResponse;
+import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.TextMessage;
 
 public class NetworkConstants {
@@ -23,6 +24,7 @@ public class NetworkConstants {
             ServerActionResponse.class,
             ConfirmRegisterMessage.class,
             NewPlayerMessage.class,
+            StartGameMessage.class,
 
             shared.model.impl.CardImpl[].class,
             shared.model.impl.CardImpl.class

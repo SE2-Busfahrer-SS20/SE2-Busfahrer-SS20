@@ -10,10 +10,8 @@ import shared.model.Deck;
 import shared.model.Game;
 import shared.model.GameState;
 import shared.model.Player;
-import shared.model.impl.CardImpl;
-import shared.model.impl.DeckImpl;
 import shared.model.impl.GameImpl;
-import shared.model.impl.PlayerImpl;
+import shared.networking.dto.StartGameMessage;
 
 public class GameServiceImpl implements GameService {
 
@@ -77,7 +75,15 @@ public class GameServiceImpl implements GameService {
     @Override
     public void startGame() {
         this.game.setState(GameState.STARTED);
+
         //send start game message to each client
+        StartGameMessage sgm = new StartGameMessage();
+        int count = this.game.getPlayerCount();
+        for(int i=0;i<count;i++){
+            System.out.println("sending SGM...");
+            Connection con = this.game.getPlayerList().get(i).getConnection();
+            con.sendTCP(sgm);
+        }
 
     }
 

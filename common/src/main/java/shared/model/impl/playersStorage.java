@@ -3,6 +3,7 @@ package shared.model.impl;
 import java.util.ArrayList;
 
 import shared.model.Card;
+import shared.model.GameState;
 
 public class playersStorage {
 
@@ -14,6 +15,7 @@ public class playersStorage {
     private static Card[] cards;
     private static ArrayList<String> playerNames = new ArrayList<String>();
     private static boolean master=false;
+    private static GameState state=GameState.INIT;
 
     public static Card[] getCards() {
         return cards;
@@ -37,5 +39,12 @@ public class playersStorage {
     }
     public static void setMaster(boolean master) {
         playersStorage.master = master;
+    }
+
+    public static GameState getState() {
+        return state;
+    }
+    public static void setState(GameState state) {
+        playersStorage.state = state;
     }
 }

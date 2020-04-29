@@ -6,12 +6,14 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import java.io.IOException;
 
+import shared.model.GameState;
 import shared.model.impl.playersStorage;
 import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.BaseMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
 import shared.networking.dto.NewPlayerMessage;
+import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.TextMessage;
 
 import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
@@ -47,10 +49,17 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 }
 
                 if(object instanceof NewPlayerMessage){
-                    Log.debug("New Player in the Game ");
+                    Log.debug("New Player in the Game");
                     playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
                     System.out.println("NEW PLAYER IN THE GAME ");
                 }
+
+                if(object instanceof StartGameMessage){
+                    Log.debug("Game can start now");
+                    playersStorage.setState(GameState.READY);
+                    System.out.println("received SGM in listener...");
+                }
+
 
                 if (callback != null && object instanceof BaseMessage) {    //Es scheint als würde die If-Bedingung am callback !=null scheitern
                     callback.callback((BaseMessage) object);

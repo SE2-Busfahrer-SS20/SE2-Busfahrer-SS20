@@ -1,16 +1,12 @@
 package at.aau.server;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 import at.aau.server.service.GameService;
 import at.aau.server.service.impl.GameServiceImpl;
 import shared.model.GameState;
 import shared.model.Player;
-import shared.model.impl.PlayerImpl;
 import shared.networking.dto.BaseMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
-import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.ServerActionResponse;
@@ -20,8 +16,6 @@ import shared.networking.kryonet.NetworkServerKryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
-
-import javax.xml.soap.Text;
 
 import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 
@@ -99,6 +93,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                             connection.sendTCP(new TextMessage("Action not supported."));
                         }
                     }
+
                     //join existing Game
                     else if(object instanceof RegisterMessage){
                         Log.debug("Received Register Message");
@@ -120,7 +115,9 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                         }
                     }
                     else if(object instanceof StartGameMessage){
-                        Log.debug("Start Game");
+                        System.out.println("Recived SGM on ServerSide");
+                        Log.debug("Game Started");
+                        gameService.startGame();
 
                     }
 
@@ -135,7 +132,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
         switch (state) {
             case INIT:
                 if (this.gameService.gameReady())
-                    startGame();
+                    //startGame();
                 break;
             case STARTED:
                 // TODO: implement.
@@ -155,10 +152,6 @@ public class GameServer extends NetworkServerKryo implements Runnable{
         }
     }
 
-    private void startGame() {
-        Log.debug("Game started.");
-        // TODO: implement start game.
-    }
 
     private void registerClasses() {
         for (Class c : CLASS_LIST)

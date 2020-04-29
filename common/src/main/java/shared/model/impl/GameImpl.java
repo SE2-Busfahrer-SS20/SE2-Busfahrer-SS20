@@ -17,7 +17,6 @@ public class GameImpl implements Game {
     private final static int PLAYER_LIMIT_MIN = 2;
 
     private GameState state;
-    private int gameCount;  //WHATS THIS VARIABLE DESIGNATED FOR?
     private List<Player> playerList;
     private Deck cardStack;
 
@@ -59,7 +58,7 @@ public class GameImpl implements Game {
 
     @Override
     public int getPlayerCount() {
-        return gameCount;
+        return this.playerList.size();
     }
 
     public List<Player> getPlayerList() {

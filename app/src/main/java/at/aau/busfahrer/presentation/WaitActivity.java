@@ -2,6 +2,7 @@ package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
 import at.aau.busfahrer.service.GameService;
 import at.aau.busfahrer.service.impl.GameServiceImpl;
+import shared.model.GameState;
 import shared.model.impl.playersStorage;
 
 
@@ -27,29 +28,46 @@ public class WaitActivity extends AppCompatActivity {
     private boolean wait=true;
     Thread updatePlayerList = new Thread(){
         public void run(){
-            TextView[] players =new TextView[8];
-             players[0] = (TextView) findViewById(R.id.playerName1);
-             players[1] = (TextView) findViewById(R.id.playerName2);
-             players[2] = (TextView) findViewById(R.id.playerName3);
-             players[3] = (TextView) findViewById(R.id.playerName4);
-             players[4] = (TextView) findViewById(R.id.playerName5);
-             players[5] = (TextView) findViewById(R.id.playerName6);
-             players[6] = (TextView) findViewById(R.id.playerName7);
-             players[7] = (TextView) findViewById(R.id.playerName8);
-            ArrayList<String> playerNames;
-            //Busy Waiting
-            while(wait){
-              playerNames=playersStorage.getPlayerNames();
-              int size=playerNames.size();
-              for(int i=0; i<8 && i<size ;i++){
-                  if(playerNames.get(i)!=null) {
-                      players[i].setText(playerNames.get(i));
-                  }
-              }
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            if(playersStorage.isMaster()) {
+                TextView[] players = new TextView[8];
+                players[0] = (TextView) findViewById(R.id.playerName1);
+                players[1] = (TextView) findViewById(R.id.playerName2);
+                players[2] = (TextView) findViewById(R.id.playerName3);
+                players[3] = (TextView) findViewById(R.id.playerName4);
+                players[4] = (TextView) findViewById(R.id.playerName5);
+                players[5] = (TextView) findViewById(R.id.playerName6);
+                players[6] = (TextView) findViewById(R.id.playerName7);
+                players[7] = (TextView) findViewById(R.id.playerName8);
+                ArrayList<String> playerNames;
+                //Busy Waiting
+                while (wait) {
+                    playerNames = playersStorage.getPlayerNames();
+                    int size = playerNames.size();
+                    for (int i = 0; i < 8 && i < size; i++) {
+                        if (playerNames.get(i) != null) {
+                            players[i].setText(playerNames.get(i));
+                        }
+                    }
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }else{
+                while (wait) {
+                    System.out.println("waiting for game...");
+                    if(playersStorage.getState().equals(GameState.READY)){
+                        System.out.println("Starting GuessActivity..");
+                        Intent i = new Intent(WaitActivity.this, GuessActivity.class);
+                        wait=false;//To terminate busy waiting
+                        startActivity(i);
+                    }
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -85,10 +103,8 @@ public class WaitActivity extends AppCompatActivity {
     // click listener start game button
     public void onClickStartGame(View v){
         Intent i = new Intent(WaitActivity.this, GuessActivity.class);
-
         wait=false;//To terminate busy waiting
-
-        gamesvc.startGame();
+        gamesvc.startGame();//Send StartGameMessage to other clients
         startActivity(i);
 
     }
