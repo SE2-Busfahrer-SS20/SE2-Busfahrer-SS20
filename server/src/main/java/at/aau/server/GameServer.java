@@ -32,6 +32,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
     private Thread thread;
     private GameService gameService;
 
+    private Connection connectionToMaster;
 
     public GameServer() {
         Log.set(Log.LEVEL_DEBUG); // set log level for Minlog.
@@ -78,9 +79,12 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                                 ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player, true);
                                 connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
 
+                                //Add Player to Playerlist in Wait UI
                                 NewPlayerMessage npm = new NewPlayerMessage(player.getName());
                                 connection.sendTCP(npm);
 
+                                //Define current client as master
+                                connectionToMaster = connection;
 
                                Log.info("Game created.");
                             } catch (Exception ex) {
@@ -103,6 +107,10 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                             Log.debug("new Player:"+player.getName());
                             ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player);
                             connection.sendTCP(crm);
+
+                            //Send message to Master to appear in PlayersList
+                            NewPlayerMessage npm = new NewPlayerMessage(player.getName());
+                            connectionToMaster.sendTCP(npm);
                         }
                         else{
                         connection.sendTCP(new ServerActionResponse("Game is full!", false));

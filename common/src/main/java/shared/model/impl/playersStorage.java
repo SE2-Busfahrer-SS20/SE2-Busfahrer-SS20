@@ -13,6 +13,7 @@ public class playersStorage {
 
     private static Card[] cards;
     private static ArrayList<String> playerNames = new ArrayList<String>();
+    private static boolean master=false;
 
     public static Card[] getCards() {
         return cards;
@@ -29,5 +30,12 @@ public class playersStorage {
     }
     public static void addPlayerName(String name){
         playerNames.add(name);
+    }
+
+    public static boolean isMaster() {
+        return master;
+    }
+    public static void setMaster(boolean master) {
+        playersStorage.master = master;
     }
 }

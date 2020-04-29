@@ -38,10 +38,14 @@ public class ConfirmRegisterMessage extends BaseMessage {
     public Card[] getCards() {
         return cards;
     }
-
     public void setCards(Card[] cards) {
         this.cards = cards;
     }
 
-
+    public boolean isMaster() {
+        return master;
+    }
+    public void setMaster(boolean master) {
+        this.master = master;
+    }
 }

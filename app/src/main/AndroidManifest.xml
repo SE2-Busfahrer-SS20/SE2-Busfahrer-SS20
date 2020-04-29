@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="at.aau.busfahrer">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,11 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/menu_AppTheme">
-
-
         <activity android:name=".presentation.GuessActivity" />
-        <activity android:name=".presentation.MasterWaitActivity"
-            android:screenOrientation="sensorLandscape"></activity>
+        <activity
+            android:name=".presentation.WaitActivity"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".presentation.RegisterActivity"
             android:screenOrientation="sensorLandscape" />
@@ -41,10 +45,5 @@
             </intent-filter>
         </activity>
     </application>
-
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

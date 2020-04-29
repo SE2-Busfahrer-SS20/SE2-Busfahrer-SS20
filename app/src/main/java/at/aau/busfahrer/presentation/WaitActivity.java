@@ -11,12 +11,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 
-public class MasterWaitActivity extends AppCompatActivity {
+public class WaitActivity extends AppCompatActivity {
 
     private boolean wait=true;
     Thread updatePlayerList = new Thread(){
@@ -54,19 +57,33 @@ public class MasterWaitActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
-        setContentView(R.layout.activity_master_wait);
+        setContentView(R.layout.activity_wait);
+
+        //Change visability
+        LinearLayout playerList = findViewById(R.id.playerList);
+        Button bt_start = findViewById(R.id.bt_start);
+        ImageView logo = findViewById(R.id.logo);
+        if(playersStorage.isMaster()){
+            playerList.setVisibility(View.VISIBLE);
+            bt_start.setVisibility(View.VISIBLE);
+            logo.setVisibility(View.INVISIBLE);
+        }else{
+            playerList.setVisibility(View.INVISIBLE);
+            bt_start.setVisibility(View.INVISIBLE);
+            logo.setVisibility(View.VISIBLE);
+        }
+
 
         //check if other clients join server
         updatePlayerList.start();
     }
 
-    // click listener beitreten button
+    // click listener start game button
     public void onClickStartGame(View v){
-        Log.d("Join Button", "pressed");
-        Intent i = new Intent(MasterWaitActivity.this, at.aau.busfahrer.presentation.SelectCheatsActivity.class);
+        Intent i = new Intent(WaitActivity.this, at.aau.busfahrer.presentation.SelectCheatsActivity.class);
 
-        wait=false;
-        //Start game (and disable new clients to join)
+        wait=false;//To terminate busy waiting
+
         startActivity(i);
 
     }

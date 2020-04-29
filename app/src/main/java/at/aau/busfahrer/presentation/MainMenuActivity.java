@@ -68,8 +68,6 @@ public class MainMenuActivity extends AppCompatActivity {
     }
     // click listener PlayerEdit button
     public void onClickPlayGame(View v){
-        Intent i = new Intent(MainMenuActivity.this, MasterWaitActivity.class);
-        startActivity(i);
 
         //SEND REGISTERMESSAGE TO SERVER
         SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
@@ -78,7 +76,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
         gamesvc.playGame(name);
 
-
+        Intent i = new Intent(MainMenuActivity.this, WaitActivity.class);
+        startActivity(i);
 
 
 
