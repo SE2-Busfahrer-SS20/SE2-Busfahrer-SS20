@@ -1,5 +1,7 @@
 package at.aau.server.service;
 
+import com.esotericsoftware.kryonet.Connection;
+
 import java.util.List;
 
 import shared.exceptions.PlayerLimitExceededException;
@@ -22,7 +24,7 @@ public interface GameService {
      * @return boolean status,  false in case of a full List.
      */
     boolean addPlayer(Player player);
-    boolean addPlayer(String name, String MACAdress);
+    Player addPlayer(String name, String MACAdress, Connection connection);
 
 
     /**

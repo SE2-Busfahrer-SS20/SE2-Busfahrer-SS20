@@ -1,5 +1,6 @@
 package shared.model.impl;
 
+import com.esotericsoftware.kryonet.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,17 +29,17 @@ public class GameImpl implements Game {
         cardStack=new DeckImpl();//Add 52 Cards to Stack
 
     }
-    public boolean addPlayer(String name, String MACAdress){
+    public Player addPlayer(String name, String MACAdress, Connection connection){
         if(playerList.size()<8) {
             Card[] cards = new CardImpl[4];
             for (int i = 0; i < 4; i++) {
                 cards[i] = cardStack.drawCard();
             }
-            Player newPlayer = new PlayerImpl(name, MACAdress, cards, null);
+            Player newPlayer = new PlayerImpl(name, MACAdress, cards, connection);
             playerList.add(newPlayer);
-            return true;
+            return newPlayer;
         }
-        return false;
+        return null;
     }
 
     @Override

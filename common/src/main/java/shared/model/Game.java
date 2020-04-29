@@ -1,5 +1,7 @@
 package shared.model;
 
+import com.esotericsoftware.kryonet.Connection;
+
 import java.util.List;
 
 public interface Game {
@@ -9,6 +11,6 @@ public interface Game {
     int getPlayerCount();
     List<Player> getPlayerList();
     void setPlayerList(List<Player> playerList);
-    boolean addPlayer(String name, String MACAdress);
+    Player addPlayer(String name, String MACAdress, Connection connection);
     Card[] getPlayersCards(int player);
 }

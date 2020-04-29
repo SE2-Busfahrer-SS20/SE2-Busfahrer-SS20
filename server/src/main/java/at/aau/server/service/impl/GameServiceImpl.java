@@ -1,5 +1,6 @@
 package at.aau.server.service.impl;
 
+import com.esotericsoftware.kryonet.Connection;
 import java.util.List;
 
 import at.aau.server.service.GameService;
@@ -54,11 +55,9 @@ TO HERE INTO GAME OBJECT!!!
 
 
 
-    public boolean addPlayer(String name, String MACAdress){
-         return game.addPlayer(name, MACAdress);
+    public Player addPlayer(String name, String MACAdress, Connection connection){
+         return game.addPlayer(name, MACAdress, connection);
     }
-
-
 
     @Override
     public GameState getGameState() {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import at.aau.server.service.GameService;
 import at.aau.server.service.impl.GameServiceImpl;
 import shared.model.GameState;
+import shared.model.Player;
 import shared.model.impl.PlayerImpl;
 import shared.networking.dto.BaseMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
@@ -66,17 +67,14 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                     if (!gameService.gameExists()) {
 
                         if (object instanceof RegisterMessage) {
-                            RegisterMessage msg = (RegisterMessage) object;
+                            Log.debug("Received Register Message");
                             try {
+                                RegisterMessage msg = (RegisterMessage) object;
                                 gameService.createGame();  //Create empty Game Object
-                                gameService.addPlayer(msg.getPlayerName(),msg.getMACAdress());
+                                Player player = gameService.addPlayer(msg.getPlayerName(),msg.getMACAdress(),connection);
 
                                 // send result to client.
-
-                                //Respond with Cards of player #0
-                                ConfirmRegisterMessage crm = new ConfirmRegisterMessage(0, gameService.getPlayersCards(0));
-
-
+                                ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player, true);
                                 connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
                                 // Diese beinhaltet die Karten des Spielers mit der ID=0
                                 //ID=0 ist immer jener Spieler, der das Spiel startet
@@ -92,20 +90,22 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                     }
                     //join Game
                     else if(object instanceof RegisterMessage){
+                        Log.debug("Received Register Message");
 
-                        //gameService.createGame(3);//just for test purpose to avoid creating new game in each test
-                       Log.debug("Recived Register Message");
+                        RegisterMessage msg = (RegisterMessage) object;
+                        Player player = gameService.addPlayer(msg.getPlayerName(),msg.getMACAdress(),connection);
 
-                        int ID = gameService.joinGame();
-                        if(ID!=-1){     //if game is not full
-                            Log.debug("Players ID="+ID);
-                            ConfirmRegisterMessage crm = new ConfirmRegisterMessage(ID, gameService.getPlayersCards(ID));
+                        if(player!=null){ //if game is not full
+                            Log.debug("new Player:"+player.getName());
+                            ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player);
                             connection.sendTCP(crm);
-                            Log.debug("New player joined game ["+ID+"]");
-                        }else{
-                            connection.sendTCP(new ServerActionResponse("Game is full!", true)); // TODO: Action should be false in case of an error.
+                        }
+                        else{
+                        connection.sendTCP(new ServerActionResponse("Game is full!", true)); // TODO: Action should be false in case of an error.
                         }
                     }
+
+                    /*
                       else if (object instanceof RegisterMessage) {
                             RegisterMessage msg = (RegisterMessage) object;
                             if (!gameService.gameReady()) {
@@ -116,6 +116,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                                 connection.sendTCP(new ServerActionResponse("Player registered.", true));
                             }
                     }
+                     */
 
                 }
             }
