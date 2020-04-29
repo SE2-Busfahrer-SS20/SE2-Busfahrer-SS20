@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import at.aau.busfahrer.R;
 import shared.model.Card;
+import shared.model.GameState;
 import shared.model.impl.playersStorage;
 
 public class GuessActivity extends AppCompatActivity {
@@ -22,7 +23,7 @@ public class GuessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_guess);
-
+        playersStorage.setState(GameState.LAB1);
         //The cards are fetched from common
         //till now this method only works after creating a new Game on the server
         //Join a new game is not implemented yet

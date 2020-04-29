@@ -43,7 +43,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
                 if(object instanceof ConfirmRegisterMessage){
                     Log.debug("Registration Confirmed");
-
                     playersStorage.setMaster(((ConfirmRegisterMessage)object).isMaster());
                     playersStorage.setCards(((ConfirmRegisterMessage)object).getCards());
                 }
@@ -61,7 +60,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 }
 
 
-                if (callback != null && object instanceof BaseMessage) {    //Es scheint als würde die If-Bedingung am callback !=null scheitern
+                if (callback != null && object instanceof BaseMessage) {
                     callback.callback((BaseMessage) object);
                     Log.debug("Callback is instance of BaseMessage");
                     if(object instanceof TextMessage){

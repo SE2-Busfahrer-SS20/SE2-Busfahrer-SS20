@@ -80,7 +80,6 @@ public class GameServiceImpl implements GameService {
         StartGameMessage sgm = new StartGameMessage();
         int count = this.game.getPlayerCount();
         for(int i=0;i<count;i++){
-            System.out.println("sending SGM...");
             Connection con = this.game.getPlayerList().get(i).getConnection();
             con.sendTCP(sgm);
         }

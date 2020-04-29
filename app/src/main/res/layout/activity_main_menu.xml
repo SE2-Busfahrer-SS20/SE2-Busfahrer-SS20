@@ -9,32 +9,20 @@
     android:focusable="true"
     >
 
+
     <Button
+        android:id="@+id/join_server"
         style="@style/button_orange"
-        android:id="@+id/start_server"
-        android:theme="@style/button_orange"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="32dp"
-        android:onClick="onStartServer"
-        android:text="Start Game"
+        android:onClick="onClickPlayGame"
+        android:text="Join Game"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        style="@style/button_orange"
-        android:id="@+id/join_server"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:text="PLAY GAME"
-        android:onClick="onClickPlayGame"
-        app:layout_constraintEnd_toEndOf="@+id/start_server"
-        app:layout_constraintStart_toStartOf="@+id/start_server"
-        app:layout_constraintTop_toBottomOf="@+id/start_server" />
 
     <Button
         style="@style/button_orange"
@@ -98,7 +86,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/edit_player"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/start_server"
+        app:layout_constraintTop_toTopOf="@+id/join_server"
         app:srcCompat="@drawable/gamelogo" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -119,12 +107,6 @@
         android:layout_height="match_parent"
         android:elevation="5dp"
         >
-
-        <FrameLayout
-            android:id="@+id/help_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:elevation="5dp"></FrameLayout>
     </FrameLayout>
     <FrameLayout
         android:id="@+id/report_fragment"
@@ -132,6 +114,12 @@
         android:layout_height="match_parent"
         android:elevation="5dp"
         />
+    <FrameLayout
+        android:id="@+id/help_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="5dp">
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

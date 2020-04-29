@@ -115,7 +115,6 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                         }
                     }
                     else if(object instanceof StartGameMessage){
-                        System.out.println("Recived SGM on ServerSide");
                         Log.debug("Game Started");
                         gameService.startGame();
 

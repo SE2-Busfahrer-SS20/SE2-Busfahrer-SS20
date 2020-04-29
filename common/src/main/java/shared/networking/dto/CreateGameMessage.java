@@ -1,5 +1,7 @@
 package shared.networking.dto;
 
+
+//not used at the moment!
 public class CreateGameMessage extends BaseMessage{
 
     private String gameName;
