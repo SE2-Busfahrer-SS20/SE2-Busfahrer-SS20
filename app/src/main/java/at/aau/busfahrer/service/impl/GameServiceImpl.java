@@ -33,7 +33,7 @@ public class GameServiceImpl implements GameService {
         //Whats this method designated for?
     }
 
-    @Override
+    @Override//can be deleted later
     public void createGame(int playercount) {
         //Must be declared final to get accessible in inner class
         final int pc=playercount;
@@ -56,7 +56,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void joinGame(final String name){
+    public void playGame(final String name){
 
         Thread thread = new Thread(new Runnable() {
             @Override

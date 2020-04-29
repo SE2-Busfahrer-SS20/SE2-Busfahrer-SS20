@@ -14,7 +14,7 @@
 
 
         <activity android:name=".presentation.GuessActivity" />
-        <activity android:name=".presentation.JoinServerActivity"
+        <activity android:name=".presentation.MasterWaitActivity"
             android:screenOrientation="sensorLandscape"></activity>
         <activity
             android:name=".presentation.RegisterActivity"

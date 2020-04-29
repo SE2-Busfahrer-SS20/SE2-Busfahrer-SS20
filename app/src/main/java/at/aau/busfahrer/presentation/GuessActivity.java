@@ -11,8 +11,7 @@ import android.widget.TextView;
 
 import at.aau.busfahrer.R;
 import shared.model.Card;
-import shared.model.impl.CardImpl;
-import shared.model.impl.playersCards;
+import shared.model.impl.playersStorage;
 
 public class GuessActivity extends AppCompatActivity {
 
@@ -27,7 +26,7 @@ public class GuessActivity extends AppCompatActivity {
         //The cards are fetched from common
         //till now this method only works after creating a new Game on the server
         //Join a new game is not implemented yet
-        cards= playersCards.getCards();
+        cards= playersStorage.getCards();
 
     }
 

@@ -122,18 +122,6 @@ TO HERE INTO GAME OBJECT!!!
     }
 
 
-    @Override//Maybee not needed anymore
-    public int joinGame(){
-       if(playerCount<=maxPlayerCount){
-            playerCount++;
-            return playerCount;
-        }
-        else{
-            // max player count already reached.
-            return -1;
-        }
-
-    }
 
 
 

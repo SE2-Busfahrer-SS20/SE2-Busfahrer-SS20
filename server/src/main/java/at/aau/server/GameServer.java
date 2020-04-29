@@ -9,6 +9,7 @@ import shared.model.impl.PlayerImpl;
 import shared.networking.dto.BaseMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
 import shared.networking.dto.CreateGameMessage;
+import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.ServerActionResponse;
 import shared.networking.dto.TextMessage;
@@ -76,8 +77,11 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                                 // send result to client.
                                 ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player, true);
                                 connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
-                                // Diese beinhaltet die Karten des Spielers mit der ID=0
-                                //ID=0 ist immer jener Spieler, der das Spiel startet
+
+                                NewPlayerMessage npm = new NewPlayerMessage(player.getName());
+                                connection.sendTCP(npm);
+
+
                                Log.info("Game created.");
                             } catch (Exception ex) {
                                 Log.error(ex.toString());
@@ -88,7 +92,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                             connection.sendTCP(new TextMessage("Action not supported."));
                         }
                     }
-                    //join Game
+                    //join existing Game
                     else if(object instanceof RegisterMessage){
                         Log.debug("Received Register Message");
 
@@ -101,22 +105,9 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                             connection.sendTCP(crm);
                         }
                         else{
-                        connection.sendTCP(new ServerActionResponse("Game is full!", true)); // TODO: Action should be false in case of an error.
+                        connection.sendTCP(new ServerActionResponse("Game is full!", false));
                         }
                     }
-
-                    /*
-                      else if (object instanceof RegisterMessage) {
-                            RegisterMessage msg = (RegisterMessage) object;
-                            if (!gameService.gameReady()) {
-                                gameService.addPlayer(new PlayerImpl(msg.getPlayerName(), connection));
-                                Log.debug("Player registered.");
-                                // send result to client.
-
-                                connection.sendTCP(new ServerActionResponse("Player registered.", true));
-                            }
-                    }
-                     */
 
                 }
             }

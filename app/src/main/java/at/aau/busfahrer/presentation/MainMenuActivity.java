@@ -2,15 +2,11 @@ package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
 import at.aau.busfahrer.service.GameService;
 import at.aau.busfahrer.service.impl.GameServiceImpl;
-import shared.networking.dto.RegisterMessage;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -71,18 +67,16 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivity(i);
     }
     // click listener PlayerEdit button
-    public void onClickJoinServer(View v){
-        Intent i = new Intent(MainMenuActivity.this, JoinServerActivity.class);
+    public void onClickPlayGame(View v){
+        Intent i = new Intent(MainMenuActivity.this, MasterWaitActivity.class);
         startActivity(i);
 
         //SEND REGISTERMESSAGE TO SERVER
-
-
         SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String name=sharedPreferences.getString("Player","name");
 
-        gamesvc.joinGame(name);
+        gamesvc.playGame(name);
 
 
 

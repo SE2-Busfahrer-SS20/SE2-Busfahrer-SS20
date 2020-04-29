@@ -4,5 +4,5 @@ public interface GameService {
 
     void createGame(int playercount);
 
-    void joinGame(String name);
+    void playGame(String name);
 }

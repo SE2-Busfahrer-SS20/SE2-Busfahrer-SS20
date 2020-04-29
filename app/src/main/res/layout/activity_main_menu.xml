@@ -31,7 +31,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:text="PLAY GAME"
-        android:onClick="onClickJoinServer"
+        android:onClick="onClickPlayGame"
         app:layout_constraintEnd_toEndOf="@+id/start_server"
         app:layout_constraintStart_toStartOf="@+id/start_server"
         app:layout_constraintTop_toBottomOf="@+id/start_server" />
@@ -119,6 +119,12 @@
         android:layout_height="match_parent"
         android:elevation="5dp"
         >
+
+        <FrameLayout
+            android:id="@+id/help_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="5dp"></FrameLayout>
     </FrameLayout>
     <FrameLayout
         android:id="@+id/report_fragment"
@@ -126,12 +132,6 @@
         android:layout_height="match_parent"
         android:elevation="5dp"
         />
-    <FrameLayout
-        android:id="@+id/help_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="5dp">
-    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
