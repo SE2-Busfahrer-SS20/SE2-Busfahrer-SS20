@@ -10,6 +10,7 @@ public class PlayerImpl implements Player {
     private String MACAdress;
     private Card[] cards;
     private Connection connection;
+    private int count;
 
 
     //Constructor for Server Side
@@ -43,5 +44,15 @@ public class PlayerImpl implements Player {
     @Override
     public Connection getConnection() {
         return connection;
+    }
+
+    @Override
+    public int getCount() {
+        return count;
+    }
+
+    @Override
+    public void setCount(int newCount) {
+        this.count = newCount;
     }
 }

@@ -1,5 +1,6 @@
 package shared.model;
 
+import java.util.List;
 import shared.model.impl.CardImpl;
 import java.util.List;
 
@@ -7,6 +8,6 @@ import java.util.List;
 public interface Deck {
     CardImpl drawCard();
     void refill();
-    int size();
     List<String> printDeck();
+    int size();
 }
