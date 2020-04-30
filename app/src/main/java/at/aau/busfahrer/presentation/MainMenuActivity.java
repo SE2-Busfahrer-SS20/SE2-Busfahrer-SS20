@@ -12,6 +12,12 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.esotericsoftware.minlog.Log;
+
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
+
 public class MainMenuActivity extends AppCompatActivity {
     GameService gamesvc;
 
@@ -72,12 +78,10 @@ public class MainMenuActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String name=sharedPreferences.getString("Player","name");
 
-        gamesvc.playGame(name);
+        gamesvc.playGame(name, getMacAddr());
 
         Intent i = new Intent(MainMenuActivity.this, SelectCheatsActivity.class);
         startActivity(i);
-
-
 
     }
 
@@ -88,5 +92,35 @@ public class MainMenuActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
+
+    private  String getMacAddr() {
+        //This code was found on StackOverFlow:
+            //https://stackoverflow.com/questions/33159224/getting-mac-address-in-android-6-0
+        try {
+            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface nif : all) {
+                if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
+
+                byte[] macBytes = nif.getHardwareAddress();
+                if (macBytes == null) {
+                    return "";
+                }
+
+                StringBuilder res1 = new StringBuilder();
+                for (byte b : macBytes) {
+                    res1.append(Integer.toHexString(b & 0xFF) + ":");
+                }
+
+                if (res1.length() > 0) {
+                    res1.deleteCharAt(res1.length() - 1);
+                }
+                return res1.toString();
+            }
+        } catch (Exception e) {
+            Log.error(e.toString());
+        }
+        return "";
     }
 }

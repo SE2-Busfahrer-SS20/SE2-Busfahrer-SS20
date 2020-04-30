@@ -1,5 +1,12 @@
 package at.aau.busfahrer.service.impl;
 
+import android.content.Context;
+
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+
+
+
 import com.esotericsoftware.minlog.Log;
 
 import at.aau.busfahrer.service.GameService;
@@ -55,12 +62,12 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void playGame(final String name){
+    public void playGame(final String name, final String MACAddress){
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                RegisterMessage rm = new RegisterMessage(name, getMacAdress());
+                RegisterMessage rm = new RegisterMessage(name, MACAddress);
                 try {
                     client.connect(host);
                     client.sendMessage(rm);
@@ -89,16 +96,6 @@ public class GameServiceImpl implements GameService {
             }
         });
         thread.start();
-    }
-
-
-    private String getMacAdress(){
-       /*
-        WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        WifiInfo info = manager.getConnectionInfo();
-        return info.getMacAddress();
-        */
-        return "MACAdress";
     }
 
 

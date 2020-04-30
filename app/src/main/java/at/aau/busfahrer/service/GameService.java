@@ -4,7 +4,7 @@ public interface GameService {
 
     void createGame(int playercount);
 
-    void playGame(String name);
+    void playGame(String name, String MACAddress);
 
     void startGame();
 }
