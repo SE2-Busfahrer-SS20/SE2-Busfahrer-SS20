@@ -1,12 +1,5 @@
 package at.aau.busfahrer.service.impl;
 
-import android.content.Context;
-
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-
-
-
 import com.esotericsoftware.minlog.Log;
 
 import at.aau.busfahrer.service.GameService;
