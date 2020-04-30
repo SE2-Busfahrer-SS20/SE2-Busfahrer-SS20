@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,6 +17,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.esotericsoftware.minlog.Log;
 
 import java.util.ArrayList;
 
@@ -51,7 +52,7 @@ public class WaitActivity extends AppCompatActivity {
                     try {
                         sleep(1000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Log.error(e.toString());
                     }
                 }
             }else{
@@ -66,7 +67,7 @@ public class WaitActivity extends AppCompatActivity {
                     try {
                         sleep(1000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Log.error(e.toString());
                     }
                 }
             }

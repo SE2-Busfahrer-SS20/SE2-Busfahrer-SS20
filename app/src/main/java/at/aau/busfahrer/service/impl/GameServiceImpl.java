@@ -1,5 +1,7 @@
 package at.aau.busfahrer.service.impl;
 
+import com.esotericsoftware.minlog.Log;
+
 import at.aau.busfahrer.service.GameService;
 import shared.networking.NetworkClient;
 import shared.networking.dto.CreateGameMessage;
@@ -45,8 +47,7 @@ public class GameServiceImpl implements GameService {
                     client.connect(host);
                     client.sendMessage(cgm);
                 } catch (Exception e) {
-                    System.out.println(e);
-                    e.printStackTrace();
+                    Log.error(e.toString());
                 }
             }
         });
@@ -64,8 +65,7 @@ public class GameServiceImpl implements GameService {
                     client.connect(host);
                     client.sendMessage(rm);
                 } catch (Exception e) {
-                    System.out.println(e);
-                    e.printStackTrace();
+                    Log.error(e.toString());
                 }
             }
         });
@@ -84,8 +84,7 @@ public class GameServiceImpl implements GameService {
             client.sendMessage(sgm);
             System.out.println("sending SGM...");
         } catch (Exception e) {
-            System.out.println(e);
-            e.printStackTrace();
+            Log.error(e.toString());
         }
             }
         });
