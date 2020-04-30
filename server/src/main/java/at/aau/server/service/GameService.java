@@ -20,10 +20,9 @@ public interface GameService {
 
     /**
      * Add Player to list.
-     * @param player
      * @return boolean status,  false in case of a full List.
      */
-    boolean addPlayer(Player player);
+
     Player addPlayer(String name, String MACAdress, Connection connection);
 
 
@@ -48,5 +47,6 @@ public interface GameService {
     //Card[][] getPlayercardList();
     // Deck getCardStack();
     Card[] getPlayersCards(int player);
+
 
 }

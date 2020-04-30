@@ -10,11 +10,13 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import at.aau.server.service.impl.GameServiceImpl;
 import shared.exceptions.PlayerLimitExceededException;
 import shared.model.Card;
+import shared.model.Game;
 import shared.model.GameState;
 import shared.model.Player;
 import shared.model.impl.PlayerImpl;
@@ -29,6 +31,7 @@ public class GameServiceTest {
     private final static int MIN_PLAYERS = 8;
 
     private GameService gameService;
+
     @Mock
     Connection mockConnection;
 
@@ -40,7 +43,6 @@ public class GameServiceTest {
     @Before
     public void init() {
         gameService = new GameServiceImpl();
-
     }
 
     /*
@@ -53,39 +55,24 @@ public class GameServiceTest {
 
     @Test
     public void testGameExistsAfterCreation() throws PlayerLimitExceededException {
-            gameService.createGame(4);
+            gameService.createGame();
             assertTrue(gameService.gameExists());
     }
 
-    @Test
-    public void testMaxPlayerCount() {
-       try {
-           gameService.createGame(MAX_PLAYERS);
-       } catch (Exception e) {
-           fail();
-       }
-       try {
-           gameService.createGame(MAX_PLAYERS + 1);
-           fail();
-       } catch (PlayerLimitExceededException ex)
-       { } catch (Exception e) {
-           fail();
-       }
-    }
 
     @Test
     public void addPlayer() throws PlayerLimitExceededException {
-        gameService.createGame(4);
-        Player player = new PlayerImpl("MaxMustermann", mockConnection);
-        gameService.addPlayer(player);
-        List<Player> playerList = gameService.getPlayerList();
-        assertEquals(playerList.size(), 1);
-        assertEquals(playerList.get(0), player);
+        gameService.createGame();
+        Player player = new PlayerImpl("elias", "macAdress", null,null);
+        gameService.addPlayer("elias", "macAdress", null);
+        List<Player> playerList = gameService.getGame().getPlayerList();
+        System.out.println("SIZE:"+gameService.getGame().getPlayerCount());
+        assertEquals(gameService.getGame().getPlayerCount(), 1);
     }
 
     @Test
     public void checkGameStates() throws PlayerLimitExceededException {
-        gameService.createGame(2);
+        gameService.createGame();
         assertEquals(gameService.getGame().getState(), GameState.INIT);
         gameService.startGame();
         assertEquals(gameService.getGame().getState(), GameState.STARTED);
@@ -103,21 +90,29 @@ public class GameServiceTest {
         int players = 4;
         int cardsPerPlayer = 52 / players;
         // start game
-        gameService.createGame(4);
-        // check card deck after dealing cards (4 cards / Player).
-        assertEquals((gameService.getCardStack()).size(), (52 - (players * 4)));
+        gameService.createGame();
+
+
         // check player cards.
-        Card[][] cardStack = gameService.getPlayercardList();
-        assertEquals(cardStack.length, players);
-        assertEquals(cardStack[0].length, 4);
-        assertEquals(cardStack[1].length, 4);
-        assertEquals(cardStack[2].length, 4);
-        assertEquals(cardStack[3].length, 4);
+        gameService.getGame().addPlayer("name1","mac1",null);
+        gameService.getGame().addPlayer("name2","mac2",null);
+        gameService.getGame().addPlayer("name3","mac3",null);
+        gameService.getGame().addPlayer("name4","mac4",null);
+        // check card deck after dealing cards (4 cards / Player).
+        assertEquals((gameService.getGame().getCardStack()).size(), (52 - (players * 4)));
+
+
+        assertEquals(gameService.getGame().getPlayerCount(), players);
+        assertEquals(gameService.getGame().getPlayersCards(0).length, 4);
+        assertEquals(gameService.getGame().getPlayersCards(1).length, 4);
+        assertEquals(gameService.getGame().getPlayersCards(2).length, 4);
+        assertEquals(gameService.getGame().getPlayersCards(3).length, 4);
     }
 
     /**
      * Destroy object to support garbage collector.
      */
+
     @After
     public void destroy() {
         gameService = null;

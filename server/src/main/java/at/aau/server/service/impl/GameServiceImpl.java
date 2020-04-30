@@ -25,18 +25,6 @@ public class GameServiceImpl implements GameService {
         return game.getPlayerList();
     }
 
-    @Override   //Remove this method
-    public boolean addPlayer(Player player) {
-        List<Player> playerList = getPlayerList();
-
-        if(playerList.size() < game.getPlayerCount()) {
-            playerList.add(player);
-            game.setPlayerList(playerList);
-            return true;
-        }
-        return false;
-    }
-
     public Player addPlayer(String name, String MACAdress, Connection connection){
          return game.addPlayer(name, MACAdress, connection);
     }
@@ -111,7 +99,6 @@ public class GameServiceImpl implements GameService {
     public Card[] getPlayersCards(int player) {
         return game.getPlayersCards(player);
     }
-
 
 
 

@@ -69,6 +69,19 @@ public class GameImpl implements Game {
         this.playerList = playerList;
     }
 
+    public static int getPlayerLimitMax() {
+        return PLAYER_LIMIT_MAX;
+    }
 
+    public static int getPlayerLimitMin() {
+        return PLAYER_LIMIT_MIN;
+    }
 
+    public Deck getCardStack() {
+        return cardStack;
+    }
+
+    public void setCardStack(Deck cardStack) {
+        this.cardStack = cardStack;
+    }
 }

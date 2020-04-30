@@ -13,4 +13,7 @@ public interface Game {
     void setPlayerList(List<Player> playerList);
     Player addPlayer(String name, String MACAdress, Connection connection);
     Card[] getPlayersCards(int player);
+
+    public Deck getCardStack();
+    public void setCardStack(Deck cardStack);
 }
