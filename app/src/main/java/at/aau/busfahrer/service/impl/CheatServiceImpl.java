@@ -1,45 +1,40 @@
 package at.aau.busfahrer.service.impl;
+import at.aau.busfahrer.service.CheatService;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
+
 import android.util.Log;
-import at.aau.busfahrer.service.CheatService;
+import java.util.concurrent.TimeUnit;
 
 public class CheatServiceImpl implements CheatService {
-
-    /*
-        Zu beginn des Spieles kann sich jeder Spieler für einen der folgenden „Sensoren“ entscheiden,
-        mit deren Auslösung er unbemerkt Schummeln kann.
-
-        *Lichtsensor
-        *Beschleunigungsensor
-        *Annährungssensor
-
-    https://developer.android.com/reference/android/hardware/SensorManager
-     */
 
     private static final String TAG = "CheatServiceImpl";
     private static final int TYPE_FAIR = 0;
 
+    @SuppressLint("StaticFieldLeak") // using ApplicationContext solves this problem, context is not saved.
     private static CheatServiceImpl instance;
 
-    // callback for UI calls
     public interface SensorListener{
         void handle();
     }
 
-    // sensor stuff
     private Context context;
     private SensorListener sensorListener;
     private SensorManager sensorManager;
-    private int sensor_type;
-    private static Sensor sensor;
+    private int sensorType;
+    private Sensor sensor;
+    private String activityName;
+    private long lastUpdateMs;
     public boolean isSensorListen = false;
 
-    // constructor
+    @SuppressWarnings("unused")
     private CheatServiceImpl(){};
-    public static synchronized CheatServiceImpl getInstance(){
+
+    public static CheatServiceImpl getInstance(){
         if(CheatServiceImpl.instance == null){
             CheatServiceImpl.instance = new CheatServiceImpl();
         }
@@ -50,27 +45,31 @@ public class CheatServiceImpl implements CheatService {
         this.sensorListener = sensorListener;
     }
 
-    public void setSensorType(int type){
-        sensor_type = type;
-    }
-    public int getSensorType(){
-        return sensor_type;
-    }
-
     private void onStart(){
         Log.i(TAG,"Service started");
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        if (sensor_type == Sensor.TYPE_ACCELEROMETER){
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        }else if(sensor_type == Sensor.TYPE_LIGHT){
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        }else if (sensor_type == TYPE_FAIR){
-            sensor = null;
-            isSensorListen = false;
-        }
-        if (sensor != null){
-            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-            isSensorListen = true;
+        if(sensorManager != null){
+            switch (sensorType) {
+                case Sensor.TYPE_ACCELEROMETER:
+                    sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+                    break;
+                case Sensor.TYPE_LIGHT:
+                    sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+                    break;
+                case TYPE_FAIR:
+                    sensor = null;
+                    sensorManager = null;
+                    isSensorListen = false;
+                    playFairMode();
+                    break;
+                default:
+                    Log.e(TAG, "Sensor not found");
+                    break;
+            }
+            if (sensor != null){
+                sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+                isSensorListen = true;
+            }
         }
     }
 
@@ -95,53 +94,63 @@ public class CheatServiceImpl implements CheatService {
         isSensorListen = false;
     }
 
-    /*
-    Sensor Event = long timestamp , float value[] x,y,z , Sensor Obj , int accuracy
-    https://developer.android.com/guide/topics/sensors/sensors_overview#dont-block-the-onsensorchanged-method
-     */
+    private void playFairMode(){
+        // handle fair mode ...
+    }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
-        switch (sensor.getType()){
-          case (Sensor.TYPE_ACCELEROMETER):
-              getAccelerometer(event);
-              break;
-          case (Sensor.TYPE_LIGHT):
-              getLight(event);
-              break;
-      }
+        if(sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+            getAccelerometer(event);
+        }else if(sensor.getType() == Sensor.TYPE_LIGHT){
+            getLight(event);
+        }
     }
 
     private void getAccelerometer(SensorEvent event) {
-
-        long timestamp = event.timestamp; // in nanoseconds
+        long timestamp = TimeUnit.MILLISECONDS.convert(event.timestamp, TimeUnit.NANOSECONDS);
         float x = event.values[0];
         float y = event.values[1];
         float z = event.values[2];
 
-        // calculate g force
-        float accelerationSquareRoot = (x * x + y * y + z * z)
+        if((timestamp - lastUpdateMs) > 500){
+        float accelerationSqrt = (x * x + y * y + z * z)
                 / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
-        if (accelerationSquareRoot >= 2){
-            System.out.println("Shake detected");
+        if (accelerationSqrt >= 4){
+            lastUpdateMs = timestamp;
+            Log.i(TAG,"Shake detected");
+            sensorListener.handle();
         }else{
+            lastUpdateMs = timestamp;
             return;
+        }
         }
     }
 
     private void getLight(SensorEvent event){
-        // sensor default value ~5 daylight
-        // todo: sensor sensitivity too high
+        long timestamp = TimeUnit.MILLISECONDS.convert(event.timestamp, TimeUnit.NANOSECONDS);
         float lux = event.values[0];
-        if(lux < 5){
-            System.out.println("dark");
-        }else{
-            return;
+
+        if((timestamp - lastUpdateMs) > 800) {
+            if (lux < 5) {
+                lastUpdateMs = timestamp;
+                Log.i(TAG,"Dark");
+                sensorListener.handle();
+            } else {
+                lastUpdateMs = timestamp;
+            }
         }
     }
-
+    public void setSensorType(int type){
+        sensorType = type;
+    }
+    public int getSensorType(){
+        return sensorType;
+    }
     @Override
-    public void setContext(Context context) {
+    public void setContext(Context context, String name) {
         this.context = context;
+        this.activityName = name;
     }
     public Context getContext() {
         return context;
@@ -152,26 +161,25 @@ public class CheatServiceImpl implements CheatService {
     }
     @Override
     public void pauseListen() {
-        if(sensor_type == TYPE_FAIR){
-
+        if(sensorType != TYPE_FAIR){
+            onPause();
         }
-        onPause();
     }
     @Override
     public void resumeListen() {
-        if(sensor_type == TYPE_FAIR){
-
+        if(sensorType != TYPE_FAIR){
+            onResume();
         }
-        onResume();
     }
     @Override
     public void stopListen() {
-        if(sensor_type == TYPE_FAIR){
-
+        if(sensorType != TYPE_FAIR){
+            onStop();
         }
-        onStop();
     }
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+    @Override @SuppressWarnings("unused")
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // NOT NEEDED
+    }
 
 }

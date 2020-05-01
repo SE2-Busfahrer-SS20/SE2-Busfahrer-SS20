@@ -1,11 +1,9 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
-import at.aau.busfahrer.service.CheatService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.os.Bundle;
@@ -51,7 +49,8 @@ public class SelectCheatsActivity extends AppCompatActivity {
 
     }
 
-    public void onRadioButtonClicked(View v){
+    @SuppressWarnings("unused")
+    public void onRadioButtonClicked(View view){
         if(light.isPressed()) {
             light.setBackgroundResource(R.drawable.bg_btn_orange);
             sensortype = Sensor.TYPE_LIGHT;

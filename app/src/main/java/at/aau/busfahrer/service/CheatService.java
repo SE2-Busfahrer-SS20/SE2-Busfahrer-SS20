@@ -6,7 +6,7 @@ import android.hardware.SensorEventListener;
 
 public interface CheatService extends SensorEventListener {
 
-    void setContext(Context context);
+    void setContext(Context context, String name);
     void startListen();
     void pauseListen();
     void resumeListen();

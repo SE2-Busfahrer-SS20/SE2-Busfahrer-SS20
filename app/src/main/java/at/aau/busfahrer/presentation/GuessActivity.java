@@ -1,7 +1,7 @@
 package at.aau.busfahrer.presentation;
-
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +12,6 @@ import android.widget.TextView;
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 import shared.model.Card;
-import shared.model.impl.CardImpl;
 import shared.model.impl.playersCards;
 
 public class GuessActivity extends AppCompatActivity {
@@ -32,11 +31,32 @@ public class GuessActivity extends AppCompatActivity {
         cards= playersCards.getCards();
 
         cheatService = CheatServiceImpl.getInstance();
-        cheatService.setContext(this);
+        cheatService.setContext(getApplicationContext(), getClass().getName());
         cheatService.startListen();
-
-        // TODO -> onBackPressed() prevent going back.
-
+        cheatService.setSensorListener(new CheatServiceImpl.SensorListener() {
+            @Override
+            public void handle() {
+                cheatService.pauseListen();
+                new AlertDialog.Builder(GuessActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                        .setTitle("Are you sure you want to cheat?")
+                        .setCancelable(false)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                TextView tV=findViewById(R.id.tV_card1);
+                                turnCard(tV, cards[0]);
+                                cheatService.stopListen();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                cheatService.resumeListen();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .create().show();
+            }
+        });
     }
 
     //The following 4 onClick-methodes are just relevant for Sprint 1 where we want to be able to turn each card
