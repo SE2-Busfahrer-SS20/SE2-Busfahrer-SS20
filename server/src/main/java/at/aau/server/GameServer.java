@@ -4,6 +4,7 @@ import java.io.IOException;
 import at.aau.server.service.GameService;
 import at.aau.server.service.PLabService;
 import at.aau.server.service.impl.GameServiceImpl;
+import at.aau.server.service.impl.PLabServiceImpl;
 import shared.model.GameState;
 import shared.model.Player;
 import shared.networking.dto.BaseMessage;
@@ -158,7 +159,8 @@ public class GameServer extends NetworkServerKryo implements Runnable{
     }
 
     private void startLab2() {
-
+        pLabService = new PLabServiceImpl(this.gameService.getGame());
+        pLabService.startLab();
     }
 
 
