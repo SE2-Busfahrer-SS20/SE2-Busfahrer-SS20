@@ -23,10 +23,22 @@ public class GameServiceImpl implements GameService {
     }
 
 
+    /**
+     * Returns Singleton instance.
+     * @return instance
+     */
     public static synchronized GameService getInstance() {
         if (instance != null)
             return instance;
         return (instance = new GameServiceImpl());
+    }
+
+    /**
+     * This method destroy the Singleton Instance.
+     * It's needed for testing purposes.
+     */
+    public static synchronized void destroyInstance() {
+        instance = null;
     }
 
     @Override//Player list was moved into game object
@@ -107,6 +119,11 @@ public class GameServiceImpl implements GameService {
     @Override
     public Card[] getPlayersCards(int player) {
         return game.getPlayersCards(player);
+    }
+
+    public void startPLab() {
+        this.game.setState(GameState.LAB2);
+
     }
 
 

@@ -42,7 +42,7 @@ public class GameServiceTest {
      */
     @Before
     public void init() {
-        gameService = new GameServiceImpl();
+        gameService = GameServiceImpl.getInstance();
     }
 
     /*
@@ -110,11 +110,14 @@ public class GameServiceTest {
     }
 
     /**
-     * Destroy object to support garbage collector.
+     * Destroy Singleton instance to create clean instance.
      */
 
     @After
     public void destroy() {
+        // destroy Singleton Instance.
+        GameServiceImpl.destroyInstance();
+        // support garbage collector.
         gameService = null;
     }
 

@@ -143,8 +143,9 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 // TODO: implement.
                 break;
             // Starts pyramiden lab.
-            case LAB2:
-                // TODO: implement.
+            case LAB2READY:
+                this.gameService.nextLab(); // TODO: align next LAB Method.
+                startLab2();
                 break;
             // Starts busdriver lab.
             case LAB3:
@@ -154,6 +155,10 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 // TODO: implement.
                 break;
         }
+    }
+
+    private void startLab2() {
+
     }
 
 
