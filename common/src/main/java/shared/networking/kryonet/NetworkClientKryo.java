@@ -35,7 +35,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     @Override
     public void connect(String host) throws IOException {
         client.start();
-        client.connect(5000, host, NetworkConstants.TCP_PORT, NetworkConstants.UDP_PORT);
+        client.connect(5000, host, NetworkConstants.TCP_PORT);
         //Here the client receives messages from the server !
 
         client.addListener(new Listener() {

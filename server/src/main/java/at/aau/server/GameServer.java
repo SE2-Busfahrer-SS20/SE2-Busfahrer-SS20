@@ -2,6 +2,7 @@ package at.aau.server;
 
 import java.io.IOException;
 import at.aau.server.service.GameService;
+import at.aau.server.service.PLabService;
 import at.aau.server.service.impl.GameServiceImpl;
 import shared.model.GameState;
 import shared.model.Player;
@@ -28,6 +29,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
 
     private Thread thread;
     private GameService gameService;
+    private PLabService pLabService;
 
     private Connection connectionToMaster;
 
@@ -136,12 +138,15 @@ public class GameServer extends NetworkServerKryo implements Runnable{
             case STARTED:
                 // TODO: implement.
                 break;
+            // Starts guess lab.
             case LAB1:
                 // TODO: implement.
                 break;
+            // Starts pyramiden lab.
             case LAB2:
                 // TODO: implement.
                 break;
+            // Starts busdriver lab.
             case LAB3:
                 // TODO: implement.
                 break;
