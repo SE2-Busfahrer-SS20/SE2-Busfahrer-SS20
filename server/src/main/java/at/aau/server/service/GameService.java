@@ -47,6 +47,4 @@ public interface GameService {
     //Card[][] getPlayercardList();
     // Deck getCardStack();
     Card[] getPlayersCards(int player);
-
-
 }

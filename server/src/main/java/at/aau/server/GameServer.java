@@ -35,7 +35,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
 
     public GameServer() {
         Log.set(Log.LEVEL_DEBUG); // set log level for Minlog.
-        gameService = new GameServiceImpl();
+        gameService = GameServiceImpl.getInstance();
         registerClasses();
     }
 

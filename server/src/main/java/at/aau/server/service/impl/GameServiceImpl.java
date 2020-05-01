@@ -16,8 +16,17 @@ import shared.networking.dto.StartGameMessage;
 public class GameServiceImpl implements GameService {
 
     private Game game;
+    // Instance for singleton.
+    private static  GameServiceImpl instance;
 
-    public GameServiceImpl() {
+    private GameServiceImpl() {
+    }
+
+
+    public static synchronized GameService getInstance() {
+        if (instance != null)
+            return instance;
+        return (instance = new GameServiceImpl());
     }
 
     @Override//Player list was moved into game object
