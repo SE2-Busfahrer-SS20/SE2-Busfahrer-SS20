@@ -8,12 +8,6 @@ import android.view.View;
 import android.widget.TextView;
 
 
-import org.w3c.dom.Text;
-
-import java.sql.Time;
-import java.util.HashSet;
-import java.util.Set;
-
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import shared.model.Card;
