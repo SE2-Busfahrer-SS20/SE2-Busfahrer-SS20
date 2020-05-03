@@ -21,12 +21,20 @@ public class playersStorage {
     private static ArrayList<String> playerNames = new ArrayList<String>();
     private static boolean master=false;
     private static GameState state=GameState.INIT;
+    private static Card[] pyramidCards;
 
     public static Card[] getCards() {
         return cards;
     }
     public static void setCards(Card[] cards) {
         playersStorage.cards = cards;
+    }
+
+    public static Card[] getPyramidCardsCards() {
+        return pyramidCards;
+    }
+    public static void setPyramidCardsCards(Card[] cards) {
+        playersStorage.pyramidCards = cards;
     }
 
     public static String getPlayerName(int index){

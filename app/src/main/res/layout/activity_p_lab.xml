@@ -10,69 +10,243 @@
         android:id="@+id/headerPLab"
         android:layout_width="0dp"
         android:layout_height="45dp"
-        android:theme="@style/mainMenuHeadTextView"
         android:text="@string/plab_header"
+        android:theme="@style/mainMenuHeadTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tV_pcard1"
-        android:layout_width="88dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:clickable="true"
-        android:text="🂠"
+        android:focusable="true"
+        android:gravity="bottom"
+        android:onClick="onClickCardPCard"
         android:textColor="#000000"
         android:textSize="130sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tV_card1" />
+        app:layout_constraintEnd_toStartOf="@+id/tV_pcard2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerPLab"
+        tools:text="@string/card_backcover" />
+
+    <TextView
+        android:id="@+id/tV_pcard2"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="60dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="bottom"
+        android:onClick="onClickCardPCard"
+        android:textColor="#000000"
+        android:textSize="130sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tV_pcard1"
+        app:layout_constraintTop_toBottomOf="@+id/headerPLab"
+        tools:text="@string/card_backcover" />
+
+
+    <TextView
+        android:id="@+id/tV_pcard3"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="bottom"
+        android:onClick="onClickCardPCard"
+        android:textColor="#000000"
+        android:textSize="130sp"
+        app:layout_constraintEnd_toStartOf="@+id/tV_pcard4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tV_pcard1"
+        tools:text="@string/card_backcover" />
+
+    <TextView
+        android:id="@+id/tV_pcard4"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="bottom"
+        android:onClick="onClickCardPCard"
+        android:textColor="#000000"
+        android:textSize="130sp"
+        app:layout_constraintEnd_toStartOf="@+id/tV_pcard5"
+        app:layout_constraintStart_toEndOf="@+id/tV_pcard3"
+        app:layout_constraintTop_toBottomOf="@+id/tV_pcard1"
+        tools:text="@string/card_backcover" />
+
+    <TextView
+        android:id="@+id/tV_pcard5"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="bottom"
+        android:onClick="onClickCardPCard"
+        android:textColor="#000000"
+        android:textSize="130sp"
+        app:layout_constraintEnd_toStartOf="@+id/tV_pcard6"
+        app:layout_constraintStart_toEndOf="@+id/tV_pcard4"
+        app:layout_constraintTop_toBottomOf="@+id/tV_pcard1"
+        tools:text="@string/card_backcover" />
+
+    <TextView
+        android:id="@+id/tV_pcard6"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="bottom"
+        android:onClick="onClickCardPCard"
+        android:textColor="#000000"
+        android:textSize="130sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tV_pcard5"
+        app:layout_constraintTop_toBottomOf="@+id/tV_pcard2"
+        tools:text="@string/card_backcover" />
+
+    <TextView
+        android:id="@+id/tV_pcard7"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="bottom"
+        android:onClick="onClickCardPCard"
+        android:textColor="#000000"
+        android:textSize="130sp"
+        app:layout_constraintEnd_toStartOf="@+id/tV_pcard8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tV_pcard3"
+        tools:text="@string/card_backcover" />
+
+    <TextView
+        android:id="@+id/tV_pcard8"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="bottom"
+        android:onClick="onClickCardPCard"
+        android:textColor="#000000"
+        android:textSize="130sp"
+        app:layout_constraintEnd_toStartOf="@+id/tV_pcard9"
+        app:layout_constraintStart_toEndOf="@+id/tV_pcard7"
+        app:layout_constraintTop_toBottomOf="@+id/tV_pcard3"
+        tools:text="@string/card_backcover" />
+
+    <TextView
+        android:id="@+id/tV_pcard9"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="bottom"
+        android:onClick="onClickCardPCard"
+        android:textColor="#000000"
+        android:textSize="130sp"
+        app:layout_constraintEnd_toStartOf="@+id/tV_pcard10"
+        app:layout_constraintStart_toEndOf="@+id/tV_pcard8"
+        app:layout_constraintTop_toBottomOf="@+id/tV_pcard3"
+        tools:text="@string/card_backcover" />
+
+    <TextView
+        android:id="@+id/tV_pcard10"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="bottom"
+        android:onClick="onClickCardPCard"
+        android:textColor="#000000"
+        android:textSize="130sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tV_pcard9"
+        app:layout_constraintTop_toBottomOf="@+id/tV_pcard3"
+        tools:text="@string/card_backcover" />
 
     <TextView
         android:id="@+id/tV_card1"
-        android:layout_width="88dp"
-        android:layout_height="wrap_content"
+        android:layout_width="89dp"
+        android:layout_height="140dp"
         android:layout_marginEnd="8dp"
         android:clickable="false"
-        android:text="🂠"
+        android:gravity="bottom"
         android:textColor="#000000"
         android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tV_card2" />
+        app:layout_constraintEnd_toStartOf="@+id/tV_card2"
+        tools:text="@string/card_backcover" />
 
     <TextView
         android:id="@+id/tV_card2"
         android:layout_width="88dp"
-        android:layout_height="wrap_content"
+        android:layout_height="140dp"
         android:layout_marginEnd="8dp"
         android:clickable="false"
-        android:text="🂠"
+        android:gravity="bottom"
         android:textColor="#000000"
         android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tV_card3" />
+        app:layout_constraintEnd_toStartOf="@+id/tV_card3"
+        tools:text="@string/card_backcover" />
 
     <TextView
         android:id="@+id/tV_card3"
         android:layout_width="88dp"
-        android:layout_height="wrap_content"
+        android:layout_height="140dp"
         android:layout_marginEnd="8dp"
         android:clickable="false"
-        android:text="🂠"
+        android:gravity="bottom"
         android:textColor="#000000"
         android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tV_card4" />
+        app:layout_constraintEnd_toStartOf="@+id/tV_card4"
+        tools:text="@string/card_backcover" />
 
     <TextView
         android:id="@+id/tV_card4"
         android:layout_width="88dp"
-        android:layout_height="wrap_content"
+        android:layout_height="140dp"
         android:layout_marginEnd="15dp"
         android:clickable="false"
-        android:text="🂠"
+        android:gravity="bottom"
         android:textColor="#000000"
         android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="@string/card_backcover" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
