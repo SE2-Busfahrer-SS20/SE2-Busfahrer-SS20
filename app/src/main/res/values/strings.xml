@@ -25,4 +25,5 @@ Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming 
     <string name="title_activity_wait">waitActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="plab_header">Pyramiden Lab</string>
 </resources>

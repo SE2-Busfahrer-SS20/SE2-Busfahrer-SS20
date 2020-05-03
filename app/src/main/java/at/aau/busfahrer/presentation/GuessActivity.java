@@ -14,7 +14,6 @@ import at.aau.busfahrer.presentation.utils.CardUtility;
 import shared.model.Card;
 import shared.model.GameState;
 import shared.model.impl.playersStorage;
-import at.aau.busfahrer.presentation.utils.CardUtility.*;
 
 public class GuessActivity extends AppCompatActivity {
 
