@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.naming.Context;
 
 import shared.model.Card;
+import shared.model.Deck;
 import shared.model.GameState;
 
 
@@ -60,6 +61,7 @@ public class playersStorage {
     public static void setState(GameState state) {
         playersStorage.state = state;
     }
+
 
 
 }
