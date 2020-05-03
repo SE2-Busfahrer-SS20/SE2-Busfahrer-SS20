@@ -16,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/menu_AppTheme">
+        <activity android:name=".presentation.PLabActivity"></activity>
         <activity android:name=".presentation.GuessActivity" />
         <activity
             android:name=".presentation.WaitActivity"

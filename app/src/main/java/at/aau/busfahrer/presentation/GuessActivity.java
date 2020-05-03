@@ -10,9 +10,11 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import at.aau.busfahrer.R;
+import at.aau.busfahrer.presentation.utils.CardUtility;
 import shared.model.Card;
 import shared.model.GameState;
 import shared.model.impl.playersStorage;
+import at.aau.busfahrer.presentation.utils.CardUtility.*;
 
 public class GuessActivity extends AppCompatActivity {
 
@@ -37,36 +39,22 @@ public class GuessActivity extends AppCompatActivity {
 
     public void onClickCard1(View v) {
         TextView tV=findViewById(R.id.tV_card1);
-        turnCard(tV, cards[0]);
+        CardUtility.turnCard(tV, cards[0]);
     }
 
     public void onClickCard2(View view) {
         TextView tV=findViewById(R.id.tV_card2);
-        turnCard(tV, cards[1]);
+        CardUtility.turnCard(tV, cards[1]);
     }
 
     public void onClickCard3(View view) {
         TextView tV=findViewById(R.id.tV_card3);
-        turnCard(tV, cards[2]);
+        CardUtility.turnCard(tV, cards[2]);
     }
 
     public void onClickCard4(View view) {
         TextView tV=findViewById(R.id.tV_card4);
-        turnCard(tV, cards[3]);
-    }
-
-    private void turnCard(TextView tV, Card c){
-        //Id suit is Pick or Kreuz -> change collor to red
-        if(c.getSuit()==1||c.getSuit()==2){
-           tV.setTextColor(Color.parseColor("#FF0000"));//Red
-        }
-
-        if(tV.getText().equals("\uD83C\uDCA0")) {//if it shows the cards back-side
-            tV.setText(c.toString());
-        }else{
-            tV.setText("\uD83C\uDCA0");//set to card back side
-            tV.setTextColor(Color.parseColor("#000000"));//black
-        }
+        CardUtility.turnCard(tV, cards[3]);
     }
 
     // removes android status bar on top, for fullscreen
