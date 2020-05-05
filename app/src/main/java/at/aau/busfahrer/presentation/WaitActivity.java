@@ -21,7 +21,6 @@ import java.util.ArrayList;
 public class WaitActivity extends AppCompatActivity implements PreGameListener {
     private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
 
-
     GameService gamesvc;
 
     @Override
@@ -31,6 +30,7 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
         setContentView(R.layout.activity_wait);
 
         gamesvc = GameServiceImpl.getInstance();
+
         //Change visability
         LinearLayout playerList = findViewById(R.id.playerList);
         Button bt_start = findViewById(R.id.bt_start);
@@ -74,6 +74,7 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
     //Callback to open new Activity when Master starts the game
     @Override
     public void onGameStart(){
+        System.out.println("Play Game!!!");
         Intent i = new Intent(WaitActivity.this, GuessActivity.class);
         startActivity(i);
     }

@@ -3,6 +3,7 @@ package at.aau.busfahrer.service.impl;
 import com.esotericsoftware.minlog.Log;
 
 import at.aau.busfahrer.service.GameService;
+import shared.model.Card;
 import shared.networking.NetworkClient;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.RegisterMessage;
@@ -94,6 +95,21 @@ public class GameServiceImpl implements GameService {
     }
 
 
+    public boolean guessColor(Card card, boolean guessBlack){
+        boolean cardIsBlack=true;
+        if(card.getSuit()==1||card.getSuit()==2){//Red
+            cardIsBlack=false;
+        }
+        if(guessBlack==cardIsBlack){//Guessed right
+            //SEND DTO
+            return true;
+        }
+        else{
+            //SEND DTO
+            return false;
+        }
+
+    }
 
 
 }
