@@ -123,4 +123,9 @@ public class MainMenuActivity extends AppCompatActivity {
         }
         return "";
     }
+
+    public void openPLab(View v) {
+        Intent i = new Intent(MainMenuActivity.this, PLabActivity.class);
+        startActivity(i);
+    }
 }
