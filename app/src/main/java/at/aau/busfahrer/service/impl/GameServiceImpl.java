@@ -41,16 +41,13 @@ public class GameServiceImpl implements GameService {
         //Must be declared final to get accessible in inner class
         final int pc=playercount;
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                CreateGameMessage cgm = new CreateGameMessage(pc);
-                try {
-                    client.connect(host);
-                    client.sendMessage(cgm);
-                } catch (Exception e) {
-                    Log.error(e.toString());
-                }
+        Thread thread = new Thread(() -> {
+            CreateGameMessage cgm = new CreateGameMessage(pc);
+            try {
+                client.connect(host);
+                client.sendMessage(cgm);
+            } catch (Exception e) {
+                Log.error(e.toString());
             }
         });
         thread.start();
@@ -59,16 +56,13 @@ public class GameServiceImpl implements GameService {
     @Override
     public void playGame(final String name, final String MACAddress){
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                RegisterMessage rm = new RegisterMessage(name, MACAddress);
-                try {
-                    client.connect(host);
-                    client.sendMessage(rm);
-                } catch (Exception e) {
-                    Log.error(e.toString());
-                }
+        Thread thread = new Thread(() -> {
+            RegisterMessage rm = new RegisterMessage(name, MACAddress);
+            try {
+                client.connect(host);
+                client.sendMessage(rm);
+            } catch (Exception e) {
+                Log.error(e.toString());
             }
         });
         thread.start();
@@ -77,18 +71,15 @@ public class GameServiceImpl implements GameService {
     @Override
     public void startGame(){
         System.out.println("THREAD: sending SGM...");
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-        StartGameMessage sgm = new StartGameMessage();
-        try {
-            client.connect(host);
-            client.sendMessage(sgm);
-            System.out.println("sending SGM...");
-        } catch (Exception e) {
-            Log.error(e.toString());
-        }
-            }
+        Thread thread = new Thread(() -> {
+    StartGameMessage sgm = new StartGameMessage();
+    try {
+        client.connect(host);
+        client.sendMessage(sgm);
+        System.out.println("sending SGM...");
+    } catch (Exception e) {
+        Log.error(e.toString());
+    }
         });
         thread.start();
     }
