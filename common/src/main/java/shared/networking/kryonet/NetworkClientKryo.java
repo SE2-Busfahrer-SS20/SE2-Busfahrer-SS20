@@ -7,7 +7,7 @@ import com.esotericsoftware.minlog.Log;
 import java.io.IOException;
 
 import shared.model.GameState;
-import shared.model.impl.playersStorage;
+import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.BaseMessage;
@@ -21,6 +21,7 @@ import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Client client;
     private Callback<BaseMessage> callback;
+    private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
 
 
     public NetworkClientKryo() {
@@ -49,14 +50,12 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
                 if(object instanceof NewPlayerMessage){
                     Log.debug("New Player in the Game");
-                    playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
-                    System.out.println("NEW PLAYER IN THE GAME ");
+                    playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());   //instead of this, use listener to react on new Message and store in app
                 }
 
                 if(object instanceof StartGameMessage){
                     Log.debug("Game can start now");
                     playersStorage.setState(GameState.READY);
-                    System.out.println("received SGM in listener...");
                 }
 
 

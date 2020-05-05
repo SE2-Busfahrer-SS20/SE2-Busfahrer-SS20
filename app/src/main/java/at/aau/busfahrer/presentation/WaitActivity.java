@@ -3,11 +3,10 @@ import at.aau.busfahrer.*;
 import at.aau.busfahrer.service.GameService;
 import at.aau.busfahrer.service.impl.GameServiceImpl;
 import shared.model.GameState;
-import shared.model.impl.playersStorage;
-
+import shared.model.OnAdditionalPlayerListener;
+import shared.model.impl.PlayersStorageImpl;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,13 +22,18 @@ import com.esotericsoftware.minlog.Log;
 import java.util.ArrayList;
 
 
-public class WaitActivity extends AppCompatActivity {
+public class WaitActivity extends AppCompatActivity implements OnAdditionalPlayerListener{
+    private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
+
+    ///------Busy waiting---///
 
     GameService gamesvc;
+
     private boolean wait=true;
-    Thread updatePlayerList = new Thread(){
+    Thread update = new Thread(){
         public void run(){
-            if(playersStorage.isMaster()) {
+            /*
+            if(PlayersStorage.isMaster()) {
                 TextView[] players = new TextView[8];
                 players[0] = (TextView) findViewById(R.id.playerName1);
                 players[1] = (TextView) findViewById(R.id.playerName2);
@@ -42,7 +46,7 @@ public class WaitActivity extends AppCompatActivity {
                 ArrayList<String> playerNames;
                 //Busy Waiting
                 while (wait) {
-                    playerNames = playersStorage.getPlayerNames();
+                    playerNames = PlayersStorage.getPlayerNames();
                     int size = playerNames.size();
                     for (int i = 0; i < 8 && i < size; i++) {
                         if (playerNames.get(i) != null) {
@@ -56,6 +60,7 @@ public class WaitActivity extends AppCompatActivity {
                     }
                 }
             }else{
+             */
                 while (wait) {
                     System.out.println("waiting for game...");
                     if(playersStorage.getState().equals(GameState.READY)){
@@ -71,8 +76,16 @@ public class WaitActivity extends AppCompatActivity {
                     }
                 }
             }
-        }
+        //}
     };
+
+    ///---------Callback to update Playerlist-----////
+    @Override
+    public void onAdditionalPlayer() {
+        updatePlayerList();
+    }
+    ///---End of Callback---////
+
 
 
     @Override
@@ -82,7 +95,6 @@ public class WaitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wait);
 
         gamesvc = GameServiceImpl.getInstance();
-
         //Change visability
         LinearLayout playerList = findViewById(R.id.playerList);
         Button bt_start = findViewById(R.id.bt_start);
@@ -91,6 +103,7 @@ public class WaitActivity extends AppCompatActivity {
             playerList.setVisibility(View.VISIBLE);
             bt_start.setVisibility(View.VISIBLE);
             logo.setVisibility(View.INVISIBLE);
+            updatePlayerList();
         }else{
             playerList.setVisibility(View.INVISIBLE);
             bt_start.setVisibility(View.INVISIBLE);
@@ -98,7 +111,10 @@ public class WaitActivity extends AppCompatActivity {
         }
 
         //check if other clients join server
-        updatePlayerList.start();
+        update.start();
+
+        //registerCallback
+        playersStorage.registerOnAdditionalPlayerListener(this);
     }
 
     // click listener start game button
@@ -117,14 +133,28 @@ public class WaitActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
+    //Update player list in Interface
+    private void updatePlayerList(){
+        if(playersStorage.isMaster()) {
+            TextView[] players = new TextView[8];
+            players[0] = (TextView) findViewById(R.id.playerName1);
+            players[1] = (TextView) findViewById(R.id.playerName2);
+            players[2] = (TextView) findViewById(R.id.playerName3);
+            players[3] = (TextView) findViewById(R.id.playerName4);
+            players[4] = (TextView) findViewById(R.id.playerName5);
+            players[5] = (TextView) findViewById(R.id.playerName6);
+            players[6] = (TextView) findViewById(R.id.playerName7);
+            players[7] = (TextView) findViewById(R.id.playerName8);
+            ArrayList<String> playerNames;
 
-
-    static void updatePlayers(){
-        //Plan: Use this method to update GUI when NewPlayerMessage is received
-        //Problem: This method can't be accessed from common (Circle Dependency)
-        //Lösungsansatz: Wäre es möglich den Listener auf die App zu verschieben?
-
-        //Notlösung: Momentan wurde das Problem mit busy-waiting gelöst - ich glaube aber, dass dieses Problem noch öfters auftreten wird
+            playerNames = playersStorage.getPlayerNames();
+            int size = playerNames.size();
+            for (int i = 0; i < 8 && i < size; i++) {
+                if (playerNames.get(i) != null) {
+                    players[i].setText(playerNames.get(i));
+                }
+            }
+        }
     }
 
 }

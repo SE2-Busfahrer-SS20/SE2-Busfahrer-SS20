@@ -12,11 +12,12 @@ import android.widget.TextView;
 import at.aau.busfahrer.R;
 import shared.model.Card;
 import shared.model.GameState;
-import shared.model.impl.playersStorage;
+import shared.model.impl.PlayersStorageImpl;
+
 
 public class GuessActivity extends AppCompatActivity {
-
     private Card[] cards;
+    private PlayersStorageImpl playersStorage= PlayersStorageImpl.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
