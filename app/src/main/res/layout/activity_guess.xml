@@ -11,6 +11,19 @@
         android:id="@+id/headerStartServer"
         android:layout_width="0dp"
         android:layout_height="45dp"
+        android:text="Guess-Round #1"
+        android:theme="@style/mainMenuHeadTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/headerStartServer2"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="292dp"
+        android:background="@android:color/background_dark"
         android:text="Gueass if the first card is red or black"
         android:theme="@style/mainMenuHeadTextView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +41,7 @@
         android:onClick="onClickCard1"
         android:text="🂠"
         android:textColor="#000000"
-        android:textSize="130sp"
+        android:textSize="100sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tV_card2"
         app:layout_constraintStart_toStartOf="parent" />
@@ -43,7 +56,7 @@
         android:onClick="onClickCard2"
         android:text="🂠"
         android:textColor="#000000"
-        android:textSize="130sp"
+        android:textSize="100sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tV_card3"
         app:layout_constraintStart_toEndOf="@+id/tV_card1" />
@@ -58,7 +71,7 @@
         android:onClick="onClickCard3"
         android:text="🂠"
         android:textColor="#000000"
-        android:textSize="130sp"
+        android:textSize="100sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tV_card4"
         app:layout_constraintStart_toEndOf="@+id/tV_card2" />
@@ -73,7 +86,7 @@
         android:onClick="onClickCard4"
         android:text="🂠"
         android:textColor="#000000"
-        android:textSize="130sp"
+        android:textSize="100sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tV_card3" />
@@ -83,33 +96,30 @@
         android:layout_width="221dp"
         android:layout_height="46dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="Black"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/tV_card4"
+        app:layout_constraintBottom_toTopOf="@+id/bt_red"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.79"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
+        app:layout_constraintTop_toBottomOf="@+id/headerStartServer2" />
 
     <Button
         android:id="@+id/bt_red"
         android:layout_width="221dp"
         android:layout_height="46dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
 
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="28dp"
         android:background="@drawable/bg_btn_red"
         android:text="Red"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/tV_card1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
+        app:layout_constraintTop_toBottomOf="@+id/headerStartServer2"
+        app:layout_constraintVertical_bias="0.90999997" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

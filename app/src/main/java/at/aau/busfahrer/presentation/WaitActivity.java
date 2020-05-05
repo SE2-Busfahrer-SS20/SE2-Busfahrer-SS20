@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
 public class WaitActivity extends AppCompatActivity implements PreGameListener {
     private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
 
@@ -46,9 +45,6 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
             bt_start.setVisibility(View.INVISIBLE);
             logo.setVisibility(View.VISIBLE);
         }
-
-        //check if other clients join server
-        //update.start();
 
         //registerCallback
         playersStorage.registerOnAdditionalPlayerListener(this);

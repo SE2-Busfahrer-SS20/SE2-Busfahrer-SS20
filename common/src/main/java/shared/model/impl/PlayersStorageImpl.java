@@ -6,13 +6,8 @@ import shared.model.GameState;
 import shared.model.PreGameListener;
 import shared.model.PlayersStorage;
 
-
 public class PlayersStorageImpl implements PlayersStorage {
 
-    /* this class is only used to store things in common because they can not be stored in app
-     * since the listener which receives them from the server is in NetwerkClientKryo.java and from there
-     * it is not possible to access objects in the app
-    */
     private Card[] cards;
     private ArrayList<String> playerNames;
     private boolean master=false;
@@ -97,6 +92,5 @@ public class PlayersStorageImpl implements PlayersStorage {
         else
             this.state = state;
     }
-
 
 }
