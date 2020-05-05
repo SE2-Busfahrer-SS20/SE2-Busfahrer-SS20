@@ -28,7 +28,7 @@ public class GameServiceImpl implements GameService {
     }
 
     private GameServiceImpl() {
-        this.client = new NetworkClientKryo();
+        this.client = NetworkClientKryo.getInstance();
         this.host = shared.networking.kryonet.NetworkConstants.host;
     }
 
