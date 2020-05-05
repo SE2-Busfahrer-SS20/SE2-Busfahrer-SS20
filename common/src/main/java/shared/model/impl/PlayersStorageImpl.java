@@ -1,10 +1,9 @@
 package shared.model.impl;
-
 import java.util.ArrayList;
 
 import shared.model.Card;
 import shared.model.GameState;
-import shared.model.OnAdditionalPlayerListener;
+import shared.model.PreGameListener;
 import shared.model.PlayersStorage;
 
 
@@ -20,17 +19,26 @@ public class PlayersStorageImpl implements PlayersStorage {
     private GameState state;
 
     //Callback stuff
-    private OnAdditionalPlayerListener additionalPlayerListener;
+    private PreGameListener preGameListener;
 
-    public void registerOnAdditionalPlayerListener(OnAdditionalPlayerListener additionalPlayerListener){
-        this.additionalPlayerListener=additionalPlayerListener;
+    public void registerOnAdditionalPlayerListener(PreGameListener additionalPlayerListener){
+        this.preGameListener=additionalPlayerListener;
     }
     private void updatePlayerList(){
         new Thread(new Runnable(){
             public void run(){
-                System.out.println("CALLBACK in PlayersStorageImpl!!!");
-                if (additionalPlayerListener !=null){
-                    additionalPlayerListener.onAdditionalPlayer();
+                if (preGameListener !=null){
+                    preGameListener.onAdditionalPlayer();
+                }
+            }
+        }).start();
+    }
+
+    private void gameStateChangedToReady(){
+        new Thread(new Runnable(){
+            public void run(){
+                if (preGameListener !=null){
+                    preGameListener.onGameStart();
                 }
             }
         }).start();
@@ -75,11 +83,20 @@ public class PlayersStorageImpl implements PlayersStorage {
     public void setMaster(boolean master) {
         this.master = master;
     }
+
     public GameState getState() {
         return state;
     }
+
     public void setState(GameState state) {
-        this.state = state;
+        //if game changes from init to ready, the WaitActivity needs to receive a callback to start the game!
+        if(this.state==GameState.INIT&&state==GameState.READY){
+            this.state = state;
+            gameStateChangedToReady();
+        }
+        else
+            this.state = state;
     }
+
 
 }

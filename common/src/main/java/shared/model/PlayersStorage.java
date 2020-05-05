@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public interface PlayersStorage {
 
 
-    void registerOnAdditionalPlayerListener(OnAdditionalPlayerListener additionalPlayerListener);
+    void registerOnAdditionalPlayerListener(PreGameListener additionalPlayerListener);
 
     Card[] getCards();
     void setCards(Card[] cards);
