@@ -19,11 +19,23 @@ public class SelectCheatsActivity extends AppCompatActivity {
         hideAppTitleBar();
         setContentView(R.layout.activity_select_cheats);
 
+
     }
 
     public void onClickStart(View v){
-        Intent i = new Intent(SelectCheatsActivity.this, WaitActivity.class);
+        Intent i = new Intent(SelectCheatsActivity.this, BushmenActivity.class);
         startActivity(i);
+
+        bt_start = findViewById(R.id.bt_start);
+        bt_start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Open GuessActivity
+                Intent intent = new Intent(SelectCheatsActivity.this, at.aau.busfahrer.presentation.BushmenActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void hideAppTitleBar(){
