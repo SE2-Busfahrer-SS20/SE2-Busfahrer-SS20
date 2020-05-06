@@ -12,7 +12,7 @@ import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.ServerActionResponse;
 import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.TextMessage;
-import shared.networking.dto.playedMessage;
+import shared.networking.dto.PlayedMessage;
 import shared.networking.kryonet.NetworkServerKryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -122,8 +122,9 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                     }
 
                     //Guess-Rounds
-                    else if(object instanceof playedMessage){
-                        playedMessage pM = (playedMessage) object;
+                    else if(object instanceof PlayedMessage){
+                        System.out.println("RECEIVED playedMessage !!!");
+                        PlayedMessage pM = (PlayedMessage) object;
                         if(pM.getLap()==1){     //Black or Red
                             gameService.GuessRound1(pM.getTempID(), pM.scored());
                         }
@@ -150,13 +151,13 @@ public class GameServer extends NetworkServerKryo implements Runnable{
             case STARTED:
                 // TODO: implement.
                 break;
-            case LAB1:
+            case LAP1:
                 // TODO: implement.
                 break;
-            case LAB2:
+            case LAP2:
                 // TODO: implement.
                 break;
-            case LAB3:
+            case LAP3:
                 // TODO: implement.
                 break;
             case ENDED:

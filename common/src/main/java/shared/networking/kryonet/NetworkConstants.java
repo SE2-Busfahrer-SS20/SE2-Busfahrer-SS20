@@ -8,6 +8,8 @@ import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.ServerActionResponse;
 import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.TextMessage;
+import shared.networking.dto.PlayedMessage;
+import shared.networking.dto.UpdateMessage;
 
 public class NetworkConstants {
 
@@ -25,9 +27,12 @@ public class NetworkConstants {
             ConfirmRegisterMessage.class,
             NewPlayerMessage.class,
             StartGameMessage.class,
+            PlayedMessage.class,
+            UpdateMessage.class,
 
             shared.model.impl.CardImpl[].class,
-            shared.model.impl.CardImpl.class
+            shared.model.impl.CardImpl.class,
+            java.util.ArrayList.class
 
     };
 

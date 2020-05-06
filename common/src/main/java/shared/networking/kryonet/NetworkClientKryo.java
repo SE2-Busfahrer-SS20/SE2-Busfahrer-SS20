@@ -15,6 +15,7 @@ import shared.networking.dto.ConfirmRegisterMessage;
 import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.TextMessage;
+import shared.networking.dto.UpdateMessage;
 
 import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 
@@ -59,6 +60,14 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 if(object instanceof StartGameMessage){
                     Log.debug("Game can start now");
                     playersStorage.setState(GameState.READY);
+                }
+
+                if(object instanceof UpdateMessage){
+                    System.out.println("RECEIVED UPDATE MESSAGE ON CLIENT SIDE!!");
+                    //update players score in User Interface (feature does not exist yet)
+                    UpdateMessage uM = (UpdateMessage)object;
+                    playersStorage.updateOnMessage(uM.getScore(),uM.getCurrentPlayer());
+
                 }
 
 

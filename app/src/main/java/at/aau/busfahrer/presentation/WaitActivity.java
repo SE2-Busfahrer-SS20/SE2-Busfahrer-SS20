@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 public class WaitActivity extends AppCompatActivity implements PreGameListener {
     private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
-
     GameService gamesvc;
 
     @Override
@@ -47,7 +46,7 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
         }
 
         //registerCallback
-        playersStorage.registerOnAdditionalPlayerListener(this);
+        playersStorage.registerPreGameListener(this);
     }
 
     // click listener start game button
@@ -79,7 +78,7 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
         startActivity(i);
     }
 
-    //Update player list in Interface
+    //Update playerList in Interface
     private void updatePlayerList(){
         if(playersStorage.isMaster()) {
             TextView[] players = new TextView[8];

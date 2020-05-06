@@ -10,7 +10,7 @@ import shared.networking.dto.RegisterMessage;
 
 import shared.networking.dto.StartGameMessage;
 
-import shared.networking.dto.playedMessage;
+import shared.networking.dto.PlayedMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 
 public class GameServiceImpl implements GameService {
@@ -104,7 +104,7 @@ public class GameServiceImpl implements GameService {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                playedMessage pM = new playedMessage(1,tempID, scored);
+                PlayedMessage pM = new PlayedMessage(1,tempID, scored);
                 try {
                     client.connect(host);
                     client.sendMessage(pM);

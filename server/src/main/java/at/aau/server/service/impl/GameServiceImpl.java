@@ -6,14 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.aau.server.service.GameService;
-import shared.exceptions.PlayerLimitExceededException;
 import shared.model.Card;
 import shared.model.Game;
 import shared.model.GameState;
 import shared.model.Player;
 import shared.model.impl.GameImpl;
 import shared.networking.dto.StartGameMessage;
-import shared.networking.dto.updateMessage;
+import shared.networking.dto.UpdateMessage;
 
 public class GameServiceImpl implements GameService {
 
@@ -132,18 +131,13 @@ public class GameServiceImpl implements GameService {
 
         //send DTO updateMessage to all clients
         this.game.setState(GameState.LAP1);
-        updateMessage uM = new updateMessage(nextPlayer, score);
+        UpdateMessage uM = new UpdateMessage(nextPlayer, score);
         int count = this.game.getPlayerCount();
         for(int i=0;i<count;i++){
             Connection con = this.game.getPlayerList().get(i).getConnection();
             con.sendTCP(uM);
         }
 
-
     }
-
-
-
-
 
 }

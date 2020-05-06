@@ -15,10 +15,11 @@ import at.aau.busfahrer.service.GameService;
 import at.aau.busfahrer.service.impl.GameServiceImpl;
 import shared.model.Card;
 import shared.model.GameState;
+import shared.model.GuessRoundListener;
 import shared.model.impl.PlayersStorageImpl;
 
 
-public class GuessActivity extends AppCompatActivity {
+public class GuessActivity extends AppCompatActivity implements GuessRoundListener {
     private boolean myturn;
     private Card[] cards;
     private PlayersStorageImpl playersStorage= PlayersStorageImpl.getInstance();
@@ -39,7 +40,7 @@ public class GuessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_guess);
-        playersStorage.setState(GameState.LAB1);
+        playersStorage.setState(GameState.LAP1);
 
         tV_guessQuestion = findViewById(R.id.tV_guessQuestion);
         bt_Black = findViewById(R.id.bt_black);
@@ -57,8 +58,13 @@ public class GuessActivity extends AppCompatActivity {
         else{
             onPauseMode();
         }
+        //Register Callback
+        playersStorage.registerGuessRoundListener(this);
 
     }
+
+
+
     public void onClick_btBlack(View view) {
        boolean answer=gameService.guessColor(playersStorage.getTempID(), cards[0],true);
         turnCard(tV_card1, cards[0]);
@@ -71,7 +77,20 @@ public class GuessActivity extends AppCompatActivity {
         onAnswer(answer);
     }
 
+    @Override   //Callback - executed when receiving
+    public void onUpdateMessage(){
+        System.out.println("UPDATE MESSAGE IN GUESS ACTIVITY !!!");
+        if(playersStorage.getCurrentTurn()==playersStorage.getTempID()){    //this players turn
+            onPlayMode();
+        }
+        else{
+            onPauseMode();
+        }
+        //update Score
 
+    }
+
+    /*
     //The following 4 onClick-methodes are just relevant for Sprint 1 where we want to be able to turn each card
     //in the final edition, the cards are turned by clicking on the buttons
     //This feature may be usefull regarding to cheating
@@ -87,6 +106,8 @@ public class GuessActivity extends AppCompatActivity {
     public void onClickCard4(View view) {
         turnCard(tV_card4, cards[3]);
     }
+
+     */
 
     private void turnCard(TextView tV, Card c){
         //Id suit is Pick or Kreuz -> change collor to red
