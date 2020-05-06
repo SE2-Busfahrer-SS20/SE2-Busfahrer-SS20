@@ -22,22 +22,22 @@
             android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".presentation.RegisterActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".presentation.EditPlayerActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".presentation.SelectCheatsActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".presentation.StartServerActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".presentation.MainMenuActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".presentation.SplashScreenActivity"
-            android:screenOrientation="sensorLandscape">
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
