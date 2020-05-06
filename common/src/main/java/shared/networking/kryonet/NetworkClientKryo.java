@@ -46,11 +46,14 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     Log.debug("Registration Confirmed");
                     playersStorage.setMaster(((ConfirmRegisterMessage)object).isMaster());
                     playersStorage.setCards(((ConfirmRegisterMessage)object).getCards());
+                    playersStorage.setTempID(((ConfirmRegisterMessage)object).getID());
+
+                    System.out.println("!!!!!--------Stored TempID:"+playersStorage.getTempID()+"--------!!!!!");
                 }
 
                 if(object instanceof NewPlayerMessage){
                     Log.debug("New Player in the Game");
-                    playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());   //instead of this, use listener to react on new Message and store in app
+                    playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
                 }
 
                 if(object instanceof StartGameMessage){

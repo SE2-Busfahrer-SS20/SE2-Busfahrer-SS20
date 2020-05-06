@@ -8,6 +8,7 @@ import shared.model.PlayersStorage;
 
 public class PlayersStorageImpl implements PlayersStorage {
 
+    private int tempID; //This ID equals the Index in playerList (ArrayList in Game object)
     private Card[] cards;
     private ArrayList<String> playerNames;
     private boolean master=false;
@@ -93,4 +94,11 @@ public class PlayersStorageImpl implements PlayersStorage {
             this.state = state;
     }
 
+    public int getTempID() {
+        return tempID;
+    }
+
+    public void setTempID(int tempID) {
+        this.tempID = tempID;
+    }
 }

@@ -12,6 +12,7 @@ import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.ServerActionResponse;
 import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.TextMessage;
+import shared.networking.dto.playedMessage;
 import shared.networking.kryonet.NetworkServerKryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -117,6 +118,16 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                     else if(object instanceof StartGameMessage){
                         Log.debug("Game Started");
                         gameService.startGame();
+
+                    }
+
+                    //Guess-Rounds
+                    else if(object instanceof playedMessage){
+                        playedMessage pM = (playedMessage) object;
+                        //update Points
+                        //reset cheating variable
+                        //send updateMessage to all players
+
 
                     }
 

@@ -11,8 +11,10 @@ public interface Player {
     Card[] getCards();
     Card getCard(int index);
     Connection getConnection();
-    int getCount();
-    void setCount(int newCount);
+    int getScore();
+    void setScore(int newCount);
+    int getTempID();
+    void setTempID(int ID);
 
 
 }

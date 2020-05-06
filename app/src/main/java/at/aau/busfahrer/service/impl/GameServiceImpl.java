@@ -10,6 +10,7 @@ import shared.networking.dto.RegisterMessage;
 
 import shared.networking.dto.StartGameMessage;
 
+import shared.networking.dto.playedMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 
 public class GameServiceImpl implements GameService {
@@ -77,18 +78,16 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void startGame(){
-        System.out.println("THREAD: sending SGM...");
         Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-        StartGameMessage sgm = new StartGameMessage();
-        try {
-            client.connect(host);
-            client.sendMessage(sgm);
-            System.out.println("sending SGM...");
-        } catch (Exception e) {
-            Log.error(e.toString());
-        }
+                @Override
+               public void run() {
+            StartGameMessage sgm = new StartGameMessage();
+            try {
+                client.connect(host);
+                client.sendMessage(sgm);
+            } catch (Exception e) {
+                Log.error(e.toString());
+                }
             }
         });
         thread.start();
@@ -100,14 +99,23 @@ public class GameServiceImpl implements GameService {
         if(card.getSuit()==1||card.getSuit()==2){//Red
             cardIsBlack=false;
         }
-        if(guessBlack==cardIsBlack){//Guessed right
-            //SEND DTO
-            return true;
-        }
-        else{
-            //SEND DTO
-            return false;
-        }
+        final boolean guess=guessBlack==cardIsBlack; //true when player guessed correct, otherwise false
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                playedMessage pM = new playedMessage(guess, 1);
+                try {
+                    client.connect(host);
+                    client.sendMessage(pM);
+                } catch (Exception e) {
+                    Log.error(e.toString());
+                }
+            }
+        });
+        thread.start();
+
+        return guess;
 
     }
 

@@ -6,7 +6,6 @@ import java.util.List;
 import at.aau.server.service.GameService;
 import shared.exceptions.PlayerLimitExceededException;
 import shared.model.Card;
-import shared.model.Deck;
 import shared.model.Game;
 import shared.model.GameState;
 import shared.model.Player;
@@ -85,7 +84,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame() throws PlayerLimitExceededException {
+    public void createGame() {
         game=new GameImpl();
               //Only one game possible
     }

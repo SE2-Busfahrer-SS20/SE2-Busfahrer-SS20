@@ -14,19 +14,19 @@ public class ConfirmRegisterMessage extends BaseMessage {
 
     }
 
-    public ConfirmRegisterMessage(int ID, Card[] cards) {
-        this.ID=ID;
+    public ConfirmRegisterMessage(Card[] cards) {
         this.cards = cards;
     }
 
     public ConfirmRegisterMessage(Player player){
-        ID=0; //is ID still needed?
+        ID=player.getTempID();
         cards=player.getCards();
+
     }
 
     public ConfirmRegisterMessage(Player player,boolean master){
+        ID=player.getTempID();
         this.master=master;
-        ID=0; //is ID still needed?
         cards=player.getCards();
     }
 
@@ -44,4 +44,11 @@ public class ConfirmRegisterMessage extends BaseMessage {
         this.master = master;
     }
 
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
 }
