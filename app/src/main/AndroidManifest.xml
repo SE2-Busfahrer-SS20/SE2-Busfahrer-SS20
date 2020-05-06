@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/menu_AppTheme">
         <activity android:name=".presentation.GuessActivity" />
+        <activity android:name=".presentation.BushmenActivity" />
         <activity
             android:name=".presentation.WaitActivity"
             android:screenOrientation="sensorLandscape" />
