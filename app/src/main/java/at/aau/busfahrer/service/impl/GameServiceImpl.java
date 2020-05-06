@@ -38,6 +38,7 @@ public class GameServiceImpl implements GameService {
         //Whats this method designated for?
     }
 
+
     @Override//can be deleted later
     public void createGame(int playercount) {
         //Must be declared final to get accessible in inner class
@@ -82,18 +83,13 @@ public class GameServiceImpl implements GameService {
                 @Override
                public void run() {
             StartGameMessage sgm = new StartGameMessage();
-            try {
-                client.connect(host);
-                client.sendMessage(sgm);
-            } catch (Exception e) {
-                Log.error(e.toString());
-                }
+            client.sendMessage(sgm);
             }
         });
         thread.start();
     }
 
-
+    @Override
     public boolean guessColor(final int tempID, Card card, boolean guessBlack){
         boolean cardIsBlack=true;
         if(card.getSuit()==1||card.getSuit()==2){//Red
@@ -101,22 +97,20 @@ public class GameServiceImpl implements GameService {
         }
         final boolean scored=guessBlack==cardIsBlack; //true if player guessed correct, otherwise false
 
+        return scored;
+
+    }
+
+    @Override
+    public void nextPlayer(final int lap, final int tempID, final boolean scored){
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                PlayedMessage pM = new PlayedMessage(1,tempID, scored);
-                try {
-                    client.connect(host);
-                    client.sendMessage(pM);
-                } catch (Exception e) {
-                    Log.error(e.toString());
-                }
+                PlayedMessage pM = new PlayedMessage(lap,tempID, scored);
+                client.sendMessage(pM);
             }
         });
         thread.start();
-
-        return scored;
-
     }
 
 

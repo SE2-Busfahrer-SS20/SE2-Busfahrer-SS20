@@ -63,8 +63,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 }
 
                 if(object instanceof UpdateMessage){
-                    System.out.println("RECEIVED UPDATE MESSAGE ON CLIENT SIDE!!");
-                    //update players score in User Interface (feature does not exist yet)
                     UpdateMessage uM = (UpdateMessage)object;
                     playersStorage.updateOnMessage(uM.getScore(),uM.getCurrentPlayer());
 

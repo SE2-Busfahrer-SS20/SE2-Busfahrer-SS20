@@ -52,7 +52,7 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
     // click listener start game button
     public void onClickStartGame(View v){
         Intent i = new Intent(WaitActivity.this, GuessActivity.class);
-    //    wait=false;//To terminate busy waiting
+
         gamesvc.startGame();//Send StartGameMessage to other clients
         startActivity(i);
 

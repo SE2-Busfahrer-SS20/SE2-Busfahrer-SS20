@@ -2,6 +2,7 @@ package at.aau.busfahrer.presentation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +21,6 @@ import shared.model.impl.PlayersStorageImpl;
 
 
 public class GuessActivity extends AppCompatActivity implements GuessRoundListener {
-    private boolean myturn;
     private Card[] cards;
     private PlayersStorageImpl playersStorage= PlayersStorageImpl.getInstance();
     private GameService gameService = GameServiceImpl.getInstance();
@@ -34,13 +34,15 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private TextView tV_card3;
     private TextView tV_card4;
 
+    private boolean answer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_guess);
-        playersStorage.setState(GameState.LAP1);
+        playersStorage.setState(GameState.LAP1A);
 
         tV_guessQuestion = findViewById(R.id.tV_guessQuestion);
         bt_Black = findViewById(R.id.bt_black);
@@ -52,10 +54,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         tV_card4=findViewById(R.id.tV_card4);
 
         cards= playersStorage.getCards();
-        if(playersStorage.isMaster()){
-            myturn=true;
-        }
-        else{
+        if(!playersStorage.isMaster()){
             onPauseMode();
         }
         //Register Callback
@@ -66,48 +65,59 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
 
     public void onClick_btBlack(View view) {
-       boolean answer=gameService.guessColor(playersStorage.getTempID(), cards[0],true);
+       answer=gameService.guessColor(playersStorage.getTempID(), cards[0],true);
         turnCard(tV_card1, cards[0]);
         onAnswer(answer);
     }
 
     public void onClick_btRed(View view) {
-        boolean answer=gameService.guessColor(playersStorage.getTempID(), cards[0],false);
+        answer=gameService.guessColor(playersStorage.getTempID(), cards[0],false);
         turnCard(tV_card1, cards[0]);
         onAnswer(answer);
     }
 
+    public void onClick_feedback(View view) {
+        gameService.nextPlayer(1,playersStorage.getTempID(),answer);
+        onPauseMode();
+    }
+
+
+
     @Override   //Callback - executed when receiving
     public void onUpdateMessage(){
-        System.out.println("UPDATE MESSAGE IN GUESS ACTIVITY !!!");
+
+        System.out.println("It is the turn of  player: "+playersStorage.getCurrentTurn()+ " !!!!!!!!");
+
+        if(playersStorage.getCurrentTurn()==0){
+            //This means that every player has finished his turn and the next interface can be opened
+            Intent i = new Intent(GuessActivity.this, MainMenuActivity.class);  //just till next round is finished - MainMenueActivity can be replaced by pyramid after merge
+            startActivity(i);
+        }
         if(playersStorage.getCurrentTurn()==playersStorage.getTempID()){    //this players turn
             onPlayMode();
         }
         else{
             onPauseMode();
         }
-        //update Score
-
+        //update Score in UI (feature does not exist yet)
     }
 
-    /*
+
     //The following 4 onClick-methodes are just relevant for Sprint 1 where we want to be able to turn each card
     //in the final edition, the cards are turned by clicking on the buttons
     //This feature may be usefull regarding to cheating
     public void onClickCard1(View v) {
-        turnCard(tV_card1, cards[0]);
+        //turnCard(tV_card1, cards[0]);
     }
     public void onClickCard2(View view) {
-        turnCard(tV_card2, cards[1]);
+        //turnCard(tV_card2, cards[1]);
     }
     public void onClickCard3(View view) {
-        turnCard(tV_card3, cards[2]);
+        //turnCard(tV_card3, cards[2]);
     }
     public void onClickCard4(View view) {
-        turnCard(tV_card4, cards[3]);
+        //turnCard(tV_card4, cards[3]);
     }
-
-     */
 
     private void turnCard(TextView tV, Card c){
         //Id suit is Pick or Kreuz -> change collor to red
@@ -141,6 +151,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         tV_card2.setTextColor(Color.GRAY);
         tV_card3.setTextColor(Color.GRAY);
         tV_card4.setTextColor(Color.GRAY);
+        tV_feedback.setVisibility(View.INVISIBLE);
     }
 
     private void onPlayMode(){
@@ -157,16 +168,17 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
     private void onAnswer(boolean answer){
         if(answer){
-            tV_feedback.setText("Correct Answer");
+            tV_feedback.setText("Correct Answer\n[-OK-]");
         }
         else{
-            tV_feedback.setText("Wrong Answer");
+            tV_feedback.setText("Wrong Answer\n[-OK-]");
 
         }
         tV_feedback.setVisibility(View.VISIBLE);
         bt_Black.setVisibility(View.INVISIBLE);
         bt_Red.setVisibility(View.INVISIBLE);
     }
+
 
 
 }

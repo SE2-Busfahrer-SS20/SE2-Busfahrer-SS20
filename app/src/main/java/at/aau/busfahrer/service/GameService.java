@@ -11,4 +11,6 @@ public interface GameService {
     void startGame();
 
     boolean guessColor(int tempID, Card card, boolean guessBlack);
+
+    void nextPlayer(final int lap, final int tempID, final boolean scored);
 }

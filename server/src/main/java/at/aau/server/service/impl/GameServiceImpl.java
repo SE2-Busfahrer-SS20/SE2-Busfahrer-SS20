@@ -49,9 +49,9 @@ public class GameServiceImpl implements GameService {
     public void nextLab() {
         switch (game.getState()) {
             case STARTED:
-                game.setState(GameState.LAP1);
+                game.setState(GameState.LAP1A);
                 break;
-            case LAP1:
+            case LAP1A:
                 game.setState(GameState.LAP2);
                 break;
             case LAP2:
@@ -103,7 +103,6 @@ public class GameServiceImpl implements GameService {
 
 
     //Methodes for Guess-Rounds
-
     @Override
     public void GuessRound1(int tempID, boolean scored) {
         //update score
@@ -117,27 +116,36 @@ public class GameServiceImpl implements GameService {
             score.add(playerScore);
         }
 
+        //Reset Cheating
+        resetCheated();
+
         //Who's next?
         int nextPlayer;
-        if(tempID<game.getPlayerCount()){
+        if(tempID<(game.getPlayerCount()-1)){
             nextPlayer=tempID+1;
-            this.game.setState(GameState.LAP1);
+            this.game.setState(GameState.LAP1A);
         }
         else{ //if next player = 0 --> client starts guess round 2!
             nextPlayer=0;
-            this.game.setState(GameState.LAP2);
+            //this.game.setState(GameState.LAP1B);  //switch to Guess round 2
+            this.game.setState(GameState.LAP2); //switch to Pyramid - (only during developing process)
 
+            //CALL METHODE FOR PYRAMIDE HERE !!
         }
 
         //send DTO updateMessage to all clients
-        this.game.setState(GameState.LAP1);
         UpdateMessage uM = new UpdateMessage(nextPlayer, score);
         int count = this.game.getPlayerCount();
         for(int i=0;i<count;i++){
             Connection con = this.game.getPlayerList().get(i).getConnection();
             con.sendTCP(uM);
         }
-
     }
 
+
+    private void resetCheated(){
+        for(int i=0; i<game.getPlayerCount();i++){
+            game.getPlayerList().get(i).setCheatedThisRound(false);
+        }
+    }
 }

@@ -76,16 +76,6 @@ public class PlayersStorageImpl implements PlayersStorage {
 
     }
 
-
-
-
-
-
-
-
-
-
-
     //Getter, Setter Methodes
     public Card[] getCards() {
         return cards;
@@ -154,7 +144,6 @@ public class PlayersStorageImpl implements PlayersStorage {
     }
 
     public void updateOnMessage(ArrayList<Integer> score, int currentTurn){
-        System.out.println("RECEIVED UPDATE MESSAGE IN PLAYER STORAGE IMPL !!!");
         this.score=score;
         this.currentTurn=currentTurn;
         nextPlayersTurn(); //Callback

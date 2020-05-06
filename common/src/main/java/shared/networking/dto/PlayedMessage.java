@@ -7,7 +7,6 @@ public class PlayedMessage extends BaseMessage {
     int lap;
     int tempID; //must be equal with Index in playerList.(ArrayList in Game Object)
     boolean scored; //Ob der Client Richtig geraten hat
-    //int earnedPoints; // can be determined by guess variable
 
     public PlayedMessage(){}
 
@@ -15,7 +14,6 @@ public class PlayedMessage extends BaseMessage {
         this.lap=lap;
         this.tempID=tempID;
         this.scored=scored;
-
     }
 
     public boolean scored() {

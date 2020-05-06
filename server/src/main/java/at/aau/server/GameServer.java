@@ -20,8 +20,6 @@ import com.esotericsoftware.minlog.Log;
 
 import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 
-
-
 public class GameServer extends NetworkServerKryo implements Runnable{
 
     private static final String REQUEST_TEST = "request test";
@@ -116,25 +114,19 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                         }
                     }
                     else if(object instanceof StartGameMessage){
-                        Log.debug("Game Started");
+                        Log.info("Game started");
                         gameService.startGame();
+                        Log.info("Game started");
 
                     }
 
                     //Guess-Rounds
                     else if(object instanceof PlayedMessage){
-                        System.out.println("RECEIVED playedMessage !!!");
                         PlayedMessage pM = (PlayedMessage) object;
                         if(pM.getLap()==1){     //Black or Red
                             gameService.GuessRound1(pM.getTempID(), pM.scored());
                         }
-                        //reset cheating variable
-                        //send updateMessage to all players
-                        //update Points
-
-
                     }
-
                 }
             }
         });
@@ -151,8 +143,9 @@ public class GameServer extends NetworkServerKryo implements Runnable{
             case STARTED:
                 // TODO: implement.
                 break;
-            case LAP1:
+            case LAP1A:
                 // TODO: implement.
+                //Guess Rounds are implemented in GameService
                 break;
             case LAP2:
                 // TODO: implement.
@@ -165,7 +158,6 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 break;
         }
     }
-
 
     private void registerClasses() {
         for (Class c : CLASS_LIST)

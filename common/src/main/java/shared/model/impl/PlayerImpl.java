@@ -78,4 +78,24 @@ public class PlayerImpl implements Player {
     public void setTempID(int tempID) {
         this.tempID = tempID;
     }
+
+    @Override
+    public boolean isCheated() {
+        return cheated;
+    }
+
+    @Override
+    public void setCheated(boolean cheated) {
+        this.cheated = cheated;
+    }
+
+    @Override
+    public boolean isCheatedThisRound() {
+        return cheatedThisRound;
+    }
+
+    @Override
+    public void setCheatedThisRound(boolean cheatedThisRound) {
+        this.cheatedThisRound = cheatedThisRound;
+    }
 }
