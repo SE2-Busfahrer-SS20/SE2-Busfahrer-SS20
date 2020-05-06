@@ -27,6 +27,7 @@ public class NetworkConstants {
             ConfirmRegisterMessage.class,
             NewPlayerMessage.class,
             StartGameMessage.class,
+
             PlayedMessage.class,
             UpdateMessage.class,
 

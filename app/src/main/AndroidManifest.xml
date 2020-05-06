@@ -23,33 +23,33 @@
 
         <activity android:name=".presentation.GuessActivity" />
 
-            <activity
-                android:name=".presentation.WaitActivity"
-                android:screenOrientation="sensorLandscape" />
-            <activity
-                android:name=".presentation.RegisterActivity"
-                android:screenOrientation="sensorLandscape" />
-            <activity
-                android:name=".presentation.EditPlayerActivity"
-                android:screenOrientation="sensorLandscape" />
-            <activity
-                android:name=".presentation.SelectCheatsActivity"
-                android:screenOrientation="sensorLandscape" />
-            <activity
-                android:name=".presentation.StartServerActivity"
-                android:screenOrientation="sensorLandscape" />
-            <activity
-                android:name=".presentation.MainMenuActivity"
-                android:screenOrientation="sensorLandscape" />
-            <activity
-                android:name=".presentation.SplashScreenActivity"
-                android:screenOrientation="sensorLandscape">
-                <intent-filter>
-                    <action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name=".presentation.WaitActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".presentation.RegisterActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".presentation.EditPlayerActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".presentation.SelectCheatsActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".presentation.StartServerActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".presentation.MainMenuActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".presentation.SplashScreenActivity"
+            android:screenOrientation="sensorPortrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                    <category android:name="android.intent.category.LAUNCHER" />
-                </intent-filter>
-            </activity>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
     </application>
 
