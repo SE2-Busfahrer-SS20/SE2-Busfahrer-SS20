@@ -60,13 +60,13 @@ public class GuessActivity extends AppCompatActivity {
 
     }
     public void onClick_btBlack(View view) {
-       boolean answer=gameService.guessColor(cards[0],true);
+       boolean answer=gameService.guessColor(playersStorage.getTempID(), cards[0],true);
         turnCard(tV_card1, cards[0]);
         onAnswer(answer);
     }
 
     public void onClick_btRed(View view) {
-        boolean answer=gameService.guessColor(cards[0],false);
+        boolean answer=gameService.guessColor(playersStorage.getTempID(), cards[0],false);
         turnCard(tV_card1, cards[0]);
         onAnswer(answer);
     }

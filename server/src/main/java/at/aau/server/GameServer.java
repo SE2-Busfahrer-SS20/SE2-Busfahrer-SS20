@@ -124,9 +124,12 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                     //Guess-Rounds
                     else if(object instanceof playedMessage){
                         playedMessage pM = (playedMessage) object;
-                        //update Points
+                        if(pM.getLap()==1){     //Black or Red
+                            gameService.GuessRound1(pM.getTempID(), pM.scored());
+                        }
                         //reset cheating variable
                         //send updateMessage to all players
+                        //update Points
 
 
                     }

@@ -4,7 +4,29 @@ import java.util.ArrayList;
 
 //Dieses DTO wird nach jedem Zug der Raterunden an alle Clients gesendet
 public class updateMessage extends BaseMessage {
-    int currentPlayer;  //ID des Spielers der jetzt dran ist
-    ArrayList<Integer> score; //Punkte aller Spieler (index=id)
+
+    int currentPlayer;  //in next round, it is this players turn
+    ArrayList<Integer> score; //Points of all players
+
+    public updateMessage(int currentPlayer, ArrayList<Integer> score) {
+        this.currentPlayer = currentPlayer;
+        this.score = score;
+    }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(int currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public ArrayList<Integer> getScore() {
+        return score;
+    }
+
+    public void setScore(ArrayList<Integer> score) {
+        this.score = score;
+    }
 }
 

@@ -24,6 +24,9 @@ public class PlayerImpl implements Player {
         this.MACAdress=MACAdress;
         this.cards=cards;
         this.connection = connection;
+        this.score=0;
+        this.cheated=false;
+        this.cheatedThisRound=false;
     }
 
     @Override
@@ -61,6 +64,10 @@ public class PlayerImpl implements Player {
         this.score = newCount;
     }
 
+    @Override
+    public void addPoints(int points){
+        this.score+=points;
+    }
 
     @Override
     public int getTempID() {

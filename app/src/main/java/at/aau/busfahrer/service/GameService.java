@@ -10,5 +10,5 @@ public interface GameService {
 
     void startGame();
 
-    boolean guessColor(Card card, boolean guessBlack);
+    boolean guessColor(int tempID, Card card, boolean guessBlack);
 }

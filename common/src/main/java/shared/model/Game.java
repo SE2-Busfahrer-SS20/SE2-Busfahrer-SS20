@@ -16,4 +16,6 @@ public interface Game {
 
     public Deck getCardStack();
     public void setCardStack(Deck cardStack);
+
+    void addPointsToPlayer(int tempID, int points);
 }

@@ -13,8 +13,10 @@ public interface Player {
     Connection getConnection();
     int getScore();
     void setScore(int newCount);
+    void addPoints(int points);
     int getTempID();
     void setTempID(int ID);
+
 
 
 }

@@ -4,8 +4,8 @@ public enum GameState {
     INIT,
     READY,
     STARTED,
-    LAB1,
-    LAB2,
-    LAB3,
+    LAP1,
+    LAP2,
+    LAP3,
     ENDED
 }

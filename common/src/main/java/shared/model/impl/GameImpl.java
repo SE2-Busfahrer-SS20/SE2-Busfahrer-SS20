@@ -88,4 +88,8 @@ public class GameImpl implements Game {
     public void setCardStack(Deck cardStack) {
         this.cardStack = cardStack;
     }
+
+    public void addPointsToPlayer(int tempID, int points){
+        playerList.get(tempID).addPoints(points);
+    }
 }

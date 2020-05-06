@@ -94,17 +94,17 @@ public class GameServiceImpl implements GameService {
     }
 
 
-    public boolean guessColor(Card card, boolean guessBlack){
+    public boolean guessColor(final int tempID, Card card, boolean guessBlack){
         boolean cardIsBlack=true;
         if(card.getSuit()==1||card.getSuit()==2){//Red
             cardIsBlack=false;
         }
-        final boolean guess=guessBlack==cardIsBlack; //true when player guessed correct, otherwise false
+        final boolean scored=guessBlack==cardIsBlack; //true if player guessed correct, otherwise false
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                playedMessage pM = new playedMessage(guess, 1);
+                playedMessage pM = new playedMessage(1,tempID, scored);
                 try {
                     client.connect(host);
                     client.sendMessage(pM);
@@ -115,7 +115,7 @@ public class GameServiceImpl implements GameService {
         });
         thread.start();
 
-        return guess;
+        return scored;
 
     }
 
