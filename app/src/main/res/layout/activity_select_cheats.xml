@@ -9,11 +9,11 @@
 
     <Button
         android:id="@+id/bt_start"
-        android:layout_width="240dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
         android:orientation="horizontal"
         android:text="Start"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,6 +21,62 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
+
+    <Button
+        android:id="@+id/button3"
+        style="@style/button_black"
+        android:layout_width="200dp"
+        android:layout_height="125dp"
+        android:layout_marginTop="32dp"
+        android:drawableTop="@drawable/ic_light_foreground"
+        android:drawablePadding="-50dp"
+        android:onClick="onRadioButtonClicked"
+        android:text="Light"
+        app:layout_constraintEnd_toEndOf="@+id/button6"
+        app:layout_constraintStart_toStartOf="@+id/button6"
+        app:layout_constraintTop_toBottomOf="@+id/button6" />
+
+    <Button
+        android:id="@+id/button7"
+        style="@style/button_black"
+        android:layout_width="200dp"
+        android:layout_height="125dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="42dp"
+        android:layout_marginEnd="64dp"
+        android:drawableTop="@drawable/ic_smile"
+        android:drawablePadding="-40dp"
+        android:onClick="onRadioButtonClicked"
+        android:text="Fair"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/button6"
+        style="@style/button_black"
+        android:layout_width="200dp"
+        android:layout_height="125dp"
+        android:layout_marginTop="32dp"
+        android:drawableTop="@drawable/ic_shake_foreground"
+        android:drawablePadding="-50dp"
+        android:onClick="onRadioButtonClicked"
+        android:text="Shake"
+        android:textAlignment="center"
+        android:textDirection="locale"
+        app:layout_constraintEnd_toEndOf="@+id/button7"
+        app:layout_constraintStart_toStartOf="@+id/button7"
+        app:layout_constraintTop_toBottomOf="@+id/button7" />
+
+    <TextView
+        android:id="@+id/headerCheats"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:text="Cheats auswählen"
+        android:theme="@style/mainMenuHeadTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
@@ -34,66 +90,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerCheats" />
-
-
-    <TextView
-        android:id="@+id/headerCheats"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:text="Cheats auswählen"
-        android:theme="@style/mainMenuHeadTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button3"
-        style="@style/button_black"
-        android:layout_width="145dp"
-        android:layout_height="125dp"
-        android:layout_marginStart="108dp"
-        android:drawableTop="@drawable/ic_light_foreground"
-        android:drawablePadding="-50dp"
-        android:onClick="onRadioButtonClicked"
-        android:text="Light"
-        app:layout_constraintBottom_toBottomOf="@+id/button7"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button7"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/button7"
-        style="@style/button_black"
-        android:layout_width="145dp"
-        android:layout_height="125dp"
-        android:drawableTop="@drawable/ic_smile"
-        android:drawablePadding="-40dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Fair"
-        android:onClick="onRadioButtonClicked"
-        app:layout_constraintBottom_toTopOf="@+id/bt_start"
-        app:layout_constraintEnd_toStartOf="@+id/button6"
-        app:layout_constraintStart_toEndOf="@+id/button3"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.579" />
-
-    <Button
-        android:id="@+id/button6"
-        style="@style/button_black"
-        android:layout_width="145dp"
-        android:layout_height="125dp"
-        android:layout_marginEnd="108dp"
-        android:drawableTop="@drawable/ic_shake_foreground"
-        android:drawablePadding="-50dp"
-        android:onClick="onRadioButtonClicked"
-        android:text="Shake"
-        android:textAlignment="center"
-        android:textDirection="locale"
-        app:layout_constraintBottom_toBottomOf="@+id/button7"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button7"
-        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

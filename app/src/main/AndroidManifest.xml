@@ -23,7 +23,7 @@
             android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".presentation.SelectCheatsActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".presentation.StartServerActivity"
             android:screenOrientation="sensorLandscape" />
