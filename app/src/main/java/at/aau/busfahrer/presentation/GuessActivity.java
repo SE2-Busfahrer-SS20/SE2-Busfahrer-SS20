@@ -35,6 +35,8 @@ public class GuessActivity extends AppCompatActivity {
         bt_cought.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TO-DO
+                //Prüfen werd gerade dran ist, von dem wird dann ausgelesen ob boolean true der false
 
             }
         });

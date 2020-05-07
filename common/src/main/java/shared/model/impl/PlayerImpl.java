@@ -11,6 +11,7 @@ public class PlayerImpl implements Player {
     private Card[] cards;
     private Connection connection;
     private int count;
+    private boolean cheated;
 
 
     //Constructor for Server Side
@@ -54,5 +55,13 @@ public class PlayerImpl implements Player {
     @Override
     public void setCount(int newCount) {
         this.count = newCount;
+    }
+
+    public boolean isCheated() {
+        return cheated;
+    }
+
+    public void setCheated(boolean cheated) {
+        this.cheated = cheated;
     }
 }
