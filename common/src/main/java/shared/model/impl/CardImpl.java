@@ -3,12 +3,12 @@ package shared.model.impl;
 import shared.model.Card;
 
 public class CardImpl implements Card {
-    private final int suit; //entspricht der Farbe: Herz, Pik, Karo, Kreuz
-    private final int rank; //entspricht dem Rang: 1(Ass)-10, Bube, Dame, König
+    private final int suit; //corresponds to the color: heart, spades, diamonds, clubs
+    private final int rank; //corresponds to the rank: 1 (ace) -10, jack, queen, king
 
     public CardImpl ( int val ) {
-        suit = val / 13;    //gibt einen Wert von 0 bis 3 aus: z.B. 0=Pik, 1=Herz usw.
-        rank = val % 13;    //gibt einen Wert von 0 bis 12 aus: z.B. 0=Ass, 10=Bub, 3= 4te Karte
+        suit = val / 13;    //outputs a value from 0 to 3: e.g. 0 = spades, 1 = hearts etc.
+        rank = val % 13;    //outputs a value from 0 to 12: e.g. 0 = ace, 10 = boy, 3 = 4th card
     }
 
     public CardImpl( int st, int rnk ) {
@@ -33,9 +33,9 @@ public class CardImpl implements Card {
 
     public String toString( )
     {
-        int codePoint = 127137 + suit * 16 + rank;  //Berechnung der Karten mittels ASCII Code
+        int codePoint = 127137 + suit * 16 + rank;  //Calculation of the cards using ASCII code
 
-        if( rank > 10 )//Es gibt einige Karte die nicht für unser Spiel gebraucht werde, diese werden so übersprungen.
+        if( rank > 10 )//There are some cards that are not used for our game, so they are skipped.
         {
             codePoint++;
         }

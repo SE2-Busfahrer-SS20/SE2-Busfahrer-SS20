@@ -2,14 +2,15 @@ package shared.model.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import shared.model.Deck;
 import shared.model.impl.CardImpl;
 
 public class DeckImpl implements Deck {
-    private static final int NUM_CARDS_IN_DECK = 52;    //4 (Farben) * 13(Anzahl Karten pro Farbe) = 52 Karten gesamt
+    private static final int NUM_CARDS_IN_DECK = 52;    //4 (colour) * 13(Number of cards per color) = 52 cards total
 
-    private ArrayList<CardImpl> cards = new ArrayList<>( ); //ArrayList, weil es viel dynamischer zu handhaben ist, als ein Array
+    private List<CardImpl> cards = new ArrayList<>( ); //ArrayList because it is much more dynamic to handle than an array
 
     public DeckImpl( ) {
         //Erstelle des Kartendecks
@@ -17,31 +18,31 @@ public class DeckImpl implements Deck {
         {
             cards.add( new CardImpl( i ) );
         }
-        Collections.shuffle( cards );   //Mischen der Karten, ordnet alle Elemente der Liste zufällig an
+        Collections.shuffle( cards );   //Shuffling the cards, randomly arranges all elements of the list
     }
 
     public CardImpl drawCard( ) {
-        //Ausgeben und entfernen der ersten Karte aus dem Deck
+        //Issue and remove the first card from the deck
         return cards.remove( 0 );
     }
 
     public boolean isEmpty( ) {
-        if (cards.size()<5)
-            return true;
-        else
-            return false;
+        return cards.size()==0;
     }
 
     public void refill(){
-        //Neufüllung des Decks,wenn leer.
+        //Refill the deck when empty.
         int size=cards.size();
         for( int i = 0; i < NUM_CARDS_IN_DECK; i++ )
         {
             CardImpl c= new CardImpl(i);
             boolean exist=false;
-            //Überprüfung ob Karten bereits im Deck sind.
+            //Check whether cards are already in the deck.
             for(int j=0;j<size;j++) {
-                if(cards.get(j).equals(c))
+                CardImpl a = cards.get(j);
+                String card1 = a.toString();
+                String card2 = c.toString();
+                if(card1.equals(card2))
                     exist=true;
             }
             if(!exist)
@@ -49,10 +50,19 @@ public class DeckImpl implements Deck {
         }
         Collections.shuffle( cards );
     }
+    //outputs a List with the hole cards.
+    public List<String> printDeck() {
+        List<String> strings = new ArrayList<>();
 
-    public void printDeck() {
         for(int i=0;i<NUM_CARDS_IN_DECK;i++){
-            System.out.println("#"+i+" Suit: "+cards.get(i).getSuit()+"\tRank: "+cards.get(i).getRank()+"\t\t"+cards.get(i).toString());
+            strings.add(cards.get(i).toString());
         }
+        return strings;
+    }
+    public List<CardImpl> getCards(){
+        return cards;
+    }
+    public int size() {
+        return cards.size();
     }
 }

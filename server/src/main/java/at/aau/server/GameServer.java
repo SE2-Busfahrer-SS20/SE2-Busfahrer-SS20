@@ -4,13 +4,15 @@ import java.io.IOException;
 import at.aau.server.service.GameService;
 import at.aau.server.service.impl.GameServiceImpl;
 import shared.model.GameState;
-import shared.model.impl.PlayerImpl;
+import shared.model.Player;
 import shared.networking.dto.BaseMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
-import shared.networking.dto.CreateGameMessage;
+import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.ServerActionResponse;
+import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.TextMessage;
+import shared.networking.dto.PlayedMessage;
 import shared.networking.kryonet.NetworkServerKryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -18,12 +20,15 @@ import com.esotericsoftware.minlog.Log;
 
 import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 
-
 public class GameServer extends NetworkServerKryo implements Runnable{
+
+    private static final String REQUEST_TEST = "request test";
+    private static final String RESPONSE_TEST = "response test";
 
     private Thread thread;
     private GameService gameService;
 
+    private Connection connectionToMaster;
 
     public GameServer() {
         Log.set(Log.LEVEL_DEBUG); // set log level for Minlog.
@@ -51,24 +56,32 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 // check if the game is null, to prevent NullPointerExceptions.
                 if (object == null) {
                     Log.debug("Object is null");
-                } else if (object instanceof TextMessage) {
+                } else if (object instanceof TextMessage && ((TextMessage) object).getText().equals(REQUEST_TEST)) {
+                    messageCallback.callback((TextMessage) object);
+                    connection.sendTCP(new TextMessage(RESPONSE_TEST));
                     Log.debug("Received TextMessage: " + ((TextMessage) object).getText());
                 } else {
 
-                    if (!gameService.gameExists()) { // in case that no game instance exists.
-                        if (object instanceof CreateGameMessage) {
-                            CreateGameMessage msg = (CreateGameMessage) object;
+                    if (!gameService.gameExists()) {
+
+                        if (object instanceof RegisterMessage) {
+                            Log.debug("Received Register Message");
                             try {
-                                gameService.createGame(msg.getPlayerCount());     //initializes cardStack, playerCards for each player in gameService
+                                RegisterMessage msg = (RegisterMessage) object;
+                                gameService.createGame();  //Create empty Game Object
+                                Player player = gameService.addPlayer(msg.getPlayerName(),msg.getMACAdress(),connection);
+
                                 // send result to client.
-
-                                //Respond with Cards of player #0
-                                ConfirmRegisterMessage crm = new ConfirmRegisterMessage(0, gameService.getPlayersCards(0));
-                                // ConfirmRegisterMessage cgm = new ConfirmRegisterMessage();
-
+                                ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player, true);
                                 connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
-                                // Diese beinhaltet die Karten des Spielers mit der ID=0
-                                //ID=0 ist immer jener Spieler, der das Spiel startet
+
+                                //Add Player to Playerlist in Wait UI
+                                NewPlayerMessage npm = new NewPlayerMessage(player.getName());
+                                connection.sendTCP(npm);
+
+                                //Define current client as master
+                                connectionToMaster = connection;
+
                                Log.info("Game created.");
                             } catch (Exception ex) {
                                 Log.error(ex.toString());
@@ -79,33 +92,41 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                             connection.sendTCP(new TextMessage("Action not supported."));
                         }
                     }
-                    //join Game
+
+                    //join existing Game
                     else if(object instanceof RegisterMessage){
+                        Log.debug("Received Register Message");
 
-                        //gameService.createGame(3);//just for test purpose to avoid creating new game in each test
-                       Log.debug("Recived Register Message");
+                        RegisterMessage msg = (RegisterMessage) object;
+                        Player player = gameService.addPlayer(msg.getPlayerName(),msg.getMACAdress(),connection);
 
-                        int ID = gameService.joinGame();
-                        if(ID!=-1){     //if game is not full
-                            Log.debug("Players ID="+ID);
-                            ConfirmRegisterMessage crm = new ConfirmRegisterMessage(ID, gameService.getPlayersCards(ID));
+                        if(player!=null){ //if game is not full
+                            Log.debug("new Player:"+player.getName());
+                            ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player);
                             connection.sendTCP(crm);
-                            Log.debug("New player joined game ["+ID+"]");
-                        }else{
-                            connection.sendTCP(new ServerActionResponse("Game is full!", true)); // TODO: Action should be false in case of an error.
+
+                            //Send message to Master to appear in PlayersList
+                            NewPlayerMessage npm = new NewPlayerMessage(player.getName());
+                            connectionToMaster.sendTCP(npm);
+                        }
+                        else{
+                        connection.sendTCP(new ServerActionResponse("Game is full!", false));
                         }
                     }
-                      else if (object instanceof RegisterMessage) {
-                            RegisterMessage msg = (RegisterMessage) object;
-                            if (!gameService.gameReady()) {
-                                gameService.addPlayer(new PlayerImpl(msg.getPlayerName(), connection));
-                                Log.debug("Player registered.");
-                                // send result to client.
+                    else if(object instanceof StartGameMessage){
+                        Log.info("Game started");
+                        gameService.startGame();
+                        Log.info("Game started");
 
-                                connection.sendTCP(new ServerActionResponse("Player registered.", true));
-                            }
                     }
 
+                    //Guess-Rounds
+                    else if(object instanceof PlayedMessage){
+                        PlayedMessage pM = (PlayedMessage) object;
+                        if(pM.getLap()==1){     //Black or Red
+                            gameService.GuessRound1(pM.getTempID(), pM.scored());
+                        }
+                    }
                 }
             }
         });
@@ -117,29 +138,25 @@ public class GameServer extends NetworkServerKryo implements Runnable{
         switch (state) {
             case INIT:
                 if (this.gameService.gameReady())
-                    startGame();
+                    //startGame();
                 break;
             case STARTED:
                 // TODO: implement.
                 break;
-            case LAB1:
+            case LAP1A:
+                // TODO: implement.
+                //Guess Rounds are implemented in GameService
+                break;
+            case LAP2:
                 // TODO: implement.
                 break;
-            case LAB2:
-                // TODO: implement.
-                break;
-            case LAB3:
+            case LAP3:
                 // TODO: implement.
                 break;
             case ENDED:
                 // TODO: implement.
                 break;
         }
-    }
-
-    private void startGame() {
-        Log.debug("Game started.");
-        // TODO: implement start game.
     }
 
     private void registerClasses() {

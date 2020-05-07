@@ -1,5 +1,7 @@
 package at.aau.server.service;
 
+import com.esotericsoftware.kryonet.Connection;
+
 import java.util.List;
 
 import shared.exceptions.PlayerLimitExceededException;
@@ -18,10 +20,11 @@ public interface GameService {
 
     /**
      * Add Player to list.
-     * @param player
      * @return boolean status,  false in case of a full List.
      */
-    boolean addPlayer(Player player);
+
+    Player addPlayer(String name, String MACAdress, Connection connection);
+
 
     /**
      *
@@ -39,10 +42,13 @@ public interface GameService {
     void startGame();
     void endGame();
     Game getGame();
-    void createGame(int playerCount) throws PlayerLimitExceededException;
+    void createGame() throws PlayerLimitExceededException;
     boolean gameExists();
-    Card[][] getPlayercardList();
-    Deck getCardStack();
+    //Card[][] getPlayercardList();
+    // Deck getCardStack();
     Card[] getPlayersCards(int player);
-    public int joinGame();
+
+    //Guess-Rounds
+    void GuessRound1(int tempID, boolean scored);
+
 }

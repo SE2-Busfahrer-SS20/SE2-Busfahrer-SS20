@@ -14,24 +14,21 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import static shared.networking.kryonet.NetworkConstants.host;
-
+//THIS ACTIVITY IS NOT USED AT ALL IN THE CURRENT VERSION
 public class StartServerActivity extends AppCompatActivity {
 
-    EditText name;
     Spinner spinner;
     Integer playercount;
     GameService gamesvc;
-   // GameService gamesvc = new GameServiceImpl("192.168.0.103");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_start_server);
         initSpinnerDropDown();
-        name = findViewById(R.id.server_name);
 
-        gamesvc=new GameServiceImpl(host);//moved down //IP of computer (Localhost=phone)
+        gamesvc=GameServiceImpl.getInstance();
     }
 
     // ui drop down, array values in res@strings
@@ -50,7 +47,7 @@ public class StartServerActivity extends AppCompatActivity {
         startActivity(i);
 
         // START SERVER:
-        gamesvc.createGame(playercount, name.toString());
+        gamesvc.createGame(playercount);
 
     }
 

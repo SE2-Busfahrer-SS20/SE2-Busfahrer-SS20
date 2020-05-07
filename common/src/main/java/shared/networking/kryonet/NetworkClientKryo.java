@@ -6,18 +6,23 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import java.io.IOException;
 
-import shared.model.impl.playersCards;
+import shared.model.GameState;
+import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.BaseMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
+import shared.networking.dto.NewPlayerMessage;
+import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.TextMessage;
+import shared.networking.dto.UpdateMessage;
 
 import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 
 public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Client client;
     private Callback<BaseMessage> callback;
+    private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
 
 
     public NetworkClientKryo() {
@@ -33,24 +38,38 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     public void connect(String host) throws IOException {
         client.start();
         client.connect(5000, host, NetworkConstants.TCP_PORT, NetworkConstants.UDP_PORT);
-        //Here the client recives messages from the server !
+        //Here the client receives messages from the server !
 
         client.addListener(new Listener() {
             public void received(Connection connection, Object object) {
 
                 if(object instanceof ConfirmRegisterMessage){
                     Log.debug("Registration Confirmed");
-                    // TODO: Karten am Client speichern und mittels Callback Function die Cases behandeln.
-                    /*
-                     * Von hier aus die Karten in GameServiceImpl oder wo anders in der App
-                     * zu speichern führt zu Circle-Dependencies --> Redesign -> Listener verschieben?
-                     */
-                    //Oder Karten in Common Speichern? (--> so ist es jetzt)
-                    playersCards.setCards(((ConfirmRegisterMessage)object).getCards());
+                    playersStorage.setMaster(((ConfirmRegisterMessage)object).isMaster());
+                    playersStorage.setCards(((ConfirmRegisterMessage)object).getCards());
+                    playersStorage.setTempID(((ConfirmRegisterMessage)object).getID());
+
+                    System.out.println("!!!!!--------Stored TempID:"+playersStorage.getTempID()+"--------!!!!!");
+                }
+
+                if(object instanceof NewPlayerMessage){
+                    Log.debug("New Player in the Game");
+                    playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
+                }
+
+                if(object instanceof StartGameMessage){
+                    Log.debug("Game can start now");
+                    playersStorage.setState(GameState.READY);
+                }
+
+                if(object instanceof UpdateMessage){
+                    UpdateMessage uM = (UpdateMessage)object;
+                    playersStorage.updateOnMessage(uM.getScore(),uM.getCurrentPlayer());
 
                 }
 
-                if (callback != null && object instanceof BaseMessage) {    //Es scheint als würde die If-Bedingung am callback !=null scheitern
+
+                if (callback != null && object instanceof BaseMessage) {
                     callback.callback((BaseMessage) object);
                     Log.debug("Callback is instance of BaseMessage");
                     if(object instanceof TextMessage){
