@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import at.aau.busfahrer.R;
@@ -29,6 +30,15 @@ public class GuessActivity extends AppCompatActivity {
         //till now this method only works after creating a new Game on the server
         //Join a new game is not implemented yet
         cards= playersStorage.getCards();
+
+        Button bt_cought = findViewById(R.id.bt_caught);
+        bt_cought.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
 
     }
 
@@ -77,4 +87,6 @@ public class GuessActivity extends AppCompatActivity {
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
+
+
 }
