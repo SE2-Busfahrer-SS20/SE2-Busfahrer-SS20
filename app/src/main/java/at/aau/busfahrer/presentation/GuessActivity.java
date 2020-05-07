@@ -1,6 +1,8 @@
 package at.aau.busfahrer.presentation;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.service.GameService;
+import at.aau.busfahrer.service.impl.CheatServiceImpl;
 import at.aau.busfahrer.service.impl.GameServiceImpl;
 import shared.model.Card;
 import shared.model.GameState;
@@ -34,6 +37,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private TextView tV_card4;
 
     private boolean answer;
+    private CheatServiceImpl cheatService;
 
 
     @Override
@@ -64,8 +68,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                         .setCancelable(false)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                TextView tV=findViewById(R.id.tV_card1);
-                                turnCard(tV, cards[0]);
                                 cheatService.stopListen();
                             }
                         })
