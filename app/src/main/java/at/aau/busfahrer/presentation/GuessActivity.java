@@ -59,6 +59,18 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         cheatService = CheatServiceImpl.getInstance();
         cheatService.setContext(getApplicationContext(), getClass().getName());
         cheatService.startListen();
+        handleCheat();
+
+        cards= playersStorage.getCards();
+        if(!playersStorage.isMaster()){
+            onPauseMode();
+        }
+        //Register Callback
+        playersStorage.registerGuessRoundListener(this);
+
+    }
+
+    public void handleCheat(){
         cheatService.setSensorListener(new CheatServiceImpl.SensorListener() {
             @Override
             public void handle() {
@@ -81,13 +93,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                         .create().show();
             }
         });
-        cards= playersStorage.getCards();
-        if(!playersStorage.isMaster()){
-            onPauseMode();
-        }
-        //Register Callback
-        playersStorage.registerGuessRoundListener(this);
-
     }
 
 
