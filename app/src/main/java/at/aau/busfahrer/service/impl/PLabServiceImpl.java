@@ -12,12 +12,14 @@ import shared.networking.kryonet.NetworkClientKryo;
 
 public class PLabServiceImpl implements PLabService {
 
+
     // Counter for matched cards from pyramid and cards on the hand.
     private int matchCounter = 0;
     private Callback<Card[]> cardCallback;
     private NetworkClient client;
     private Card[] pCards = new Card[10];
-
+    // constants for rows.
+    private final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
     // TODO: remove, JUST for TESTING.
     private Card[] cards = new Card[4];
 
@@ -45,15 +47,22 @@ public class PLabServiceImpl implements PLabService {
      * @return true || false
      */
     @Override
-    public Card checkCardMatch(String cardString, Card[] cards) {
+    public Card checkCardMatch(String cardString, Card[] cards, int row) {
         Card pCard = CardUtility.getCardFromString(cardString, this.pCards);
         // check if the cardString is in the pcards stack, in case of null it's a reverted card.
         if (pCard == null)
             return null;
         // Iterate over Player Cards and check if the Card matches.
         for (Card card : cards) {
-            if (card.getRank() == pCard.getRank()) {
-                matchCounter++;
+            if (card.getRank() == pCard.getRank() && pCard.getRank() > 1 && pCard.getRank() <= 10)  {
+                if (row == ROW1)
+                    matchCounter += 4;
+                else if (row == ROW2)
+                    matchCounter += 3;
+                else if (row == ROW3)
+                    matchCounter += 2;
+                else
+                    matchCounter += 1;
                 return card;
             }
         }

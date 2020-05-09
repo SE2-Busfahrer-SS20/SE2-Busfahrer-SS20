@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.TextView;
 
 
+import java.sql.RowId;
+
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.PLabService;
@@ -23,6 +25,7 @@ public class PLabActivity extends AppCompatActivity {
     // contains the cards on the hand of the Player.
     private Card[] cards;
 
+    private final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
     // contains the Ids of the TextViews where the Player cards should be displayed.
     private final int[] myCardIds = {R.id.tV_card1, R.id.tV_card2, R.id.tV_card3, R.id.tV_card4};
     // contains the Ids of the TextViews where the pyramid lab cards should be displayed.
@@ -71,7 +74,7 @@ public class PLabActivity extends AppCompatActivity {
     public void onClickCardPCard(View v) {
             TextView tV = findViewById(v.getId());
             // Parse Text value of the clicked TextView.
-            Card card = pLabService.checkCardMatch(tV.getText().toString(), cards);
+            Card card = pLabService.checkCardMatch(tV.getText().toString(), cards, getRow(v.getId()));
             if (card != null) {
                 CardUtility.turnCard(tV, card);
                // matchedCardsCount++;
@@ -92,5 +95,15 @@ public class PLabActivity extends AppCompatActivity {
         for (int i = 0; i < cards.length; i++) {
             CardUtility.turnCard(findViewById(ids[i]), cards[i]);
         }
+    }
+
+    private int getRow(int id) {
+        if (id == R.id.tV_pcard1)
+            return ROW1;
+        else if ( id == R.id.tV_pcard2 || id == R.id.tV_pcard3)
+            return ROW2;
+        else if ( id == R.id.tV_pcard4 || id == R.id.tV_pcard5|| id == R.id.tV_pcard6)
+            return ROW3;
+        else return ROW4;
     }
 }

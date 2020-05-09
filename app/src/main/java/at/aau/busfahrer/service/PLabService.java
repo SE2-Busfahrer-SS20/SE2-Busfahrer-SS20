@@ -7,7 +7,7 @@ import shared.networking.Callback;
 
 public interface PLabService {
 
-    Card checkCardMatch(String cardString, Card[] cards);
+    Card checkCardMatch(String cardString, Card[] cards, int row);
     int getMatchCount();
     void registerCardCallback(Callback<Card[]> callback);
     Card[] getPCards();
