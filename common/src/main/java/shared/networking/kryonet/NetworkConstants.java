@@ -1,6 +1,7 @@
 package shared.networking.kryonet;
 
 import shared.networking.dto.BaseMessage;
+import shared.networking.dto.CheatedMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.NewPlayerMessage;
@@ -30,6 +31,7 @@ public class NetworkConstants {
 
             PlayedMessage.class,
             UpdateMessage.class,
+            CheatedMessage.class,
 
             shared.model.impl.CardImpl[].class,
             shared.model.impl.CardImpl.class,
