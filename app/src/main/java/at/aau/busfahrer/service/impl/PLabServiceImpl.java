@@ -1,5 +1,7 @@
 package at.aau.busfahrer.service.impl;
 
+import android.util.Log;
+
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.PLabService;
 import shared.model.Card;
@@ -54,7 +56,8 @@ public class PLabServiceImpl implements PLabService {
             return null;
         // Iterate over Player Cards and check if the Card matches.
         for (Card card : cards) {
-            if (card.getRank() == pCard.getRank() && pCard.getRank() > 1 && pCard.getRank() <= 10)  {
+            Log.i("Card Matcher", pCard.getRank()+"");
+            if (card.getRank() == pCard.getRank() && pCard.getRank() > 0 && pCard.getRank() < 10)  {
                 if (row == ROW1)
                     matchCounter += 4;
                 else if (row == ROW2)
