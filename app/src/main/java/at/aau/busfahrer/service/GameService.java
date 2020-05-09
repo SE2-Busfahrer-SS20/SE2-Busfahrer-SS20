@@ -13,4 +13,7 @@ public interface GameService {
     boolean guessColor(int tempID, Card card, boolean guessBlack);
 
     void nextPlayer(final int lap, final int tempID, final boolean scored);
+
+    void sendMsgCheated(final int playerId, final boolean cheated, final long timeStamp, final int cheatType);
+
 }

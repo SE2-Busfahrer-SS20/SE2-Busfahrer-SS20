@@ -80,6 +80,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                         .setCancelable(false)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                gameService.sendMsgCheated(playersStorage.getTempID(),true, System.currentTimeMillis(), cheatService.getSensorType());
                                 cheatService.stopListen();
                             }
                         })

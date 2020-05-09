@@ -35,10 +35,10 @@ public class SelectCheatsActivity extends AppCompatActivity {
         bt_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Open GuessActivity
+                //Open WaitActivity
                 if(sensortype != -1){
-                Intent intent = new Intent(SelectCheatsActivity.this, at.aau.busfahrer.presentation.GuessActivity.class);
-                startActivity(intent);
+                    Intent i = new Intent(SelectCheatsActivity.this, WaitActivity.class);
+                    startActivity(i);
                 CheatServiceImpl cheatService = CheatServiceImpl.getInstance();
                 cheatService.setSensorType(sensortype);
                 }else{
