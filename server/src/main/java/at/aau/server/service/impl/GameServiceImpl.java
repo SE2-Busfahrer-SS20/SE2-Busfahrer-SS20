@@ -6,7 +6,6 @@ import java.util.List;
 import at.aau.server.service.GameService;
 import shared.exceptions.PlayerLimitExceededException;
 import shared.model.Card;
-import shared.model.Deck;
 import shared.model.Game;
 import shared.model.GameState;
 import shared.model.Player;

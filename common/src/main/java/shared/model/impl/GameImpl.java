@@ -15,17 +15,16 @@ import shared.model.Player;
 
 public class GameImpl implements Game {
 
-    // define constants for MAX Players.
-    private final static int PLAYER_LIMIT_MAX = 8;
-    private final static int PLAYER_LIMIT_MIN = 2;
-    private final static int PLAB_STACK_SIZE = 10;
-
     // define object attributes.
     private GameState state;
     private List<Player> playerList;
     private Deck cardStack;
     private Card[] pCards;
 
+    // define constants for MAX Players.
+    private final static int PLAYER_LIMIT_MAX = 8;
+    private final static int PLAYER_LIMIT_MIN = 2;
+    private final static int PLAB_STACK_SIZE = 10;
 
     public GameImpl() {
         this.state = GameState.INIT;

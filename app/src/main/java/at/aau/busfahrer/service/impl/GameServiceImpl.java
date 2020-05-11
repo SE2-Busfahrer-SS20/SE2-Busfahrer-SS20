@@ -6,9 +6,7 @@ import at.aau.busfahrer.service.GameService;
 import shared.networking.NetworkClient;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.RegisterMessage;
-
 import shared.networking.dto.StartGameMessage;
-
 import shared.networking.kryonet.NetworkClientKryo;
 
 public class GameServiceImpl implements GameService {
