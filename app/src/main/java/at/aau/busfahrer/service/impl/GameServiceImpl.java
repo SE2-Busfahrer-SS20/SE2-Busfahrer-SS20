@@ -8,11 +8,7 @@ import shared.networking.NetworkClient;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.StartGameMessage;
-<<<<<<< HEAD
-=======
-
 import shared.networking.dto.PlayedMessage;
->>>>>>> develop
 import shared.networking.kryonet.NetworkClientKryo;
 
 public class GameServiceImpl implements GameService {
@@ -35,11 +31,6 @@ public class GameServiceImpl implements GameService {
         this.client = NetworkClientKryo.getInstance();
         this.host = shared.networking.kryonet.NetworkConstants.host;
     }
-
-    public void connect() {
-        //Whats this method designated for?
-    }
-
 
     @Override//can be deleted later
     public void createGame(int playercount) {
@@ -75,25 +66,12 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void startGame(){
-<<<<<<< HEAD
-        System.out.println("THREAD: sending SGM...");
-        Thread thread = new Thread(() -> {
-    StartGameMessage sgm = new StartGameMessage();
-    try {
-        client.connect(host);
-        client.sendMessage(sgm);
-        System.out.println("sending SGM...");
-    } catch (Exception e) {
-        Log.error(e.toString());
-    }
-=======
         Thread thread = new Thread(new Runnable() {
                 @Override
                public void run() {
             StartGameMessage sgm = new StartGameMessage();
             client.sendMessage(sgm);
             }
->>>>>>> develop
         });
         thread.start();
     }

@@ -123,7 +123,7 @@ public class GameServiceImpl implements GameService {
     }
 
     public void startPLab() {
-        this.game.setState(GameState.LAB2);
+        this.game.setState(GameState.LAP2);
 
     }
 
