@@ -9,7 +9,7 @@ import shared.model.Player;
 public class StartPLabMessage extends BaseMessage {
 
     // 10 cards for the "Pyramidenrunde".
-    private Set<Card> plabCards;
+    private Card[] plabCards;
     private List<Player> playerList;
 
     /**
@@ -19,16 +19,20 @@ public class StartPLabMessage extends BaseMessage {
     /**
      * @param plabCards
      */
-    public StartPLabMessage(Set<Card> plabCards, List<Player> playerList) {
+    public StartPLabMessage(Card[] plabCards, List<Player> playerList) {
         this.plabCards = plabCards;
         this.playerList = playerList;
     }
 
-    public Set<Card> getPlabCards() {
+    public StartPLabMessage(Card[] plabCards) {
+        this.plabCards = plabCards;
+    }
+
+    public Card[] getPlabCards() {
         return plabCards;
     }
 
-    public void setPlabCards(Set<Card> plabCards) {
+    public void setPlabCards(Card[] plabCards) {
         this.plabCards = plabCards;
     }
 
