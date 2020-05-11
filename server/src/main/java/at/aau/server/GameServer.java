@@ -13,6 +13,7 @@ import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.ServerActionResponse;
 import shared.networking.dto.StartGameMessage;
+import shared.networking.dto.StartPLabMessage;
 import shared.networking.dto.TextMessage;
 import shared.networking.kryonet.NetworkServerKryo;
 import com.esotericsoftware.kryonet.Connection;
@@ -28,7 +29,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
     private static final String REQUEST_TEST = "request test";
     private static final String RESPONSE_TEST = "response test";
 
-    private Thread thread;
+    private Thread thread; // TODO: remove Attribute.
     private GameService gameService;
     private PLabService pLabService;
 
@@ -37,17 +38,20 @@ public class GameServer extends NetworkServerKryo implements Runnable{
     public GameServer() {
         Log.set(Log.LEVEL_DEBUG); // set log level for Minlog.
         gameService = GameServiceImpl.getInstance();
+        pLabService = new PLabServiceImpl(this.gameService.getGame(), this);
         registerClasses();
     }
 
+    // TODO: delete this method, should not be needed anymore.
     @Override
     public void run() {
+        /*
         while(true) {
             if (gameService.gameExists()) {
                 play(gameService.getGameState());
             }
 
-        }
+        }*/
     }
 
     // TODO: extract Listener to Listener Factory.
@@ -120,7 +124,16 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                     else if(object instanceof StartGameMessage){
                         Log.debug("Game Started");
                         gameService.startGame();
+                    } else if (object instanceof StartPLabMessage) {
+                        Log.debug("PLab started for Connection: ", connection.toString());
+                        pLabService.startLab(connection);
+                    } else if (object instanceof TextMessage) {
+                        Log.info("Got message from client", ((TextMessage) object).getText());
+                    }
 
+                    else if (object instanceof BaseMessage) {
+                        Log.info("Action not supported.");
+                        connection.sendTCP(new TextMessage("Action not supported."));
                     }
 
                 }
@@ -145,8 +158,8 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 break;
             // Starts pyramiden lab.
             case LAB2READY:
-                this.gameService.nextLab(); // TODO: align next LAB Method.
-                startLab2();
+              //  this.gameService.nextLab(); // TODO: align next LAB Method.
+               // startLab2();
                 break;
             // Starts busdriver lab.
             case LAB3:
@@ -156,11 +169,6 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 // TODO: implement.
                 break;
         }
-    }
-
-    private void startLab2() {
-        pLabService = new PLabServiceImpl(this.gameService.getGame(), this);
-        pLabService.startLab();
     }
 
 
