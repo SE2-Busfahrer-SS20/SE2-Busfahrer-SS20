@@ -3,10 +3,7 @@ package shared.model.impl;
 import com.esotericsoftware.kryonet.Connection;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import shared.model.Card;
 import shared.model.Deck;
 import shared.model.Game;

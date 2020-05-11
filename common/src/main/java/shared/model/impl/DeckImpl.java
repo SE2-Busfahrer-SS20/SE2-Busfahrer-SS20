@@ -3,9 +3,7 @@ package shared.model.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import shared.model.Deck;
-import shared.model.impl.CardImpl;
 
 public class DeckImpl implements Deck {
     private static final int NUM_CARDS_IN_DECK = 52;    //4 (Farben) * 13(Anzahl Karten pro Farbe) = 52 Karten gesamt

@@ -1,11 +1,7 @@
 package shared.model.impl;
 
 import java.util.ArrayList;
-
-import javax.naming.Context;
-
 import shared.model.Card;
-import shared.model.Deck;
 import shared.model.GameState;
 
 

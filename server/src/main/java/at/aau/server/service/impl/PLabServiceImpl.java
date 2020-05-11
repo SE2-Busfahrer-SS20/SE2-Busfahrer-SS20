@@ -10,10 +10,7 @@ import java.util.List;
 import at.aau.server.GameServer;
 import at.aau.server.service.GameService;
 import at.aau.server.service.PLabService;
-import shared.model.Card;
-import shared.model.Game;
 import shared.model.Player;
-import shared.model.impl.PlayerImpl;
 import shared.networking.dto.StartPLabMessage;
 
 
