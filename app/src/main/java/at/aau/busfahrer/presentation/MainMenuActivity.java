@@ -1,21 +1,32 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
+import at.aau.busfahrer.service.GameService;
+import at.aau.busfahrer.service.impl.GameServiceImpl;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.esotericsoftware.minlog.Log;
+
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
 
 public class MainMenuActivity extends AppCompatActivity {
+    GameService gamesvc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_main_menu);
+        gamesvc = GameServiceImpl.getInstance();
     }
 
       // click listener about button
@@ -48,21 +59,24 @@ public class MainMenuActivity extends AppCompatActivity {
                 .commit();
     }
 
-    // click listener startServer button
-    public void onStartServer(View v){
-        Intent i = new Intent(MainMenuActivity.this,StartServerActivity.class);
-        startActivity(i);
-    }
-
     // click listener PlayerEdit button
     public void onClickEditPlayer(View v){
         Intent i = new Intent(MainMenuActivity.this, EditPlayerActivity.class);
         startActivity(i);
     }
     // click listener PlayerEdit button
-    public void onClickJoinServer(View v){
-        Intent i = new Intent(MainMenuActivity.this, JoinServerActivity.class);
+    public void onClickPlayGame(View v){
+
+        //SEND REGISTERMESSAGE TO SERVER
+        SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String name=sharedPreferences.getString("Player","name");
+
+        gamesvc.playGame(name, getMacAddr());
+
+        Intent i = new Intent(MainMenuActivity.this, SelectCheatsActivity.class);
         startActivity(i);
+
     }
 
 
@@ -72,5 +86,40 @@ public class MainMenuActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
+
+    private  String getMacAddr() {
+        //This code was found on StackOverFlow:
+            //https://stackoverflow.com/questions/33159224/getting-mac-address-in-android-6-0
+        try {
+            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface nif : all) {
+                if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
+
+                byte[] macBytes = nif.getHardwareAddress();
+                if (macBytes == null) {
+                    return "";
+                }
+
+                StringBuilder res1 = new StringBuilder();
+                for (byte b : macBytes) {
+                    res1.append(Integer.toHexString(b & 0xFF) + ":");
+                }
+
+                if (res1.length() > 0) {
+                    res1.deleteCharAt(res1.length() - 1);
+                }
+                return res1.toString();
+            }
+        } catch (Exception e) {
+            Log.error(e.toString());
+        }
+        return "";
+    }
+
+    public void openPLab(View v) {
+        Intent i = new Intent(MainMenuActivity.this, PLapActivity.class);
+        startActivity(i);
     }
 }

@@ -1,9 +1,6 @@
 package at.aau.server;
 
-import at.aau.server.service.GameService;
-import shared.networking.NetworkClient;
-import shared.networking.dto.CreateGameMessage;
-import shared.networking.kryonet.NetworkClientKryo;
+import com.esotericsoftware.minlog.Log;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,9 +9,8 @@ public class Main {
         try {
             gameserver.start();
         } catch (Exception ex) {
-            System.out.println(ex);
+            Log.error(ex.toString(), ex);
         }
-
 
     }
 

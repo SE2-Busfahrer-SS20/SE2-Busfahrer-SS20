@@ -1,21 +1,19 @@
 package shared.networking.dto;
 
+
+//not used at the moment!
 public class CreateGameMessage extends BaseMessage{
 
     private String gameName;
     private int playerCount;
 
     public CreateGameMessage() {}
-    public CreateGameMessage(int playerCount, String gameName) {
-        this.gameName = gameName;
+    public CreateGameMessage(int playerCount) {
         this.playerCount = playerCount;
-    }
-
-    public String getGameName() {
-        return gameName;
     }
 
     public int getPlayerCount() {
         return playerCount;
     }
+
 }
