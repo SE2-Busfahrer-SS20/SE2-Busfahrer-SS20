@@ -5,7 +5,6 @@ import at.aau.server.service.GameService;
 import at.aau.server.service.PLabService;
 import at.aau.server.service.impl.GameServiceImpl;
 import at.aau.server.service.impl.PLabServiceImpl;
-import shared.model.GameState;
 import shared.model.Player;
 import shared.networking.dto.BaseMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
@@ -13,7 +12,6 @@ import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.ServerActionResponse;
 import shared.networking.dto.StartGameMessage;
-import shared.networking.dto.StartPLabMessage;
 import shared.networking.dto.TextMessage;
 import shared.networking.kryonet.NetworkServerKryo;
 import com.esotericsoftware.kryonet.Connection;
@@ -24,12 +22,11 @@ import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 
 
 
-public class GameServer extends NetworkServerKryo implements Runnable{
+public class GameServer extends NetworkServerKryo {
 
     private static final String REQUEST_TEST = "request test";
     private static final String RESPONSE_TEST = "response test";
 
-    private Thread thread; // TODO: remove Attribute.
     private GameService gameService;
     private PLabService pLabService;
 
@@ -42,22 +39,12 @@ public class GameServer extends NetworkServerKryo implements Runnable{
         registerClasses();
     }
 
-    // TODO: delete this method, should not be needed anymore.
-    @Override
-    public void run() {
-        /*
-        while(true) {
-            if (gameService.gameExists()) {
-                play(gameService.getGameState());
-            }
-
-        }*/
-    }
-
-    // TODO: extract Listener to Listener Factory.
+    // TODO: extract Listeners into Service functions.
     @Override
     public void start() throws IOException {
         super.start();
+        // start PLab Service.
+        pLabService.start();
         Log.debug("Server started successfully.");
         super.addListener(new Listener() {
             public void received(Connection connection, Object object) {
@@ -136,38 +123,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 }
             }
         });
-
-        thread = new Thread(this);
-        thread.start();
     }
-    private void play(GameState state) {
-        switch (state) {
-            case INIT:
-                if (this.gameService.gameReady())
-                    //startGame();
-                break;
-            case STARTED:
-                // TODO: implement.
-                break;
-            // Starts guess lab.
-            case LAB1:
-                // TODO: implement.
-                break;
-            // Starts pyramiden lab.
-            case LAB2READY:
-              //  this.gameService.nextLab(); // TODO: align next LAB Method.
-               // startLab2();
-                break;
-            // Starts busdriver lab.
-            case LAB3:
-                // TODO: implement.
-                break;
-            case ENDED:
-                // TODO: implement.
-                break;
-        }
-    }
-
 
     private void registerClasses() {
         for (Class c : CLASS_LIST)

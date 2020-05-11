@@ -30,7 +30,6 @@ public class PLabServiceImpl implements PLabService {
     public PLabServiceImpl(GameServer server) {
         this.server = server;
         this.gameService = GameServiceImpl.getInstance();
-        addListener();
     }
 
     /**
@@ -51,6 +50,11 @@ public class PLabServiceImpl implements PLabService {
     @Override
     public void finishLab() {
 
+    }
+
+    @Override
+    public void start() {
+        addListener();
     }
 
     private List<String> getPlayerNames() {
