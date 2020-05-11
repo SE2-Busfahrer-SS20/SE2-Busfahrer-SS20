@@ -22,15 +22,18 @@ public class PLabServiceImpl implements PLabService {
     // Counter for matched cards from pyramid and cards on the hand.
     private int matchCounter = 0;
     private Callback<Card[]> cardCallback;
+    private Callback<Boolean> finishedLabCallback;
     private NetworkClient client;
     private Card[] pCards = new Card[10];
     private List<String> playerNames = new ArrayList<>();
+    private static PLabService instance;
     // constants for rows.
     private final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
     // TODO: remove, JUST for TESTING.
     private Card[] cards = new Card[4];
 
-    public PLabServiceImpl() {
+    private PLabServiceImpl() {
+
         this.client = NetworkClientKryo.getInstance();
 
         // TODO: remove, JUST FOR TESTING.
@@ -41,8 +44,6 @@ public class PLabServiceImpl implements PLabService {
         for(int i = 0; i < 10; i++)
             pCards[i] = deck.drawCard();*/
 
-        playerNames.add("Player 1");
-        playerNames.add("Player 2");
     }
 
 
@@ -81,6 +82,7 @@ public class PLabServiceImpl implements PLabService {
         this.client.registerCallback(StartPLabMessage.class, msg -> {
             Log.i("Callback started.", "");
             this.pCards = ((StartPLabMessage) msg).getPlabCards();
+            this.playerNames = ((StartPLabMessage) msg).getPlayerNames();
             cardCallback.callback(pCards);
         });
         Thread thread = new Thread(() -> {
@@ -93,12 +95,16 @@ public class PLabServiceImpl implements PLabService {
             }
         });
         thread.start();
-
     }
 
     @Override
     public void registerCardCallback(Callback<Card[]> callback) {
         this.cardCallback = callback;
+    }
+
+    @Override
+    public void registerFinishedLabCallback(Callback<Boolean> callback) {
+        this.finishedLabCallback = callback;
     }
 
     @Override
@@ -125,6 +131,12 @@ public class PLabServiceImpl implements PLabService {
     // TODO: remove, JUST FOR TESTING PURPOSES.
     public Card[] getCards() {
         return cards;
+    }
+
+    public static synchronized PLabService getInstance() {
+        if (instance == null)
+            return (instance = new PLabServiceImpl());
+        return instance;
     }
     /*
     public void testCallback() {

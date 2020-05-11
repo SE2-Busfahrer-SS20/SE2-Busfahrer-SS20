@@ -36,7 +36,7 @@ public class StartPLabMessage extends BaseMessage {
         this.plabCards = plabCards;
     }
 
-    public List<String> getPlayerList() {
+    public List<String> getPlayerNames() {
         return playerNames;
     }
 
