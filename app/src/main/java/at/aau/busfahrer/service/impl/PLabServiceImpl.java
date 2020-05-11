@@ -2,6 +2,10 @@ package at.aau.busfahrer.service.impl;
 
 import android.util.Log;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.PLabService;
 import shared.model.Card;
@@ -20,6 +24,7 @@ public class PLabServiceImpl implements PLabService {
     private Callback<Card[]> cardCallback;
     private NetworkClient client;
     private Card[] pCards = new Card[10];
+    private List<String> playerNames = new ArrayList<>();
     // constants for rows.
     private final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
     // TODO: remove, JUST for TESTING.
@@ -38,6 +43,9 @@ public class PLabServiceImpl implements PLabService {
             cards[i] = deck.drawCard();
         for(int i = 0; i < 10; i++)
             pCards[i] = deck.drawCard();
+
+        playerNames.add("Player 1");
+        playerNames.add("Player 2");
     }
 
 
@@ -81,6 +89,23 @@ public class PLabServiceImpl implements PLabService {
     public Card[] getPCards() {
         return pCards;
     }
+
+    @Override
+    public void finish() {
+        // TODO: send dealed points back to the server.
+    }
+
+    @Override
+    public List<String> getPlayerNames() {
+        return playerNames;
+    }
+
+    @Override
+    public int getMatchCount() {
+        return matchCounter;
+    }
+
+
     // TODO: remove, JUST FOR TESTING PURPOSES.
     public Card[] getCards() {
         return cards;
@@ -89,8 +114,4 @@ public class PLabServiceImpl implements PLabService {
         this.cardCallback.callback(this.pCards);
     }
 
-    @Override
-    public int getMatchCount() {
-        return matchCounter;
-    }
 }

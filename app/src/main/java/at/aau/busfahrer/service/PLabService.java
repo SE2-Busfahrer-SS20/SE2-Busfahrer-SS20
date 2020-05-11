@@ -2,6 +2,8 @@ package at.aau.busfahrer.service;
 
 import android.widget.TextView;
 
+import java.util.List;
+
 import shared.model.Card;
 import shared.networking.Callback;
 
@@ -11,4 +13,6 @@ public interface PLabService {
     int getMatchCount();
     void registerCardCallback(Callback<Card[]> callback);
     Card[] getPCards();
+    void finish();
+    List<String> getPlayerNames();
 }
