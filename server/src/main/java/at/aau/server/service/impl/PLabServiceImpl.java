@@ -40,7 +40,7 @@ public class PLabServiceImpl implements PLabService {
         if(this.gameService.getGame() != null) {
             Log.info("PLAb Started", "start send message to " + connection.toString() );
             connection.sendTCP(
-                    new StartPLabMessage(this.gameService.getGame().getpCards())
+                    new StartPLabMessage(this.gameService.getGame().getpCards(), getPlayerNames())
             );
         } else {
             Log.error("Game Object is null!, You need to start a game first.");
@@ -50,6 +50,14 @@ public class PLabServiceImpl implements PLabService {
     @Override
     public void finishLab() {
 
+    }
+
+    private List<String> getPlayerNames() {
+        List<String> playerNames = new ArrayList<>();
+        for (Player p : this.gameService.getGame().getPlayerList()) {
+            playerNames.add(p.getName());
+        }
+        return playerNames;
     }
 
     private void addListener() {

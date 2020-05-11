@@ -10,7 +10,7 @@ public class StartPLabMessage extends BaseMessage {
 
     // 10 cards for the "Pyramidenrunde".
     private Card[] plabCards;
-    private List<Player> playerList;
+    private List<String> playerNames;
 
     /**
      * Kryonet needs Constructor without parameters.
@@ -19,9 +19,9 @@ public class StartPLabMessage extends BaseMessage {
     /**
      * @param plabCards
      */
-    public StartPLabMessage(Card[] plabCards, List<Player> playerList) {
+    public StartPLabMessage(Card[] plabCards, List<String> playerNames) {
         this.plabCards = plabCards;
-        this.playerList = playerList;
+        this.playerNames = playerNames;
     }
 
     public StartPLabMessage(Card[] plabCards) {
@@ -36,11 +36,11 @@ public class StartPLabMessage extends BaseMessage {
         this.plabCards = plabCards;
     }
 
-    public List<Player> getPlayerList() {
-        return playerList;
+    public List<String> getPlayerList() {
+        return playerNames;
     }
 
-    public void setPlayerList(List<Player> playerList) {
-        this.playerList = playerList;
+    public void setPlayerNames(List<String> playerNames) {
+        this.playerNames = playerNames;
     }
 }
