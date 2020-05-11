@@ -30,6 +30,7 @@ public class PLabServiceImpl implements PLabService {
     public PLabServiceImpl(GameServer server) {
         this.server = server;
         this.gameService = GameServiceImpl.getInstance();
+        addListener();
     }
 
     /**
@@ -63,6 +64,10 @@ public class PLabServiceImpl implements PLabService {
     private void addListener() {
         server.addListener(new Listener() {
             public void received(Connection connection, Object object) {
+                if (object instanceof StartPLabMessage) {
+                    Log.debug("PLab started for Connection: ", connection.toString());
+                    startLab(connection);
+                }
             }
         });
     }

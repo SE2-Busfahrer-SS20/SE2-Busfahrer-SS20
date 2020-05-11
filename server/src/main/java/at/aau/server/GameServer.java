@@ -124,9 +124,6 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                     else if(object instanceof StartGameMessage){
                         Log.debug("Game Started");
                         gameService.startGame();
-                    } else if (object instanceof StartPLabMessage) {
-                        Log.debug("PLab started for Connection: ", connection.toString());
-                        pLabService.startLab(connection);
                     } else if (object instanceof TextMessage) {
                         Log.info("Got message from client", ((TextMessage) object).getText());
                     }
