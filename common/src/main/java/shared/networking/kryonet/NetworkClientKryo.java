@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import shared.model.GameState;
-import shared.model.impl.playersStorage;
+import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.BaseMessage;
@@ -19,12 +19,15 @@ import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.StartPLabMessage;
 import shared.networking.dto.TextMessage;
+import shared.networking.dto.UpdateMessage;
 
 import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 
 public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     private Client client;
+    private Callback<BaseMessage> callback;
+    private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
     // Callback Map to store callbacks for every DTO Class. HashMap to access object in O(1).
     private Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
     private static NetworkClient instance;
@@ -52,23 +55,46 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     Log.info("Network Client Listener Error: Received Object is null or not from Type BaseMessage.");
                 } else if (object instanceof ConfirmRegisterMessage) {
                     Log.debug("Registration Confirmed");
-                    playersStorage.setMaster(((ConfirmRegisterMessage) object).isMaster());
-                    playersStorage.setCards(((ConfirmRegisterMessage) object).getCards());
-                } else if (object instanceof NewPlayerMessage) {
+                    playersStorage.setMaster(((ConfirmRegisterMessage)object).isMaster());
+                    playersStorage.setCards(((ConfirmRegisterMessage)object).getCards());
+                    playersStorage.setTempID(((ConfirmRegisterMessage)object).getID());
+
+                    System.out.println("!!!!!--------Stored TempID:"+playersStorage.getTempID()+"--------!!!!!");
+                }
+
+                if(object instanceof NewPlayerMessage){
                     Log.debug("New Player in the Game");
-                    playersStorage.addPlayerName(((NewPlayerMessage) object).getPlayerName());
-                    Log.info("NEW PLAYER IN THE GAME ");
-                } else if (object instanceof StartGameMessage) {
+                    playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
+                }
+
+                if(object instanceof StartGameMessage){
                     Log.debug("Game can start now");
                     playersStorage.setState(GameState.READY);
-                    Log.info("received SGM in listener...");
-                } else if (object instanceof StartPLabMessage) {
+                }
+
+                if(object instanceof UpdateMessage){
+                    UpdateMessage uM = (UpdateMessage)object;
+                    playersStorage.updateOnMessage(uM.getScore(),uM.getCurrentPlayer());
+
+                }
+
+                if (object instanceof StartPLabMessage) {
                     Log.info("StartPlaBMesssage received");
                     // call the correct callback to store cards and update UI Thread.
                     callbackMap.get(StartPLabMessage.class).callback((BaseMessage) object);
-                } else if (object instanceof TextMessage) {
+                }
+                // just for debugging purposes.
+                if (object instanceof TextMessage) {
                     Log.debug("Callback is instance of TextMessage");
                     Log.debug(((TextMessage) (object)).getText());
+                }
+
+                if (callback != null && object instanceof BaseMessage) {
+                    callback.callback((BaseMessage) object);
+                    Log.debug("Callback is instance of BaseMessage");
+                    if(object instanceof TextMessage){
+                        Log.debug(((TextMessage)(object)).getText());
+                    }
                 }
             }
         });

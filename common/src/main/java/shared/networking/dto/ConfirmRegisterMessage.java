@@ -10,29 +10,24 @@ public class ConfirmRegisterMessage extends BaseMessage {
     private int ID;
     private Card[] cards;
 
-    public ConfirmRegisterMessage(int ID, Card[] cards) {
-        this.ID=ID;
-        this.cards = cards;
-    }
-    public ConfirmRegisterMessage(Player player){
-        ID=0; //is ID still needed?
-        cards=player.getCards();
-    }
-    public ConfirmRegisterMessage(Player player,boolean master){
-        this.master=master;
-        ID=0; //is ID still needed?
-        cards=player.getCards();
+    ConfirmRegisterMessage() {
+
     }
 
-    //just for test purpose
-    public ConfirmRegisterMessage() {
-        this.ID=0;
-        this.cards = new CardImpl[4];
-        //4x Herz Ass
-        this.cards[0] = new CardImpl(1,1);
-        this.cards[1] = new CardImpl(1,1);
-        this.cards[2] = new CardImpl(1,1);
-        this.cards[3] = new CardImpl(1,1);
+    public ConfirmRegisterMessage(Card[] cards) {
+        this.cards = cards;
+    }
+
+    public ConfirmRegisterMessage(Player player){
+        ID=player.getTempID();
+        cards=player.getCards();
+
+    }
+
+    public ConfirmRegisterMessage(Player player,boolean master){
+        ID=player.getTempID();
+        this.master=master;
+        cards=player.getCards();
     }
 
     public Card[] getCards() {
@@ -47,5 +42,13 @@ public class ConfirmRegisterMessage extends BaseMessage {
     }
     public void setMaster(boolean master) {
         this.master = master;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 }

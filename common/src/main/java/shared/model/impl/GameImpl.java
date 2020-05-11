@@ -17,6 +17,7 @@ public class GameImpl implements Game {
     private List<Player> playerList;
     private Deck cardStack;
     private Card[] pCards;
+    private int currentPlayer; //It is this players turn //value=Index of playerList
 
     // define constants for MAX Players.
     private final static int PLAYER_LIMIT_MAX = 8;
@@ -26,17 +27,18 @@ public class GameImpl implements Game {
     public GameImpl() {
         this.state = GameState.INIT;
         this.playerList = new ArrayList<>();
-        cardStack = new DeckImpl();//Add 52 Cards to Stack
-
+        cardStack=new DeckImpl();//Add 52 Cards to Stack
+        currentPlayer=0; //in first Guess-Round the player who was Master in WaitActivity starts
     }
 
-    public Player addPlayer(String name, String MACAdress, Connection connection) {
-        if (playerList.size() < 8) {
+    public Player addPlayer(String name, String MACAdress, Connection connection){
+        if(playerList.size()<8) {
             Card[] cards = new CardImpl[4];
             for (int i = 0; i < 4; i++) {
                 cards[i] = cardStack.drawCard();
             }
             Player newPlayer = new PlayerImpl(name, MACAdress, cards, connection);
+            newPlayer.setTempID(playerList.size()); //Index starts with 0, so size returns highest index + 1
             playerList.add(newPlayer);
             return newPlayer;
         }
@@ -99,10 +101,14 @@ public class GameImpl implements Game {
      * @return cards.
      */
     private Card[] generatePCardStack() {
-       Card[]cards = new CardImpl[10];
+        Card[] cards = new CardImpl[10];
         for (int i = 0; i < PLAB_STACK_SIZE; i++) {
-           cards[i] = cardStack.drawCard();
+            cards[i] = cardStack.drawCard();
         }
         return cards;
+    }
+    public void addPointsToPlayer(int tempID, int points){
+        playerList.get(tempID).addPoints(points);
+
     }
 }

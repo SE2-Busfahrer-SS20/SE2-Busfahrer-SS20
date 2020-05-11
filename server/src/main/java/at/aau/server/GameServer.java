@@ -13,6 +13,7 @@ import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.ServerActionResponse;
 import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.TextMessage;
+import shared.networking.dto.PlayedMessage;
 import shared.networking.kryonet.NetworkServerKryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -21,8 +22,8 @@ import com.esotericsoftware.minlog.Log;
 import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 
 
-
 public class GameServer extends NetworkServerKryo {
+
 
     private static final String REQUEST_TEST = "request test";
     private static final String RESPONSE_TEST = "response test";
@@ -109,17 +110,22 @@ public class GameServer extends NetworkServerKryo {
                         }
                     }
                     else if(object instanceof StartGameMessage){
-                        Log.debug("Game Started");
+                        Log.info("Game started");
                         gameService.startGame();
                     } else if (object instanceof TextMessage) {
                         Log.info("Got message from client", ((TextMessage) object).getText());
-                    }
-
-                    else if (object instanceof BaseMessage) {
+                    } else if (object instanceof BaseMessage) {
                         Log.info("Action not supported.");
                         connection.sendTCP(new TextMessage("Action not supported."));
                     }
 
+                    //Guess-Rounds
+                    else if(object instanceof PlayedMessage){
+                        PlayedMessage pM = (PlayedMessage) object;
+                        if(pM.getLap()==1){     //Black or Red
+                            gameService.GuessRound1(pM.getTempID(), pM.scored());
+                        }
+                    }
                 }
             }
         });

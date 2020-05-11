@@ -17,10 +17,10 @@ public interface Game {
 
     public Deck getCardStack();
     public void setCardStack(Deck cardStack);
-
     /**
      * Cards for Pyramidenrunde.
      * @return Card[]
      */
     public Card[] getpCards();
+    void addPointsToPlayer(int tempID, int points);
 }
