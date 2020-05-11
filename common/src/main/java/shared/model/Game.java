@@ -22,5 +22,5 @@ public interface Game {
      * Cards for Pyramidenrunde.
      * @return Card[]
      */
-    public Set<Card> getpCards();
+    public Card[] getpCards();
 }

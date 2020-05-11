@@ -24,7 +24,7 @@ public class GameImpl implements Game {
     private GameState state;
     private List<Player> playerList;
     private Deck cardStack;
-    private Set<Card> pCards;
+    private Card[] pCards;
 
 
     public GameImpl() {
@@ -92,7 +92,7 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public Set<Card> getpCards() {
+    public Card[] getpCards() {
         if (pCards != null)
             return pCards;
         return (pCards = generatePCardStack());
@@ -102,10 +102,10 @@ public class GameImpl implements Game {
      * Method to create 10 cards for the pyramiden Lab.
      * @return cards.
      */
-    private Set<Card> generatePCardStack() {
-       Set<Card> cards = new HashSet<>();
+    private Card[] generatePCardStack() {
+       Card[]cards = new CardImpl[10];
         for (int i = 0; i < PLAB_STACK_SIZE; i++) {
-           cards.add(cardStack.drawCard());
+           cards[i] = cardStack.drawCard();
         }
         return cards;
     }
