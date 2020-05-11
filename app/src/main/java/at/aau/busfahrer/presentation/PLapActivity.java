@@ -9,19 +9,15 @@ import android.view.View;
 import android.widget.TextView;
 
 
-import java.sql.RowId;
-
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.PLabService;
 import at.aau.busfahrer.service.impl.PLabServiceImpl;
 import shared.model.Card;
-import shared.model.Deck;
 import shared.model.GameState;
-import shared.model.impl.DeckImpl;
 import shared.model.impl.playersStorage;
 
-public class PLabActivity extends AppCompatActivity {
+public class PLapActivity extends AppCompatActivity {
 
     // contains the cards on the hand of the Player.
     private Card[] cards;
@@ -38,7 +34,7 @@ public class PLabActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pLabService = PLabServiceImpl.getInstance();
-        setContentView(R.layout.activity_p_lab);
+        setContentView(R.layout.activity_p_lap);
         pLabService.registerCardCallback(cards -> {
             runOnUiThread(() -> {
                 // this.pCards = cards;
@@ -48,7 +44,7 @@ public class PLabActivity extends AppCompatActivity {
         });
         pLabService.startLab();
 
-        playersStorage.setState(GameState.LAB2);
+        playersStorage.setState(GameState.LAP2);
         cards = playersStorage.getCards();
 
         /** TODO: remove after testing. */
@@ -87,7 +83,7 @@ public class PLabActivity extends AppCompatActivity {
     }
 
     public void onNextLabClick(View v) {
-        Intent i = new Intent(PLabActivity.this, PLabFinished.class);
+        Intent i = new Intent(PLapActivity.this, PLabFinished.class);
         startActivity(i);
     }
 

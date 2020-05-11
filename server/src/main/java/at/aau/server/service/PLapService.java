@@ -2,7 +2,7 @@ package at.aau.server.service;
 
 import com.esotericsoftware.kryonet.Connection;
 
-public interface PLabService {
+public interface PLapService {
     void startLab(Connection connection);
 
     void finishLab();

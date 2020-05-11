@@ -22,7 +22,7 @@ public class PLabFinished extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_p_lab_finished);
+        setContentView(R.layout.activity_p_lap_finished);
         pLabService = PLabServiceImpl.getInstance();
         updateList(pLabService.getPlayerNames());
         pLabService.registerFinishedLabCallback(lostGame -> {

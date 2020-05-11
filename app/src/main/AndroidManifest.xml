@@ -19,7 +19,7 @@
             android:supportsRtl="true"
             android:theme="@style/menu_AppTheme">
         <activity android:name=".presentation.PLabFinished"></activity>
-        <activity android:name=".presentation.PLabActivity" />
+        <activity android:name=".presentation.PLapActivity" />
         <meta-data
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"
             android:value="true"/>

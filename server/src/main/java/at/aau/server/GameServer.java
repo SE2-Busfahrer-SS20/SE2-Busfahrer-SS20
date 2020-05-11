@@ -2,9 +2,9 @@ package at.aau.server;
 
 import java.io.IOException;
 import at.aau.server.service.GameService;
-import at.aau.server.service.PLabService;
+import at.aau.server.service.PLapService;
 import at.aau.server.service.impl.GameServiceImpl;
-import at.aau.server.service.impl.PLabServiceImpl;
+import at.aau.server.service.impl.PLapServiceImpl;
 import shared.model.Player;
 import shared.networking.dto.BaseMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
@@ -29,14 +29,14 @@ public class GameServer extends NetworkServerKryo {
     private static final String RESPONSE_TEST = "response test";
 
     private GameService gameService;
-    private PLabService pLabService;
+    private PLapService pLapService;
 
     private Connection connectionToMaster;
 
     GameServer() {
         Log.set(Log.LEVEL_DEBUG); // set log level for Minlog.
         gameService = GameServiceImpl.getInstance();
-        pLabService = new PLabServiceImpl(this);
+        pLapService = new PLapServiceImpl(this);
         registerClasses();
     }
 
@@ -45,7 +45,7 @@ public class GameServer extends NetworkServerKryo {
     public void start() throws IOException {
         super.start();
         // start PLab Service.
-        pLabService.start();
+        pLapService.start();
         Log.debug("Server started successfully.");
         super.addListener(new Listener() {
             public void received(Connection connection, Object object) {

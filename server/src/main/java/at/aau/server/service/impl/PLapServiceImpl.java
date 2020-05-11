@@ -9,7 +9,7 @@ import java.util.List;
 
 import at.aau.server.GameServer;
 import at.aau.server.service.GameService;
-import at.aau.server.service.PLabService;
+import at.aau.server.service.PLapService;
 import shared.model.Player;
 import shared.networking.dto.StartPLabMessage;
 
@@ -19,12 +19,12 @@ import shared.networking.dto.StartPLabMessage;
  * @Version: 1.0
  * @Author: Gerold Auer
  */
-public class PLabServiceImpl implements PLabService {
+public class PLapServiceImpl implements PLapService {
 
     private GameServer server;
     private GameService gameService;
 
-    public PLabServiceImpl(GameServer server) {
+    public PLapServiceImpl(GameServer server) {
         this.server = server;
         this.gameService = GameServiceImpl.getInstance();
     }
