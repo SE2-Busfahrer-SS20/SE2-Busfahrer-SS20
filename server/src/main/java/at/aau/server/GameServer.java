@@ -84,8 +84,9 @@ public class GameServer extends NetworkServerKryo {
                                 // TODO: implement client error response and implement error handler in client.
                             }
                         } else if (object instanceof BaseMessage) {
-                            Log.info("Action not supported.");
-                            connection.sendTCP(new TextMessage("Action not supported."));
+                            String errmsg = "Action not supported.";
+                            Log.info(errmsg);
+                            connection.sendTCP(new TextMessage(errmsg));
                         }
                     }
 
