@@ -38,7 +38,6 @@ public class PLabActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         pLabService = new PLabServiceImpl();
         setContentView(R.layout.activity_p_lab);
-
         pLabService.registerCardCallback(cards -> {
             runOnUiThread(() -> {
                 // this.pCards = cards;
@@ -46,13 +45,14 @@ public class PLabActivity extends AppCompatActivity {
                 turnCards(pCardIds, cards);
             });
         });
+        pLabService.startLab();
 
         // playersStorage.setState(GameState.LAB2);
         // cards = playersStorage.getCards();
 
         /** TODO: remove after testing. */
         cards = ((PLabServiceImpl) pLabService).getCards();
-        ((PLabServiceImpl) pLabService).testCallback();
+        // ((PLabServiceImpl) pLabService).testCallback();
         /**
          *  Turns cards automatically.
          *  Cards must be turned to times.
@@ -87,6 +87,7 @@ public class PLabActivity extends AppCompatActivity {
 
     public void onNextLabClick(View v) {
         pLabService.finish();
+
     }
 
     public void onDealPointClick(View v) {

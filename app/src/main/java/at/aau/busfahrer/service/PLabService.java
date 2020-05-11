@@ -15,4 +15,5 @@ public interface PLabService {
     Card[] getPCards();
     void finish();
     List<String> getPlayerNames();
+    void startLab();
 }

@@ -1,11 +1,10 @@
 package at.aau.busfahrer.service.impl;
 
+
 import android.util.Log;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.PLabService;
 import shared.model.Card;
@@ -15,6 +14,7 @@ import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.StartPLabMessage;
 import shared.networking.kryonet.NetworkClientKryo;
+import shared.networking.kryonet.NetworkConstants;
 
 public class PLabServiceImpl implements PLabService {
 
@@ -32,17 +32,14 @@ public class PLabServiceImpl implements PLabService {
 
     public PLabServiceImpl() {
         this.client = NetworkClientKryo.getInstance();
-        this.client.registerCallback(StartPLabMessage.class, msg -> {
-            // TODO: implement get cards.
-            cardCallback.callback(pCards);
-        });
 
         // TODO: remove, JUST FOR TESTING.
         Deck deck = new DeckImpl();
         for(int i = 0; i < 4; i++)
             cards[i] = deck.drawCard();
+        /*
         for(int i = 0; i < 10; i++)
-            pCards[i] = deck.drawCard();
+            pCards[i] = deck.drawCard();*/
 
         playerNames.add("Player 1");
         playerNames.add("Player 2");
@@ -64,7 +61,7 @@ public class PLabServiceImpl implements PLabService {
             return null;
         // Iterate over Player Cards and check if the Card matches.
         for (Card card : cards) {
-            Log.i("Card Matcher", pCard.getRank()+"");
+            Log.i("Card Matcher", pCard.getRank() + "");
             if (card.getRank() == pCard.getRank() && pCard.getRank() > 0 && pCard.getRank() < 10)  {
                 if (row == ROW1)
                     matchCounter += 4;
@@ -78,6 +75,25 @@ public class PLabServiceImpl implements PLabService {
             }
         }
         return null;
+    }
+
+    public void startLab() {
+        this.client.registerCallback(StartPLabMessage.class, msg -> {
+            Log.i("Callback started.", "");
+            this.pCards = ((StartPLabMessage) msg).getPlabCards();
+            cardCallback.callback(pCards);
+        });
+        Thread thread = new Thread(() -> {
+            try {
+                Log.i("PLab Service", "PLab start was triggered.");
+                client.connect(NetworkConstants.host);
+                this.client.sendMessage(new StartPLabMessage());
+            } catch (Exception e) {
+                Log.e("Error in PLabService", e.toString(),e);
+            }
+        });
+        thread.start();
+
     }
 
     @Override
@@ -110,8 +126,9 @@ public class PLabServiceImpl implements PLabService {
     public Card[] getCards() {
         return cards;
     }
+    /*
     public void testCallback() {
         this.cardCallback.callback(this.pCards);
-    }
+    }*/
 
 }
