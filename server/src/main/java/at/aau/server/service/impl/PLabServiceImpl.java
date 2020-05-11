@@ -24,12 +24,10 @@ import shared.networking.dto.StartPLabMessage;
  */
 public class PLabServiceImpl implements PLabService {
 
-    private Game game;
     private GameServer server;
     private GameService gameService;
 
-    public PLabServiceImpl(Game game, GameServer server) {
-        this.game = game;
+    public PLabServiceImpl(GameServer server) {
         this.server = server;
         this.gameService = GameServiceImpl.getInstance();
     }
