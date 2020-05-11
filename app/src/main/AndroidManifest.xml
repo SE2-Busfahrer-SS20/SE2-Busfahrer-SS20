@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="at.aau.busfahrer">
+        package="at.aau.busfahrer">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -10,35 +10,36 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/menu_AppTheme">
-        <activity android:name=".presentation.PLabActivity"></activity>
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:supportsRtl="true"
+            android:theme="@style/menu_AppTheme">
+        <activity android:name=".presentation.PLabFinished"></activity>
+        <activity android:name=".presentation.PLabActivity" />
         <activity android:name=".presentation.GuessActivity" />
         <activity
-            android:name=".presentation.WaitActivity"
-            android:screenOrientation="sensorLandscape" />
+                android:name=".presentation.WaitActivity"
+                android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".presentation.RegisterActivity"
-            android:screenOrientation="sensorLandscape" />
+                android:name=".presentation.RegisterActivity"
+                android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".presentation.EditPlayerActivity"
-            android:screenOrientation="sensorLandscape" />
+                android:name=".presentation.EditPlayerActivity"
+                android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".presentation.SelectCheatsActivity"
-            android:screenOrientation="sensorLandscape" />
+                android:name=".presentation.SelectCheatsActivity"
+                android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".presentation.StartServerActivity"
-            android:screenOrientation="sensorLandscape" />
+                android:name=".presentation.StartServerActivity"
+                android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".presentation.MainMenuActivity"
-            android:screenOrientation="sensorLandscape" />
+                android:name=".presentation.MainMenuActivity"
+                android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".presentation.SplashScreenActivity"
-            android:screenOrientation="sensorLandscape">
+                android:name=".presentation.SplashScreenActivity"
+                android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
