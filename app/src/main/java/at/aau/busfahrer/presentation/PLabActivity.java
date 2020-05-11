@@ -85,6 +85,14 @@ public class PLabActivity extends AppCompatActivity {
             Log.d("CARD MATCH COUNTER: ", pLabService.getMatchCount() + "");
     }
 
+    public void onNextLabClick(View v) {
+        pLabService.finish();
+    }
+
+    public void onDealPointClick(View v) {
+
+    }
+
     /**
      * Turns all Player cards at the beginning of the lab.
      *

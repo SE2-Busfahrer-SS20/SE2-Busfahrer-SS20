@@ -159,7 +159,7 @@ public class GameServer extends NetworkServerKryo implements Runnable{
     }
 
     private void startLab2() {
-        pLabService = new PLabServiceImpl(this.gameService.getGame());
+        pLabService = new PLabServiceImpl(this.gameService.getGame(), this);
         pLabService.startLab();
     }
 
