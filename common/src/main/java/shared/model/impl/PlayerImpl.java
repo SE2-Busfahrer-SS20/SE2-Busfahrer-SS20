@@ -98,4 +98,5 @@ public class PlayerImpl implements Player {
     public void setCheatedThisRound(boolean cheatedThisRound) {
         this.cheatedThisRound = cheatedThisRound;
     }
+
 }

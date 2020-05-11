@@ -17,10 +17,10 @@ public interface NetworkClient {
 
     /**
      * Registers a callback which gets called if a message is received.
-     *
+     * @param dtoClass
      * @param callback
      */
-    void registerCallback(Callback<BaseMessage> callback);
+    void registerCallback(Class dtoClass, Callback<BaseMessage> callback);
 
     /**
      * Sends a message to the server.

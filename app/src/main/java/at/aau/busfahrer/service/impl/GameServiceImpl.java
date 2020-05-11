@@ -8,9 +8,7 @@ import shared.networking.NetworkClient;
 import shared.networking.dto.CheatedMessage;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.RegisterMessage;
-
 import shared.networking.dto.StartGameMessage;
-
 import shared.networking.dto.PlayedMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 
@@ -31,30 +29,22 @@ public class GameServiceImpl implements GameService {
     }
 
     private GameServiceImpl() {
-        this.client = new NetworkClientKryo();
+        this.client = NetworkClientKryo.getInstance();
         this.host = shared.networking.kryonet.NetworkConstants.host;
     }
-
-    public void connect() {
-        //Whats this method designated for?
-    }
-
 
     @Override//can be deleted later
     public void createGame(int playercount) {
         //Must be declared final to get accessible in inner class
         final int pc=playercount;
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                CreateGameMessage cgm = new CreateGameMessage(pc);
-                try {
-                    client.connect(host);
-                    client.sendMessage(cgm);
-                } catch (Exception e) {
-                    Log.error(e.toString());
-                }
+        Thread thread = new Thread(() -> {
+            CreateGameMessage cgm = new CreateGameMessage(pc);
+            try {
+                client.connect(host);
+                client.sendMessage(cgm);
+            } catch (Exception e) {
+                Log.error(e.toString());
             }
         });
         thread.start();
@@ -63,16 +53,13 @@ public class GameServiceImpl implements GameService {
     @Override
     public void playGame(final String name, final String MACAddress){
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                RegisterMessage rm = new RegisterMessage(name, MACAddress);
-                try {
-                    client.connect(host);
-                    client.sendMessage(rm);
-                } catch (Exception e) {
-                    Log.error(e.toString());
-                }
+        Thread thread = new Thread(() -> {
+            RegisterMessage rm = new RegisterMessage(name, MACAddress);
+            try {
+                client.connect(host);
+                client.sendMessage(rm);
+            } catch (Exception e) {
+                Log.error(e.toString());
             }
         });
         thread.start();

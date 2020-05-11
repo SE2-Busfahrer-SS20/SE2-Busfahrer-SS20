@@ -23,7 +23,7 @@ public class NetworkServerKryo implements NetworkServer, KryoNetComponent {
 
     public void start() throws IOException {
         server.start();
-        server.bind(NetworkConstants.TCP_PORT, NetworkConstants.UDP_PORT);
+        server.bind(NetworkConstants.TCP_PORT);
     }
 
     public void registerCallback(Callback<BaseMessage> callback) {

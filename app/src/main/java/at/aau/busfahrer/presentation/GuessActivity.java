@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import at.aau.busfahrer.R;
+import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.GameService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 import at.aau.busfahrer.service.impl.GameServiceImpl;
@@ -100,13 +101,13 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
     public void onClick_btBlack(View view) {
        answer=gameService.guessColor(playersStorage.getTempID(), cards[0],true);
-        turnCard(tV_card1, cards[0]);
+        CardUtility.turnCard(tV_card1, cards[0]);
         onAnswer(answer);
     }
 
     public void onClick_btRed(View view) {
         answer=gameService.guessColor(playersStorage.getTempID(), cards[0],false);
-        turnCard(tV_card1, cards[0]);
+        CardUtility.turnCard(tV_card1, cards[0]);
         onAnswer(answer);
     }
 
@@ -141,30 +142,16 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     //in the final edition, the cards are turned by clicking on the buttons
     //This feature may be usefull regarding to cheating
     public void onClickCard1(View v) {
-        //turnCard(tV_card1, cards[0]);
+        // CardUtility.turnCard(tV_card1, cards[0]);
     }
     public void onClickCard2(View view) {
-        //turnCard(tV_card2, cards[1]);
+        // CardUtility.turnCard(tV_card2, cards[1]);
     }
     public void onClickCard3(View view) {
-        //turnCard(tV_card3, cards[2]);
+        // CardUtility.turnCard(tV_card3, cards[2]);
     }
     public void onClickCard4(View view) {
-        //turnCard(tV_card4, cards[3]);
-    }
-
-    private void turnCard(TextView tV, Card c){
-        //Id suit is Pick or Kreuz -> change collor to red
-        if(c.getSuit()==1||c.getSuit()==2){
-           tV.setTextColor(Color.parseColor("#FF0000"));//Red
-        }
-
-        if(tV.getText().equals("\uD83C\uDCA0")) {//if it shows the cards back-side
-            tV.setText(c.toString());
-        }else{
-            tV.setText("\uD83C\uDCA0");//set to card back side
-            tV.setTextColor(Color.parseColor("#000000"));//black
-        }
+        // CardUtility.turnCard(tV_card4, cards[3]);
     }
 
     // removes android status bar on top, for fullscreen

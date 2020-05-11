@@ -2,8 +2,9 @@ package at.aau.server;
 
 import java.io.IOException;
 import at.aau.server.service.GameService;
+import at.aau.server.service.PLapService;
 import at.aau.server.service.impl.GameServiceImpl;
-import shared.model.GameState;
+import at.aau.server.service.impl.PLapServiceImpl;
 import shared.model.Player;
 import shared.networking.dto.BaseMessage;
 import shared.networking.dto.CheatedMessage;
@@ -21,36 +22,31 @@ import com.esotericsoftware.minlog.Log;
 
 import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 
-public class GameServer extends NetworkServerKryo implements Runnable{
+
+public class GameServer extends NetworkServerKryo {
+
 
     private static final String REQUEST_TEST = "request test";
     private static final String RESPONSE_TEST = "response test";
 
-    private Thread thread;
     private GameService gameService;
+    private PLapService pLapService;
 
     private Connection connectionToMaster;
 
-    public GameServer() {
+    GameServer() {
         Log.set(Log.LEVEL_DEBUG); // set log level for Minlog.
-        gameService = new GameServiceImpl();
+        gameService = GameServiceImpl.getInstance();
+        pLapService = new PLapServiceImpl(this);
         registerClasses();
     }
 
-    @Override
-    public void run() {
-        while(true) {
-            if (gameService.gameExists()) {
-                play(gameService.getGameState());
-            }
-
-        }
-    }
-
-    // TODO: extract Listener to Listener Factory.
+    // TODO: extract Listeners into Service functions.
     @Override
     public void start() throws IOException {
         super.start();
+        // start PLab Service.
+        pLapService.start();
         Log.debug("Server started successfully.");
         super.addListener(new Listener() {
             public void received(Connection connection, Object object) {
@@ -89,8 +85,9 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                                 // TODO: implement client error response and implement error handler in client.
                             }
                         } else if (object instanceof BaseMessage) {
-                            Log.info("Action not supported.");
-                            connection.sendTCP(new TextMessage("Action not supported."));
+                            String errmsg = "Action not supported.";
+                            Log.info(errmsg);
+                            connection.sendTCP(new TextMessage(errmsg));
                         }
                     }
 
@@ -117,8 +114,11 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                     else if(object instanceof StartGameMessage){
                         Log.info("Game started");
                         gameService.startGame();
-                        Log.info("Game started");
-
+                    } else if (object instanceof TextMessage) {
+                        Log.info("Got message from client", ((TextMessage) object).getText());
+                    } else if (object instanceof BaseMessage) {
+                        Log.info("Action not supported.");
+                        connection.sendTCP(new TextMessage("Action not supported."));
                     }
 
                     //Guess-Rounds
@@ -140,33 +140,6 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 }
             }
         });
-
-        thread = new Thread(this);
-        thread.start();
-    }
-    private void play(GameState state) {
-        switch (state) {
-            case INIT:
-                if (this.gameService.gameReady())
-                    //startGame();
-                break;
-            case STARTED:
-                // TODO: implement.
-                break;
-            case LAP1A:
-                // TODO: implement.
-                //Guess Rounds are implemented in GameService
-                break;
-            case LAP2:
-                // TODO: implement.
-                break;
-            case LAP3:
-                // TODO: implement.
-                break;
-            case ENDED:
-                // TODO: implement.
-                break;
-        }
     }
 
     private void registerClasses() {
