@@ -32,7 +32,7 @@ public class GameServer extends NetworkServerKryo {
 
     private Connection connectionToMaster;
 
-    public GameServer() {
+    GameServer() {
         Log.set(Log.LEVEL_DEBUG); // set log level for Minlog.
         gameService = GameServiceImpl.getInstance();
         pLabService = new PLabServiceImpl(this);
