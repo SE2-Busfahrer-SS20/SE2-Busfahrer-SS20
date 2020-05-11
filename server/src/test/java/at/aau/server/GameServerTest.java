@@ -82,11 +82,11 @@ public class GameServerTest {
     }
 
     private void startClient() throws IOException {
-        NetworkClient client = new NetworkClientKryo();
+        NetworkClient client = NetworkClientKryo.getInstance();
         // registerClassesForComponent((NetworkClientKryo)client);
 
         client.connect("localhost");
-        client.registerCallback(argument ->
+        client.registerCallback(TextMessage.class, argument ->
                 {
                     System.out.printf("Client Thread ID: %d%n", Thread.currentThread().getId());
 

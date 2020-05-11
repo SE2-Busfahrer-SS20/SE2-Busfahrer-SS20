@@ -1,9 +1,9 @@
 package shared.model.impl;
 
 import com.esotericsoftware.kryonet.Connection;
+
 import java.util.ArrayList;
 import java.util.List;
-
 import shared.model.Card;
 import shared.model.Deck;
 import shared.model.Game;
@@ -12,17 +12,17 @@ import shared.model.Player;
 
 public class GameImpl implements Game {
 
-    // define constants for MAX Players
-    private final static int PLAYER_LIMIT_MAX = 8;
-    private final static int PLAYER_LIMIT_MIN = 2;
-
+    // define object attributes.
     private GameState state;
     private List<Player> playerList;
     private Deck cardStack;
-
+    private Card[] pCards;
     private int currentPlayer; //It is this players turn //value=Index of playerList
 
-
+    // define constants for MAX Players.
+    private final static int PLAYER_LIMIT_MAX = 8;
+    private final static int PLAYER_LIMIT_MIN = 2;
+    private final static int PLAB_STACK_SIZE = 10;
 
     public GameImpl() {
         this.state = GameState.INIT;
@@ -89,7 +89,26 @@ public class GameImpl implements Game {
         this.cardStack = cardStack;
     }
 
+    @Override
+    public Card[] getpCards() {
+        if (pCards != null)
+            return pCards;
+        return (pCards = generatePCardStack());
+    }
+
+    /**
+     * Method to create 10 cards for the pyramiden Lab.
+     * @return cards.
+     */
+    private Card[] generatePCardStack() {
+        Card[] cards = new CardImpl[10];
+        for (int i = 0; i < PLAB_STACK_SIZE; i++) {
+            cards[i] = cardStack.drawCard();
+        }
+        return cards;
+    }
     public void addPointsToPlayer(int tempID, int points){
         playerList.get(tempID).addPoints(points);
+
     }
 }

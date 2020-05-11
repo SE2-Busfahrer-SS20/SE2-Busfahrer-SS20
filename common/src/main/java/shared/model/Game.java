@@ -3,6 +3,7 @@ package shared.model;
 import com.esotericsoftware.kryonet.Connection;
 
 import java.util.List;
+import java.util.Set;
 
 public interface Game {
 
@@ -16,6 +17,10 @@ public interface Game {
 
     public Deck getCardStack();
     public void setCardStack(Deck cardStack);
-
+    /**
+     * Cards for Pyramidenrunde.
+     * @return Card[]
+     */
+    public Card[] getpCards();
     void addPointsToPlayer(int tempID, int points);
 }
