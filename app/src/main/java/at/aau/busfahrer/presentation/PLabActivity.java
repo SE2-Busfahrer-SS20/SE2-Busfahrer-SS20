@@ -2,6 +2,7 @@ package at.aau.busfahrer.presentation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,7 +37,7 @@ public class PLabActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pLabService = new PLabServiceImpl();
+        pLabService = PLabServiceImpl.getInstance();
         setContentView(R.layout.activity_p_lab);
         pLabService.registerCardCallback(cards -> {
             runOnUiThread(() -> {
@@ -47,11 +48,11 @@ public class PLabActivity extends AppCompatActivity {
         });
         pLabService.startLab();
 
-        // playersStorage.setState(GameState.LAB2);
-        // cards = playersStorage.getCards();
+        playersStorage.setState(GameState.LAB2);
+        cards = playersStorage.getCards();
 
         /** TODO: remove after testing. */
-        cards = ((PLabServiceImpl) pLabService).getCards();
+        // cards = ((PLabServiceImpl) pLabService).getCards();
         // ((PLabServiceImpl) pLabService).testCallback();
         /**
          *  Turns cards automatically.
@@ -86,8 +87,8 @@ public class PLabActivity extends AppCompatActivity {
     }
 
     public void onNextLabClick(View v) {
-        pLabService.finish();
-
+        Intent i = new Intent(PLabActivity.this, PLabFinished.class);
+        startActivity(i);
     }
 
     public void onDealPointClick(View v) {

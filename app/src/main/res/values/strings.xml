@@ -29,4 +29,5 @@ Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming 
     <string name="card_backcover">🂠</string>
     <string name="plab_nextButton">Next Lab</string>
     <string name="plab_selectButton">Deal Points</string>
+    <string name="deal_button_text">Deal Points</string>
 </resources>
