@@ -29,9 +29,11 @@ public class GameServiceImpl implements GameService {
      * @return instance
      */
     public static synchronized GameService getInstance() {
-        if (instance != null)
+        if (instance == null) {
+            instance = new GameServiceImpl();
             return instance;
-        return (instance = new GameServiceImpl());
+        }
+        return instance;
     }
 
     /**
