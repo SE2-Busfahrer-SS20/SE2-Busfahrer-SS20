@@ -12,14 +12,13 @@ import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.ServerActionResponse;
 import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.TextMessage;
+import shared.networking.dto.PlayedMessage;
 import shared.networking.kryonet.NetworkServerKryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
 import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
-
-
 
 public class GameServer extends NetworkServerKryo implements Runnable{
 
@@ -115,11 +114,19 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                         }
                     }
                     else if(object instanceof StartGameMessage){
-                        Log.debug("Game Started");
+                        Log.info("Game started");
                         gameService.startGame();
+                        Log.info("Game started");
 
                     }
 
+                    //Guess-Rounds
+                    else if(object instanceof PlayedMessage){
+                        PlayedMessage pM = (PlayedMessage) object;
+                        if(pM.getLap()==1){     //Black or Red
+                            gameService.GuessRound1(pM.getTempID(), pM.scored());
+                        }
+                    }
                 }
             }
         });
@@ -136,13 +143,14 @@ public class GameServer extends NetworkServerKryo implements Runnable{
             case STARTED:
                 // TODO: implement.
                 break;
-            case LAB1:
+            case LAP1A:
+                // TODO: implement.
+                //Guess Rounds are implemented in GameService
+                break;
+            case LAP2:
                 // TODO: implement.
                 break;
-            case LAB2:
-                // TODO: implement.
-                break;
-            case LAB3:
+            case LAP3:
                 // TODO: implement.
                 break;
             case ENDED:
@@ -150,7 +158,6 @@ public class GameServer extends NetworkServerKryo implements Runnable{
                 break;
         }
     }
-
 
     private void registerClasses() {
         for (Class c : CLASS_LIST)

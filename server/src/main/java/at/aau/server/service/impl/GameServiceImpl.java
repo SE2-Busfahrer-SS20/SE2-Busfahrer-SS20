@@ -1,17 +1,18 @@
 package at.aau.server.service.impl;
 
 import com.esotericsoftware.kryonet.Connection;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import at.aau.server.service.GameService;
-import shared.exceptions.PlayerLimitExceededException;
 import shared.model.Card;
-import shared.model.Deck;
 import shared.model.Game;
 import shared.model.GameState;
 import shared.model.Player;
 import shared.model.impl.GameImpl;
 import shared.networking.dto.StartGameMessage;
+import shared.networking.dto.UpdateMessage;
 
 public class GameServiceImpl implements GameService {
 
@@ -48,13 +49,13 @@ public class GameServiceImpl implements GameService {
     public void nextLab() {
         switch (game.getState()) {
             case STARTED:
-                game.setState(GameState.LAB1);
+                game.setState(GameState.LAP1A);
                 break;
-            case LAB1:
-                game.setState(GameState.LAB2);
+            case LAP1A:
+                game.setState(GameState.LAP2);
                 break;
-            case LAB2:
-                game.setState(GameState.LAB3);
+            case LAP2:
+                game.setState(GameState.LAP3);
                 break;
         }
 
@@ -85,7 +86,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame() throws PlayerLimitExceededException {
+    public void createGame() {
         game=new GameImpl();
               //Only one game possible
     }
@@ -101,6 +102,50 @@ public class GameServiceImpl implements GameService {
     }
 
 
+    //Methodes for Guess-Rounds
+    @Override
+    public void GuessRound1(int tempID, boolean scored) {
+        //update score
+        if(scored)
+            game.addPointsToPlayer(tempID,1);
+
+        //ArrayList of all players scores
+        ArrayList<Integer> score = new ArrayList<>();
+        for(int i=0; i<game.getPlayerCount();i++){
+            int playerScore=game.getPlayerList().get(i).getScore();
+            score.add(playerScore);
+        }
+
+        //Reset Cheating
+        resetCheated();
+
+        //Who's next?
+        int nextPlayer;
+        if(tempID<(game.getPlayerCount()-1)){
+            nextPlayer=tempID+1;
+            this.game.setState(GameState.LAP1A);
+        }
+        else{ //if next player = 0 --> client starts guess round 2!
+            nextPlayer=0;
+            //this.game.setState(GameState.LAP1B);  //switch to Guess round 2
+            this.game.setState(GameState.LAP2); //switch to Pyramid - (only during developing process)
+
+            //CALL METHODE FOR PYRAMIDE HERE !!
+        }
+
+        //send DTO updateMessage to all clients
+        UpdateMessage uM = new UpdateMessage(nextPlayer, score);
+        int count = this.game.getPlayerCount();
+        for(int i=0;i<count;i++){
+            Connection con = this.game.getPlayerList().get(i).getConnection();
+            con.sendTCP(uM);
+        }
+    }
 
 
+    private void resetCheated(){
+        for(int i=0; i<game.getPlayerCount();i++){
+            game.getPlayerList().get(i).setCheatedThisRound(false);
+        }
+    }
 }

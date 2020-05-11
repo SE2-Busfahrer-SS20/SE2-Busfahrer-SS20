@@ -3,12 +3,14 @@ package at.aau.busfahrer.service.impl;
 import com.esotericsoftware.minlog.Log;
 
 import at.aau.busfahrer.service.GameService;
+import shared.model.Card;
 import shared.networking.NetworkClient;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.RegisterMessage;
 
 import shared.networking.dto.StartGameMessage;
 
+import shared.networking.dto.PlayedMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 
 public class GameServiceImpl implements GameService {
@@ -35,6 +37,7 @@ public class GameServiceImpl implements GameService {
     public void connect() {
         //Whats this method designated for?
     }
+
 
     @Override//can be deleted later
     public void createGame(int playercount) {
@@ -76,24 +79,39 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void startGame(){
-        System.out.println("THREAD: sending SGM...");
         Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-        StartGameMessage sgm = new StartGameMessage();
-        try {
-            client.connect(host);
+                @Override
+               public void run() {
+            StartGameMessage sgm = new StartGameMessage();
             client.sendMessage(sgm);
-            System.out.println("sending SGM...");
-        } catch (Exception e) {
-            Log.error(e.toString());
-        }
             }
         });
         thread.start();
     }
 
+    @Override
+    public boolean guessColor(final int tempID, Card card, boolean guessBlack){
+        boolean cardIsBlack=true;
+        if(card.getSuit()==1||card.getSuit()==2){//Red
+            cardIsBlack=false;
+        }
+        final boolean scored=guessBlack==cardIsBlack; //true if player guessed correct, otherwise false
 
+        return scored;
+
+    }
+
+    @Override
+    public void nextPlayer(final int lap, final int tempID, final boolean scored){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                PlayedMessage pM = new PlayedMessage(lap,tempID, scored);
+                client.sendMessage(pM);
+            }
+        });
+        thread.start();
+    }
 
 
 }

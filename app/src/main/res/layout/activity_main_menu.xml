@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.MainMenuActivity"
     android:clickable="true"
     android:focusable="true"
-    >
+    tools:context=".presentation.MainMenuActivity">
 
 
     <Button
@@ -16,110 +15,115 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="32dp"
         android:onClick="onClickPlayGame"
         android:text="Play"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        style="@style/button_orange"
         android:id="@+id/help"
+        style="@style/button_orange"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
         android:onClick="onClickHelp"
         android:text="Help"
-        app:layout_constraintEnd_toEndOf="@+id/join_server"
-        app:layout_constraintStart_toStartOf="@+id/join_server"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/join_server" />
 
     <Button
-        style="@style/button_orange"
-        android:theme="@style/button_orange"
         android:id="@+id/edit_player"
+        style="@style/button_orange"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
         android:onClick="onClickEditPlayer"
         android:text="Edit Player"
-        app:layout_constraintEnd_toEndOf="@+id/help"
-        app:layout_constraintStart_toStartOf="@+id/help"
+        android:theme="@style/button_orange"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/help" />
 
     <Button
-        android:theme="@style/Theme.AppCompat.Light"
         android:id="@+id/report"
         android:layout_width="wrap_content"
         android:layout_height="29dp"
-        android:padding="3dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="16dp"
         android:background="#00EAE7E7"
         android:onClick="onClickReport"
+        android:padding="3dp"
         android:text="Report a Bug"
         android:textSize="14sp"
+        android:theme="@style/Theme.AppCompat.Light"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/guideline2" />
 
     <Button
-        android:theme="@style/Theme.AppCompat.Light"
         android:id="@+id/about"
         android:layout_width="wrap_content"
         android:layout_height="29dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="24dp"
         android:background="#00EAE7E7"
         android:onClick="onClickAbout"
         android:text="About"
         android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/report"
-        app:layout_constraintTop_toTopOf="@+id/report" />
+        android:theme="@style/Theme.AppCompat.Light"
+        app:layout_constraintBottom_toBottomOf="@+id/report"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2" />
 
     <ImageView
         android:id="@+id/menu_logo"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edit_player"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/report"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/join_server"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_player"
         app:srcCompat="@drawable/gamelogo" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
+        android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_percent="0.5294118"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintGuide_percent="0.50"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:id="@+id/about_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="5dp"
-        >
-    </FrameLayout>
-    <FrameLayout
-        android:id="@+id/report_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="5dp"
-        />
-    <FrameLayout
-        android:id="@+id/help_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="5dp">
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/help_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="5dp"
+            tools:layout_editor_absoluteY="16dp"></FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/about_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="5dp"
+            >
+
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/report_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="5dp"
+            />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

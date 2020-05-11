@@ -15,6 +15,7 @@ import shared.networking.dto.ConfirmRegisterMessage;
 import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.TextMessage;
+import shared.networking.dto.UpdateMessage;
 
 import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 
@@ -46,16 +47,25 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     Log.debug("Registration Confirmed");
                     playersStorage.setMaster(((ConfirmRegisterMessage)object).isMaster());
                     playersStorage.setCards(((ConfirmRegisterMessage)object).getCards());
+                    playersStorage.setTempID(((ConfirmRegisterMessage)object).getID());
+
+                    System.out.println("!!!!!--------Stored TempID:"+playersStorage.getTempID()+"--------!!!!!");
                 }
 
                 if(object instanceof NewPlayerMessage){
                     Log.debug("New Player in the Game");
-                    playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());   //instead of this, use listener to react on new Message and store in app
+                    playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
                 }
 
                 if(object instanceof StartGameMessage){
                     Log.debug("Game can start now");
                     playersStorage.setState(GameState.READY);
+                }
+
+                if(object instanceof UpdateMessage){
+                    UpdateMessage uM = (UpdateMessage)object;
+                    playersStorage.updateOnMessage(uM.getScore(),uM.getCurrentPlayer());
+
                 }
 
 

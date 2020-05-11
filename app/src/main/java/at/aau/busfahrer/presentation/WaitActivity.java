@@ -18,11 +18,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
 public class WaitActivity extends AppCompatActivity implements PreGameListener {
     private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
-
-
     GameService gamesvc;
 
     @Override
@@ -32,6 +29,7 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
         setContentView(R.layout.activity_wait);
 
         gamesvc = GameServiceImpl.getInstance();
+
         //Change visability
         LinearLayout playerList = findViewById(R.id.playerList);
         Button bt_start = findViewById(R.id.bt_start);
@@ -47,17 +45,14 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
             logo.setVisibility(View.VISIBLE);
         }
 
-        //check if other clients join server
-        //update.start();
-
         //registerCallback
-        playersStorage.registerOnAdditionalPlayerListener(this);
+        playersStorage.registerPreGameListener(this);
     }
 
     // click listener start game button
     public void onClickStartGame(View v){
         Intent i = new Intent(WaitActivity.this, GuessActivity.class);
-    //    wait=false;//To terminate busy waiting
+
         gamesvc.startGame();//Send StartGameMessage to other clients
         startActivity(i);
 
@@ -78,11 +73,12 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
     //Callback to open new Activity when Master starts the game
     @Override
     public void onGameStart(){
+        System.out.println("Play Game!!!");
         Intent i = new Intent(WaitActivity.this, GuessActivity.class);
         startActivity(i);
     }
 
-    //Update player list in Interface
+    //Update playerList in Interface
     private void updatePlayerList(){
         if(playersStorage.isMaster()) {
             TextView[] players = new TextView[8];
