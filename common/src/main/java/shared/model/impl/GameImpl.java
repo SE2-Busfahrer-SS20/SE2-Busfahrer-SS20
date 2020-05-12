@@ -112,7 +112,8 @@ public class GameImpl implements Game {
 
     }
 
-    public int getCurrentPlayer() {
+
+    public int setCurrentPlayer() {
         return currentPlayer;
     }
 
