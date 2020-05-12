@@ -92,4 +92,12 @@ public class GameImpl implements Game {
     public void addPointsToPlayer(int tempID, int points){
         playerList.get(tempID).addPoints(points);
     }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(int currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
 }

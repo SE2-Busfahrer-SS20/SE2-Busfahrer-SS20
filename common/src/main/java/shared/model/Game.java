@@ -18,4 +18,7 @@ public interface Game {
     public void setCardStack(Deck cardStack);
 
     void addPointsToPlayer(int tempID, int points);
+
+    void setCurrentPlayer(int currentPlayer);
+    int getCurrentPlayer();
 }
