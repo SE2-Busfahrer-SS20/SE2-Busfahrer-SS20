@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import at.aau.busfahrer.R;
 import shared.model.Card;
-import shared.model.impl.CardImpl;
 import shared.model.impl.playersCards;
 
 public class GuessActivity extends AppCompatActivity {

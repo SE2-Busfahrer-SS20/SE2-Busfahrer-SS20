@@ -3,7 +3,7 @@
 *.aar
 *.ap_
 *.aab
-
+*.html
 .DS_Store
 
 # Files for the ART/Dalvik VM
@@ -12,6 +12,10 @@
 # Java class files
 *.class
 
+# Jacoco resources
+jacoco-resources
+/jacoco-resources
+jacoco-resources/
 # Generated files
 bin/
 gen/

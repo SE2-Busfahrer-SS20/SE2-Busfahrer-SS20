@@ -7,22 +7,26 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import java.util.List;
 
-import at.aau.server.service.GameService;
 import at.aau.server.service.impl.GameServiceImpl;
+import shared.exceptions.PlayerLimitExceededException;
+import shared.model.Card;
 import shared.model.GameState;
 import shared.model.Player;
 import shared.model.impl.PlayerImpl;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class GameServiceTest {
+
+    private final static int MAX_PLAYERS = 8;
+    private final static int MIN_PLAYERS = 8;
 
     private GameService gameService;
     @Mock
@@ -39,9 +43,38 @@ public class GameServiceTest {
 
     }
 
+    /*
+     * The following code tests basic methods of GameService.
+     */
+    @Test
+    public void testGameExists() {
+        assertFalse(gameService.gameExists());
+    }
 
     @Test
-    public void addPlayer() {
+    public void testGameExistsAfterCreation() throws PlayerLimitExceededException {
+            gameService.createGame(4);
+            assertTrue(gameService.gameExists());
+    }
+
+    @Test
+    public void testMaxPlayerCount() {
+       try {
+           gameService.createGame(MAX_PLAYERS);
+       } catch (Exception e) {
+           fail();
+       }
+       try {
+           gameService.createGame(MAX_PLAYERS + 1);
+           fail();
+       } catch (PlayerLimitExceededException ex)
+       { } catch (Exception e) {
+           fail();
+       }
+    }
+
+    @Test
+    public void addPlayer() throws PlayerLimitExceededException {
         gameService.createGame(4);
         Player player = new PlayerImpl("MaxMustermann", mockConnection);
         gameService.addPlayer(player);
@@ -51,7 +84,7 @@ public class GameServiceTest {
     }
 
     @Test
-    public void checkGameStates() {
+    public void checkGameStates() throws PlayerLimitExceededException {
         gameService.createGame(2);
         assertEquals(gameService.getGame().getState(), GameState.INIT);
         gameService.startGame();
@@ -64,6 +97,23 @@ public class GameServiceTest {
         assertEquals(gameService.getGame().getState(), GameState.LAB3);
     }
 
+    @Test
+    public void checkPlayerCards() throws PlayerLimitExceededException{
+        // 52 - (4*PlayerCount) remaining cards in cardStack.
+        int players = 4;
+        int cardsPerPlayer = 52 / players;
+        // start game
+        gameService.createGame(4);
+        // check card deck after dealing cards (4 cards / Player).
+        assertEquals((gameService.getCardStack()).size(), (52 - (players * 4)));
+        // check player cards.
+        Card[][] cardStack = gameService.getPlayercardList();
+        assertEquals(cardStack.length, players);
+        assertEquals(cardStack[0].length, 4);
+        assertEquals(cardStack[1].length, 4);
+        assertEquals(cardStack[2].length, 4);
+        assertEquals(cardStack[3].length, 4);
+    }
 
     /**
      * Destroy object to support garbage collector.

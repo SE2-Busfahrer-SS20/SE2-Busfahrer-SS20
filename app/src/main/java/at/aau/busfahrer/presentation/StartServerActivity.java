@@ -22,7 +22,7 @@ public class StartServerActivity extends AppCompatActivity {
     Spinner spinner;
     Integer playercount;
     GameService gamesvc;
-   // GameService gamesvc = new GameServiceImpl("192.168.0.103");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
