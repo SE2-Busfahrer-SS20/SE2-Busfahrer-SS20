@@ -1,7 +1,8 @@
 package at.aau.busfahrer.presentation;
-
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import java.util.List;
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.GameService;
+import at.aau.busfahrer.service.impl.CheatServiceImpl;
 import at.aau.busfahrer.service.impl.GameServiceImpl;
 import shared.model.Card;
 import shared.model.GameState;
@@ -41,6 +43,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private Button bt_cought;
 
     private boolean answer;
+
     private List<Player> playerList;
     private GameImpl gameImpl;
     private int currentPlayer;
@@ -49,6 +52,9 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private Player myself;
     private int scoreCheater;
     private  int myScore;
+
+    private CheatServiceImpl cheatService;
+
 
 
     @Override
@@ -67,6 +73,11 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         tV_card3=findViewById(R.id.tV_card3);
         tV_card4=findViewById(R.id.tV_card4);
         bt_cought = findViewById(R.id.bt_caught);
+
+        cheatService = CheatServiceImpl.getInstance();
+        cheatService.setContext(getApplicationContext(), getClass().getName());
+        cheatService.startListen();
+        handleCheat();
 
         cards= playersStorage.getCards();
         if(!playersStorage.isMaster()){
@@ -111,6 +122,32 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
 
 
+    }
+
+    public void handleCheat(){
+        cheatService.setSensorListener(new CheatServiceImpl.SensorListener() {
+            @Override
+            public void handle() {
+                cheatService.pauseListen();
+                new AlertDialog.Builder(GuessActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                        .setTitle("Are you sure you want to cheat?")
+                        .setCancelable(false)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                gameService.sendMsgCheated(playersStorage.getTempID(),true, System.currentTimeMillis(), cheatService.getSensorType());
+                                cheatService.stopListen();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                cheatService.resumeListen();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .create().show();
+            }
+        });
     }
 
 

@@ -7,6 +7,7 @@ import at.aau.server.service.impl.GameServiceImpl;
 import at.aau.server.service.impl.PLapServiceImpl;
 import shared.model.Player;
 import shared.networking.dto.BaseMessage;
+import shared.networking.dto.CheatedMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
 import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.RegisterMessage;
@@ -125,6 +126,15 @@ public class GameServer extends NetworkServerKryo {
                         PlayedMessage pM = (PlayedMessage) object;
                         if(pM.getLap()==1){     //Black or Red
                             gameService.GuessRound1(pM.getTempID(), pM.scored());
+                            Log.info(pM.toString());
+
+                        }
+                    }
+                    // Player has cheated message
+                    else if(object instanceof CheatedMessage){
+                        CheatedMessage cM = (CheatedMessage) object;
+                        if(cM.hasCheated()){
+                            gameService.getPlayerList().get(cM.getTempID()).setCheatedThisRound(true);
                         }
                     }
                 }

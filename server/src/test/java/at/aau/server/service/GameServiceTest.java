@@ -85,6 +85,7 @@ public class GameServiceTest {
         assertEquals(gameService.getGame().getState(), GameState.LAB3);
 
          */
+
     }
 
     @Test

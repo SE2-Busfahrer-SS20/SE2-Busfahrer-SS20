@@ -7,6 +7,71 @@
     tools:context=".presentation.SelectCheatsActivity">
 
 
+    <Button
+        android:id="@+id/bt_start"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:orientation="horizontal"
+        android:text="Start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <Button
+        android:id="@+id/button3"
+        style="@style/button_black"
+        android:layout_width="200dp"
+        android:layout_height="125dp"
+        android:layout_marginTop="16dp"
+        android:drawableTop="@drawable/ic_light_foreground"
+        android:drawablePadding="-50dp"
+        android:onClick="onRadioButtonClicked"
+        android:text="Light"
+        app:layout_constraintEnd_toEndOf="@+id/button6"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/button6"
+        app:layout_constraintTop_toBottomOf="@+id/button6" />
+
+    <Button
+        android:id="@+id/button7"
+        style="@style/button_black"
+        android:layout_width="200dp"
+        android:layout_height="125dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="8dp"
+        android:drawableTop="@drawable/ic_smile"
+        android:drawablePadding="-40dp"
+        android:onClick="onRadioButtonClicked"
+        android:text="Fair"
+        app:layout_constraintBottom_toTopOf="@+id/bt_start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/button6"
+        style="@style/button_black"
+        android:layout_width="200dp"
+        android:layout_height="125dp"
+        android:layout_marginTop="16dp"
+        android:drawableTop="@drawable/ic_shake_foreground"
+        android:drawablePadding="-50dp"
+        android:onClick="onRadioButtonClicked"
+        android:text="Shake"
+        android:textAlignment="center"
+        android:textDirection="locale"
+        app:layout_constraintEnd_toEndOf="@+id/button7"
+        app:layout_constraintStart_toStartOf="@+id/button7"
+        app:layout_constraintTop_toBottomOf="@+id/button7" />
+
     <TextView
         android:id="@+id/headerCheats"
         android:layout_width="0dp"
@@ -17,34 +82,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello World!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.609" />
-
-        <Button
-            android:id="@+id/bt_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="161dp"
-            android:layout_marginTop="278dp"
-            android:layout_marginEnd="162dp"
-            android:layout_marginBottom="30dp"
-            android:onClick="onClickStart"
-            android:text="CONTINUE"
-            app:layout_constraintBottom_toTopOf="@+id/textView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+        android:id="@+id/textView"
+        android:layout_width="316dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:text="Cheat auswählen, der im Spiel verfügbar sein soll."
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerCheats" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
