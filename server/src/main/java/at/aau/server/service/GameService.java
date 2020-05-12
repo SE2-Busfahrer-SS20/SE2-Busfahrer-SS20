@@ -42,6 +42,7 @@ public interface GameService {
     void startGame();
     void endGame();
     Game getGame();
+    void createGame();
     void createGame(String masterName, String MACAddress, Connection connection) throws PlayerLimitExceededException;
     boolean gameExists();
     //Card[][] getPlayercardList();
