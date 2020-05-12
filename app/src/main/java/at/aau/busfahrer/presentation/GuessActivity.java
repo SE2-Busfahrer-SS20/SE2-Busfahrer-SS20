@@ -11,6 +11,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.List;
+
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.GameService;
@@ -18,6 +20,8 @@ import at.aau.busfahrer.service.impl.GameServiceImpl;
 import shared.model.Card;
 import shared.model.GameState;
 import shared.model.GuessRoundListener;
+import shared.model.Player;
+import shared.model.impl.GameImpl;
 import shared.model.impl.PlayersStorageImpl;
 
 
@@ -34,8 +38,17 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private TextView tV_card2;
     private TextView tV_card3;
     private TextView tV_card4;
+    private Button bt_cought;
 
     private boolean answer;
+    private List<Player> playerList;
+    private GameImpl gameImpl;
+    private int currentPlayer;
+    private int indexOfMe;
+    private Player playerCheated;
+    private Player myself;
+    private int scoreCheater;
+    private  int myScore;
 
 
     @Override
@@ -53,6 +66,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         tV_card2=findViewById(R.id.tV_card2);
         tV_card3=findViewById(R.id.tV_card3);
         tV_card4=findViewById(R.id.tV_card4);
+        bt_cought = findViewById(R.id.bt_caught);
 
         cards= playersStorage.getCards();
         if(!playersStorage.isMaster()){
@@ -60,6 +74,30 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         }
         //Register Callback
         playersStorage.registerGuessRoundListener(this);
+
+
+    }
+    public void onClick_btCought(View view) {
+        //Check wich player's turn it is
+        playerList = gameImpl.getPlayerList();
+        //currentPlayer = gameImpl.getCurrentPlayer();
+        //indexOfMe = gameImpl.getMyself?
+        playerCheated = playerList.get(currentPlayer);
+        //Welcher spieler bin ich ? Welcher Index in der Liste?
+        //myself = playerList.get(indexOfMe);
+
+        if (playerCheated.isCheatedThisRound() == true){
+            scoreCheater = playerCheated.getScore();
+            scoreCheater++;
+            playerCheated.setScore(scoreCheater);
+
+            //myScore = myself.getScore();
+            myScore--;
+            //myself.setScore(myScore);
+
+        }
+
+
 
     }
 
@@ -88,16 +126,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     public void onUpdateMessage(){
 
         System.out.println("It is the turn of  player: "+playersStorage.getCurrentTurn()+ " !!!!!!!!");
-
-        Button bt_cought = findViewById(R.id.bt_caught);
-        bt_cought.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TO-DO
-                //Prüfen werd gerade dran ist, von dem wird dann ausgelesen ob boolean true der false
-
-            }
-        });
 
 
         if(playersStorage.getCurrentTurn()==0){
