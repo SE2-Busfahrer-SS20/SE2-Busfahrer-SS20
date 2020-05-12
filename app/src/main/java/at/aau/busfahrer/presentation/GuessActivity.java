@@ -25,6 +25,7 @@ import shared.model.GuessRoundListener;
 import shared.model.Player;
 import shared.model.impl.GameImpl;
 import shared.model.impl.PlayersStorageImpl;
+import shared.networking.dto.PlayedMessage;
 
 
 public class GuessActivity extends AppCompatActivity implements GuessRoundListener {
@@ -47,11 +48,12 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private List<Player> playerList;
     private GameImpl gameImpl;
     private int currentPlayer;
-    private int indexOfMe;
     private Player playerCheated;
     private Player myself;
     private int scoreCheater;
     private  int myScore;
+    private PlayedMessage pl;
+    private int indexOfMe;
 
     private CheatServiceImpl cheatService;
 
@@ -103,21 +105,36 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     public void onClick_btCought(View view) {
         //Check wich player's turn it is
         playerList = gameImpl.getPlayerList();
-        //currentPlayer = gameImpl.getCurrentPlayer();
-        //indexOfMe = gameImpl.getMyself?
-        playerCheated = playerList.get(currentPlayer);
-        //Welcher spieler bin ich ? Welcher Index in der Liste?
-        //myself = playerList.get(indexOfMe);
+        //get the index of the curren player on the playerList
+        currentPlayer = gameImpl.getCurrentPlayer();
+        //get the Index of myself from the player list
+        indexOfMe = pl.getTempID();
 
+        myself = playerList.get(indexOfMe);
+        playerCheated = playerList.get(currentPlayer);
+        //if the currentplayer has cheated, he get one point and i lose one point
         if (playerCheated.isCheatedThisRound() == true){
+            //TextView "Erwischt!"
+            //the player who cheated increases his score
             scoreCheater = playerCheated.getScore();
             scoreCheater++;
             playerCheated.setScore(scoreCheater);
 
-            //myScore = myself.getScore();
+            //myScore will be decremented one time
+            myScore = myself.getScore();
             myScore--;
-            //myself.setScore(myScore);
+            myself.setScore(myScore);
 
+        }else{
+            //the player who has NOT cheated decreases his score
+            scoreCheater = playerCheated.getScore();
+            scoreCheater--;
+            playerCheated.setScore(scoreCheater);
+
+            //myScore will be increased one time
+            myScore = myself.getScore();
+            myScore++;
+            myself.setScore(myScore);
         }
 
 
