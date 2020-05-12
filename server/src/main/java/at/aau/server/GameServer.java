@@ -109,10 +109,9 @@ public class GameServer extends NetworkServerKryo {
                         PlayedMessage pM = (PlayedMessage) object;
                         if(pM.getLap()==1){     //Black or Red
                             gameService.GuessRound1(pM.getTempID(), pM.scored());
-                            Log.info(pM.toString());
-
                         }
                     }
+
                     // Player has cheated message
                     else if(object instanceof CheatedMessage){
                         CheatedMessage cM = (CheatedMessage) object;
