@@ -22,7 +22,7 @@ public class Database {
     private Connection connection;
 
 
-    protected static Database getInstance(){
+    public static Database getInstance(){
         if(db==null){
             db = new Database();
         }
@@ -71,20 +71,20 @@ public class Database {
             runPreparedStatement(sql, null);
         }
         catch(Exception e){
-        e.printStackTrace();
+            e.printStackTrace();
         }
     }
     private int runPreparedStatement(String statement, String[] params, boolean returnKEY) throws SQLException {
         int key=-1;
         PreparedStatement addUser= connection.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
-        for(int count=0;count<params.length;count++){
+        for(int count=0;params!=null &&count<params.length;count++){
             addUser.setString(count+1, params[count]);
         }
 
         int affectedRows = addUser.executeUpdate();
-        if (affectedRows == 0) {
-            throw new SQLException("Query failed, no rows affected.");
-        }
+        //if (affectedRows == 0) {
+        //    throw new SQLException("Query failed, no rows affected.");
+        //}
         try (ResultSet generatedKeys = addUser.getGeneratedKeys()) {
             if (generatedKeys.next()) {
                 key=generatedKeys.getInt(1);
@@ -99,7 +99,6 @@ public class Database {
         runPreparedStatement(statement, params, false);
     }
     private ResultSet runPreparedStatementReturnList(String statement, String[] params){
-        List userList= new ArrayList<>();
         try{
             PreparedStatement preparedStatement= connection.prepareStatement(statement);
 
@@ -113,7 +112,7 @@ public class Database {
         }
         return null;
     }
-    protected User addUser(String mac, String name){
+    public User addUser(String mac, String name){
         try {
             return new User(runPreparedStatement("INSERT INTO users (mac, name)\n" +
                     "VALUES(?, ?);", new String[]{mac, name}, true), mac, name);
@@ -122,7 +121,7 @@ public class Database {
         }
         return null;
     }
-    protected void deleteUser(int id){
+    public void deleteUser(int id){
         try {
             runPreparedStatement(
                     "DELETE FROM users\n" +
@@ -132,7 +131,7 @@ public class Database {
             e.printStackTrace();
         }
     }
-    protected List<User> getAllUsers(){
+    public List<User> getAllUsers(){
         String sql="SELECT * FROM users;";
         List<User> allUsers= new ArrayList<>();
         try {
@@ -145,7 +144,7 @@ public class Database {
         }
         return allUsers;
     }
-    protected User getBestUser(){
+    public User getBestUser(){
         try {
             ResultSet res= runPreparedStatementReturnList("SELECT * FROM scores ORDER BY userid DESC LIMIT 1;", null);
             while (res.next()){
@@ -156,7 +155,7 @@ public class Database {
         }
     return null;
     }
-    protected User getUserByMAC(String mac){
+    public User getUserByMAC(String mac){
         try {
             ResultSet res = runPreparedStatementReturnList("SELECT * FROM users\n" +
                     "WHERE mac=?;", new String[]{mac});
@@ -170,7 +169,7 @@ public class Database {
 
         return null;
     }
-    protected User getUserByID(int id){
+    public User getUserByID(int id){
         try {
             ResultSet res = runPreparedStatementReturnList("SELECT * FROM users\n" +
                     "WHERE id=?;", new String[]{String.valueOf(id)});
@@ -184,7 +183,7 @@ public class Database {
 
         return null;
     }
-    protected Score addScore(int userid, int score){
+    public Score addScore(int userid, int score){
         try {
             runPreparedStatement("INSERT INTO scores (userid, score)\n" +
                     "VALUES(?, ?);", new String[]{String.valueOf(userid), String.valueOf(score)});
@@ -195,7 +194,7 @@ public class Database {
 
         return null;
     }
-    protected List getAllScores(int id){
+    public List getAllScores(int id){
         List scores= new ArrayList();
         try {
             ResultSet res =runPreparedStatementReturnList("SELECT score FROM scores WHERE userid = ?;", new String[]{String.valueOf(id)});
@@ -207,5 +206,51 @@ public class Database {
             e.printStackTrace();
         }
         return null;
+    }
+    public int getNumberOfAllScores() {
+        String sql =    "SELECT COUNT(*) AS rowcount FROM scores";
+        try{
+            ResultSet res= runPreparedStatementReturnList(sql, null);
+            while (res.next()){
+                return res.getInt("rowcount") ;
+            }
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
+    public int getNumberOfAllUsers(){
+        String sql =    "SELECT COUNT(*) AS rowcount FROM users";
+        try{
+            ResultSet res= runPreparedStatementReturnList(sql, null);
+            while (res.next()){
+                return res.getInt("rowcount") ;
+            }
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
+    public void emptyUserTable(){
+        String sql="DELETE FROM users;";
+        try {
+            runPreparedStatement(sql,null);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void emptyScoreTable(){
+        String sql="DELETE FROM scores;";
+        try {
+            runPreparedStatement(sql,null);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
