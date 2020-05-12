@@ -17,8 +17,31 @@ import shared.networking.dto.UpdateMessage;
 public class GameServiceImpl implements GameService {
 
     private Game game;
+    // Instance for singleton.
+    private static  GameServiceImpl instance;
 
-    public GameServiceImpl() {
+    private GameServiceImpl() {
+    }
+
+
+    /**
+     * Returns Singleton instance.
+     * @return instance
+     */
+    public static synchronized GameService getInstance() {
+        if (instance == null) {
+            instance = new GameServiceImpl();
+            return instance;
+        }
+        return instance;
+    }
+
+    /**
+     * This method destroy the Singleton Instance.
+     * It's needed for testing purposes.
+     */
+    public static synchronized void destroyInstance() {
+        instance = null;
     }
 
     @Override//Player list was moved into game object
@@ -100,6 +123,12 @@ public class GameServiceImpl implements GameService {
     public Card[] getPlayersCards(int player) {
         return game.getPlayersCards(player);
     }
+
+    public void startPLab() {
+        this.game.setState(GameState.LAP2);
+
+    }
+
 
 
     //Methodes for Guess-Rounds

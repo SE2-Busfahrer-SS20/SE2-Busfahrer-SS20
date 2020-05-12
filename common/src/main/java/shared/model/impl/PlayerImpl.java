@@ -99,12 +99,4 @@ public class PlayerImpl implements Player {
     public void setCheatedThisRound(boolean cheatedThisRound) {
         this.cheatedThisRound = cheatedThisRound;
     }
-
-    public boolean isCheated() {
-        return cheated;
-    }
-
-    public void setCheated(boolean cheated) {
-        this.cheated = cheated;
-    }
 }
