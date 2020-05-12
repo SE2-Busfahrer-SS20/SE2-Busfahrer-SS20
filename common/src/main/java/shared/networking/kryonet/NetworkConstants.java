@@ -11,7 +11,7 @@ public class NetworkConstants {
     // List for registered dto classes. Add needed classes to the array.
     public static final Class[] CLASS_LIST = {
             BaseMessage.class,
-            TextMessage.class,s
+            TextMessage.class,
             RegisterMessage.class,
             CreateGameMessage.class,
             ServerActionResponse.class,
