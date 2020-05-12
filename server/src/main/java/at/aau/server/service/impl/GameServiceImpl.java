@@ -176,6 +176,8 @@ public class GameServiceImpl implements GameService {
             //CALL METHODE FOR PYRAMIDE HERE !!
         }
 
+        game.setCurrentPlayer(nextPlayer);
+
         //send DTO updateMessage to all clients
         UpdateMessage uM = new UpdateMessage(nextPlayer, score);
         int count = this.game.getPlayerCount();

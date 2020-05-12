@@ -111,4 +111,12 @@ public class GameImpl implements Game {
         playerList.get(tempID).addPoints(points);
 
     }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(int currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
 }
