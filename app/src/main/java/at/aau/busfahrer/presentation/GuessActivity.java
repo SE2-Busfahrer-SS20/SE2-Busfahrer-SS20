@@ -87,7 +87,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         playersStorage.registerGuessRoundListener(this);
 
         //The player which turn it is,could cought someone else, the button musst be not visible
-        //Observer? every time currentPlayer changed check?
+        //Observer?Listener? every time currentPlayer changed check?
         //if(currentPlayerindex == myIndex){
         // bt_cought.setVisbility(false);
         //} else{
