@@ -1,6 +1,7 @@
 package at.aau.server.service.impl;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.minlog.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,8 @@ import shared.model.Game;
 import shared.model.GameState;
 import shared.model.Player;
 import shared.model.impl.GameImpl;
+import shared.networking.dto.ConfirmRegisterMessage;
+import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.UpdateMessage;
 
@@ -109,9 +112,19 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame() {
+    public void createGame(String masterName, String MACAddress,  Connection connection) {
         game=new GameImpl();
-              //Only one game possible
+
+        Player player = addPlayer(masterName,MACAddress, connection);
+
+        ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player, true);
+        connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
+
+        //Add Player to Playerlist in Wait UI
+        NewPlayerMessage npm = new NewPlayerMessage(player.getName());
+        connection.sendTCP(npm);
+
+        Log.info("Game created.");
     }
 
     @Override
@@ -129,6 +142,7 @@ public class GameServiceImpl implements GameService {
 
     }
 
+    //Register
 
 
     //Methodes for Guess-Rounds
@@ -161,6 +175,8 @@ public class GameServiceImpl implements GameService {
 
             //CALL METHODE FOR PYRAMIDE HERE !!
         }
+
+        game.setCurrentPlayer(nextPlayer);
 
         //send DTO updateMessage to all clients
         UpdateMessage uM = new UpdateMessage(nextPlayer, score);
