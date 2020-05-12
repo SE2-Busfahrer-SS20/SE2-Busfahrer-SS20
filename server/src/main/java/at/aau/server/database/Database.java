@@ -146,7 +146,7 @@ public class Database {
     }
     public User getBestUser(){
         try {
-            ResultSet res= runPreparedStatementReturnList("SELECT * FROM scores ORDER BY userid DESC LIMIT 1;", null);
+            ResultSet res= runPreparedStatementReturnList("SELECT * FROM scores ORDER BY score DESC LIMIT 1;", null);
             while (res.next()){
                 return getUserByID(res.getInt("userid"));
             }
