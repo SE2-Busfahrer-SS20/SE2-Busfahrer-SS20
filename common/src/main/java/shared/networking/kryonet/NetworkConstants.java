@@ -26,6 +26,7 @@ public class NetworkConstants {
             com.esotericsoftware.kryonet.Connection.class,
             PlayedMessage.class,
             UpdateMessage.class,
+            CheatedMessage.class,
 
     };
 

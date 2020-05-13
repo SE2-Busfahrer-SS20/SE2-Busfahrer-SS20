@@ -1,7 +1,8 @@
 package at.aau.busfahrer.presentation;
-
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,10 +11,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.GameService;
+import at.aau.busfahrer.service.impl.CheatServiceImpl;
 import at.aau.busfahrer.service.impl.GameServiceImpl;
 
 import shared.model.Card;
@@ -37,6 +40,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private TextView tV_card4;
 
     private boolean answer;
+    private CheatServiceImpl cheatService;
 
 
     @Override
@@ -55,6 +59,12 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         tV_card3=findViewById(R.id.tV_card3);
         tV_card4=findViewById(R.id.tV_card4);
 
+        // Cheat Service
+        cheatService = CheatServiceImpl.getInstance();
+        cheatService.setContext(getApplicationContext(), getClass().getName());
+        cheatService.startListen();
+        handleCheat();
+
         cards= playersStorage.getCards();
         if(!playersStorage.isMaster()){
             onPauseMode();
@@ -63,7 +73,31 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         playersStorage.registerGuessRoundListener(this);
 
     }
-
+    // handles cheating, Confirmation dialog, if player press yes --> cheatedMessage sent to server
+    public void handleCheat(){
+        cheatService.setSensorListener(() -> {
+            cheatService.pauseListen();
+            if(playersStorage.getTempID() == playersStorage.getCurrentTurn()){
+                new AlertDialog.Builder(GuessActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                        // Yes
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                            // sending network call
+                            gameService.sendMsgCheated(playersStorage.getTempID(),true, System.currentTimeMillis(), cheatService.getSensorType());
+                            CardUtility.turnCard(tV_card1, cards[0]);
+                            cheatService.stopListen();
+                        })
+                        // No
+                        .setNegativeButton(android.R.string.no, (dialog, which) -> cheatService.resumeListen())
+                        .setTitle("Are you sure you want to cheat?")
+                        .setCancelable(false)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .create().show();
+            }else{
+                Toast.makeText(this, "Wait until your Turn starts", Toast.LENGTH_SHORT).show();
+                cheatService.resumeListen();
+            }
+        });
+    }
 
 
     public void onClick_btBlack(View view) {

@@ -5,6 +5,7 @@ import com.esotericsoftware.minlog.Log;
 import at.aau.busfahrer.service.GameService;
 import shared.model.Card;
 import shared.networking.NetworkClient;
+import shared.networking.dto.CheatedMessage;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.StartGameMessage;
@@ -95,6 +96,18 @@ public class GameServiceImpl implements GameService {
             public void run() {
                 PlayedMessage pM = new PlayedMessage(lap,tempID, scored);
                 client.sendMessage(pM);
+            }
+        });
+        thread.start();
+    }
+
+    // network call for player cheated in game
+    public void sendMsgCheated(final int playerId, final boolean cheated, final long timeStamp, final int cheatType){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                CheatedMessage cM = new CheatedMessage(playerId,cheated,timeStamp,cheatType);
+                client.sendMessage(cM);
             }
         });
         thread.start();
