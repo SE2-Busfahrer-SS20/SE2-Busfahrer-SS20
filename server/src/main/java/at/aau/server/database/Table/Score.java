@@ -1,15 +1,13 @@
 package at.aau.server.database.Table;
 
-import java.sql.Connection;
-
-public class Score extends Table{
+public class Score implements Table{
     private int userid;
-    private int score;
+    private int scoreValue;
 
     public Score(int userid, int score) {
         super();
         this.userid = userid;
-        this.score = score;
+        this.scoreValue = score;
     }
 
     public int getUserid() {
@@ -21,10 +19,10 @@ public class Score extends Table{
     }
 
     public int getScore() {
-        return score;
+        return scoreValue;
     }
 
     public void setScore(int score) {
-        this.score = score;
+        this.scoreValue = score;
     }
 }

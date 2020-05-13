@@ -78,13 +78,11 @@ public class Database {
         for(int count=0;params!=null &&count<params.length;count++){
             preparedStatement.setString(count+1, params[count]);
         }
-
-        int affectedRows = preparedStatement.executeUpdate();
+        preparedStatement.executeUpdate();
 
         try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
             if (generatedKeys.next()) {
                 key=generatedKeys.getInt(1);
-                generatedKeys.close();
             }
             else if(returnKEY){
                 throw new SQLException("Creating failed, no ID obtained.");
@@ -143,36 +141,36 @@ public class Database {
 
         ResultSet res= runPreparedStatementReturnList("SELECT * FROM scores ORDER BY score DESC LIMIT 1;", null);
         if(res==null){
-            throw new NullPointerException("Failed creating List >>AllUsers<<");
+            throw new NullPointerException("Failed creating >>bestUser<<");
         }
         if (res.next()){
             return getUserByID(res.getInt("userid"));
         }
-        throw new SQLException("Could not query any value!");
+        throw new SQLException("Could not query best User!");
     }
     public User getUserByMAC(String mac) throws SQLException {
 
         ResultSet res = runPreparedStatementReturnList("SELECT * FROM users\n" +
                 "WHERE mac=?;", new String[]{mac});
         if(res==null){
-            throw new NullPointerException("Failed creating List >>AllUsers<<");
+            throw new NullPointerException("Failed creating >>userByMAC<<");
         }
         if (res.next()) {
             return new User(res.getInt("id"), res.getString("mac"), res.getString("name"));
         }
-        throw new SQLException("Could not query any value!");
+        throw new SQLException("Could not query User by Mac!");
     }
     public User getUserByID(int id) throws SQLException {
 
         ResultSet res = runPreparedStatementReturnList("SELECT * FROM users\n" +
                 "WHERE id=?;", new String[]{String.valueOf(id)});
         if(res==null){
-            throw new NullPointerException("Failed creating List >>AllUsers<<");
+            throw new NullPointerException("Failed creating >>userByID<<");
         }
         if (res.next()) {
             return new User(id, res.getString("mac"), res.getString("name"));
         }
-        throw new SQLException("Could not query any value!");
+        throw new SQLException("Could not query User per ID!");
     }
     public Score addScore(int userid, int score) throws SQLException {
         try {
@@ -189,7 +187,7 @@ public class Database {
 
         ResultSet res =runPreparedStatementReturnList("SELECT score FROM scores WHERE userid = ?;", new String[]{String.valueOf(id)});
         if(res==null){
-            throw new NullPointerException("Failed creating List >>AllUsers<<");
+            throw new NullPointerException("Failed creating List >>AllScores<<");
         }
         while (res.next()){
             scores.add(res.getInt("score"));
@@ -200,24 +198,24 @@ public class Database {
         String sql =    "SELECT COUNT(*) AS rowcount FROM scores";
         ResultSet res= runPreparedStatementReturnList(sql, null);
         if(res==null){
-            throw new NullPointerException("Failed creating List >>AllUsers<<");
+            throw new NullPointerException("Failed creating Number >>allScores<<");
         }
         if (res.next()){
             return res.getInt("rowcount") ;
         }
-        throw new SQLException("Could not query any value!");
+        throw new SQLException("Could not query number of all Scores!");
     }
     public int getNumberOfAllUsers() throws SQLException {
         String sql =    "SELECT COUNT(*) AS rowcount FROM users";
 
         ResultSet res= runPreparedStatementReturnList(sql, null);
         if(res==null){
-            throw new NullPointerException("Failed creating List >>AllUsers<<");
+            throw new NullPointerException("Failed creating >>numberOFAllUsers<<");
         }
         if (res.next()){
             return res.getInt("rowcount") ;
         }
-        throw new SQLException("Could not query any value!");
+        throw new SQLException("Could not query number of  all Users!");
     }
     public void emptyUserTable() throws SQLException {
         String sql="DELETE FROM users;";
@@ -232,7 +230,7 @@ public class Database {
         try {
             runPreparedStatement(sql,null);
         }catch (Exception e){
-            throw new SQLException("Could not empty Usertable!");
+            throw new SQLException("Could not empty Scoretable!");
         }
     }
 }

@@ -1,8 +1,6 @@
 package at.aau.server.database.Table;
 
-import java.sql.Connection;
-
-public class User extends Table{
+public class User implements Table{
     private int id;
     private String mac;
     private String name;
