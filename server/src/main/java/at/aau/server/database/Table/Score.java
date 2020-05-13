@@ -1,30 +1,28 @@
 package at.aau.server.database.Table;
 
-import java.sql.Connection;
-
-public class Score extends Table{
-    private int userid;
-    private int score;
+public class Score implements Table{
+    private int userId;
+    private int scoreValue;
 
     public Score(int userid, int score) {
         super();
-        this.userid = userid;
-        this.score = score;
+        this.userId = userid;
+        this.scoreValue = score;
     }
 
     public int getUserid() {
-        return userid;
+        return userId;
     }
 
     public void setUserid(int userid) {
-        this.userid = userid;
+        this.userId = userid;
     }
 
     public int getScore() {
-        return score;
+        return scoreValue;
     }
 
     public void setScore(int score) {
-        this.score = score;
+        this.scoreValue = score;
     }
 }
