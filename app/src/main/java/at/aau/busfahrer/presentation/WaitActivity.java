@@ -73,7 +73,6 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
     //Callback to open new Activity when Master starts the game
     @Override
     public void onGameStart(){
-        System.out.println("Play Game!!!");
         Intent i = new Intent(WaitActivity.this, GuessActivity.class);
         startActivity(i);
     }

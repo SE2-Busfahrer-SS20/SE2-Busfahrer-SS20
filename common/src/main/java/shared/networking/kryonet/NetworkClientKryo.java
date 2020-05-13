@@ -59,7 +59,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     playersStorage.setCards(((ConfirmRegisterMessage)object).getCards());
                     playersStorage.setTempID(((ConfirmRegisterMessage)object).getID());
 
-                    System.out.println("!!!!!--------Stored TempID:"+playersStorage.getTempID()+"--------!!!!!");
                 }
 
                 if(object instanceof NewPlayerMessage){
