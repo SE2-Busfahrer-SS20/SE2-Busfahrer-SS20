@@ -19,6 +19,7 @@ import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.GameService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 import at.aau.busfahrer.service.impl.GameServiceImpl;
+
 import shared.model.Card;
 import shared.model.GameState;
 import shared.model.GuessRoundListener;
@@ -54,6 +55,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private  int myScore;
     private PlayedMessage pl;
     private int indexOfMe;
+    private TextView tV_erwischt;
 
     private CheatServiceImpl cheatService;
 
@@ -75,6 +77,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         tV_card3=findViewById(R.id.tV_card3);
         tV_card4=findViewById(R.id.tV_card4);
         bt_cought = findViewById(R.id.bt_caught);
+        tV_erwischt = findViewById(R.id.txtView_erwischt);
 
         cheatService = CheatServiceImpl.getInstance();
         cheatService.setContext(getApplicationContext(), getClass().getName());
@@ -87,14 +90,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         }
         //Register Callback
         playersStorage.registerGuessRoundListener(this);
-
-        //The player which turn it is,could cought someone else, the button musst be not visible
-        //Observer?Listener? every time currentPlayer changed check?
-        //if(currentPlayerindex == myIndex){
-        // bt_cought.setVisbility(false);
-        //} else{
-        //bt_cought.setVisbility(true);
-        //}
+        //Only when I am cheating, the Text View is could be visbible
+        tV_erwischt.setVisibility(View.INVISIBLE);
 
 
     }
@@ -115,6 +112,14 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         //if the currentplayer has cheated, he get one point and i lose one point
         if (playerCheated.isCheatedThisRound() == true){
             //TextView "Erwischt!"
+            tV_erwischt.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_erwischt.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tV_erwischt.setVisibility(View.INVISIBLE);
+                }
+            }, 5000);
             //the player who cheated increases his score
             scoreCheater = playerCheated.getScore();
             scoreCheater++;
@@ -244,6 +249,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         tV_card3.setTextColor(Color.GRAY);
         tV_card4.setTextColor(Color.GRAY);
         tV_feedback.setVisibility(View.INVISIBLE);
+        bt_cought.setVisibility(View.VISIBLE);
+
     }
 
     private void onPlayMode(){
@@ -256,6 +263,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         tV_card2.setTextColor(Color.parseColor("#000000"));
         tV_card3.setTextColor(Color.parseColor("#000000"));
         tV_card4.setTextColor(Color.parseColor("#000000"));
+        bt_cought.setVisibility(View.INVISIBLE);
     }
 
     private void onAnswer(boolean answer){
