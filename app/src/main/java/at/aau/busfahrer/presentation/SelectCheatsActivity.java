@@ -15,7 +15,8 @@ import android.widget.Toast;
 
 public class SelectCheatsActivity extends AppCompatActivity {
 
-    Button bt_start;    //This button is only for test puropose to open GuessActivity
+
+    Button start;
     Button light;
     Button shake;
     Button fair;
@@ -29,21 +30,18 @@ public class SelectCheatsActivity extends AppCompatActivity {
         light = findViewById(R.id.button3);
         shake = findViewById(R.id.button6);
         fair = findViewById(R.id.button7);
-        bt_start = findViewById(R.id.bt_start);
 
+        start = findViewById(R.id.bt_start);
 
-        bt_start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Open WaitActivity
-                if(sensortype != -1){
-                    Intent i = new Intent(SelectCheatsActivity.this, WaitActivity.class);
-                    startActivity(i);
-                CheatServiceImpl cheatService = CheatServiceImpl.getInstance();
-                cheatService.setSensorType(sensortype);
-                }else{
-                    Toast.makeText(SelectCheatsActivity.this, "Select Cheat first", Toast.LENGTH_SHORT).show();
-                }
+        start.setOnClickListener(v -> {
+            //Open WaitActivity
+            if(sensortype != -1){
+                Intent i = new Intent(SelectCheatsActivity.this, WaitActivity.class);
+                startActivity(i);
+            CheatServiceImpl cheatService = CheatServiceImpl.getInstance();
+            cheatService.setSensorType(sensortype);
+            }else{
+                Toast.makeText(SelectCheatsActivity.this, "Select Cheat first", Toast.LENGTH_SHORT).show();
             }
         });
 

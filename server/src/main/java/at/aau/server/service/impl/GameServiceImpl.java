@@ -113,7 +113,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void createGame(String masterName, String MACAddress,  Connection connection) {
-        game=new GameImpl();
+        createGame();
 
         Player player = addPlayer(masterName,MACAddress, connection);
 
@@ -125,6 +125,10 @@ public class GameServiceImpl implements GameService {
         connection.sendTCP(npm);
 
         Log.info("Game created.");
+    }
+
+    public void createGame(){
+        this.game=new GameImpl();
     }
 
     @Override

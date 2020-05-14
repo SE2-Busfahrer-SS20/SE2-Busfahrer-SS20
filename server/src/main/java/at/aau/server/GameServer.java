@@ -121,6 +121,14 @@ public class GameServer extends NetworkServerKryo {
                         }
                     }
 
+                    // Player has cheated message
+                    else if(object instanceof CheatedMessage){
+                        CheatedMessage cM = (CheatedMessage) object;
+                        if(cM.hasCheated()){
+                            gameService.getPlayerList().get(cM.getTempID()).setCheatedThisRound(true);
+                        }
+                    }
+
                     else if (object instanceof TextMessage) {
                         Log.info("Got message from client", ((TextMessage) object).getText());
                     }
