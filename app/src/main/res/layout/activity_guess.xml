@@ -168,4 +168,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
 
+    <Button
+        android:id="@+id/bt_caught"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="28dp"
+        android:background="#2196F3"
+        android:onClick="onClick_btCought"
+        android:text="Erwischt!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
+
+    <TextView
+        android:id="@+id/txtView_erwischt"
+        android:layout_width="127dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="28dp"
+        android:text="Erwischt!!"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
