@@ -2,7 +2,6 @@ package at.aau.busfahrer.presentation;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,9 +16,11 @@ import java.util.List;
 
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
+import at.aau.busfahrer.service.CheatService;
 import at.aau.busfahrer.service.GameService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 
+import at.aau.busfahrer.service.impl.GameServiceImpl;
 import shared.model.Card;
 import shared.model.GameState;
 import shared.model.GuessRoundListener;
@@ -45,7 +46,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private Button bt_cought;
 
     private boolean answer;
-    private CheatServiceImpl cheatService;
+    private CheatService cheatService;
 
     private List<Player> playerList;
     private GameImpl gameImpl;
@@ -57,8 +58,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private PlayedMessage pl;
     private int indexOfMe;
     private TextView tV_erwischt;
-
-    private CheatServiceImpl cheatService;
 
 
 
