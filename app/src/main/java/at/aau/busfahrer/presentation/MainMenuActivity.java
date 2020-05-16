@@ -59,12 +59,6 @@ public class MainMenuActivity extends AppCompatActivity {
                 .commit();
     }
 
-    // click listener startServer button
-    public void onStartServer(View v){
-        Intent i = new Intent(MainMenuActivity.this,StartServerActivity.class);
-        startActivity(i);
-    }
-
     // click listener PlayerEdit button
     public void onClickEditPlayer(View v){
         Intent i = new Intent(MainMenuActivity.this, EditPlayerActivity.class);
@@ -122,5 +116,10 @@ public class MainMenuActivity extends AppCompatActivity {
             Log.error(e.toString());
         }
         return "";
+    }
+
+    public void openPLab(View v) {
+        Intent i = new Intent(MainMenuActivity.this, PLapActivity.class);
+        startActivity(i);
     }
 }

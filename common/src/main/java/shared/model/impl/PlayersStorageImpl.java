@@ -3,26 +3,40 @@ import java.util.ArrayList;
 
 import shared.model.Card;
 import shared.model.GameState;
+import shared.model.GuessRoundListener;
 import shared.model.PreGameListener;
 import shared.model.PlayersStorage;
 
-
 public class PlayersStorageImpl implements PlayersStorage {
 
-    /* this class is only used to store things in common because they can not be stored in app
-     * since the listener which receives them from the server is in NetwerkClientKryo.java and from there
-     * it is not possible to access objects in the app
-    */
+    private int tempID; //This ID equals the Index in playerList (ArrayList in Game object)
     private Card[] cards;
+    private GameState state;
     private ArrayList<String> playerNames;
     private boolean master=false;
-    private GameState state;
+    private int currentTurn;
+    private ArrayList<Integer> score;
 
-    //Callback stuff
+    //Singleton Pattern
+    private static PlayersStorageImpl instance;
+
+    private PlayersStorageImpl(){
+        playerNames = new ArrayList<String>();
+        state=GameState.INIT;
+    };
+
+    public static synchronized PlayersStorageImpl getInstance(){
+        if(PlayersStorageImpl.instance==null){
+            PlayersStorageImpl.instance=new PlayersStorageImpl();
+        }
+        return PlayersStorageImpl.instance;
+    }
+
+    //Callback for WaitActivity
     private PreGameListener preGameListener;
 
-    public void registerOnAdditionalPlayerListener(PreGameListener additionalPlayerListener){
-        this.preGameListener=additionalPlayerListener;
+    public void registerPreGameListener(PreGameListener preGameListener){
+        this.preGameListener=preGameListener;
     }
     private void updatePlayerList(){
         new Thread(new Runnable(){
@@ -44,21 +58,25 @@ public class PlayersStorageImpl implements PlayersStorage {
         }).start();
     }
 
-    //Singleton Pattern
-    private static PlayersStorageImpl instance;
+    //Callback for GuessActivity
+    private GuessRoundListener guessRoundListener;
 
-    private PlayersStorageImpl(){
-        playerNames = new ArrayList<String>();
-        state=GameState.INIT;
-    };
-
-    public static synchronized PlayersStorageImpl getInstance(){
-        if(PlayersStorageImpl.instance==null){
-            PlayersStorageImpl.instance=new PlayersStorageImpl();
-        }
-        return PlayersStorageImpl.instance;
+    public void registerGuessRoundListener(GuessRoundListener guessRoundListener){
+        this.guessRoundListener=guessRoundListener;
     }
 
+    private void nextPlayersTurn(){
+        new Thread(new Runnable(){
+            public void run(){
+                if(guessRoundListener!=null){
+                    guessRoundListener.onUpdateMessage();
+                }
+            }
+        }).start();
+
+    }
+
+    //Getter, Setter Methodes
     public Card[] getCards() {
         return cards;
     }
@@ -98,5 +116,36 @@ public class PlayersStorageImpl implements PlayersStorage {
             this.state = state;
     }
 
+    public int getTempID() {
+        return tempID;
+    }
 
+    public void setTempID(int tempID) {
+        this.tempID = tempID;
+    }
+
+    public int getCurrentTurn() {
+        return currentTurn;
+    }
+    public void setCurrentTurn(int currentTurn) {
+        this.currentTurn = currentTurn;
+    }
+
+    public void setPlayerNames(ArrayList<String> playerNames) {
+        this.playerNames = playerNames;
+    }
+
+    public ArrayList<Integer> getScore() {
+        return score;
+    }
+
+    public void setScore(ArrayList<Integer> score) {
+        this.score = score;
+    }
+
+    public void updateOnMessage(ArrayList<Integer> score, int currentTurn){
+        this.score=score;
+        this.currentTurn=currentTurn;
+        nextPlayersTurn(); //Callback
+    }
 }
