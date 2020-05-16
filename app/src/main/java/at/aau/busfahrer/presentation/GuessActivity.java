@@ -2,7 +2,6 @@ package at.aau.busfahrer.presentation;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,10 +16,11 @@ import java.util.List;
 
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
-import at.aau.busfahrer.service.GameService;
+import at.aau.busfahrer.service.CheatService;
+import at.aau.busfahrer.service.GamePlayService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
-import at.aau.busfahrer.service.impl.GameServiceImpl;
 
+import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
 import shared.model.Card;
 import shared.model.GameState;
 import shared.model.GuessRoundListener;
@@ -33,7 +33,7 @@ import shared.networking.dto.PlayedMessage;
 public class GuessActivity extends AppCompatActivity implements GuessRoundListener {
     private Card[] cards;
     private PlayersStorageImpl playersStorage= PlayersStorageImpl.getInstance();
-    private GameService gameService = GameServiceImpl.getInstance();
+    private GamePlayService gamePlayService = GamePlayServiceImpl.getInstance();
 
     private TextView tV_guessQuestion;
     private Button bt_Black;
@@ -46,6 +46,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private Button bt_cought;
 
     private boolean answer;
+    private CheatService cheatService;
 
     private List<Player> playerList;
     private GameImpl gameImpl;
@@ -57,8 +58,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private PlayedMessage pl;
     private int indexOfMe;
     private TextView tV_erwischt;
-
-    private CheatServiceImpl cheatService;
 
 
 
@@ -79,6 +78,12 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         tV_card4=findViewById(R.id.tV_card4);
         bt_cought = findViewById(R.id.bt_caught);
         tV_erwischt = findViewById(R.id.txtView_erwischt);
+
+        // Cheat Service
+        cheatService = CheatServiceImpl.getInstance();
+        cheatService.setContext(getApplicationContext(), getClass().getName());
+        cheatService.startListen();
+        handleCheat();
 
         // Cheat Service
         cheatService = CheatServiceImpl.getInstance();
@@ -156,7 +161,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                         // Yes
                         .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                             // sending network call
-                            gameService.sendMsgCheated(playersStorage.getTempID(),true, System.currentTimeMillis(), cheatService.getSensorType());
+                            gamePlayService.sendMsgCheated(playersStorage.getTempID(),true, System.currentTimeMillis(), cheatService.getSensorType());
                             CardUtility.turnCard(tV_card1, cards[0]);
                             cheatService.stopListen();
                         })
@@ -173,21 +178,20 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         });
     }
 
-
     public void onClick_btBlack(View view) {
-       answer=gameService.guessColor(playersStorage.getTempID(), cards[0],true);
+       answer= gamePlayService.guessColor(playersStorage.getTempID(), cards[0],true);
         CardUtility.turnCard(tV_card1, cards[0]);
         onAnswer(answer);
     }
 
     public void onClick_btRed(View view) {
-        answer=gameService.guessColor(playersStorage.getTempID(), cards[0],false);
+        answer= gamePlayService.guessColor(playersStorage.getTempID(), cards[0],false);
         CardUtility.turnCard(tV_card1, cards[0]);
         onAnswer(answer);
     }
 
     public void onClick_feedback(View view) {
-        gameService.nextPlayer(1,playersStorage.getTempID(),answer);
+        gamePlayService.nextPlayer(1,playersStorage.getTempID(),answer);
         onPauseMode();
     }
 

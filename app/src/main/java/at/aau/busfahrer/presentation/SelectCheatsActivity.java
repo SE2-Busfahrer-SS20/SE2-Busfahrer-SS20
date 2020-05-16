@@ -29,7 +29,10 @@ public class SelectCheatsActivity extends AppCompatActivity {
         light = findViewById(R.id.button3);
         shake = findViewById(R.id.button6);
         fair = findViewById(R.id.button7);
+
+
         start = findViewById(R.id.bt_start);
+
 
         start.setOnClickListener(v -> {
             //Open WaitActivity

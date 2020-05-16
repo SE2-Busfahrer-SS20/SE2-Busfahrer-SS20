@@ -1,9 +1,5 @@
 package shared.networking.kryonet;
 
-<<<<<<< HEAD
-import shared.model.impl.PlayerImpl;
-import shared.networking.dto.*;
-=======
 
 import shared.model.impl.PlayerImpl;
 import shared.networking.dto.*;
@@ -18,7 +14,7 @@ import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.TextMessage;
 import shared.networking.dto.PlayedMessage;
 import shared.networking.dto.UpdateMessage;
->>>>>>> feature/E07-STORY05-Task01
+
 
 public class NetworkConstants {
 
@@ -43,6 +39,10 @@ public class NetworkConstants {
             java.util.ArrayList.class,
             PlayerImpl.class,
             com.esotericsoftware.kryonet.Connection.class,
+
+            PlayedMessage.class,
+            UpdateMessage.class,
+            CheatedMessage.class,
 
 
     };
