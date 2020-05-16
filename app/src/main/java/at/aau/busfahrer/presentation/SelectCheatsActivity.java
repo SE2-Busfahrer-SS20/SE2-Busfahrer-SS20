@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 public class SelectCheatsActivity extends AppCompatActivity {
 
-
     Button start;
     Button light;
     Button shake;
@@ -31,7 +30,9 @@ public class SelectCheatsActivity extends AppCompatActivity {
         shake = findViewById(R.id.button6);
         fair = findViewById(R.id.button7);
 
+
         start = findViewById(R.id.bt_start);
+
 
         start.setOnClickListener(v -> {
             //Open WaitActivity
@@ -44,6 +45,7 @@ public class SelectCheatsActivity extends AppCompatActivity {
                 Toast.makeText(SelectCheatsActivity.this, "Select Cheat first", Toast.LENGTH_SHORT).show();
             }
         });
+
 
     }
 
@@ -67,6 +69,7 @@ public class SelectCheatsActivity extends AppCompatActivity {
         }else{
             fair.setBackgroundResource(R.drawable.bg_btn_black);
         }
+
     }
 
     private void hideAppTitleBar(){

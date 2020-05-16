@@ -15,6 +15,7 @@ import shared.networking.dto.TextMessage;
 import shared.networking.dto.PlayedMessage;
 import shared.networking.dto.UpdateMessage;
 
+
 public class NetworkConstants {
 
     public static final int TCP_PORT = 54555;
@@ -30,22 +31,19 @@ public class NetworkConstants {
             ConfirmRegisterMessage.class,
             NewPlayerMessage.class,
             StartGameMessage.class,
-
-            StartPLabMessage.class,
-
-
             PlayedMessage.class,
             UpdateMessage.class,
             CheatedMessage.class,
-
             shared.model.impl.CardImpl[].class,
             shared.model.impl.CardImpl.class,
             java.util.ArrayList.class,
             PlayerImpl.class,
             com.esotericsoftware.kryonet.Connection.class,
+
             PlayedMessage.class,
             UpdateMessage.class,
             CheatedMessage.class,
+
 
     };
 
