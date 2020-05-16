@@ -1,14 +1,11 @@
 package at.aau.busfahrer.presentation;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.nfc.cardemulation.CardEmulation;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,7 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 import at.aau.busfahrer.R;
-import at.aau.busfahrer.service.GameService;
+import at.aau.busfahrer.service.GamePlayService;
 import shared.model.impl.CardImpl;
 import shared.model.impl.DeckImpl;
 
@@ -26,7 +23,7 @@ public class BushmenActivity extends AppCompatActivity {
 
     private List<CardImpl> cards;
 
-    private GameService gameService;
+    private GamePlayService gamePlayService;
 
     TextView TxtPunkte;
 

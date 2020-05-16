@@ -1,7 +1,7 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
-import at.aau.busfahrer.service.GameService;
-import at.aau.busfahrer.service.impl.GameServiceImpl;
+import at.aau.busfahrer.service.GamePlayService;
+import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,14 +19,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class MainMenuActivity extends AppCompatActivity {
-    GameService gamesvc;
+    GamePlayService gamesvc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_main_menu);
-        gamesvc = GameServiceImpl.getInstance();
+        gamesvc = GamePlayServiceImpl.getInstance();
     }
 
       // click listener about button

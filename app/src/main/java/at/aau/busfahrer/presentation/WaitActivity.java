@@ -1,7 +1,7 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
-import at.aau.busfahrer.service.GameService;
-import at.aau.busfahrer.service.impl.GameServiceImpl;
+import at.aau.busfahrer.service.GamePlayService;
+import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
 import shared.model.PreGameListener;
 import shared.model.impl.PlayersStorageImpl;
 
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class WaitActivity extends AppCompatActivity implements PreGameListener {
     private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
-    GameService gamesvc;
+    GamePlayService gamesvc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
         hideAppTitleBar();
         setContentView(R.layout.activity_wait);
 
-        gamesvc = GameServiceImpl.getInstance();
+        gamesvc = GamePlayServiceImpl.getInstance();
 
         //Change visability
         LinearLayout playerList = findViewById(R.id.playerList);

@@ -2,7 +2,7 @@ package at.aau.busfahrer.service;
 
 import shared.model.Card;
 
-public interface GameService {
+public interface GamePlayService {
 
     void createGame(int playercount);
 

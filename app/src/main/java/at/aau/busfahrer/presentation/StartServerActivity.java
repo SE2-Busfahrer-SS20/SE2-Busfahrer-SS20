@@ -1,7 +1,7 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
-import at.aau.busfahrer.service.GameService;
-import at.aau.busfahrer.service.impl.GameServiceImpl;
+import at.aau.busfahrer.service.GamePlayService;
+import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 
 //THIS ACTIVITY IS NOT USED AT ALL IN THE CURRENT VERSION
@@ -19,7 +18,7 @@ public class StartServerActivity extends AppCompatActivity {
 
     Spinner spinner;
     Integer playercount;
-    GameService gamesvc;
+    GamePlayService gamesvc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +27,7 @@ public class StartServerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start_server);
         initSpinnerDropDown();
 
-        gamesvc=GameServiceImpl.getInstance();
+        gamesvc= GamePlayServiceImpl.getInstance();
     }
 
     // ui drop down, array values in res@strings

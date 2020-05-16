@@ -17,10 +17,10 @@ import java.util.List;
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.CheatService;
-import at.aau.busfahrer.service.GameService;
+import at.aau.busfahrer.service.GamePlayService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 
-import at.aau.busfahrer.service.impl.GameServiceImpl;
+import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
 import shared.model.Card;
 import shared.model.GameState;
 import shared.model.GuessRoundListener;
@@ -33,7 +33,7 @@ import shared.networking.dto.PlayedMessage;
 public class GuessActivity extends AppCompatActivity implements GuessRoundListener {
     private Card[] cards;
     private PlayersStorageImpl playersStorage= PlayersStorageImpl.getInstance();
-    private GameService gameService = GameServiceImpl.getInstance();
+    private GamePlayService gamePlayService = GamePlayServiceImpl.getInstance();
 
     private TextView tV_guessQuestion;
     private Button bt_Black;
@@ -161,7 +161,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                         // Yes
                         .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                             // sending network call
-                            gameService.sendMsgCheated(playersStorage.getTempID(),true, System.currentTimeMillis(), cheatService.getSensorType());
+                            gamePlayService.sendMsgCheated(playersStorage.getTempID(),true, System.currentTimeMillis(), cheatService.getSensorType());
                             CardUtility.turnCard(tV_card1, cards[0]);
                             cheatService.stopListen();
                         })
@@ -179,19 +179,19 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     }
 
     public void onClick_btBlack(View view) {
-       answer=gameService.guessColor(playersStorage.getTempID(), cards[0],true);
+       answer= gamePlayService.guessColor(playersStorage.getTempID(), cards[0],true);
         CardUtility.turnCard(tV_card1, cards[0]);
         onAnswer(answer);
     }
 
     public void onClick_btRed(View view) {
-        answer=gameService.guessColor(playersStorage.getTempID(), cards[0],false);
+        answer= gamePlayService.guessColor(playersStorage.getTempID(), cards[0],false);
         CardUtility.turnCard(tV_card1, cards[0]);
         onAnswer(answer);
     }
 
     public void onClick_feedback(View view) {
-        gameService.nextPlayer(1,playersStorage.getTempID(),answer);
+        gamePlayService.nextPlayer(1,playersStorage.getTempID(),answer);
         onPauseMode();
     }
 
