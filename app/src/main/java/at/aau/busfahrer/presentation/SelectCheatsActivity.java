@@ -43,6 +43,7 @@ public class SelectCheatsActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
     @SuppressWarnings("unused")
@@ -65,6 +66,7 @@ public class SelectCheatsActivity extends AppCompatActivity {
         }else{
             fair.setBackgroundResource(R.drawable.bg_btn_black);
         }
+
     }
 
     private void hideAppTitleBar(){
