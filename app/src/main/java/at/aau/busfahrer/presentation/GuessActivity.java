@@ -151,6 +151,14 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         //Schummel Aufdeckfunktion Ende
 
     }
+    public void onClickScore(View v){
+        ScoreFragment aboutFragment = new ScoreFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("menu")
+                .replace(R.id.score_fragment,aboutFragment,"ABOUT_FRAGMENT")
+                .commit();
+    }
 
 
     // handles cheating, Confirmation dialog, if player press yes --> cheatedMessage sent to server
