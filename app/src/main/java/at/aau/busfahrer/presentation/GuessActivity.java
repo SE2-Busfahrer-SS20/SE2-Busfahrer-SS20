@@ -53,7 +53,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private TextView tV_erwischt;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
