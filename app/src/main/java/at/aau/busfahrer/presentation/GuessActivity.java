@@ -1,4 +1,5 @@
 package at.aau.busfahrer.presentation;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -32,12 +33,12 @@ import shared.networking.dto.PlayedMessage;
 
 public class GuessActivity extends AppCompatActivity implements GuessRoundListener {
     private Card[] cards;
-    private PlayersStorageImpl playersStorage= PlayersStorageImpl.getInstance();
+    private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
     private GamePlayService gamePlayService = GamePlayServiceImpl.getInstance();
 
     private TextView tV_guessQuestion;
-    private Button bt_Black;
-    private Button bt_Red;
+    private Button bt_FirstOption;
+    private Button bt_SecondOption;
     private TextView tV_feedback;
     private TextView tV_card1;
     private TextView tV_card2;
@@ -48,17 +49,18 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private boolean answer;
     private CheatService cheatService;
 
+    /// Whats this code for?
     private List<Player> playerList;
     private GameImpl gameImpl;
     private int currentPlayer;
     private Player playerCheated;
     private Player myself;
     private int scoreCheater;
-    private  int myScore;
+    private int myScore;
     private PlayedMessage pl;
     private int indexOfMe;
     private TextView tV_erwischt;
-
+    ///
 
 
     @Override
@@ -66,44 +68,41 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_guess);
-        playersStorage.setState(GameState.LAP1A);
 
+        //Visibility
         tV_guessQuestion = findViewById(R.id.tV_guessQuestion);
-        bt_Black = findViewById(R.id.bt_black);
-        bt_Red = findViewById(R.id.bt_red);
+        bt_FirstOption = findViewById(R.id.bt_FirstOption);
+        bt_SecondOption = findViewById(R.id.bt_SecondOption);
         tV_feedback = findViewById(R.id.tV_feedback);
-        tV_card1=findViewById(R.id.tV_card1);
-        tV_card2=findViewById(R.id.tV_card2);
-        tV_card3=findViewById(R.id.tV_card3);
-        tV_card4=findViewById(R.id.tV_card4);
+        tV_card1 = findViewById(R.id.tV_card1);
+        tV_card2 = findViewById(R.id.tV_card2);
+        tV_card3 = findViewById(R.id.tV_card3);
+        tV_card4 = findViewById(R.id.tV_card4);
         bt_cought = findViewById(R.id.bt_caught);
         tV_erwischt = findViewById(R.id.txtView_erwischt);
 
-        // Cheat Service
-        cheatService = CheatServiceImpl.getInstance();
-        cheatService.setContext(getApplicationContext(), getClass().getName());
-        cheatService.startListen();
-        handleCheat();
 
-        // Cheat Service
-        cheatService = CheatServiceImpl.getInstance();
-        cheatService.setContext(getApplicationContext(), getClass().getName());
-        cheatService.startListen();
-        handleCheat();
-
-        cards= playersStorage.getCards();
-        if(!playersStorage.isMaster()){
+        playersStorage.setState(GameState.LAP1A);
+        cards = playersStorage.getCards();
+        if (!playersStorage.isMaster()) {
             onPauseMode();
         }
+
+        //Cheat Service
+        cheatService = CheatServiceImpl.getInstance();
+        cheatService.setContext(getApplicationContext(), getClass().getName());
+        cheatService.startListen();
+        handleCheat();
+
         //Register Callback
         playersStorage.registerGuessRoundListener(this);
+
+        ///SCHUMMEL - Aufdeckfunktion
         //Only when I am cheating, the Text View is could be visbible
         tV_erwischt.setVisibility(View.INVISIBLE);
 
 
     }
-
-
 
 
     public void onClick_btCought(View view) {
@@ -117,7 +116,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         myself = playerList.get(indexOfMe);
         playerCheated = playerList.get(currentPlayer);
         //if the currentplayer has cheated, he get one point and i lose one point
-        if (playerCheated.isCheatedThisRound() == true){
+        if (playerCheated.isCheatedThisRound() == true) {
             //TextView "Erwischt!"
             tV_erwischt.setVisibility(View.VISIBLE);
             //after 5s the TextView is invisible
@@ -137,7 +136,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             myScore--;
             myself.setScore(myScore);
 
-        }else{
+        } else {
             //the player who has NOT cheated decreases his score
             scoreCheater = playerCheated.getScore();
             scoreCheater--;
@@ -149,19 +148,21 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             myself.setScore(myScore);
         }
 
-
+        //Schummel Aufdeckfunktion Ende
 
     }
+
+
     // handles cheating, Confirmation dialog, if player press yes --> cheatedMessage sent to server
-    public void handleCheat(){
+    public void handleCheat() {
         cheatService.setSensorListener(() -> {
             cheatService.pauseListen();
-            if(playersStorage.getTempID() == playersStorage.getCurrentTurn()){
+            if (playersStorage.getTempID() == playersStorage.getCurrentTurn()) {
                 new AlertDialog.Builder(GuessActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
                         // Yes
                         .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                             // sending network call
-                            gamePlayService.sendMsgCheated(playersStorage.getTempID(),true, System.currentTimeMillis(), cheatService.getSensorType());
+                            gamePlayService.sendMsgCheated(playersStorage.getTempID(), true, System.currentTimeMillis(), cheatService.getSensorType());
                             CardUtility.turnCard(tV_card1, cards[0]);
                             cheatService.stopListen();
                         })
@@ -171,47 +172,101 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                         .setCancelable(false)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .create().show();
-            }else{
+            } else {
                 Toast.makeText(this, "Wait until your Turn starts", Toast.LENGTH_SHORT).show();
                 cheatService.resumeListen();
             }
         });
     }
 
-    public void onClick_btBlack(View view) {
-       answer= gamePlayService.guessColor(playersStorage.getTempID(), cards[0],true);
-        CardUtility.turnCard(tV_card1, cards[0]);
-        onAnswer(answer);
+
+    public void onClick_FirstOption(View view) {
+        switch (playersStorage.getState()) {
+            case LAP1A:
+                answer = gamePlayService.guessColor(playersStorage.getTempID(), cards[0], true);
+                CardUtility.turnCard(tV_card1, cards[0]);
+                onAnswer(answer);
+                break;
+            case LAP1B:
+                answer = gamePlayService.guessHigherLower(playersStorage.getTempID(), cards[1], true);
+                CardUtility.turnCard(tV_card1, cards[1]);
+                onAnswer(answer);
+                break;
+            case LAP1C:
+                break;
+            case LAP1D:
+                break;
+            default:
+                //ERROR
+
+        }
     }
 
-    public void onClick_btRed(View view) {
-        answer= gamePlayService.guessColor(playersStorage.getTempID(), cards[0],false);
-        CardUtility.turnCard(tV_card1, cards[0]);
-        onAnswer(answer);
+
+    public void onClick_SecondOption(View view) {
+        switch (playersStorage.getState()) {
+            case LAP1A:
+                answer = gamePlayService.guessColor(playersStorage.getTempID(), cards[0], false);
+                CardUtility.turnCard(tV_card1, cards[0]);
+                onAnswer(answer);
+                break;
+            case LAP1B:
+                answer = gamePlayService.guessHigherLower(playersStorage.getTempID(), cards[1], false);
+                CardUtility.turnCard(tV_card1, cards[1]);
+                onAnswer(answer);
+                break;
+            case LAP1C:
+                break;
+            case LAP1D:
+                break;
+            default:
+                //ERROR
+        }
+
     }
 
     public void onClick_feedback(View view) {
-        gamePlayService.nextPlayer(1,playersStorage.getTempID(),answer);
+        gamePlayService.nextPlayer(1, playersStorage.getTempID(), answer);
+        switch (playersStorage.getState()) {
+            case LAP1A:
+                gamePlayService.nextPlayer(1, playersStorage.getTempID(), answer);
+                break;
+            case LAP1B:
+                gamePlayService.nextPlayer(2, playersStorage.getTempID(), answer);
+                break;
+            case LAP1C:
+                gamePlayService.nextPlayer(3, playersStorage.getTempID(), answer);
+                break;
+            case LAP1D:
+                gamePlayService.nextPlayer(4, playersStorage.getTempID(), answer);
+                break;
+            default:
+                //ERROR
+        }
         onPauseMode();
     }
 
 
-
     @Override   //Callback - executed when receiving
-    public void onUpdateMessage(){
+    public void onUpdateMessage() {
 
-        System.out.println("It is the turn of  player: "+playersStorage.getCurrentTurn()+ " !!!!!!!!");
+        System.out.println("It is the turn of  player: " + playersStorage.getCurrentTurn() + " !!!!!!!!");
 
 
-        if(playersStorage.getCurrentTurn()==0){
-            //This means that every player has finished his turn and the next interface can be opened
-            Intent i = new Intent(GuessActivity.this, MainMenuActivity.class);  //just till next round is finished - MainMenueActivity can be replaced by pyramid after merge
-            startActivity(i);
+        if (playersStorage.getCurrentTurn() == 0) {
+            //This means that every player has finished the turn of the current round and the next round can be started
+            //NEXT LAP
+            boolean end = nextGameState();
+            if (end) {
+                //After all Guess-Rounds start Pyramid:
+                Intent i = new Intent(GuessActivity.this, MainMenuActivity.class);  //Change this to Pyramid Round
+                startActivity(i);
+            }
         }
-        if(playersStorage.getCurrentTurn()==playersStorage.getTempID()){    //this players turn
+
+        if (playersStorage.getCurrentTurn() == playersStorage.getTempID()) {    //this players turn
             onPlayMode();
-        }
-        else{
+        } else {
             onPauseMode();
         }
         //update Score in UI (feature does not exist yet)
@@ -225,15 +280,104 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     public void onClickCard1(View v) {
         // CardUtility.turnCard(tV_card1, cards[0]);
     }
+
     public void onClickCard2(View view) {
         // CardUtility.turnCard(tV_card2, cards[1]);
     }
+
     public void onClickCard3(View view) {
         // CardUtility.turnCard(tV_card3, cards[2]);
     }
+
     public void onClickCard4(View view) {
         // CardUtility.turnCard(tV_card4, cards[3]);
     }
+
+
+    private void onPauseMode() {
+        tV_guessQuestion.setText("wait till it is your turn..");   //Extend this to "it's playernames turn"
+        bt_FirstOption.setClickable(false);
+        bt_SecondOption.setClickable(false);
+        bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_gray);
+        bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_gray);
+
+        tV_card1.setTextColor(Color.GRAY);
+        tV_card2.setTextColor(Color.GRAY);
+        tV_card3.setTextColor(Color.GRAY);
+        tV_card4.setTextColor(Color.GRAY);
+
+        tV_feedback.setVisibility(View.INVISIBLE);
+        bt_cought.setVisibility(View.VISIBLE);
+
+    }
+
+    private void onPlayMode() {
+        switch (playersStorage.getState()) {
+            case LAP1A:
+                tV_guessQuestion.setText("Guess if the first card is red or black");
+                bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_black);
+                bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_red);
+                break;
+            case LAP1B:
+                tV_guessQuestion.setText("Guess if the second cards rank is higher or lower than first cards rank.");
+                bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_black);
+                bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_black);
+                bt_FirstOption.setText("Higher");
+                bt_SecondOption.setText("Lower");
+                break;
+            case LAP1C:
+
+                break;
+            case LAP1D:
+
+                break;
+            default:
+                //ERROR
+        }
+        bt_FirstOption.setClickable(true);
+        bt_SecondOption.setClickable(true);
+        bt_FirstOption.setVisibility(View.VISIBLE);
+        bt_SecondOption.setVisibility(View.VISIBLE);
+        tV_card1.setTextColor(Color.parseColor("#000000"));
+        tV_card2.setTextColor(Color.parseColor("#000000"));
+        tV_card3.setTextColor(Color.parseColor("#000000"));
+        tV_card4.setTextColor(Color.parseColor("#000000"));
+        bt_cought.setVisibility(View.INVISIBLE);
+    }
+
+    private void onAnswer(boolean answer) {
+        if (answer) {
+            tV_feedback.setText("Correct Answer\n[-OK-]");
+        } else {
+            tV_feedback.setText("Wrong Answer\n[-OK-]");
+
+        }
+        tV_feedback.setVisibility(View.VISIBLE);
+        bt_FirstOption.setVisibility(View.INVISIBLE);
+        bt_SecondOption.setVisibility(View.INVISIBLE);
+    }
+
+    private boolean nextGameState() {
+        switch (playersStorage.getState()) {
+            case LAP1A:
+                playersStorage.setState(GameState.LAP1B);
+                break;
+            case LAP1B:
+                playersStorage.setState(GameState.LAP1C);
+                break;
+            case LAP1C:
+                playersStorage.setState(GameState.LAP1D);
+                break;
+            case LAP1D:
+                playersStorage.setState(GameState.LAP2);//Pyramid Round
+                return true;
+            default:
+                //ERROR
+        }
+        return false;
+
+    }
+
 
     // removes android status bar on top, for fullscreen
     private void hideAppTitleBar() {
@@ -242,48 +386,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
-    private void onPauseMode(){
-        tV_guessQuestion.setText("wait till it is your turn..");   //Extend this to "it's playernames turn"
-        bt_Black.setClickable(false);
-        bt_Red.setClickable(false);
-        bt_Black.setBackgroundResource(R.drawable.bg_btn_gray);
-        bt_Red.setBackgroundResource(R.drawable.bg_btn_gray);
-        tV_card1.setTextColor(Color.GRAY);
-        tV_card2.setTextColor(Color.GRAY);
-        tV_card3.setTextColor(Color.GRAY);
-        tV_card4.setTextColor(Color.GRAY);
-        tV_feedback.setVisibility(View.INVISIBLE);
-        bt_cought.setVisibility(View.VISIBLE);
-
-    }
-
-    private void onPlayMode(){
-       tV_guessQuestion.setText("Guess if the first card is red or black");   //Extend this to "it's playernames turn"
-        bt_Black.setClickable(true);
-        bt_Red.setClickable(true);
-        bt_Black.setBackgroundResource(R.drawable.bg_btn_black);
-        bt_Red.setBackgroundResource(R.drawable.bg_btn_red);
-        tV_card1.setTextColor(Color.parseColor("#000000"));
-        tV_card2.setTextColor(Color.parseColor("#000000"));
-        tV_card3.setTextColor(Color.parseColor("#000000"));
-        tV_card4.setTextColor(Color.parseColor("#000000"));
-        bt_cought.setVisibility(View.INVISIBLE);
-    }
-
-    private void onAnswer(boolean answer){
-        if(answer){
-            tV_feedback.setText("Correct Answer\n[-OK-]");
-        }
-        else{
-            tV_feedback.setText("Wrong Answer\n[-OK-]");
-
-        }
-        tV_feedback.setVisibility(View.VISIBLE);
-        bt_Black.setVisibility(View.INVISIBLE);
-        bt_Red.setVisibility(View.INVISIBLE);
-    }
-
-
 
 
 }
+
+    

@@ -77,6 +77,8 @@ public class GamePlayServiceImpl implements GamePlayService {
         thread.start();
     }
 
+    //////////GUESS ROUND/////////////////////////
+
     @Override
     public boolean guessColor(final int tempID, Card card, boolean guessBlack){
         boolean cardIsBlack=true;
@@ -84,10 +86,25 @@ public class GamePlayServiceImpl implements GamePlayService {
             cardIsBlack=false;
         }
         final boolean scored=guessBlack==cardIsBlack; //true if player guessed correct, otherwise false
-
         return scored;
 
     }
+
+    public boolean guessHigherLower(final int tempID, Card card, boolean guessHigher){
+
+        return false;
+    }
+
+    public boolean guessBetweenOutside(final int tempID, Card card, boolean guessBetween){
+
+        return false;
+    }
+    public boolean guessSuit(final int tempID, Card card, int suit){
+
+        return false;
+    }
+
+
 
     @Override
     public void nextPlayer(final int lap, final int tempID, final boolean scored){
@@ -100,6 +117,9 @@ public class GamePlayServiceImpl implements GamePlayService {
         });
         thread.start();
     }
+
+    //////////////////////////////////////////////////////////////////////////
+
 
     // network call for player cheated in game
     public void sendMsgCheated(final int playerId, final boolean cheated, final long timeStamp, final int cheatType){
