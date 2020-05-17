@@ -20,6 +20,7 @@ import at.aau.busfahrer.service.CheatService;
 import at.aau.busfahrer.service.GamePlayService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 
+import at.aau.busfahrer.service.impl.CoughtServiceImpl;
 import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
 import shared.model.Card;
 import shared.model.GameState;
@@ -48,15 +49,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private boolean answer;
     private CheatService cheatService;
 
-    private List<Player> playerList;
-    private GameImpl gameImpl;
-    private int currentPlayer;
-    private Player playerCheated;
-    private Player myself;
-    private int scoreCheater;
-    private  int myScore;
-    private PlayedMessage pl;
-    private int indexOfMe;
+    private CoughtServiceImpl coughtService;
     private TextView tV_erwischt;
 
 
@@ -85,12 +78,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         cheatService.startListen();
         handleCheat();
 
-        // Cheat Service
-        cheatService = CheatServiceImpl.getInstance();
-        cheatService.setContext(getApplicationContext(), getClass().getName());
-        cheatService.startListen();
-        handleCheat();
-
         cards= playersStorage.getCards();
         if(!playersStorage.isMaster()){
             onPauseMode();
@@ -103,21 +90,9 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
     }
 
-
-
-
     public void onClick_btCought(View view) {
-        //Check wich player's turn it is
-        playerList = gameImpl.getPlayerList();
-        //get the index of the curren player on the playerList
-        currentPlayer = gameImpl.getCurrentPlayer();
-        //get the Index of myself from the player list
-        indexOfMe = pl.getTempID();
-
-        myself = playerList.get(indexOfMe);
-        playerCheated = playerList.get(currentPlayer);
-        //if the currentplayer has cheated, he get one point and i lose one point
-        if (playerCheated.isCheatedThisRound() == true){
+        //if the current player was cheating, he gets one point and the textView will be visible
+        if (coughtService.isCheating()==true){
             //TextView "Erwischt!"
             tV_erwischt.setVisibility(View.VISIBLE);
             //after 5s the TextView is invisible
@@ -127,28 +102,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                     tV_erwischt.setVisibility(View.INVISIBLE);
                 }
             }, 5000);
-            //the player who cheated increases his score
-            scoreCheater = playerCheated.getScore();
-            scoreCheater++;
-            playerCheated.setScore(scoreCheater);
-
-            //myScore will be decremented one time
-            myScore = myself.getScore();
-            myScore--;
-            myself.setScore(myScore);
-
-        }else{
-            //the player who has NOT cheated decreases his score
-            scoreCheater = playerCheated.getScore();
-            scoreCheater--;
-            playerCheated.setScore(scoreCheater);
-
-            //myScore will be increased one time
-            myScore = myself.getScore();
-            myScore++;
-            myself.setScore(myScore);
         }
-
 
 
     }
