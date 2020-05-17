@@ -19,7 +19,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/menu_AppTheme">
-        <activity android:name=".presentation.ScoreActivity"></activity>
         <activity android:name=".presentation.PLabFinished" />
         <activity android:name=".presentation.PLapActivity" />
 
