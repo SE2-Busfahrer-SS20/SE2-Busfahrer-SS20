@@ -3,6 +3,7 @@ package at.aau.busfahrer.service.impl;
 import java.util.List;
 import at.aau.busfahrer.service.CoughtService;
 import shared.model.Player;
+import shared.model.impl.PlayersStorageImpl;
 import shared.model.impl.GameImpl;
 import shared.networking.dto.PlayedMessage;
 
@@ -15,7 +16,7 @@ public class CoughtServiceImpl implements CoughtService {
     private Player myself;
     private int scoreCheater;
     private  int myScore;
-    private PlayedMessage pl;
+    private PlayersStorageImpl pl;
     private int indexOfMe;
 
     public  boolean isCheating(){

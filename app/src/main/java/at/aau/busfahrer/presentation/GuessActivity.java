@@ -78,6 +78,9 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         cards = playersStorage.getCards();
         if (!playersStorage.isMaster()) {
             onPauseMode();
+            bt_cought.setVisibility(View.VISIBLE);
+        }else{
+            bt_cought.setVisibility(View.INVISIBLE);
         }
 
         //Cheat Service
@@ -93,21 +96,23 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         //Only when I am cheating, the Text View is could be visbible
         tV_erwischt.setVisibility(View.INVISIBLE);
 
-
     }
 
     public void onClick_btCought(View view) {
         //if the current player was cheating, he gets one point and the textView will be visible
         if (coughtService.isCheating()==true){
             //TextView "Erwischt!"
-            tV_erwischt.setVisibility(View.VISIBLE);
+            if(playersStorage.getCurrentTurn()==playersStorage.getTempID()){
+                tV_erwischt.setVisibility(View.VISIBLE);
+            }
+
             //after 5s the TextView is invisible
-            tV_erwischt.postDelayed(new Runnable() {
+            /*tV_erwischt.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     tV_erwischt.setVisibility(View.INVISIBLE);
                 }
-            }, 5000);
+            }, 5000);*/
         }
 
 
@@ -227,8 +232,12 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
         if (playersStorage.getCurrentTurn() == playersStorage.getTempID()) {    //this players turn
             onPlayMode();
+            //when it is my turn, the cought button is Invisible
+            bt_cought.setVisibility(View.INVISIBLE);
         } else {
             onPauseMode();
+            //when it is not my turn, the cought button is Visible
+            bt_cought.setVisibility(View.VISIBLE);
         }
         //update Score in UI (feature does not exist yet)
 
@@ -268,7 +277,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         tV_card4.setTextColor(Color.GRAY);
 
         tV_feedback.setVisibility(View.INVISIBLE);
-        bt_cought.setVisibility(View.VISIBLE);
 
     }
 
@@ -303,7 +311,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         tV_card2.setTextColor(Color.parseColor("#000000"));
         tV_card3.setTextColor(Color.parseColor("#000000"));
         tV_card4.setTextColor(Color.parseColor("#000000"));
-        bt_cought.setVisibility(View.INVISIBLE);
     }
 
     private void onAnswer(boolean answer) {
