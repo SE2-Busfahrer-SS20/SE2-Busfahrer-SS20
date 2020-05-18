@@ -87,7 +87,6 @@ public class GamePlayServiceImpl implements GamePlayService {
         }
         final boolean scored=guessBlack==cardIsBlack; //true if player guessed correct, otherwise false
         return scored;
-
     }
 
     public boolean guessHigherLower(final int tempID, Card card, boolean guessHigher){

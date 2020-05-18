@@ -21,7 +21,7 @@ public class GameServiceImpl implements GameService {
 
     private Game game;
     // Instance for singleton.
-    private static  GameServiceImpl instance;
+    private static GameServiceImpl instance;
 
     private GameServiceImpl() {
     }
@@ -29,6 +29,7 @@ public class GameServiceImpl implements GameService {
 
     /**
      * Returns Singleton instance.
+     *
      * @return instance
      */
     public static synchronized GameService getInstance() {
@@ -52,8 +53,8 @@ public class GameServiceImpl implements GameService {
         return game.getPlayerList();
     }
 
-    public Player addPlayer(String name, String MACAdress, Connection connection){
-         return game.addPlayer(name, MACAdress, connection);
+    public Player addPlayer(String name, String MACAdress, Connection connection) {
+        return game.addPlayer(name, MACAdress, connection);
     }
 
     @Override
@@ -94,7 +95,7 @@ public class GameServiceImpl implements GameService {
         //send start game message to each client
         StartGameMessage sgm = new StartGameMessage();
         int count = this.game.getPlayerCount();
-        for(int i=0;i<count;i++){
+        for (int i = 0; i < count; i++) {
             Connection con = this.game.getPlayerList().get(i).getConnection();
             con.sendTCP(sgm);
         }
@@ -112,10 +113,10 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame(String masterName, String MACAddress,  Connection connection) {
+    public void createGame(String masterName, String MACAddress, Connection connection) {
         createGame();
 
-        Player player = addPlayer(masterName,MACAddress, connection);
+        Player player = addPlayer(masterName, MACAddress, connection);
 
         ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player, true);
         connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
@@ -127,8 +128,8 @@ public class GameServiceImpl implements GameService {
         Log.info("Game created.");
     }
 
-    public void createGame(){
-        this.game=new GameImpl();
+    public void createGame() {
+        this.game = new GameImpl();
     }
 
     @Override
@@ -150,16 +151,70 @@ public class GameServiceImpl implements GameService {
 
 
     //Methodes for Guess-Rounds
+    //TODO: change int value to type of lap enum
     @Override
-    public void GuessRound1(int tempID, boolean scored) {
-        //update score
-        if(scored)
-            game.addPointsToPlayer(tempID,1);
+    public void GuessRound(int lap, int tempID, boolean scored) {
+
+        if (scored)
+            game.addPointsToPlayer(tempID, 1);
 
         //ArrayList of all players scores
         ArrayList<Integer> score = new ArrayList<>();
-        for(int i=0; i<game.getPlayerCount();i++){
-            int playerScore=game.getPlayerList().get(i).getScore();
+        for (int i = 0; i < game.getPlayerCount(); i++) {
+            int playerScore = game.getPlayerList().get(i).getScore();
+            score.add(playerScore);
+        }
+
+        //Reset Cheating
+        resetCheated();
+
+        int nextPlayer=-1;
+        switch (lap) {
+            case 1:
+                if (tempID < (game.getPlayerCount() - 1)) {
+                    nextPlayer = tempID + 1;
+                    this.game.setState(GameState.LAP1A);
+                } else { //if next player = 0 --> client starts guess round 2!
+                    nextPlayer = 0;
+                    this.game.setState(GameState.LAP1B);  //switch to Guess round 2
+                    //this.game.setState(GameState.LAP2); //switch to Pyramid - (only during developing process)
+                }
+
+                game.setCurrentPlayer(nextPlayer);
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+            default:
+                //ERROR
+                break;
+        }
+            //send DTO updateMessage to all clients
+            UpdateMessage uM = new UpdateMessage(nextPlayer, score);
+            int count = this.game.getPlayerCount();
+            for (int i = 0; i < count; i++) {
+                Connection con = this.game.getPlayerList().get(i).getConnection();
+                con.sendTCP(uM);
+        }
+    }
+
+    //Not used anymore, just here as backup/reference of old verson //can be deleted in next stable version
+    private void GuessRound1(int tempID, boolean scored) {
+        //update score
+        if (scored)
+            game.addPointsToPlayer(tempID, 1);
+
+        //ArrayList of all players scores
+        ArrayList<Integer> score = new ArrayList<>();
+        for (int i = 0; i < game.getPlayerCount(); i++) {
+            int playerScore = game.getPlayerList().get(i).getScore();
             score.add(playerScore);
         }
 
@@ -168,12 +223,11 @@ public class GameServiceImpl implements GameService {
 
         //Who's next?
         int nextPlayer;
-        if(tempID<(game.getPlayerCount()-1)){
-            nextPlayer=tempID+1;
+        if (tempID < (game.getPlayerCount() - 1)) {
+            nextPlayer = tempID + 1;
             this.game.setState(GameState.LAP1A);
-        }
-        else{ //if next player = 0 --> client starts guess round 2!
-            nextPlayer=0;
+        } else { //if next player = 0 --> client starts guess round 2!
+            nextPlayer = 0;
             //this.game.setState(GameState.LAP1B);  //switch to Guess round 2
             this.game.setState(GameState.LAP2); //switch to Pyramid - (only during developing process)
 
@@ -185,15 +239,14 @@ public class GameServiceImpl implements GameService {
         //send DTO updateMessage to all clients
         UpdateMessage uM = new UpdateMessage(nextPlayer, score);
         int count = this.game.getPlayerCount();
-        for(int i=0;i<count;i++){
+        for (int i = 0; i < count; i++) {
             Connection con = this.game.getPlayerList().get(i).getConnection();
             con.sendTCP(uM);
         }
     }
 
-
-    private void resetCheated(){
-        for(int i=0; i<game.getPlayerCount();i++){
+    private void resetCheated() {
+        for (int i = 0; i < game.getPlayerCount(); i++) {
             game.getPlayerList().get(i).setCheatedThisRound(false);
         }
     }

@@ -42,7 +42,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private TextView tV_card4;
     private Button bt_cought;
 
-    private boolean answer;
+    private boolean scored;
     private CheatService cheatService;
 
 
@@ -56,7 +56,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         hideAppTitleBar();
         setContentView(R.layout.activity_guess);
 
-        //Visibility
+        //Visibility - maybee this could be replaced with onPlayMode()?!
         tV_guessQuestion = findViewById(R.id.tV_guessQuestion);
         bt_FirstOption = findViewById(R.id.bt_FirstOption);
         bt_SecondOption = findViewById(R.id.bt_SecondOption);
@@ -82,7 +82,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         cheatService = CheatServiceImpl.getInstance();
         cheatService.setContext(getApplicationContext(), getClass().getName());
         cheatService.startListen();
-        //handleCheat();
+        //handleCheat(); //this coursed error
 
         //Register Callback
         playersStorage.registerGuessRoundListener(this);
@@ -143,14 +143,14 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     public void onClick_FirstOption(View view) {
         switch (playersStorage.getState()) {
             case LAP1A:
-                answer = gamePlayService.guessColor(playersStorage.getTempID(), cards[0], true);
+                scored = gamePlayService.guessColor(playersStorage.getTempID(), cards[0], true);
                 CardUtility.turnCard(tV_card1, cards[0]);
-                onAnswer(answer);
+                onAnswer(scored);
                 break;
             case LAP1B:
-                answer = gamePlayService.guessHigherLower(playersStorage.getTempID(), cards[1], true);
+                scored = gamePlayService.guessHigherLower(playersStorage.getTempID(), cards[1], true);
                 CardUtility.turnCard(tV_card1, cards[1]);
-                onAnswer(answer);
+                onAnswer(scored);
                 break;
             case LAP1C:
                 break;
@@ -162,18 +162,17 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         }
     }
 
-
     public void onClick_SecondOption(View view) {
         switch (playersStorage.getState()) {
             case LAP1A:
-                answer = gamePlayService.guessColor(playersStorage.getTempID(), cards[0], false);
+                scored = gamePlayService.guessColor(playersStorage.getTempID(), cards[0], false);
                 CardUtility.turnCard(tV_card1, cards[0]);
-                onAnswer(answer);
+                onAnswer(scored);
                 break;
             case LAP1B:
-                answer = gamePlayService.guessHigherLower(playersStorage.getTempID(), cards[1], false);
+                scored = gamePlayService.guessHigherLower(playersStorage.getTempID(), cards[1], false);
                 CardUtility.turnCard(tV_card1, cards[1]);
-                onAnswer(answer);
+                onAnswer(scored);
                 break;
             case LAP1C:
                 break;
@@ -188,17 +187,18 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     public void onClick_feedback(View view) {
 
         switch (playersStorage.getState()) {
+            //nextPlayer sends DTO playedMessage to Server
             case LAP1A:
-                gamePlayService.nextPlayer(1, playersStorage.getTempID(), answer);
+                gamePlayService.nextPlayer(1, playersStorage.getTempID(), scored);
                 break;
             case LAP1B:
-                gamePlayService.nextPlayer(2, playersStorage.getTempID(), answer);
+                gamePlayService.nextPlayer(2, playersStorage.getTempID(), scored);
                 break;
             case LAP1C:
-                gamePlayService.nextPlayer(3, playersStorage.getTempID(), answer);
+                gamePlayService.nextPlayer(3, playersStorage.getTempID(), scored);
                 break;
             case LAP1D:
-                gamePlayService.nextPlayer(4, playersStorage.getTempID(), answer);
+                gamePlayService.nextPlayer(4, playersStorage.getTempID(), scored);
                 break;
             default:
                 //ERROR
@@ -259,6 +259,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         tV_guessQuestion.setText("wait till it is your turn..");   //Extend this to "it's playernames turn"
         //bt_FirstOption.setClickable(false);
         //bt_SecondOption.setClickable(false);
+        bt_FirstOption.setVisibility(View.INVISIBLE);
+        bt_SecondOption.setVisibility(View.INVISIBLE);
         bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_gray);
         bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_gray);
 
@@ -273,6 +275,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     }
 
     private void onPlayMode() {
+
         switch (playersStorage.getState()) {
             case LAP1A:
                 tV_guessQuestion.setText("Guess if the first card is red or black");
@@ -295,9 +298,9 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             default:
                 //ERROR
         }
-        bt_FirstOption.setClickable(true);
-        bt_SecondOption.setClickable(true);
-        bt_FirstOption.setVisibility(View.VISIBLE);
+        //bt_FirstOption.setClickable(true);
+        //bt_SecondOption.setClickable(true);
+        bt_FirstOption.setVisibility(View.VISIBLE); //This button is the problem !!!
         bt_SecondOption.setVisibility(View.VISIBLE);
         tV_card1.setTextColor(Color.parseColor("#000000"));
         tV_card2.setTextColor(Color.parseColor("#000000"));

@@ -104,12 +104,15 @@ public class GameServer extends NetworkServerKryo {
                         Log.info("Game started");
                         gameService.startGame();
                     }
+
+
                     //Guess-Rounds
                     else if(object instanceof PlayedMessage){
                         PlayedMessage pM = (PlayedMessage) object;
-                        if(pM.getLap()==1){     //Black or Red
-                            gameService.GuessRound1(pM.getTempID(), pM.scored());
-                        }
+
+                        gameService.GuessRound(pM.getLap(), pM.getTempID(), pM.scored());
+
+
                     }
 
 
