@@ -13,8 +13,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.CheatService;
@@ -26,10 +24,7 @@ import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
 import shared.model.Card;
 import shared.model.GameState;
 import shared.model.GuessRoundListener;
-import shared.model.Player;
-import shared.model.impl.GameImpl;
 import shared.model.impl.PlayersStorageImpl;
-import shared.networking.dto.PlayedMessage;
 
 
 public class GuessActivity extends AppCompatActivity implements GuessRoundListener {
@@ -79,7 +74,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         if (!playersStorage.isMaster()) {
             onPauseMode();
             bt_cought.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             bt_cought.setVisibility(View.INVISIBLE);
         }
 
@@ -87,7 +82,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         cheatService = CheatServiceImpl.getInstance();
         cheatService.setContext(getApplicationContext(), getClass().getName());
         cheatService.startListen();
-        handleCheat();
+        //handleCheat();
 
         //Register Callback
         playersStorage.registerGuessRoundListener(this);
@@ -95,14 +90,14 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         ///SCHUMMEL - Aufdeckfunktion
         //Only when I am cheating, the Text View is could be visbible
         tV_erwischt.setVisibility(View.INVISIBLE);
-
     }
+
 
     public void onClick_btCought(View view) {
         //if the current player was cheating, he gets one point and the textView will be visible
-        if (coughtService.isCheating()==true){
+        if (coughtService.isCheating() == true) {
             //TextView "Erwischt!"
-            if(playersStorage.getCurrentTurn()==playersStorage.getTempID()){
+            if (playersStorage.getCurrentTurn() == playersStorage.getTempID()) {
                 tV_erwischt.setVisibility(View.VISIBLE);
             }
 
@@ -114,12 +109,11 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 }
             }, 5000);*/
         }
-
-
     }
 
 
     // handles cheating, Confirmation dialog, if player press yes --> cheatedMessage sent to server
+
     public void handleCheat() {
         cheatService.setSensorListener(() -> {
             cheatService.pauseListen();
@@ -192,7 +186,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     }
 
     public void onClick_feedback(View view) {
-        gamePlayService.nextPlayer(1, playersStorage.getTempID(), answer);
+
         switch (playersStorage.getState()) {
             case LAP1A:
                 gamePlayService.nextPlayer(1, playersStorage.getTempID(), answer);
@@ -216,9 +210,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     @Override   //Callback - executed when receiving
     public void onUpdateMessage() {
 
-        System.out.println("It is the turn of  player: " + playersStorage.getCurrentTurn() + " !!!!!!!!");
-
-
         if (playersStorage.getCurrentTurn() == 0) {
             //This means that every player has finished the turn of the current round and the next round can be started
             //NEXT LAP
@@ -233,11 +224,11 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         if (playersStorage.getCurrentTurn() == playersStorage.getTempID()) {    //this players turn
             onPlayMode();
             //when it is my turn, the cought button is Invisible
-            bt_cought.setVisibility(View.INVISIBLE);
+            //bt_cought.setVisibility(View.INVISIBLE); //moved to onPlayMode();
         } else {
             onPauseMode();
             //when it is not my turn, the cought button is Visible
-            bt_cought.setVisibility(View.VISIBLE);
+            //bt_cought.setVisibility(View.VISIBLE); //moved to onPauseMode();
         }
         //update Score in UI (feature does not exist yet)
 
@@ -266,8 +257,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
     private void onPauseMode() {
         tV_guessQuestion.setText("wait till it is your turn..");   //Extend this to "it's playernames turn"
-        bt_FirstOption.setClickable(false);
-        bt_SecondOption.setClickable(false);
+        //bt_FirstOption.setClickable(false);
+        //bt_SecondOption.setClickable(false);
         bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_gray);
         bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_gray);
 
@@ -278,6 +269,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
         tV_feedback.setVisibility(View.INVISIBLE);
 
+        bt_cought.setVisibility(View.VISIBLE);
     }
 
     private void onPlayMode() {
@@ -311,6 +303,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         tV_card2.setTextColor(Color.parseColor("#000000"));
         tV_card3.setTextColor(Color.parseColor("#000000"));
         tV_card4.setTextColor(Color.parseColor("#000000"));
+
+        bt_cought.setVisibility(View.INVISIBLE);
     }
 
     private void onAnswer(boolean answer) {
@@ -318,7 +312,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             tV_feedback.setText("Correct Answer\n[-OK-]");
         } else {
             tV_feedback.setText("Wrong Answer\n[-OK-]");
-
         }
         tV_feedback.setVisibility(View.VISIBLE);
         bt_FirstOption.setVisibility(View.INVISIBLE);
@@ -345,7 +338,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         return false;
 
     }
-
 
     // removes android status bar on top, for fullscreen
     private void hideAppTitleBar() {

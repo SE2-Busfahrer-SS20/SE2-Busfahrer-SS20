@@ -8,6 +8,7 @@ import shared.model.Card;
 /**
  * Contains shared utility functions for the GUI.
  */
+
 public class CardUtility {
 
 
@@ -31,6 +32,8 @@ public class CardUtility {
      * @param cards
      * @return card.
      */
+
+
     public static Card getCardFromString(String cardString, Card[] cards) {
         for (Card card : cards)
             if (card.toString().equals(cardString))
