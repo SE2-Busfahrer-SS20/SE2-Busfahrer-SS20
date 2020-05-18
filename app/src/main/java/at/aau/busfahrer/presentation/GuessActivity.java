@@ -256,58 +256,65 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
 
     private void onPauseMode() {
-        tV_guessQuestion.setText("wait till it is your turn..");   //Extend this to "it's playernames turn"
-        //bt_FirstOption.setClickable(false);
-        //bt_SecondOption.setClickable(false);
-        bt_FirstOption.setVisibility(View.INVISIBLE);
-        bt_SecondOption.setVisibility(View.INVISIBLE);
-        bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_gray);
-        bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_gray);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tV_guessQuestion.setText("wait till it is your turn..");   //Extend this to "it's playernames turn"
+                bt_FirstOption.setVisibility(View.INVISIBLE);
+                bt_SecondOption.setVisibility(View.INVISIBLE);
+                bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_gray);
+                bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_gray);
 
-        tV_card1.setTextColor(Color.GRAY);
-        tV_card2.setTextColor(Color.GRAY);
-        tV_card3.setTextColor(Color.GRAY);
-        tV_card4.setTextColor(Color.GRAY);
+                tV_card1.setTextColor(Color.GRAY);
+                tV_card2.setTextColor(Color.GRAY);
+                tV_card3.setTextColor(Color.GRAY);
+                tV_card4.setTextColor(Color.GRAY);
 
-        tV_feedback.setVisibility(View.INVISIBLE);
+                tV_feedback.setVisibility(View.INVISIBLE);
 
-        bt_cought.setVisibility(View.VISIBLE);
+                bt_cought.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void onPlayMode() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
 
-        switch (playersStorage.getState()) {
-            case LAP1A:
-                tV_guessQuestion.setText("Guess if the first card is red or black");
-                bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_black);
-                bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_red);
-                break;
-            case LAP1B:
-                tV_guessQuestion.setText("Guess if the second cards rank is higher or lower than first cards rank.");
-                bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_black);
-                bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_black);
-                bt_FirstOption.setText("Higher");
-                bt_SecondOption.setText("Lower");
-                break;
-            case LAP1C:
+                switch (playersStorage.getState()) {
+                    case LAP1A:
+                        tV_guessQuestion.setText("Guess if the first card is red or black");
+                        bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_black);
+                        bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_red);
+                        break;
+                    case LAP1B:
+                        tV_guessQuestion.setText("Guess if the second cards rank is higher or lower than first cards rank.");
+                        bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_black);
+                        bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_black);
+                        bt_FirstOption.setText("Higher");
+                        bt_SecondOption.setText("Lower");
+                        break;
+                    case LAP1C:
 
-                break;
-            case LAP1D:
+                        break;
+                    case LAP1D:
 
-                break;
-            default:
-                //ERROR
-        }
-        //bt_FirstOption.setClickable(true);
-        //bt_SecondOption.setClickable(true);
-        bt_FirstOption.setVisibility(View.VISIBLE); //This button is the problem !!!
-        bt_SecondOption.setVisibility(View.VISIBLE);
-        tV_card1.setTextColor(Color.parseColor("#000000"));
-        tV_card2.setTextColor(Color.parseColor("#000000"));
-        tV_card3.setTextColor(Color.parseColor("#000000"));
-        tV_card4.setTextColor(Color.parseColor("#000000"));
+                        break;
+                    default:
+                        //ERROR
+                }
+                bt_FirstOption.setVisibility(View.VISIBLE); //This button is the problem !!!
+                bt_SecondOption.setVisibility(View.VISIBLE);
+                tV_card1.setTextColor(Color.parseColor("#000000"));
+                tV_card2.setTextColor(Color.parseColor("#000000"));
+                tV_card3.setTextColor(Color.parseColor("#000000"));
+                tV_card4.setTextColor(Color.parseColor("#000000"));
 
-        bt_cought.setVisibility(View.INVISIBLE);
+                bt_cought.setVisibility(View.INVISIBLE);
+
+            }
+        });
     }
 
     private void onAnswer(boolean answer) {
