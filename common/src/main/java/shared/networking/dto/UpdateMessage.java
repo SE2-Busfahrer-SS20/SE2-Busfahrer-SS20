@@ -5,8 +5,8 @@ import java.util.ArrayList;
 //Dieses DTO wird nach jedem Zug der Raterunden an alle Clients gesendet
 public class UpdateMessage extends BaseMessage {
 
-    int currentPlayer;  //in next round, it is this players turn
-    ArrayList<Integer> score; //Points of all players
+    private int currentPlayer;  //in next round, it is this players turn
+    private ArrayList<Integer> score; //Points of all players
 
     public UpdateMessage(){}
 

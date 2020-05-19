@@ -11,7 +11,7 @@
         android:layout_width="314dp"
         android:layout_height="44dp"
         android:drawableLeft="@drawable/ic_account_circle_black_24dp"
-        android:ems="10"
+        android:paddingStart="10dp"
         android:gravity="center"
         android:hint="NAME"
         android:inputType="textPersonName"
@@ -25,7 +25,7 @@
         android:id="@+id/headerRegisterPlayer"
         android:layout_width="0dp"
         android:layout_height="45dp"
-        android:text="Spieler erstellen"
+        android:text="Create new User"
         android:theme="@style/mainMenuHeadTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +39,19 @@
         android:text="ERSTELLEN"
         android:onClick="onClickCreate"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/RegisterEditPlayerName"
+        app:layout_constraintStart_toStartOf="@+id/RegisterEditPlayerName" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:text="Enter playername"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/RegisterEditPlayerName"
         app:layout_constraintEnd_toEndOf="@+id/RegisterEditPlayerName"
         app:layout_constraintStart_toStartOf="@+id/RegisterEditPlayerName" />
 

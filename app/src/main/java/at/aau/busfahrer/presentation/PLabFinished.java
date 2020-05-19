@@ -1,5 +1,6 @@
 package at.aau.busfahrer.presentation;
 
+import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -27,14 +28,17 @@ public class PLabFinished extends AppCompatActivity {
         updateList(pLabService.getPlayerNames());
         pLabService.registerFinishedLabCallback(lostGame -> {
             runOnUiThread(() -> {
-                // Switch to Busfaher Lab and pass boolean attribute
+                Intent bushmenIntent = new Intent(this, BushmenActivity.class);
+                bushmenIntent.putExtra("LOST_GAME", lostGame);
+                startActivity(bushmenIntent);
             });
         });
         findViewById(R.id.progressBar_pfinished).setVisibility(View.INVISIBLE);
     }
 
     public void dealButtonClick(View v) {
-        // TODO: implement send Points to Server.
+        String selectedPlayer = ((Spinner)findViewById(R.id.sP_name_spinner)).getSelectedItem().toString();
+        pLabService.dealPoints(selectedPlayer);
         setWait();
         v.setEnabled(false);
     }

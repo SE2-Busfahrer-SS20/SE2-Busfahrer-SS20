@@ -100,7 +100,7 @@
         tools:layout_editor_absoluteX="16dp" />
 
     <Button
-        android:id="@+id/bt_black"
+        android:id="@+id/bt_FirstOption"
         style="@style/button_black"
         android:layout_width="217dp"
         android:layout_height="44dp"
@@ -109,16 +109,16 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/bg_btn_black"
         android:clickable="true"
-        android:onClick="onClick_btBlack"
+        android:onClick="onClick_FirstOption"
         android:text="Black"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/bt_red"
+        app:layout_constraintBottom_toTopOf="@+id/bt_SecondOption"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tV_guessQuestion" />
 
     <Button
-        android:id="@+id/bt_red"
+        android:id="@+id/bt_SecondOption"
         android:layout_width="221dp"
         android:layout_height="46dp"
         android:layout_marginStart="8dp"
@@ -127,7 +127,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/bg_btn_red"
         android:clickable="true"
-        android:onClick="onClick_btRed"
+        android:onClick="onClick_SecondOption"
         android:text="Red"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/tV_card2"
@@ -143,16 +143,18 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/bg_head_orange"
-        android:gravity="center"
         android:clickable="true"
+        android:gravity="center"
         android:onClick="onClick_feedback"
         android:text="Correct Answer"
         android:textSize="50sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/tV_card2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tV_guessQuestion" />
+        app:layout_constraintTop_toBottomOf="@+id/tV_guessQuestion"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textView2"
@@ -165,6 +167,29 @@
         android:text="space for score-overview \n and catch-cheater button"
         app:layout_constraintBottom_toTopOf="@+id/tV_guessQuestion"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
+
+    <Button
+        android:id="@+id/bt_caught"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="28dp"
+        android:background="#2196F3"
+        android:onClick="onClick_btCought"
+        android:text="Erwischt!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
+
+    <TextView
+        android:id="@+id/txtView_erwischt"
+        android:layout_width="127dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="28dp"
+        android:text="Erwischt!!"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
 
