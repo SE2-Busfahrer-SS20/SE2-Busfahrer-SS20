@@ -12,7 +12,9 @@ import shared.model.Deck;
 import shared.model.impl.DeckImpl;
 import shared.networking.Callback;
 import shared.networking.NetworkClient;
+import shared.networking.dto.DealPointsMessage;
 import shared.networking.dto.StartPLabMessage;
+import shared.networking.dto.WinnerLooserMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 import shared.networking.kryonet.NetworkConstants;
 
@@ -37,13 +39,13 @@ public class PLabServiceImpl implements PLabService {
         this.client = NetworkClientKryo.getInstance();
 
         // TODO: remove, JUST FOR TESTING.
+
         Deck deck = new DeckImpl();
         for(int i = 0; i < 4; i++)
             cards[i] = deck.drawCard();
         /*
         for(int i = 0; i < 10; i++)
             pCards[i] = deck.drawCard();*/
-
     }
 
 
@@ -85,16 +87,16 @@ public class PLabServiceImpl implements PLabService {
             this.playerNames = ((StartPLabMessage) msg).getPlayerNames();
             cardCallback.callback(pCards);
         });
-        Thread thread = new Thread(() -> {
+
+        Thread startThread = new Thread(() -> {
             try {
                 Log.i("PLab Service", "PLab start was triggered.");
-                client.connect(NetworkConstants.host);
                 this.client.sendMessage(new StartPLabMessage());
             } catch (Exception e) {
                 Log.e("Error in PLabService", e.toString(),e);
             }
         });
-        thread.start();
+        startThread.start();
     }
 
     @Override
@@ -113,8 +115,22 @@ public class PLabServiceImpl implements PLabService {
     }
 
     @Override
-    public void finish() {
-        // TODO: send dealed points back to the server.
+    public void dealPoints(String playerName) {
+        this.client.registerCallback(WinnerLooserMessage.class, msg -> {
+            Log.i("Callback started.", "Winner Looser Callback started.");
+            boolean isLooser = ((WinnerLooserMessage) msg).getIsLooser();
+            finishedLabCallback.callback(isLooser);
+        });
+        DealPointsMessage msg = new DealPointsMessage(playerName, matchCounter);
+        Thread thread = new Thread(() -> {
+            try {
+                Log.i("PLab Service Client", "PLab send deal point message.");
+                this.client.sendMessage(msg);
+            } catch (Exception e) {
+                Log.e("Error in PLabService", e.toString(),e);
+            }
+        });
+        thread.start();
     }
 
     @Override
@@ -127,20 +143,16 @@ public class PLabServiceImpl implements PLabService {
         return matchCounter;
     }
 
-
-    // TODO: remove, JUST FOR TESTING PURPOSES.
-    public Card[] getCards() {
-        return cards;
-    }
-
     public static synchronized PLabService getInstance() {
         if (instance == null)
             return (instance = new PLabServiceImpl());
         return instance;
     }
+    // TODO: remove comments, when they are not needed anymore.
     /*
     public void testCallback() {
         this.cardCallback.callback(this.pCards);
     }*/
+    public Card[] getCards() {return cards;}
 
 }

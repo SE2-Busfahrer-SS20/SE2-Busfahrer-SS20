@@ -13,13 +13,7 @@ import shared.model.GameState;
 import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
 import shared.networking.NetworkClient;
-import shared.networking.dto.BaseMessage;
-import shared.networking.dto.ConfirmRegisterMessage;
-import shared.networking.dto.NewPlayerMessage;
-import shared.networking.dto.StartGameMessage;
-import shared.networking.dto.StartPLabMessage;
-import shared.networking.dto.TextMessage;
-import shared.networking.dto.UpdateMessage;
+import shared.networking.dto.*;
 
 import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 
@@ -52,7 +46,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             public void received(Connection connection, Object object) {
                 // handle null objects or not known Objects.
                 if (!(object instanceof BaseMessage)) {
-                    Log.info("Network Client Listener Error: Received Object is null or not from Type BaseMessage.");
+                    // Log.info("Network Client Listener Error: Received Object is null or not from Type BaseMessage.");
                 } else if (object instanceof ConfirmRegisterMessage) {
                     Log.debug("Registration Confirmed");
                     playersStorage.setMaster(((ConfirmRegisterMessage)object).isMaster());
@@ -81,6 +75,12 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     Log.info("StartPlaBMesssage received");
                     // call the correct callback to store cards and update UI Thread.
                     callbackMap.get(StartPLabMessage.class).callback((BaseMessage) object);
+                }
+
+                if (object instanceof WinnerLooserMessage) {
+                    Log.info("WinnerLooserMessage received");
+                    // call the correct callback to store cards and update UI Thread.
+                    callbackMap.get(WinnerLooserMessage.class).callback((BaseMessage) object);
                 }
                 // just for debugging purposes.
                 if (object instanceof TextMessage) {
