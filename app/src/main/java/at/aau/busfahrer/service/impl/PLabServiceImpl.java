@@ -14,6 +14,7 @@ import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.DealPointsMessage;
 import shared.networking.dto.StartPLabMessage;
+import shared.networking.dto.WinnerLooserMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 import shared.networking.kryonet.NetworkConstants;
 
@@ -116,6 +117,11 @@ public class PLabServiceImpl implements PLabService {
 
     @Override
     public void dealPoints(String playerName) {
+        this.client.registerCallback(WinnerLooserMessage.class, msg -> {
+            Log.i("Callback started.", "");
+            boolean isLooser = ((WinnerLooserMessage) msg).getIsLooser();
+            finishedLabCallback.callback(isLooser);
+        });
         DealPointsMessage msg = new DealPointsMessage(playerName, matchCounter);
         Thread thread = new Thread(() -> {
             try {

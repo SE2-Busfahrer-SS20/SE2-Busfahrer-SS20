@@ -5,6 +5,8 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import at.aau.server.GameServer;
@@ -14,6 +16,7 @@ import shared.model.Game;
 import shared.model.Player;
 import shared.networking.dto.DealPointsMessage;
 import shared.networking.dto.StartPLabMessage;
+import shared.networking.dto.WinnerLooserMessage;
 
 
 /**
@@ -70,7 +73,20 @@ public class PLapServiceImpl implements PLapService {
     }
 
     public void updatePlayers() {
-        // TODO: check who is the looser and update players.
+        List<Player> playerList = gameService.getGame().getPlayerList();
+        // Sort players on points attribute.
+        playerList.sort(new Comparator<Player>() {
+            @Override
+            public int compare(Player p1, Player p2) {
+                return p1.getScore() - p2.getScore();
+            }
+        });
+        for(Player p : playerList) {
+            WinnerLooserMessage msg = new WinnerLooserMessage();
+            // set looser to true when the player is the last in the list (Looser).
+            msg.setIsLooser(playerList.indexOf(p) == playerList.size() - 1);
+            p.getConnection().sendTCP(msg);
+        }
     }
 
     private List<String> getPlayerNames() {
