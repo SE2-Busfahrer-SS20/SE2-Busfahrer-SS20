@@ -55,17 +55,19 @@ public class CoughtServiceImpl implements CoughtService {
             playerCheated.setScore(scoreCheater);
 
             //myScore will be decremented one time
-            //ACHTUNG keine negativen Punkte keine minuszahlen
             myScore = myself.getScore();
-            myScore--;
+            if(myScore!=0){
+                myScore--;
+            }
             myself.setScore(myScore);
             return true;
 
         }else{
             //the player who has NOT cheated decreases his score
-            //ACHTUNG keine negativen Punkte keine minuszahlen
             scoreCheater = playerCheated.getScore();
-            scoreCheater--;
+            if(scoreCheater!=0){
+                scoreCheater--;
+            }
             playerCheated.setScore(scoreCheater);
 
             //myScore will be increased one time
