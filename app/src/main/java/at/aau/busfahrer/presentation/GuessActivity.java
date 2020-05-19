@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import at.aau.busfahrer.R;
@@ -64,6 +65,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_guess);
@@ -128,11 +130,11 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     }
     public void onClickScore(View v){
 
-        ScoreFragment aboutFragment = new ScoreFragment();
+        ScoreFragment scoreFragment = new ScoreFragment();
         getSupportFragmentManager()
                 .beginTransaction()
                 .addToBackStack("menu")
-                .replace(R.id.score_fragment,aboutFragment,"ABOUT_FRAGMENT")
+                .replace(R.id.score_fragment,scoreFragment,"SCORE_FRAGMENT")
                 .commit();
     }
 

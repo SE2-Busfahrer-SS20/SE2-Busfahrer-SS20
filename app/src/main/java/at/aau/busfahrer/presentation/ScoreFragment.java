@@ -27,7 +27,6 @@ public class ScoreFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_score, container, false);
-        System.out.println("\n\n\n"+playersStorage.getPlayerNames()+"\n\n\n");
         String[] scoreItems= new String[playersStorage.getPlayerNames().size()];
         for(int i=0;i<scoreItems.length;i++){
             scoreItems[i]=playersStorage.getPlayerName(i)+": "+playersStorage.getScore().get(i);
