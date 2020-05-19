@@ -81,7 +81,7 @@ public class GamePlayServiceImpl implements GamePlayService {
 
     @Override
     //Guess-Round #1
-    public boolean guessColor(final int tempID, Card card, boolean guessBlack) {
+    public boolean guessColor(Card card, boolean guessBlack) {
         boolean cardIsBlack = true;
         if (card.getSuit() == 1 || card.getSuit() == 2) {//Red
             cardIsBlack = false;
@@ -92,7 +92,7 @@ public class GamePlayServiceImpl implements GamePlayService {
 
     @Override
     //Guess-Round #2
-    public boolean guessHigherLower(final int tempID, Card card, Card reference, boolean guessHigher) {
+    public boolean guessHigherLower(Card card, Card reference, boolean guessHigher) {
         int rank=card.getRank();
         int rankRef=card.getRank();
 
@@ -106,7 +106,7 @@ public class GamePlayServiceImpl implements GamePlayService {
         if(rank==rankRef)
             return true;
 
-        if (rank < rankRef) //rank is higher than reference
+        if (rank > rankRef) //rank is higher than reference
             return guessHigher;
         else
             return !guessHigher;
@@ -114,7 +114,7 @@ public class GamePlayServiceImpl implements GamePlayService {
 
     @Override
     //Guess-Round #3
-    public boolean guessBetweenOutside(final int tempID, Card card, Card refOne, Card refTwo, boolean guessBetween) {
+    public boolean guessBetweenOutside(Card card, Card refOne, Card refTwo, boolean guessBetween) {
         int rank, rankLow, rankHigh;
         rank = card.getRank();
         if (refOne.getRank() < refTwo.getRank()) {
@@ -144,7 +144,7 @@ public class GamePlayServiceImpl implements GamePlayService {
 
     @Override
     //Guess-Round #4
-    public boolean guessSuit(final int tempID, Card card, int suit) {
+    public boolean guessSuit(Card card, int suit) {
         if (card.getSuit() == suit)
             return true;
         else

@@ -150,15 +150,15 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     public void onClick_FirstOption(View view) {
         switch (playersStorage.getState()) {
             case LAP1A:
-                scored = gamePlayService.guessColor(playersStorage.getTempID(), cards[0], true);
+                scored = gamePlayService.guessColor(cards[0], true);
                 CardUtility.turnCard(tV_card1, cards[0]);
                 break;
             case LAP1B:
-                scored = gamePlayService.guessHigherLower(playersStorage.getTempID(), cards[1], cards[0], true);
+                scored = gamePlayService.guessHigherLower(cards[1], cards[0], true);
                 CardUtility.turnCard(tV_card2, cards[1]);
                 break;
             case LAP1C:
-                scored = gamePlayService.guessBetweenOutside(playersStorage.getTempID(), cards[2], cards[0], cards[1] ,true);
+                scored = gamePlayService.guessBetweenOutside(cards[2], cards[0], cards[1] ,true);
                 CardUtility.turnCard(tV_card3, cards[2]);
                 break;
         }
@@ -169,15 +169,15 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     public void onClick_SecondOption(View view) {
         switch (playersStorage.getState()) {
             case LAP1A:
-                scored = gamePlayService.guessColor(playersStorage.getTempID(), cards[0], false);
+                scored = gamePlayService.guessColor(cards[0], false);
                 CardUtility.turnCard(tV_card1, cards[0]);
                 break;
             case LAP1B:
-                scored = gamePlayService.guessHigherLower(playersStorage.getTempID(), cards[1], cards[0], false);
+                scored = gamePlayService.guessHigherLower(cards[1], cards[0], false);
                 CardUtility.turnCard(tV_card2, cards[1]);
                 break;
             case LAP1C:
-                scored = gamePlayService.guessBetweenOutside(playersStorage.getTempID(), cards[2], cards[0], cards[1] ,false);
+                scored = gamePlayService.guessBetweenOutside(cards[2], cards[0], cards[1] ,false);
                 CardUtility.turnCard(tV_card3, cards[2]);
                 break;
         }
@@ -185,21 +185,13 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     }
 
     //for round 4
-    public void onClick_Spade(View view) {
-        guessSuit(0);
-    }
-    public void onClick_Heart(View view) {
-        guessSuit(1);
-    }
-    public void onClick_Diamond(View view) {
-        guessSuit(2);
-    }
-    public void onClick_Club(View view) {
-        guessSuit(3);
-    }
+    public void onClick_Spade(View view)    { guessSuit(0); }
+    public void onClick_Heart(View view)    { guessSuit(1); }
+    public void onClick_Diamond(View view)  { guessSuit(2); }
+    public void onClick_Club(View view)     { guessSuit(3); }
 
     private void guessSuit(int suit){
-        scored=gamePlayService.guessSuit(playersStorage.getTempID(), cards[3], suit);
+        scored=gamePlayService.guessSuit(cards[3], suit);
         CardUtility.turnCard(tV_card4, cards[3]);
         onAnswer(scored);
     }
