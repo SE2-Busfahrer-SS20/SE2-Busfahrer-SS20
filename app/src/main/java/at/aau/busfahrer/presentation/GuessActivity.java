@@ -94,27 +94,25 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
         ///SCHUMMEL - Aufdeckfunktion
         //Only when I am cheating, the Text View is could be visbible
+        coughtService = CoughtServiceImpl.getInstance();
         tV_erwischt.setVisibility(View.INVISIBLE);
 
     }
 
     public void onClick_btCought(View view) {
+        //erwischt dto an Server schicken
         //if the current player was cheating, he gets one point and the textView will be visible
-        if (coughtService.isCheating()==true){
-            //TextView "Erwischt!"
-            if(playersStorage.getCurrentTurn()==playersStorage.getTempID()){
-                tV_erwischt.setVisibility(View.VISIBLE);
-            }
-
+        if (coughtService.isCheating()==true) {
+            //Wird momentan nur bei mir selbst angezeigt ZUSÄTZLICH soll auch beim Schummler angezeigt werden
+            tV_erwischt.setVisibility(View.VISIBLE);
             //after 5s the TextView is invisible
-            /*tV_erwischt.postDelayed(new Runnable() {
+            tV_erwischt.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     tV_erwischt.setVisibility(View.INVISIBLE);
                 }
-            }, 5000);*/
+            }, 5000);
         }
-
 
     }
 
