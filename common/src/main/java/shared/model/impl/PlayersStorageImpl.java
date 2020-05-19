@@ -66,7 +66,9 @@ public class PlayersStorageImpl implements PlayersStorage {
     }
 
     private void nextPlayersTurn(){
+
         new Thread(new Runnable(){
+            @Override
             public void run(){
                 if(guessRoundListener!=null){
                     guessRoundListener.onUpdateMessage();

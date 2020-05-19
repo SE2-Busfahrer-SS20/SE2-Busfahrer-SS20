@@ -1,5 +1,6 @@
 package at.aau.busfahrer.presentation;
 
+import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -29,12 +30,16 @@ import shared.model.GuessRoundListener;
 import shared.model.Player;
 import shared.model.impl.GameImpl;
 import shared.model.impl.PlayersStorageImpl;
+import shared.model.impl.playersStorage;
 import shared.networking.dto.PlayedMessage;
 
 
 public class GuessActivity extends AppCompatActivity implements GuessRoundListener {
+
+    Handler uiHandler;
     private Card[] cards;
     private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
+
     private GamePlayService gamePlayService = GamePlayServiceImpl.getInstance();
 
     private TextView tV_guessQuestion;
@@ -46,6 +51,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private TextView tV_card3;
     private TextView tV_card4;
     private Button bt_cought;
+    private Button btn_score;
+
 
     private boolean answer;
     private CheatService cheatService;
@@ -60,6 +67,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_guess);
+        uiHandler=new Handler();
+        btn_score = findViewById(R.id.bt_score);
 
         //Visibility
         tV_guessQuestion = findViewById(R.id.tV_guessQuestion);
@@ -87,7 +96,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         cheatService = CheatServiceImpl.getInstance();
         cheatService.setContext(getApplicationContext(), getClass().getName());
         cheatService.startListen();
-        handleCheat();
+        //handleCheat();
 
         //Register Callback
         playersStorage.registerGuessRoundListener(this);
@@ -118,6 +127,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
     }
     public void onClickScore(View v){
+
         ScoreFragment aboutFragment = new ScoreFragment();
         getSupportFragmentManager()
                 .beginTransaction()
@@ -178,6 +188,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
 
     public void onClick_SecondOption(View view) {
+
         switch (playersStorage.getState()) {
             case LAP1A:
                 answer = gamePlayService.guessColor(playersStorage.getTempID(), cards[0], false);
@@ -200,7 +211,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     }
 
     public void onClick_feedback(View view) {
-        gamePlayService.nextPlayer(1, playersStorage.getTempID(), answer);
         switch (playersStorage.getState()) {
             case LAP1A:
                 gamePlayService.nextPlayer(1, playersStorage.getTempID(), answer);
@@ -219,14 +229,20 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         }
         onPauseMode();
     }
-
+    private void updateScoreButton(int score){
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                btn_score.setText("Score: "+score);
+            }
+        });
+    }
 
     @Override   //Callback - executed when receiving
     public void onUpdateMessage() {
-
         System.out.println("It is the turn of  player: " + playersStorage.getCurrentTurn() + " !!!!!!!!");
 
-
+        updateScoreButton(playersStorage.getScore().get(playersStorage.getTempID()));
         if (playersStorage.getCurrentTurn() == 0) {
             //This means that every player has finished the turn of the current round and the next round can be started
             //NEXT LAP
@@ -245,7 +261,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         } else {
             onPauseMode();
             //when it is not my turn, the cought button is Visible
-            bt_cought.setVisibility(View.VISIBLE);
+            //bt_cought.setVisibility(View.VISIBLE);
         }
         //update Score in UI (feature does not exist yet)
 
@@ -270,7 +286,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     public void onClickCard4(View view) {
         // CardUtility.turnCard(tV_card4, cards[3]);
     }
-
 
     private void onPauseMode() {
         tV_guessQuestion.setText("wait till it is your turn..");   //Extend this to "it's playernames turn"
