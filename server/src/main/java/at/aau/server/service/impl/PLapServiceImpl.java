@@ -63,6 +63,7 @@ public class PLapServiceImpl implements PLapService {
         // check if the lap is finished, then update all players and notify the looser to start "Bushmen Activity"
         if (lapFinished()) {
             updatePlayers();
+            System.out.println("finished Lap");
         }
         System.out.println("After setting new Points.");
         printPlayerPoints();

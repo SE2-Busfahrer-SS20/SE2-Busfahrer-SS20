@@ -46,7 +46,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             public void received(Connection connection, Object object) {
                 // handle null objects or not known Objects.
                 if (!(object instanceof BaseMessage)) {
-                    Log.info("Network Client Listener Error: Received Object is null or not from Type BaseMessage.");
+                    // Log.info("Network Client Listener Error: Received Object is null or not from Type BaseMessage.");
                 } else if (object instanceof ConfirmRegisterMessage) {
                     Log.debug("Registration Confirmed");
                     playersStorage.setMaster(((ConfirmRegisterMessage)object).isMaster());
@@ -111,7 +111,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     public static synchronized NetworkClient getInstance() {
         if (instance == null)
-            return new NetworkClientKryo();
+            instance = new NetworkClientKryo();
         return instance;
     }
 }

@@ -46,7 +46,6 @@ public class PLabServiceImpl implements PLabService {
         /*
         for(int i = 0; i < 10; i++)
             pCards[i] = deck.drawCard();*/
-
     }
 
 
@@ -88,16 +87,16 @@ public class PLabServiceImpl implements PLabService {
             this.playerNames = ((StartPLabMessage) msg).getPlayerNames();
             cardCallback.callback(pCards);
         });
-        Thread thread = new Thread(() -> {
+
+        Thread startThread = new Thread(() -> {
             try {
                 Log.i("PLab Service", "PLab start was triggered.");
-                client.connect(NetworkConstants.host);
                 this.client.sendMessage(new StartPLabMessage());
             } catch (Exception e) {
                 Log.e("Error in PLabService", e.toString(),e);
             }
         });
-        thread.start();
+        startThread.start();
     }
 
     @Override
@@ -118,7 +117,7 @@ public class PLabServiceImpl implements PLabService {
     @Override
     public void dealPoints(String playerName) {
         this.client.registerCallback(WinnerLooserMessage.class, msg -> {
-            Log.i("Callback started.", "");
+            Log.i("Callback started.", "Winner Looser Callback started.");
             boolean isLooser = ((WinnerLooserMessage) msg).getIsLooser();
             finishedLabCallback.callback(isLooser);
         });
@@ -126,7 +125,6 @@ public class PLabServiceImpl implements PLabService {
         Thread thread = new Thread(() -> {
             try {
                 Log.i("PLab Service Client", "PLab send deal point message.");
-                client.connect(NetworkConstants.host);
                 this.client.sendMessage(msg);
             } catch (Exception e) {
                 Log.e("Error in PLabService", e.toString(),e);
