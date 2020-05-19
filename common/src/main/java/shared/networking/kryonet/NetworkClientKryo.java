@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import shared.model.GameState;
+import shared.model.impl.Cheater;
 import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
 import shared.networking.NetworkClient;
@@ -82,6 +83,14 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     // call the correct callback to store cards and update UI Thread.
                     callbackMap.get(WinnerLooserMessage.class).callback((BaseMessage) object);
                 }
+
+                if(object instanceof CheatedMessage){
+                    Log.info("CheatedMessage received");
+                    CheatedMessage uM = (CheatedMessage)object;
+                    playersStorage.updateCheaterList(
+                            new Cheater(uM.getTempID(),uM.hasCheated(),uM.getTimeStamp(),uM.getCheatType(),uM.getPlayerName()));
+                }
+
                 // just for debugging purposes.
                 if (object instanceof TextMessage) {
                     Log.debug("Callback is instance of TextMessage");

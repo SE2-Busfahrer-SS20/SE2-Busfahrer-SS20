@@ -2,10 +2,12 @@ package shared.networking.dto;
 
 public class CheatedMessage extends BaseMessage {
 
+
     private int playerId;
     private boolean cheated;
     private long timeStamp;
     private int cheatType;
+    private String playerName;
 
     public CheatedMessage(){}
 
@@ -14,6 +16,14 @@ public class CheatedMessage extends BaseMessage {
         this.cheated = cheated;
         this.timeStamp = timeStamp;
         this.cheatType = cheatType;
+    }
+
+    public CheatedMessage(int playerId, boolean cheated, long timeStamp, int cheatType,  String playerName) {
+        this.playerId = playerId;
+        this.cheated = cheated;
+        this.timeStamp = timeStamp;
+        this.cheatType = cheatType;
+        this.playerName = playerName;
     }
 
     public int getTempID() {
@@ -46,5 +56,13 @@ public class CheatedMessage extends BaseMessage {
 
     public void setCheatType(int cheatType) {
         this.cheatType = cheatType;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 }
