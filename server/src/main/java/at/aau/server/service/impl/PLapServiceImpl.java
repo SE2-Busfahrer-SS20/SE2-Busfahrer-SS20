@@ -10,7 +10,9 @@ import java.util.List;
 import at.aau.server.GameServer;
 import at.aau.server.service.GameService;
 import at.aau.server.service.PLapService;
+import shared.model.Game;
 import shared.model.Player;
+import shared.networking.dto.DealPointsMessage;
 import shared.networking.dto.StartPLabMessage;
 
 
@@ -45,13 +47,30 @@ public class PLapServiceImpl implements PLapService {
     }
 
     @Override
-    public void finishLab() {
-
+    public void finishLab(String playerName, int points) {
+        printPlayerPoints();
+        List<Player> playerList = gameService.getGame().getPlayerList();
+        for (int i = 0; i < playerList.size(); i++) {
+            if (playerList.get(i).getName().equals(playerName)) {
+                playerList.get(i).addPoints(points);
+            }
+        }
+        gameService.getGame().setPlayerList(playerList);
+        gameService.getGame().playerFinishedPLav(); // increases the counter for finished players.
+        if (lapFinished()) {
+            updatePlayers();
+        }
+        System.out.println("After setting new Points.");
+        printPlayerPoints();
     }
 
     @Override
     public void start() {
         addListener();
+    }
+
+    public void updatePlayers() {
+        // TODO: check who is the looser and update players.
     }
 
     private List<String> getPlayerNames() {
@@ -69,8 +88,28 @@ public class PLapServiceImpl implements PLapService {
                     Log.debug("PLab started for Connection: ", connection.toString());
                     startLab(connection);
                 }
+                if (object instanceof DealPointsMessage) {
+                    DealPointsMessage msg = (DealPointsMessage) object;
+                    Log.debug("PLab got Points.", + msg.getPoints() + " points for player: " + msg.getDestPlayerName());
+                    finishLab(msg.getDestPlayerName(), msg.getPoints());
+                }
+
             }
         });
+    }
+
+    /**
+     * Just for Testing. TODO: remove.
+     */
+    private void printPlayerPoints() {
+        for(Player p : gameService.getGame().getPlayerList()) {
+            System.out.println("Player: " + p.getName() + " has: " + p.getScore() + " points.");
+        }
+    }
+
+    private boolean lapFinished() {
+        Game game = gameService.getGame();
+        return game.getPlapFinishedCount() == game.getPlayerList().size();
     }
 
 }
