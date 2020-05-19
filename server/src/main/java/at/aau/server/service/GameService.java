@@ -49,5 +49,5 @@ public interface GameService {
     // Deck getCardStack();
     Card[] getPlayersCards(int player);
     //Guess-Rounds
-    void GuessRound(int lap, int tempID, boolean scored);
+    void GuessRound(GameState lap, int tempID, boolean scored);
 }

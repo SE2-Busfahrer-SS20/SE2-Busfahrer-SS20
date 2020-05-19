@@ -81,10 +81,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         cards = playersStorage.getCards();
         if (!playersStorage.isMaster()) {
             onPauseMode();
-            //bt_cought.setVisibility(View.VISIBLE); //moved to onPauseMode()
         } else {
             onPlayMode();
-            //bt_cought.setVisibility(View.INVISIBLE); //moved to onPauseMode()
         }
 
         //Cheat Service
@@ -148,6 +146,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     }
 
 
+    //First Button used in Guess round 1 to 3 as: black, higher, outside
     public void onClick_FirstOption(View view) {
         switch (playersStorage.getState()) {
             case LAP1A:
@@ -162,14 +161,11 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 scored = gamePlayService.guessBetweenOutside(playersStorage.getTempID(), cards[2], cards[0], cards[1] ,true);
                 CardUtility.turnCard(tV_card3, cards[2]);
                 break;
-            case LAP1D:
-                break;
-            default:
-                //ERROR
         }
         onAnswer(scored);
     }
 
+    //Second Button used in Guess round 1 to 3 as: red, lower, between
     public void onClick_SecondOption(View view) {
         switch (playersStorage.getState()) {
             case LAP1A:
@@ -184,113 +180,80 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 scored = gamePlayService.guessBetweenOutside(playersStorage.getTempID(), cards[2], cards[0], cards[1] ,false);
                 CardUtility.turnCard(tV_card3, cards[2]);
                 break;
-            case LAP1D:
-                break;
-            default:
-                //ERROR
         }
         onAnswer(scored);
-
     }
 
     //for round 4
     public void onClick_Spade(View view) {
-        scored=gamePlayService.guessSuit(playersStorage.getTempID(), cards[3], 0);
-        CardUtility.turnCard(tV_card4, cards[3]);
-        onAnswer(scored);
+        guessSuit(0);
     }
     public void onClick_Heart(View view) {
-        scored=gamePlayService.guessSuit(playersStorage.getTempID(), cards[3], 1);
-        CardUtility.turnCard(tV_card4, cards[3]);
-        onAnswer(scored);
+        guessSuit(1);
     }
     public void onClick_Diamond(View view) {
-        scored=gamePlayService.guessSuit(playersStorage.getTempID(), cards[3], 2);
-        CardUtility.turnCard(tV_card4, cards[3]);
-        onAnswer(scored);
+        guessSuit(2);
     }
     public void onClick_Club(View view) {
-        scored=gamePlayService.guessSuit(playersStorage.getTempID(), cards[3], 3);
+        guessSuit(3);
+    }
+
+    private void guessSuit(int suit){
+        scored=gamePlayService.guessSuit(playersStorage.getTempID(), cards[3], suit);
         CardUtility.turnCard(tV_card4, cards[3]);
         onAnswer(scored);
     }
 
     public void onClick_feedback(View view) {
-
-        switch (playersStorage.getState()) {
-            //nextPlayer sends DTO playedMessage to Server
-            case LAP1A:
-                gamePlayService.nextPlayer(1, playersStorage.getTempID(), scored);
-                break;
-            case LAP1B:
-                gamePlayService.nextPlayer(2, playersStorage.getTempID(), scored);
-                break;
-            case LAP1C:
-                gamePlayService.nextPlayer(3, playersStorage.getTempID(), scored);
-                break;
-            case LAP1D:
-                gamePlayService.nextPlayer(4, playersStorage.getTempID(), scored);
-                break;
-            default:
-                //ERROR
-        }
+        gamePlayService.nextPlayer(playersStorage.getState(), playersStorage.getTempID(), scored);
         onPauseMode();
     }
 
-    @Override   //Callback - executed when receiving
+    @Override   //Callback - executed when receiving UpdateMessage from server (after each players turn)
     public void onUpdateMessage() {
 
         if (playersStorage.getCurrentTurn() == 0) {
             //This means that every player has finished the turn of the current round and the next round can be started
-            //NEXT LAP
             boolean end = nextGameState();
             if (end) {
-                //After all Guess-Rounds start Pyramid:
-                Intent i = new Intent(GuessActivity.this, MainMenuActivity.class);  //Change this to Pyramid Round
+                //After all Guess-Rounds start Pyramid Activity:
+                Intent i = new Intent(GuessActivity.this, PLapActivity.class);
                 startActivity(i);
             }
         }
 
         if (playersStorage.getCurrentTurn() == playersStorage.getTempID()) {    //this players turn
             onPlayMode();
-            //when it is my turn, the cought button is Invisible
-            //bt_cought.setVisibility(View.INVISIBLE); //moved to onPlayMode();
         } else {
             onPauseMode();
-            //when it is not my turn, the cought button is Visible
-            //bt_cought.setVisibility(View.VISIBLE); //moved to onPauseMode();
         }
-        //update Score in UI (feature does not exist yet)
+        //TODO: update Score in UI
 
     }
 
+    //This methode changes visibility of UI elements when it is not this players turn
     private void onPauseMode() {
+        //Execute on runOnUIThread to enable calling this funiction in other thread
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tV_guessQuestion.setText("wait till it is your turn..");   //Extend this to "it's playernames turn"
+                tV_guessQuestion.setText("wait till it is your turn..");   //TODO: Extend this to "it's playernames turn"
                 bt_FirstOption.setVisibility(View.INVISIBLE);
                 bt_SecondOption.setVisibility(View.INVISIBLE);
                 bt_Spade.setVisibility(View.INVISIBLE);
                 bt_Heart.setVisibility(View.INVISIBLE);
                 bt_Diamond.setVisibility(View.INVISIBLE);
                 bt_Club.setVisibility(View.INVISIBLE);
-
-                bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_gray);
-                bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_gray);
-
-                tV_card1.setTextColor(Color.GRAY);
-                tV_card2.setTextColor(Color.GRAY);
-                tV_card3.setTextColor(Color.GRAY);
-                tV_card4.setTextColor(Color.GRAY);
-                tV_feedback.setVisibility(View.INVISIBLE);
-
                 bt_cought.setVisibility(View.VISIBLE);
+
+                tV_feedback.setVisibility(View.INVISIBLE);
             }
         });
     }
 
+    //This methode changes visibility of UI elements when it is not players turn
     private void onPlayMode() {
+        //Execute on runOnUIThread to enable calling this funiction in other thread
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -300,12 +263,12 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 bt_Club.setVisibility(View.INVISIBLE);
                 bt_FirstOption.setVisibility(View.VISIBLE);
                 bt_SecondOption.setVisibility(View.VISIBLE);
+                bt_cought.setVisibility(View.INVISIBLE);
+
                 tV_card1.setTextColor(Color.parseColor("#000000"));
                 tV_card2.setTextColor(Color.parseColor("#000000"));
                 tV_card3.setTextColor(Color.parseColor("#000000"));
                 tV_card4.setTextColor(Color.parseColor("#000000"));
-
-                bt_cought.setVisibility(View.INVISIBLE);
 
                 switch (playersStorage.getState()) {
                     case LAP1A:
@@ -328,7 +291,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                         bt_SecondOption.setText("Outside");
                         break;
                     case LAP1D:
-                        tV_guessQuestion.setText("Guess the fouth cards suit");
+                        tV_guessQuestion.setText("Guess the fouth cards suit.");
                         bt_Spade.setVisibility(View.VISIBLE);
                         bt_Heart.setVisibility(View.VISIBLE);
                         bt_Diamond.setVisibility(View.VISIBLE);
@@ -356,6 +319,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         bt_Club.setVisibility(View.INVISIBLE);
     }
 
+    //change GameState and return true when last guessRound was finished
     private boolean nextGameState() {
         switch (playersStorage.getState()) {
             case LAP1A:
@@ -374,7 +338,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 //ERROR
         }
         return false;
-
     }
 
     // removes android status bar on top, for fullscreen
@@ -384,6 +347,13 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
+
+
+
+
+
+
+
 
 
     //The following 4 onClick-methodes are just relevant for Sprint 1 where we want to be able to turn each card

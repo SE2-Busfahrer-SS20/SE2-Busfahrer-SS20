@@ -4,6 +4,7 @@ import com.esotericsoftware.minlog.Log;
 
 import at.aau.busfahrer.service.GamePlayService;
 import shared.model.Card;
+import shared.model.GameState;
 import shared.networking.NetworkClient;
 import shared.networking.dto.CheatedMessage;
 import shared.networking.dto.CreateGameMessage;
@@ -16,7 +17,6 @@ public class GamePlayServiceImpl implements GamePlayService {
 
     private NetworkClient client;
     private String host;
-    //send this to Server !
 
     //SINGLETON PATTERN
     private static GamePlayServiceImpl Instance;
@@ -80,6 +80,7 @@ public class GamePlayServiceImpl implements GamePlayService {
     //////////GUESS ROUND/////////////////////////
 
     @Override
+    //Guess-Round #1
     public boolean guessColor(final int tempID, Card card, boolean guessBlack) {
         boolean cardIsBlack = true;
         if (card.getSuit() == 1 || card.getSuit() == 2) {//Red
@@ -90,27 +91,29 @@ public class GamePlayServiceImpl implements GamePlayService {
     }
 
     @Override
+    //Guess-Round #2
     public boolean guessHigherLower(final int tempID, Card card, Card reference, boolean guessHigher) {
-        if (card.getRank() == reference.getRank()) //same rank counts as correct guess
+        int rank=card.getRank();
+        int rankRef=card.getRank();
+
+        //change rank of ace to 13
+        if (rank == 0)
+            rank = 13;
+        if (rankRef == 0)
+            rankRef = 13;
+
+        //equal cards count as correct guess
+        if(rank==rankRef)
             return true;
 
-        boolean cardIsHigher = true;
-
-        if (card.getRank() < reference.getRank())//card is lower
-            cardIsHigher = false;
-
-        //following two if-statements are needed because Ass is the highest card but stored with Rank=0
-        if (card.getRank() == 0)//second card is Ass -> must be higher
-            return true;
-
-        if (reference.getRank() == 0)//first card is ace -> second card must be lower, if it is same, this code is not executed
-            return false;
-
-        final boolean scored = guessHigher == cardIsHigher; //true if player guessed correct, otherwise false
-        return scored;
+        if (rank < rankRef) //rank is higher than reference
+            return guessHigher;
+        else
+            return !guessHigher;
     }
 
     @Override
+    //Guess-Round #3
     public boolean guessBetweenOutside(final int tempID, Card card, Card refOne, Card refTwo, boolean guessBetween) {
         int rank, rankLow, rankHigh;
         rank = card.getRank();
@@ -140,6 +143,7 @@ public class GamePlayServiceImpl implements GamePlayService {
     }
 
     @Override
+    //Guess-Round #4
     public boolean guessSuit(final int tempID, Card card, int suit) {
         if (card.getSuit() == suit)
             return true;
@@ -149,7 +153,7 @@ public class GamePlayServiceImpl implements GamePlayService {
 
 
     @Override
-    public void nextPlayer(final int lap, final int tempID, final boolean scored) {
+    public void nextPlayer(final GameState lap, final int tempID, final boolean scored) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {

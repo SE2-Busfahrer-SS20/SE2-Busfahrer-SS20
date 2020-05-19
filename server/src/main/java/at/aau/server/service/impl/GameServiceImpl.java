@@ -147,13 +147,9 @@ public class GameServiceImpl implements GameService {
 
     }
 
-    //Register
 
-
-    //Methodes for Guess-Rounds
-    //TODO: change int value to type of lap enum
     @Override
-    public void GuessRound(int lap, int tempID, boolean scored) {
+    public void GuessRound(GameState lap, int tempID, boolean scored) {
 
         if (scored)
             game.addPointsToPlayer(tempID, 1);
@@ -170,66 +166,9 @@ public class GameServiceImpl implements GameService {
         int nextPlayer = -1;
         if (tempID < (game.getPlayerCount() - 1)) {
             nextPlayer = tempID + 1;
-            //this.game.setState(GameState.LAP1A);//should be redundant?!
         } else { //if next player = 0 --> client starts guess round 2!
             nextPlayer = 0;
-
-            switch (lap) {
-                case 1:
-                    this.game.setState(GameState.LAP1B);  //switch to Guess round 2
-                    break;
-                case 2:
-                    this.game.setState(GameState.LAP1C);
-                    break;
-                case 3:
-                    this.game.setState(GameState.LAP1D);
-                    break;
-                case 4:
-                    this.game.setState(GameState.LAP2); //switch to Pyramid - (only during developing process)
-                    break;
-                default:
-                    //ERROR
-                    break;
-            }
-        }
-        game.setCurrentPlayer(nextPlayer);
-
-        //send DTO updateMessage to all clients
-        UpdateMessage uM = new UpdateMessage(nextPlayer, score);
-        int count = this.game.getPlayerCount();
-        for (int i = 0; i < count; i++) {
-            Connection con = this.game.getPlayerList().get(i).getConnection();
-            con.sendTCP(uM);
-        }
-    }
-
-    //Not used anymore, just here as backup/reference of old verson //can be deleted in next stable version
-    private void GuessRound1(int tempID, boolean scored) {
-        //update score
-        if (scored)
-            game.addPointsToPlayer(tempID, 1);
-
-        //ArrayList of all players scores
-        ArrayList<Integer> score = new ArrayList<>();
-        for (int i = 0; i < game.getPlayerCount(); i++) {
-            int playerScore = game.getPlayerList().get(i).getScore();
-            score.add(playerScore);
-        }
-
-        //Reset Cheating
-        resetCheated();
-
-        //Who's next?
-        int nextPlayer;
-        if (tempID < (game.getPlayerCount() - 1)) {
-            nextPlayer = tempID + 1;
-            this.game.setState(GameState.LAP1A);
-        } else { //if next player = 0 --> client starts guess round 2!
-            nextPlayer = 0;
-            //this.game.setState(GameState.LAP1B);  //switch to Guess round 2
-            this.game.setState(GameState.LAP2); //switch to Pyramid - (only during developing process)
-
-            //CALL METHODE FOR PYRAMIDE HERE !!
+            this.game.setState(lap);
         }
 
         game.setCurrentPlayer(nextPlayer);

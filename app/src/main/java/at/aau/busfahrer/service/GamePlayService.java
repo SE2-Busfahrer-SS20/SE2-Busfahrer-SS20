@@ -1,6 +1,7 @@
 package at.aau.busfahrer.service;
 
 import shared.model.Card;
+import shared.model.GameState;
 
 public interface GamePlayService {
 
@@ -15,7 +16,7 @@ public interface GamePlayService {
     boolean guessHigherLower(final int tempID, Card card, Card reference, boolean guessHigher);
     boolean guessBetweenOutside(final int tempID, Card card, Card refOne, Card refTwo, boolean guessBetween);
     boolean guessSuit(final int tempID, Card card, int suit);
-    void nextPlayer(final int lap, final int tempID, final boolean scored);
+    void nextPlayer(final GameState lap, final int tempID, final boolean scored);
 
     void sendMsgCheated(final int playerId, final boolean cheated, final long timeStamp, final int cheatType);
 
