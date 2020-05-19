@@ -1,5 +1,6 @@
 package at.aau.server.service;
 
+import at.aau.common.shared.model.CardImplTest;
 import at.aau.server.GameServer;
 import at.aau.server.service.impl.GameServiceImpl;
 import at.aau.server.service.impl.PLapServiceImpl;
@@ -10,7 +11,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import shared.model.Card;
 import shared.model.Player;
+import shared.networking.dto.BaseMessage;
+import shared.networking.dto.StartPLabMessage;
 import shared.networking.dto.WinnerLooserMessage;
 
 import java.util.ArrayList;
@@ -94,6 +98,13 @@ public class PLabServiceTest {
                Mockito.verify(winnerConnection, times(1)).sendTCP(argThat(new MessageMatcherWinner()));
                Mockito.verify(looserConnection, times(1)).sendTCP(argThat(new MessageMatcherLooser()));
 
+        }
+        @Test
+        public void testStartPLabDto() {
+                StartPLabMessage noarg = new StartPLabMessage();
+                Assert.assertTrue(noarg instanceof BaseMessage);
+                StartPLabMessage msg = new StartPLabMessage(new Card[10], getStringPlayerList());
+                Assert.assertEquals(msg.getPlayerNames(),getStringPlayerList());
         }
 
         private void doFinishingSteps() {
