@@ -34,7 +34,8 @@ public class PLabFinished extends AppCompatActivity {
     }
 
     public void dealButtonClick(View v) {
-        // TODO: implement send Points to Server.
+        String selectedPlayer = ((Spinner)findViewById(R.id.sP_name_spinner)).getSelectedItem().toString();
+        pLabService.dealPoints(selectedPlayer);
         setWait();
         v.setEnabled(false);
     }
