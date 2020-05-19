@@ -5,13 +5,12 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:focusable="true"
+    android:background="@color/black_overlay"
     tools:context=".presentation.ScoreFragment">
 
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="324dp"
-        android:text="@string/hello_blank_fragment" />
-
+        android:layout_height="233dp"
+        android:id="@+id/scoreList"
+        android:background="@drawable/bg_btn_orange"/>
 </FrameLayout>
