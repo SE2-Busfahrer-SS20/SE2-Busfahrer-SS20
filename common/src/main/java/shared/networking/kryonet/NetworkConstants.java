@@ -44,7 +44,8 @@ public class NetworkConstants {
             UpdateMessage.class,
             CheatedMessage.class,
             StartPLabMessage.class,
-            DealPointsMessage.class
+            DealPointsMessage.class,
+            WinnerLooserMessage.class
     };
 
 }
