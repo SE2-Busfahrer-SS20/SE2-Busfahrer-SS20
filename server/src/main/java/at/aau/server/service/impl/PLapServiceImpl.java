@@ -60,6 +60,7 @@ public class PLapServiceImpl implements PLapService {
         }
         gameService.getGame().setPlayerList(playerList);
         gameService.getGame().playerFinishedPLav(); // increases the counter for finished players.
+        // check if the lap is finished, then update all players and notify the looser to start "Bushmen Activity"
         if (lapFinished()) {
             updatePlayers();
         }
@@ -72,6 +73,7 @@ public class PLapServiceImpl implements PLapService {
         addListener();
     }
 
+    @Override
     public void updatePlayers() {
         List<Player> playerList = gameService.getGame().getPlayerList();
         // Sort players on points attribute.

@@ -11,5 +11,10 @@ public interface PLapService {
      * Start PLab Service and provided Listeners.
      */
     void start();
+
+    /**
+     * send message to all players. An boolean identifies the looser.
+     */
+    void updatePlayers();
 }
 
