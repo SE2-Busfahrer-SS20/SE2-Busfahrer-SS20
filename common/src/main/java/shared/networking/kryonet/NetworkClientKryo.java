@@ -86,6 +86,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 if (object instanceof TextMessage) {
                     Log.debug("Callback is instance of TextMessage");
                     Log.debug(((TextMessage) (object)).getText());
+                    callbackMap.get(TextMessage.class).callback((BaseMessage) object);
                 }
 
                 if (callback != null && object instanceof BaseMessage) {
