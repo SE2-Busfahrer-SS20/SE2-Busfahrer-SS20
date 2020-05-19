@@ -22,6 +22,7 @@ public class NetworkConstants {
     // public static final int UDP_PORT = 54777;
     public static final String host ="10.0.0.20";
 
+
     // List for registered dto classes. Add needed classes to the array.
     public static final Class[] CLASS_LIST = {
             BaseMessage.class,
@@ -40,12 +41,12 @@ public class NetworkConstants {
             java.util.ArrayList.class,
             PlayerImpl.class,
             com.esotericsoftware.kryonet.Connection.class,
-
             PlayedMessage.class,
             UpdateMessage.class,
             CheatedMessage.class,
-
-
+            StartPLabMessage.class,
+            DealPointsMessage.class,
+            WinnerLooserMessage.class
     };
 
 }

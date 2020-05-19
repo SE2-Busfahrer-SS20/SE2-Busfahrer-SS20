@@ -18,6 +18,7 @@ public class GameImpl implements Game {
     private Deck cardStack;
     private Card[] pCards;
     private int currentPlayer; //It is this players turn //value=Index of playerList
+    private int plapFinishedCounter; //contains counter for finished players.
 
     // define constants for MAX Players.
     private final static int PLAYER_LIMIT_MAX = 8;
@@ -29,6 +30,7 @@ public class GameImpl implements Game {
         this.playerList = new ArrayList<>();
         cardStack=new DeckImpl();//Add 52 Cards to Stack
         currentPlayer=0; //in first Guess-Round the player who was Master in WaitActivity starts
+        plapFinishedCounter = 0;
     }
 
     public Player addPlayer(String name, String MACAdress, Connection connection){
@@ -119,5 +121,15 @@ public class GameImpl implements Game {
 
     public void setCurrentPlayer(int currentPlayer) {
         this.currentPlayer = currentPlayer;
+    }
+
+    @Override
+    public int getPlapFinishedCount() {
+        return plapFinishedCounter;
+    }
+
+    @Override
+    public void playerFinishedPLav() {
+        plapFinishedCounter++;
     }
 }

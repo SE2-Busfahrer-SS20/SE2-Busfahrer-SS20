@@ -31,6 +31,8 @@ public class BushmenActivity extends AppCompatActivity {
 
     private int KartenCounter=0;
 
+    private boolean isLooser; // is true in case that the player is a looser.
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +52,8 @@ public class BushmenActivity extends AppCompatActivity {
 
         // Neue Initialisieren
         Reset_Game();
-
-
+        // set looser variable. Value will be set in PLapFinished Activity.
+        isLooser = getIntent().getBooleanExtra("LOST_GAME", false);
     }
 
     private void UpdateAnzeige(){
