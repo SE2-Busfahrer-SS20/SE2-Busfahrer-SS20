@@ -192,9 +192,7 @@ public class GameServiceImpl implements GameService {
                     break;
             }
         }
-
         game.setCurrentPlayer(nextPlayer);
-
 
         //send DTO updateMessage to all clients
         UpdateMessage uM = new UpdateMessage(nextPlayer, score);

@@ -145,21 +145,21 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             case LAP1A:
                 scored = gamePlayService.guessColor(playersStorage.getTempID(), cards[0], true);
                 CardUtility.turnCard(tV_card1, cards[0]);
-                onAnswer(scored);
                 break;
             case LAP1B:
                 scored = gamePlayService.guessHigherLower(playersStorage.getTempID(), cards[1], cards[0], true);
-                CardUtility.turnCard(tV_card1, cards[1]);
-                onAnswer(scored);
+                CardUtility.turnCard(tV_card2, cards[1]);
                 break;
             case LAP1C:
+                scored = gamePlayService.guessBetweenOutside(playersStorage.getTempID(), cards[2], cards[0], cards[1] ,true);
+                CardUtility.turnCard(tV_card3, cards[2]);
                 break;
             case LAP1D:
                 break;
             default:
                 //ERROR
-
         }
+        onAnswer(scored);
     }
 
     public void onClick_SecondOption(View view) {
@@ -167,20 +167,21 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             case LAP1A:
                 scored = gamePlayService.guessColor(playersStorage.getTempID(), cards[0], false);
                 CardUtility.turnCard(tV_card1, cards[0]);
-                onAnswer(scored);
                 break;
             case LAP1B:
                 scored = gamePlayService.guessHigherLower(playersStorage.getTempID(), cards[1], cards[0], false);
                 CardUtility.turnCard(tV_card2, cards[1]);
-                onAnswer(scored);
                 break;
             case LAP1C:
+                scored = gamePlayService.guessBetweenOutside(playersStorage.getTempID(), cards[2], cards[0], cards[1] ,false);
+                CardUtility.turnCard(tV_card3, cards[2]);
                 break;
             case LAP1D:
                 break;
             default:
                 //ERROR
         }
+        onAnswer(scored);
 
     }
 
@@ -295,7 +296,11 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                         bt_SecondOption.setText("Lower");
                         break;
                     case LAP1C:
-
+                        tV_guessQuestion.setText("Guess if the third cards rank is between or outside the first and second card.");
+                        bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_black);
+                        bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_black);
+                        bt_FirstOption.setText("Between");
+                        bt_SecondOption.setText("Outside");
                         break;
                     case LAP1D:
 
@@ -334,13 +339,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 playersStorage.setState(GameState.LAP1B);
                 break;
             case LAP1B:
-                //playersStorage.setState(GameState.LAP1C);
-                //break;
-
-                //just till other rounds are implemented
-                playersStorage.setState(GameState.LAP2);//Pyramid Round
-                return true;
-
+                playersStorage.setState(GameState.LAP1C);
+                break;
             case LAP1C:
                 playersStorage.setState(GameState.LAP1D);
                 break;
