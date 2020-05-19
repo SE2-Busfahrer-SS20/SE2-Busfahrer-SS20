@@ -52,9 +52,9 @@ public class PLapServiceImpl implements PLapService {
     public void finishLab(String playerName, int points) {
         printPlayerPoints();
         List<Player> playerList = gameService.getGame().getPlayerList();
-        for (int i = 0; i < playerList.size(); i++) {
-            if (playerList.get(i).getName().equals(playerName)) {
-                playerList.get(i).addPoints(points);
+        for (Player player : playerList) {
+            if (player.getName().equals(playerName)) {
+                player.addPoints(points);
             }
         }
         gameService.getGame().setPlayerList(playerList);
@@ -64,8 +64,6 @@ public class PLapServiceImpl implements PLapService {
             updatePlayers();
             Log.debug("finished Lap");
         }
-        Log.debug("After setting new Points.");
-        printPlayerPoints();
     }
 
     @Override
