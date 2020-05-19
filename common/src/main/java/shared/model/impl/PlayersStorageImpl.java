@@ -24,7 +24,7 @@ public class PlayersStorageImpl implements PlayersStorage {
         playerNames = new ArrayList<String>();
         score= new ArrayList<Integer>();
         state=GameState.INIT;
-    };
+    }
 
     public static synchronized PlayersStorageImpl getInstance(){
         if(PlayersStorageImpl.instance==null){
@@ -145,6 +145,13 @@ public class PlayersStorageImpl implements PlayersStorage {
 
     public void setScore(ArrayList<Integer> score) {
         this.score = score;
+    }
+    public void initScores(){
+        ArrayList<Integer> scores= new ArrayList<Integer>();
+        for(int i=0;i< getPlayerNames().size();i++){
+            scores.add(0);
+        }
+        this.score=scores;
     }
 
     public void updateOnMessage(ArrayList<Integer> score, int currentTurn){
