@@ -32,22 +32,26 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
     private GamePlayService gamePlayService = GamePlayServiceImpl.getInstance();
 
-    private TextView tV_guessQuestion;
+    private Button bt_cought;
     private Button bt_FirstOption;
     private Button bt_SecondOption;
+    private Button bt_Spade;
+    private Button bt_Heart;
+    private Button bt_Diamond;
+    private Button bt_Club;
+
+    private TextView tV_guessQuestion;
     private TextView tV_feedback;
     private TextView tV_card1;
     private TextView tV_card2;
     private TextView tV_card3;
     private TextView tV_card4;
-    private Button bt_cought;
+    private TextView tV_erwischt;
 
     private boolean scored;
     private CheatService cheatService;
-
-
     private CoughtServiceImpl coughtService;
-    private TextView tV_erwischt;
+
     ///
 
     @Override
@@ -56,10 +60,15 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         hideAppTitleBar();
         setContentView(R.layout.activity_guess);
 
-        //Visibility - maybee this could be replaced with onPlayMode()?!
-        tV_guessQuestion = findViewById(R.id.tV_guessQuestion);
+        //Visibility
         bt_FirstOption = findViewById(R.id.bt_FirstOption);
         bt_SecondOption = findViewById(R.id.bt_SecondOption);
+        bt_Spade=findViewById(R.id.bt_Spade);
+        bt_Heart=findViewById(R.id.bt_Heart);
+        bt_Diamond=findViewById(R.id.bt_Diamond);
+        bt_Club=findViewById(R.id.bt_Club);
+
+        tV_guessQuestion = findViewById(R.id.tV_guessQuestion);
         tV_feedback = findViewById(R.id.tV_feedback);
         tV_card1 = findViewById(R.id.tV_card1);
         tV_card2 = findViewById(R.id.tV_card2);
@@ -68,14 +77,14 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         bt_cought = findViewById(R.id.bt_caught);
         tV_erwischt = findViewById(R.id.txtView_erwischt);
 
-
         playersStorage.setState(GameState.LAP1A);
         cards = playersStorage.getCards();
         if (!playersStorage.isMaster()) {
             onPauseMode();
-            bt_cought.setVisibility(View.VISIBLE);
+            //bt_cought.setVisibility(View.VISIBLE); //moved to onPauseMode()
         } else {
-            bt_cought.setVisibility(View.INVISIBLE);
+            onPlayMode();
+            //bt_cought.setVisibility(View.INVISIBLE); //moved to onPauseMode()
         }
 
         //Cheat Service
@@ -113,7 +122,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
 
     // handles cheating, Confirmation dialog, if player press yes --> cheatedMessage sent to server
-
     public void handleCheat() {
         cheatService.setSensorListener(() -> {
             cheatService.pauseListen();
@@ -185,6 +193,28 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
     }
 
+    //for round 4
+    public void onClick_Spade(View view) {
+        scored=gamePlayService.guessSuit(playersStorage.getTempID(), cards[3], 0);
+        CardUtility.turnCard(tV_card4, cards[3]);
+        onAnswer(scored);
+    }
+    public void onClick_Heart(View view) {
+        scored=gamePlayService.guessSuit(playersStorage.getTempID(), cards[3], 1);
+        CardUtility.turnCard(tV_card4, cards[3]);
+        onAnswer(scored);
+    }
+    public void onClick_Diamond(View view) {
+        scored=gamePlayService.guessSuit(playersStorage.getTempID(), cards[3], 2);
+        CardUtility.turnCard(tV_card4, cards[3]);
+        onAnswer(scored);
+    }
+    public void onClick_Club(View view) {
+        scored=gamePlayService.guessSuit(playersStorage.getTempID(), cards[3], 3);
+        CardUtility.turnCard(tV_card4, cards[3]);
+        onAnswer(scored);
+    }
+
     public void onClick_feedback(View view) {
 
         switch (playersStorage.getState()) {
@@ -206,7 +236,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         }
         onPauseMode();
     }
-
 
     @Override   //Callback - executed when receiving
     public void onUpdateMessage() {
@@ -235,27 +264,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
     }
 
-
-    //The following 4 onClick-methodes are just relevant for Sprint 1 where we want to be able to turn each card
-    //in the final edition, the cards are turned by clicking on the buttons
-    //This feature may be usefull regarding to cheating
-    public void onClickCard1(View v) {
-        // CardUtility.turnCard(tV_card1, cards[0]);
-    }
-
-    public void onClickCard2(View view) {
-        // CardUtility.turnCard(tV_card2, cards[1]);
-    }
-
-    public void onClickCard3(View view) {
-        // CardUtility.turnCard(tV_card3, cards[2]);
-    }
-
-    public void onClickCard4(View view) {
-        // CardUtility.turnCard(tV_card4, cards[3]);
-    }
-
-
     private void onPauseMode() {
         runOnUiThread(new Runnable() {
             @Override
@@ -263,6 +271,11 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 tV_guessQuestion.setText("wait till it is your turn..");   //Extend this to "it's playernames turn"
                 bt_FirstOption.setVisibility(View.INVISIBLE);
                 bt_SecondOption.setVisibility(View.INVISIBLE);
+                bt_Spade.setVisibility(View.INVISIBLE);
+                bt_Heart.setVisibility(View.INVISIBLE);
+                bt_Diamond.setVisibility(View.INVISIBLE);
+                bt_Club.setVisibility(View.INVISIBLE);
+
                 bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_gray);
                 bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_gray);
 
@@ -281,6 +294,18 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                bt_Spade.setVisibility(View.INVISIBLE);
+                bt_Heart.setVisibility(View.INVISIBLE);
+                bt_Diamond.setVisibility(View.INVISIBLE);
+                bt_Club.setVisibility(View.INVISIBLE);
+                bt_FirstOption.setVisibility(View.VISIBLE);
+                bt_SecondOption.setVisibility(View.VISIBLE);
+                tV_card1.setTextColor(Color.parseColor("#000000"));
+                tV_card2.setTextColor(Color.parseColor("#000000"));
+                tV_card3.setTextColor(Color.parseColor("#000000"));
+                tV_card4.setTextColor(Color.parseColor("#000000"));
+
+                bt_cought.setVisibility(View.INVISIBLE);
 
                 switch (playersStorage.getState()) {
                     case LAP1A:
@@ -303,20 +328,15 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                         bt_SecondOption.setText("Outside");
                         break;
                     case LAP1D:
-
+                        tV_guessQuestion.setText("Guess the fouth cards suit");
+                        bt_Spade.setVisibility(View.VISIBLE);
+                        bt_Heart.setVisibility(View.VISIBLE);
+                        bt_Diamond.setVisibility(View.VISIBLE);
+                        bt_Club.setVisibility(View.VISIBLE);
+                        bt_FirstOption.setVisibility(View.INVISIBLE);
+                        bt_SecondOption.setVisibility(View.INVISIBLE);
                         break;
-                    default:
-                        //ERROR
                 }
-                bt_FirstOption.setVisibility(View.VISIBLE); //This button is the problem !!!
-                bt_SecondOption.setVisibility(View.VISIBLE);
-                tV_card1.setTextColor(Color.parseColor("#000000"));
-                tV_card2.setTextColor(Color.parseColor("#000000"));
-                tV_card3.setTextColor(Color.parseColor("#000000"));
-                tV_card4.setTextColor(Color.parseColor("#000000"));
-
-                bt_cought.setVisibility(View.INVISIBLE);
-
             }
         });
     }
@@ -327,10 +347,13 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         } else {
             tV_feedback.setText("Wrong Answer\n[-OK-]");
         }
-        //TODO: move UI changes into other Method
         tV_feedback.setVisibility(View.VISIBLE);
         bt_FirstOption.setVisibility(View.INVISIBLE);
         bt_SecondOption.setVisibility(View.INVISIBLE);
+        bt_Spade.setVisibility(View.INVISIBLE);
+        bt_Heart.setVisibility(View.INVISIBLE);
+        bt_Diamond.setVisibility(View.INVISIBLE);
+        bt_Club.setVisibility(View.INVISIBLE);
     }
 
     private boolean nextGameState() {
@@ -362,6 +385,25 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
+
+    //The following 4 onClick-methodes are just relevant for Sprint 1 where we want to be able to turn each card
+    //in the final edition, the cards are turned by clicking on the buttons
+    //This feature may be usefull regarding to cheating
+    public void onClickCard1(View v) {
+        // CardUtility.turnCard(tV_card1, cards[0]);
+    }
+
+    public void onClickCard2(View view) {
+        // CardUtility.turnCard(tV_card2, cards[1]);
+    }
+
+    public void onClickCard3(View view) {
+        // CardUtility.turnCard(tV_card3, cards[2]);
+    }
+
+    public void onClickCard4(View view) {
+        // CardUtility.turnCard(tV_card4, cards[3]);
+    }
 
 }
 

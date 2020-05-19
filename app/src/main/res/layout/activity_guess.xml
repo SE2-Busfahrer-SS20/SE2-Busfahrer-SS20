@@ -93,12 +93,14 @@
         app:layout_constraintStart_toEndOf="@+id/tV_card3" />
 
     <View
+        android:id="@+id/view2"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@android:color/background_dark"
         app:layout_constraintBottom_toTopOf="@+id/tV_card1"
         tools:layout_editor_absoluteX="16dp" />
 
+    //Buttons for Round 1,2.3
     <Button
         android:id="@+id/bt_FirstOption"
         style="@style/button_black"
@@ -136,12 +138,92 @@
         app:layout_constraintTop_toBottomOf="@+id/tV_guessQuestion"
         app:layout_constraintVertical_bias="0.86" />
 
+    //buttons for round 4
+
+    <Button
+        android:id="@+id/bt_Spade"
+        style="@style/button_black"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bt_btn_darkgray"
+        android:clickable="true"
+        android:onClick="onClick_Spade"
+        android:text="♠"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/tV_card1"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tV_guessQuestion" />
+
+    <Button
+        android:id="@+id/bt_Heart"
+        style="@style/button_black"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bt_btn_darkgray"
+        android:clickable="true"
+        android:onClick="onClick_Heart"
+        android:text="♥"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/tV_card1"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.60"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tV_guessQuestion" />
+
+    <Button
+        android:id="@+id/bt_Diamond"
+        style="@style/button_black"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bt_btn_darkgray"
+        android:clickable="true"
+        android:onClick="onClick_Diamond"
+        android:text="♦"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/tV_card1"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.40"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tV_guessQuestion" />
+
+    <Button
+        android:id="@+id/bt_Club"
+        style="@style/button_black"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bt_btn_darkgray"
+        android:clickable="true"
+        android:onClick="onClick_Club"
+        android:text="♣"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/tV_card1"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.20"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tV_guessQuestion" />
+
+
     <TextView
         android:id="@+id/tV_feedback"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="412dp"
+        android:layout_height="176dp"
         android:background="@drawable/bg_head_orange"
         android:clickable="true"
         android:gravity="center"
@@ -149,12 +231,11 @@
         android:text="Correct Answer"
         android:textSize="50sp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/tV_card2"
+        app:layout_constraintBottom_toTopOf="@+id/tV_card3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tV_guessQuestion"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/tV_guessQuestion" />
+
 
     <TextView
         android:id="@+id/textView2"
@@ -192,5 +273,6 @@
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
