@@ -22,6 +22,7 @@ public class PlayersStorageImpl implements PlayersStorage {
 
     private PlayersStorageImpl(){
         playerNames = new ArrayList<String>();
+        score= new ArrayList<Integer>();
         state=GameState.INIT;
     };
 
@@ -94,6 +95,7 @@ public class PlayersStorageImpl implements PlayersStorage {
     }
     public  void addPlayerName(String name){
         playerNames.add(name);
+        score.add(0);
         updatePlayerList();
     }
 
