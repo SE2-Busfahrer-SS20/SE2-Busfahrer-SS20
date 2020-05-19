@@ -40,8 +40,7 @@ public class CoughtServiceImpl implements CoughtService {
          */
 
         //get the index of the curren player on the playerList
-        //Von PlayerStorage holen
-        currentPlayer = gameImpl.getCurrentPlayer();
+        currentPlayer = pl.getCurrentTurn();
         //get the Index of myself from the player list
         indexOfMe = pl.getTempID();
 
