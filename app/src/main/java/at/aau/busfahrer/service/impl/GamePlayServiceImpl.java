@@ -89,15 +89,32 @@ public class GamePlayServiceImpl implements GamePlayService {
         return scored;
     }
 
-    public boolean guessHigherLower(final int tempID, Card card, boolean guessHigher){
+    @Override
+    public boolean guessHigherLower(final int tempID, Card card,Card reference, boolean guessHigher){
+        if(card.getRank()==reference.getRank()) //same rank counts as correct guess
+            return true;
 
-        return false;
+        boolean cardIsHigher=true;
+
+        if(card.getRank()<reference.getRank())//card is lower
+            cardIsHigher=false;
+
+        //following two if-statements are needed because Ass is the highest card but stored with Rank=0
+        if(card.getRank()==0)//second card is Ass -> must be higher
+            return true;
+
+        if(reference.getRank()==0)//first card is Ass -> second card must be lower, if it is same, this code is not executed
+            return false;
+
+        final boolean scored=guessHigher==cardIsHigher; //true if player guessed correct, otherwise false
+        return scored;
     }
-
+    @Override
     public boolean guessBetweenOutside(final int tempID, Card card, boolean guessBetween){
 
         return false;
     }
+    @Override
     public boolean guessSuit(final int tempID, Card card, int suit){
 
         return false;

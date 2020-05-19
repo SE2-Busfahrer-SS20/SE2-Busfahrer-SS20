@@ -164,44 +164,44 @@ public class GameServiceImpl implements GameService {
             int playerScore = game.getPlayerList().get(i).getScore();
             score.add(playerScore);
         }
-
         //Reset Cheating
         resetCheated();
 
-        int nextPlayer=-1;
-        switch (lap) {
-            case 1:
-                if (tempID < (game.getPlayerCount() - 1)) {
-                    nextPlayer = tempID + 1;
-                    this.game.setState(GameState.LAP1A);
-                } else { //if next player = 0 --> client starts guess round 2!
-                    nextPlayer = 0;
+        int nextPlayer = -1;
+        if (tempID < (game.getPlayerCount() - 1)) {
+            nextPlayer = tempID + 1;
+            //this.game.setState(GameState.LAP1A);//should be redundant?!
+        } else { //if next player = 0 --> client starts guess round 2!
+            nextPlayer = 0;
+
+            switch (lap) {
+                case 1:
                     this.game.setState(GameState.LAP1B);  //switch to Guess round 2
-                    //this.game.setState(GameState.LAP2); //switch to Pyramid - (only during developing process)
-                }
-
-                game.setCurrentPlayer(nextPlayer);
-
-                break;
-            case 2:
-
-                break;
-            case 3:
-
-                break;
-            case 4:
-
-                break;
-            default:
-                //ERROR
-                break;
+                    break;
+                case 2:
+                    this.game.setState(GameState.LAP1C);
+                    break;
+                case 3:
+                    this.game.setState(GameState.LAP1D);
+                    break;
+                case 4:
+                    this.game.setState(GameState.LAP2); //switch to Pyramid - (only during developing process)
+                    break;
+                default:
+                    //ERROR
+                    break;
+            }
         }
-            //send DTO updateMessage to all clients
-            UpdateMessage uM = new UpdateMessage(nextPlayer, score);
-            int count = this.game.getPlayerCount();
-            for (int i = 0; i < count; i++) {
-                Connection con = this.game.getPlayerList().get(i).getConnection();
-                con.sendTCP(uM);
+
+        game.setCurrentPlayer(nextPlayer);
+
+
+        //send DTO updateMessage to all clients
+        UpdateMessage uM = new UpdateMessage(nextPlayer, score);
+        int count = this.game.getPlayerCount();
+        for (int i = 0; i < count; i++) {
+            Connection con = this.game.getPlayerList().get(i).getConnection();
+            con.sendTCP(uM);
         }
     }
 

@@ -12,7 +12,7 @@ public interface GamePlayService {
 
     //GuessRound
     boolean guessColor(int tempID, Card card, boolean guessBlack);
-    boolean guessHigherLower(final int tempID, Card card, boolean guessHigher);
+    boolean guessHigherLower(final int tempID, Card card, Card reference, boolean guessHigher);
     boolean guessBetweenOutside(final int tempID, Card card, boolean guessBetween);
     boolean guessSuit(final int tempID, Card card, int suit);
     void nextPlayer(final int lap, final int tempID, final boolean scored);

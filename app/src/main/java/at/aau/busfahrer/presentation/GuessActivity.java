@@ -148,7 +148,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 onAnswer(scored);
                 break;
             case LAP1B:
-                scored = gamePlayService.guessHigherLower(playersStorage.getTempID(), cards[1], true);
+                scored = gamePlayService.guessHigherLower(playersStorage.getTempID(), cards[1], cards[0], true);
                 CardUtility.turnCard(tV_card1, cards[1]);
                 onAnswer(scored);
                 break;
@@ -170,8 +170,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 onAnswer(scored);
                 break;
             case LAP1B:
-                scored = gamePlayService.guessHigherLower(playersStorage.getTempID(), cards[1], false);
-                CardUtility.turnCard(tV_card1, cards[1]);
+                scored = gamePlayService.guessHigherLower(playersStorage.getTempID(), cards[1], cards[0], false);
+                CardUtility.turnCard(tV_card2, cards[1]);
                 onAnswer(scored);
                 break;
             case LAP1C:
@@ -269,7 +269,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 tV_card2.setTextColor(Color.GRAY);
                 tV_card3.setTextColor(Color.GRAY);
                 tV_card4.setTextColor(Color.GRAY);
-
                 tV_feedback.setVisibility(View.INVISIBLE);
 
                 bt_cought.setVisibility(View.VISIBLE);
@@ -323,6 +322,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         } else {
             tV_feedback.setText("Wrong Answer\n[-OK-]");
         }
+        //TODO: move UI changes into other Method
         tV_feedback.setVisibility(View.VISIBLE);
         bt_FirstOption.setVisibility(View.INVISIBLE);
         bt_SecondOption.setVisibility(View.INVISIBLE);
@@ -334,8 +334,13 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 playersStorage.setState(GameState.LAP1B);
                 break;
             case LAP1B:
-                playersStorage.setState(GameState.LAP1C);
-                break;
+                //playersStorage.setState(GameState.LAP1C);
+                //break;
+
+                //just till other rounds are implemented
+                playersStorage.setState(GameState.LAP2);//Pyramid Round
+                return true;
+
             case LAP1C:
                 playersStorage.setState(GameState.LAP1D);
                 break;

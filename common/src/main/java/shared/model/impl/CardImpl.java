@@ -35,7 +35,7 @@ public class CardImpl implements Card {
     {
         int codePoint = 127137 + suit * 16 + rank;  //Calculation of the cards using ASCII code
 
-        if( rank > 10 )//There are some cards that are not used for our game, so they are skipped.
+        if( rank > 10 )//The card Knight (German: Bube) is one card that is not used for our game, so it is skipped.
         {
             codePoint++;
         }
