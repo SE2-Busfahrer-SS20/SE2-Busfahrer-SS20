@@ -4,32 +4,30 @@ import at.aau.server.GameServer;
 import at.aau.server.service.impl.GameServiceImpl;
 import at.aau.server.service.impl.PLapServiceImpl;
 import com.esotericsoftware.kryonet.Connection;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import shared.exceptions.PlayerLimitExceededException;
-import shared.model.GameState;
 import shared.model.Player;
-import shared.model.impl.PlayerImpl;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
 
 public class PLabServiceTest {
 
-        private final static int MAX_PLAYERS = 8;
-        private final static int MIN_PLAYERS = 8;
 
         private PLapService pLapService;
+        private GameService gameService;
 
         @Mock
-        GameServer gameServer;
+        GameServer mockGameServer;
+        @Mock
+        Connection mockConnection;
+
 
         @Rule
         public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -37,18 +35,43 @@ public class PLabServiceTest {
          * Init instance of object.
          */
         @Before
-        public void init() {
-            pLapService = new PLapServiceImpl(gameServer);
+        public void init() throws Exception {
+                gameService = GameServiceImpl.getInstance();
+                gameService.createGame("master", "AA:AA:AA:AA", mockConnection);
+                pLapService = new PLapServiceImpl(mockGameServer);
+                gameService.getGame().addPlayer("player1", "AA:BB:CC:DD", mockConnection);
+                gameService.getGame().addPlayer("player2", "AA:BB:CC:DD", mockConnection);
+                gameService.getGame().addPlayer("player3", "AA:BB:CC:DD", mockConnection);
+                gameService.getGame().addPlayer("player4", "AA:BB:CC:DD", mockConnection);
         }
 
-        /*
-         * The following code tests basic methods of GameService.
-         */
         @Test
-        public void testGameExists() {
-
+        public void checkGetPlayerNames() {
+                List<String> playerList = ((PLapServiceImpl)pLapService).getPlayerNames();
+                assertEquals(playerList.size(), gameService.getPlayerList().size());
+                assertEquals(playerList, getStringPlayerList());
+        }
+        @Test
+        public void checkPlayerFinished() {
+                Assert.assertFalse(((PLapServiceImpl)pLapService).lapFinished());
+                for(int i = 0; i <= 4; i++)
+                        gameService.getGame().playerFinishedPLap();
+                Assert.assertTrue(((PLapServiceImpl)pLapService).lapFinished());
         }
 
+        @Test
+        public void testStartLab() {
+                pLapService.startLab(mockConnection);
+                Mockito.verify(mockConnection, atLeastOnce()).sendTCP(any());
+        }
+
+        private List<String> getStringPlayerList() {
+                List<String> list = new ArrayList<>();
+                for(Player p : gameService.getGame().getPlayerList()) {
+                        list.add(p.getName());
+                }
+                return list;
+        }
         /**
          * Destroy Singleton instance to create clean instance.
          */

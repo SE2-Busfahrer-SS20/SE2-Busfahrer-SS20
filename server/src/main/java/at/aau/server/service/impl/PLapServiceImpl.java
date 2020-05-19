@@ -58,7 +58,7 @@ public class PLapServiceImpl implements PLapService {
             }
         }
         gameService.getGame().setPlayerList(playerList);
-        gameService.getGame().playerFinishedPLav(); // increases the counter for finished players.
+        gameService.getGame().playerFinishedPLap(); // increases the counter for finished players.
         // check if the lap is finished, then update all players and notify the looser to start "Bushmen Activity"
         if (lapFinished()) {
             updatePlayers();
@@ -86,7 +86,11 @@ public class PLapServiceImpl implements PLapService {
         }
     }
 
-    private List<String> getPlayerNames() {
+    /**
+     * Returns Player Names, just public for testing purposes.
+     * @return playerNames List<String>
+     */
+    public List<String> getPlayerNames() {
         List<String> playerNames = new ArrayList<>();
         for (Player p : this.gameService.getGame().getPlayerList()) {
             playerNames.add(p.getName());
@@ -120,7 +124,12 @@ public class PLapServiceImpl implements PLapService {
         }
     }
 
-    private boolean lapFinished() {
+    /**
+     * Check if all players finished the pyramiden lap.
+     * It's just public for testing purposes.
+     * @return playerList.size() == FinishedCount.
+9     */
+    public boolean lapFinished() {
         Game game = gameService.getGame();
         return game.getPlapFinishedCount() == game.getPlayerList().size();
     }

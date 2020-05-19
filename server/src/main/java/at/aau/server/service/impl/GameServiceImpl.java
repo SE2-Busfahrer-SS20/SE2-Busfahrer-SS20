@@ -126,7 +126,7 @@ public class GameServiceImpl implements GameService {
 
         Log.info("Game created.");
     }
-
+    // TODO: check if we still need this method ???
     public void createGame(){
         this.game=new GameImpl();
     }
