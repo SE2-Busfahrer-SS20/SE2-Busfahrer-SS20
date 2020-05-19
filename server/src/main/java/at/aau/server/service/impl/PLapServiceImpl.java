@@ -5,7 +5,6 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -63,9 +62,9 @@ public class PLapServiceImpl implements PLapService {
         // check if the lap is finished, then update all players and notify the looser to start "Bushmen Activity"
         if (lapFinished()) {
             updatePlayers();
-            System.out.println("finished Lap");
+            Log.debug("finished Lap");
         }
-        System.out.println("After setting new Points.");
+        Log.debug("After setting new Points.");
         printPlayerPoints();
     }
 
@@ -78,12 +77,7 @@ public class PLapServiceImpl implements PLapService {
     public void updatePlayers() {
         List<Player> playerList = gameService.getGame().getPlayerList();
         // Sort players on points attribute.
-        playerList.sort(new Comparator<Player>() {
-            @Override
-            public int compare(Player p1, Player p2) {
-                return p1.getScore() - p2.getScore();
-            }
-        });
+        playerList.sort(Comparator.comparingInt(Player::getScore));
         for(Player p : playerList) {
             WinnerLooserMessage msg = new WinnerLooserMessage();
             // set looser to true when the player is the last in the list (Looser).
@@ -122,7 +116,7 @@ public class PLapServiceImpl implements PLapService {
      */
     private void printPlayerPoints() {
         for(Player p : gameService.getGame().getPlayerList()) {
-            System.out.println("Player: " + p.getName() + " has: " + p.getScore() + " points.");
+            Log.debug("Player: " + p.getName() + " has: " + p.getScore() + " points.");
         }
     }
 
