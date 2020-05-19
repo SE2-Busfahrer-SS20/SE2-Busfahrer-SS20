@@ -112,7 +112,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     public static synchronized NetworkClient getInstance() {
         if (instance == null)
-            return new NetworkClientKryo();
+            instance = new NetworkClientKryo();
         return instance;
     }
 }
