@@ -1,6 +1,5 @@
 package at.aau.server.service;
 
-import at.aau.common.shared.model.CardImplTest;
 import at.aau.server.GameServer;
 import at.aau.server.service.impl.GameServiceImpl;
 import at.aau.server.service.impl.PLapServiceImpl;
