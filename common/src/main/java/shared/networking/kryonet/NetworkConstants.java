@@ -1,6 +1,8 @@
 package shared.networking.kryonet;
 
 
+import java.util.ArrayList;
+
 import shared.model.impl.PlayerImpl;
 import shared.networking.dto.*;
 import shared.networking.dto.BaseMessage;
@@ -21,6 +23,7 @@ public class NetworkConstants {
     public static final int TCP_PORT = 54555;
 
     // public static final int UDP_PORT = 54777;
+
     public static final String host ="10.0.0.20";
 
 
@@ -47,7 +50,8 @@ public class NetworkConstants {
             CheatedMessage.class,
             StartPLabMessage.class,
             DealPointsMessage.class,
-            WinnerLooserMessage.class
+            WinnerLooserMessage.class,
+            ArrayList.class
     };
 
 }

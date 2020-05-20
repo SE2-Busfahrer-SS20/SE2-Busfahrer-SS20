@@ -133,5 +133,7 @@ public class GamePlayServiceImpl implements GamePlayService {
         thread.start();
     }
 
+    //Erwischt an den Sever schicken
+
 
 }

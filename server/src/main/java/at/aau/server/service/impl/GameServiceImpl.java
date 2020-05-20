@@ -93,12 +93,11 @@ public class GameServiceImpl implements GameService {
 
         //send start game message to each client
         StartGameMessage sgm = new StartGameMessage();
-        ArrayList<String> pList= new ArrayList<String>();
-        List<Player> playerList=game.getPlayerList();
-        for(int i=0;i<playerList.size();i++){
-            pList.add(playerList.get(i).getName());
-        }
-        sgm.setPlayerList(pList);
+
+        //Add playerList to StartGameMessage
+        //VERURSACHT PROBLEME
+        //sgm.setPlayerList(this.game.getPlayerList());
+
         int count = this.game.getPlayerCount();
         for(int i=0;i<count;i++){
             Connection con = this.game.getPlayerList().get(i).getConnection();

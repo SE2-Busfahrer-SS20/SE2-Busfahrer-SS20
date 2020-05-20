@@ -1,9 +1,12 @@
 package shared.model.impl;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import shared.model.Card;
 import shared.model.GameState;
 import shared.model.GuessRoundListener;
+import shared.model.Player;
 import shared.model.PreGameListener;
 import shared.model.PlayersStorage;
 
@@ -16,6 +19,8 @@ public class PlayersStorageImpl implements PlayersStorage {
     private boolean master=false;
     private int currentTurn;
     private ArrayList<Integer> score;
+    private List<Player> playersList;
+
 
     //Singleton Pattern
     private static PlayersStorageImpl instance;
@@ -159,4 +164,13 @@ public class PlayersStorageImpl implements PlayersStorage {
         this.currentTurn=currentTurn;
         nextPlayersTurn(); //Callback
     }
+
+    public List<Player> getPlayersList() {
+        return playersList;
+    }
+
+    public void setPlayersList(List<Player> playersList) {
+        this.playersList = playersList;
+    }
 }
+

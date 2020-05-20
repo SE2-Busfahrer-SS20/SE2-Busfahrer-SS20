@@ -1,20 +1,19 @@
 package shared.networking.dto;
 
 
-import java.util.ArrayList;
+import java.util.List;
+
+import shared.model.Player;
 
 public class StartGameMessage extends BaseMessage {
-    private ArrayList<String> playerList;
+    private List<Player> playerList;
 
-    public StartGameMessage() {
-        this.playerList =new ArrayList<String>();
-    }
-
-    public ArrayList<String> getPlayerList() {
+    public List<Player> getPlayerList() {
         return playerList;
     }
 
-    public void setPlayerList(ArrayList<String> playerList) {
+    public void setPlayerList(List<Player> playerList) {
+
         this.playerList = playerList;
     }
 }

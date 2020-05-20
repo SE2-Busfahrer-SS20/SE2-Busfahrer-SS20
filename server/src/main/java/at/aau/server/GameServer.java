@@ -104,6 +104,7 @@ public class GameServer extends NetworkServerKryo {
                         Log.info("Game started");
 
                         gameService.startGame();
+
                     }
                     //Guess-Rounds
                     else if(object instanceof PlayedMessage){
