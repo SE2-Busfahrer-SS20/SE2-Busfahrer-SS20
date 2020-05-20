@@ -99,7 +99,6 @@ public class GameServiceImpl implements GameService {
         for(int i=0;i<count;i++){
             Connection con = this.game.getPlayerList().get(i).getConnection();
             con.sendTCP(sgm);
-
         }
 
     }

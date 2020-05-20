@@ -11,7 +11,7 @@ public class StartGameMessage extends BaseMessage {
         return playerList;
     }
 
-    public void setPlayerList(List<Player> playerArrayList) {
+    public void setPlayerList(List<Player> playerList) {
         this.playerList = playerList;
     }
 }
