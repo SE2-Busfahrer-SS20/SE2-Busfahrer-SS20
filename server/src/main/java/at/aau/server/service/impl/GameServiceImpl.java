@@ -99,6 +99,8 @@ public class GameServiceImpl implements GameService {
         //VERURSACHT PROBLEME
         //sgm.setPlayerList(this.game.getPlayerList());
 
+
+
         int count = this.game.getPlayerCount();
         for (int i = 0; i < count; i++) {
             Connection con = this.game.getPlayerList().get(i).getConnection();

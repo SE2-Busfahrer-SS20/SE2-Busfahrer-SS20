@@ -19,7 +19,6 @@ public class PlayersStorageImpl implements PlayersStorage {
     private boolean master=false;
     private int currentTurn;
     private ArrayList<Integer> score;
-    private List<Player> playersList;
 
 
     //Singleton Pattern
@@ -165,12 +164,5 @@ public class PlayersStorageImpl implements PlayersStorage {
         nextPlayersTurn(); //Callback
     }
 
-    public List<Player> getPlayersList() {
-        return playersList;
-    }
-
-    public void setPlayersList(List<Player> playersList) {
-        this.playersList = playersList;
-    }
 }
 
