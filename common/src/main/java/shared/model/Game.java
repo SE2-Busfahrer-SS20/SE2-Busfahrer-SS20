@@ -24,6 +24,7 @@ public interface Game {
     public Card[] getpCards();
     void addPointsToPlayer(int tempID, int points);
 
+
     int getCurrentPlayer();
     void setCurrentPlayer(int currentPlayer);
 
