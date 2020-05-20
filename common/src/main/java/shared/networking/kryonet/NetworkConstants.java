@@ -1,6 +1,9 @@
 package shared.networking.kryonet;
 
 
+
+import shared.model.GameState;
+
 import java.util.ArrayList;
 
 import shared.model.impl.PlayerImpl;
@@ -21,10 +24,9 @@ import shared.networking.dto.UpdateMessage;
 public class NetworkConstants {
 
     public static final int TCP_PORT = 54555;
-
-    // public static final int UDP_PORT = 54777;
-
-    public static final String host ="10.0.0.20";
+    // public static final int UDP_PORT = 54777; //needs to stay commented, because on AAU server there is only one port available
+  
+    public static final String host ="192.168.0.107";
 
 
     // List for registered dto classes. Add needed classes to the array.
@@ -38,6 +40,7 @@ public class NetworkConstants {
             NewPlayerMessage.class,
             StartGameMessage.class,
             PlayedMessage.class,
+            shared.model.GameState.class,
             UpdateMessage.class,
             CheatedMessage.class,
             shared.model.impl.CardImpl[].class,
@@ -48,6 +51,7 @@ public class NetworkConstants {
             PlayedMessage.class,
             UpdateMessage.class,
             CheatedMessage.class,
+
             StartPLabMessage.class,
             DealPointsMessage.class,
             WinnerLooserMessage.class,
