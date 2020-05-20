@@ -20,7 +20,6 @@ import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
 public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     private Client client;
-    private Callback<BaseMessage> callback;
     private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
     // Callback Map to store callbacks for every DTO Class. HashMap to access object in O(1).
     private Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
@@ -88,15 +87,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     callbackMap.get(WinnerLooserMessage.class).callback((BaseMessage) object);
                 }
                 // just for debugging purposes.
-                if (callback != null && object instanceof TextMessage) {
+                if (object instanceof TextMessage) {
                     Log.debug("Callback is instance of TextMessage");
                     Log.debug(((TextMessage) (object)).getText());
                     callbackMap.get(TextMessage.class).callback((BaseMessage) object);
-                }
-
-                if (callback != null && object instanceof BaseMessage) {
-                    callback.callback((BaseMessage) object);
-                    Log.debug("Callback is instance of BaseMessage");
                 }
             }
         });
