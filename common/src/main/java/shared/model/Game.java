@@ -36,6 +36,6 @@ public interface Game {
     /**
      * increases the finished counter per 1.
      */
-    void playerFinishedPLav();
+    void playerFinishedPLap();
 
 }

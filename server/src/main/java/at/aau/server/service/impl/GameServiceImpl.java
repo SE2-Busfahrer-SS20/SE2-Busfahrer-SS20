@@ -21,7 +21,7 @@ public class GameServiceImpl implements GameService {
 
     private Game game;
     // Instance for singleton.
-    private static  GameServiceImpl instance;
+    private static GameServiceImpl instance;
 
     private GameServiceImpl() {
     }
@@ -93,9 +93,11 @@ public class GameServiceImpl implements GameService {
 
         //send start game message to each client
         StartGameMessage sgm = new StartGameMessage();
+
         //Add playerList to StartGameMessage
         //VERURSACHT PROBLEME
         //sgm.setPlayerList(this.game.getPlayerList());
+
         int count = this.game.getPlayerCount();
         for(int i=0;i<count;i++){
             Connection con = this.game.getPlayerList().get(i).getConnection();
@@ -129,7 +131,7 @@ public class GameServiceImpl implements GameService {
 
         Log.info("Game created.");
     }
-
+    // TODO: check if we still need this method ???
     public void createGame(){
         this.game=new GameImpl();
     }

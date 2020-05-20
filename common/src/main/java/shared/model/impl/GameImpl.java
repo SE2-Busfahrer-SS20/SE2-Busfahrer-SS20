@@ -129,7 +129,7 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public void playerFinishedPLav() {
+    public void playerFinishedPLap() {
         plapFinishedCounter++;
     }
 }
