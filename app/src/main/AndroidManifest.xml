@@ -28,7 +28,8 @@
 
         <activity android:name=".presentation.GuessActivity" />
 
-        <activity android:name=".presentation.BushmenActivity" />
+        <activity android:name=".presentation.BushmenActivity"
+            android:screenOrientation="sensorLandscape"/>
         <activity
             android:name=".presentation.WaitActivity"
             android:screenOrientation="sensorPortrait" />
