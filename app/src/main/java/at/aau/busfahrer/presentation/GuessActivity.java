@@ -13,8 +13,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.CheatService;
@@ -26,10 +24,7 @@ import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
 import shared.model.Card;
 import shared.model.GameState;
 import shared.model.GuessRoundListener;
-import shared.model.Player;
-import shared.model.impl.GameImpl;
 import shared.model.impl.PlayersStorageImpl;
-import shared.networking.dto.PlayedMessage;
 
 
 public class GuessActivity extends AppCompatActivity implements GuessRoundListener {
@@ -125,9 +120,9 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                         // Yes
                         .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                             // sending network call
+                            cheatService.stopListen();
                             gamePlayService.sendMsgCheated(playersStorage.getTempID(), true, System.currentTimeMillis(), cheatService.getSensorType());
                             CardUtility.turnCard(tV_card1, cards[0]);
-                            cheatService.stopListen();
                         })
                         // No
                         .setNegativeButton(android.R.string.no, (dialog, which) -> cheatService.resumeListen())
@@ -234,7 +229,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         } else {
             onPauseMode();
             //when it is not my turn, the cought button is Visible
-            bt_cought.setVisibility(View.VISIBLE);
+//            bt_cought.setVisibility(View.VISIBLE);
         }
         //update Score in UI (feature does not exist yet)
 
@@ -249,7 +244,10 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     }
 
     public void onClickCard2(View view) {
-        // CardUtility.turnCard(tV_card2, cards[1]);
+        System.out.println("click");
+        for (int i = 0; i < playersStorage.getPlayerCheated().size() ; i++) {
+            System.out.println(playersStorage.getPlayerCheated().get(i).getPlayerName());
+        }
     }
 
     public void onClickCard3(View view) {
@@ -354,5 +352,3 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
 
 }
-
-    

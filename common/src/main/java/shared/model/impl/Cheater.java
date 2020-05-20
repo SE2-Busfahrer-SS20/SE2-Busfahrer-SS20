@@ -1,7 +1,16 @@
-package shared.networking.dto;
+package shared.model.impl;
 
-public class CheatedMessage extends BaseMessage {
+public class Cheater {
 
+    /**
+     * This Class identifies a Player who cheated.
+     *
+     * @Param playerId
+     * @Param cheated True if player cheated
+     * @Param timeStamp Time when cheat event happened
+     * @Param cheatType identifies the type, 5 = Shake, 1 = Light
+     * @Param playerName
+     */
 
     private int playerId;
     private boolean cheated;
@@ -9,16 +18,7 @@ public class CheatedMessage extends BaseMessage {
     private int cheatType;
     private String playerName;
 
-    public CheatedMessage(){}
-
-    public CheatedMessage(int playerId, boolean cheated, long timeStamp, int cheatType) {
-        this.playerId = playerId;
-        this.cheated = cheated;
-        this.timeStamp = timeStamp;
-        this.cheatType = cheatType;
-    }
-
-    public CheatedMessage(int playerId, boolean cheated, long timeStamp, int cheatType,  String playerName) {
+    public Cheater(int playerId, boolean cheated, long timeStamp, int cheatType, String playerName) {
         this.playerId = playerId;
         this.cheated = cheated;
         this.timeStamp = timeStamp;
@@ -26,7 +26,7 @@ public class CheatedMessage extends BaseMessage {
         this.playerName = playerName;
     }
 
-    public int getTempID() {
+    public int getPlayerId() {
         return playerId;
     }
 
@@ -34,7 +34,7 @@ public class CheatedMessage extends BaseMessage {
         this.playerId = playerId;
     }
 
-    public boolean hasCheated() {
+    public boolean isCheated() {
         return cheated;
     }
 

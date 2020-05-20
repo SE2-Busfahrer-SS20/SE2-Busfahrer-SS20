@@ -1,9 +1,11 @@
 package shared.model.impl;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import shared.model.Card;
 import shared.model.GameState;
 import shared.model.GuessRoundListener;
+import shared.model.Player;
 import shared.model.PreGameListener;
 import shared.model.PlayersStorage;
 
@@ -16,13 +18,17 @@ public class PlayersStorageImpl implements PlayersStorage {
     private boolean master=false;
     private int currentTurn;
     private ArrayList<Integer> score;
+    private ArrayList<Cheater> playerCheated;
+
 
     //Singleton Pattern
     private static PlayersStorageImpl instance;
 
     private PlayersStorageImpl(){
         playerNames = new ArrayList<String>();
+        playerCheated = new ArrayList<Cheater>();
         state=GameState.INIT;
+
     };
 
     public static synchronized PlayersStorageImpl getInstance(){
@@ -147,5 +153,20 @@ public class PlayersStorageImpl implements PlayersStorage {
         this.score=score;
         this.currentTurn=currentTurn;
         nextPlayersTurn(); //Callback
+    }
+
+    public void updateCheaterList(Cheater cheater){
+        playerCheated.add(cheater);
+    }
+    public ArrayList<Cheater> getPlayerCheated() {
+        return playerCheated;
+    }
+
+    public boolean isCheater(int playerId){
+        for (int i = 0; i < playerCheated.size() ; i++) {
+            if(playerCheated.get(i).getPlayerId() == playerId);
+            return true;
+        }
+        return false;
     }
 }
