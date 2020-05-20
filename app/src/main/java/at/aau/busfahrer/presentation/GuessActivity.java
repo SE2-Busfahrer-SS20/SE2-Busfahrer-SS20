@@ -17,6 +17,7 @@ import android.widget.Toast;
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.CheatService;
+import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.GamePlayService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 
@@ -61,7 +62,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
     private boolean scored;
     private CheatService cheatService;
-    private CoughtServiceImpl coughtService;
+    private CoughtService coughtService;
 
     ///
 
