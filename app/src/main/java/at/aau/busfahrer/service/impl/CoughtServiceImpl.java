@@ -38,6 +38,8 @@ public class CoughtServiceImpl implements CoughtService {
         //get the Index of myself from the player list
         indexOfMe = pl.getTempID();
 
+
+        //NULL OBJECT -> probleme mit get instance?
         myself = playerList.get(indexOfMe);
         playerCheated = playerList.get(currentPlayer);
         //if the currentplayer has cheated, he get one point and I lose one point
