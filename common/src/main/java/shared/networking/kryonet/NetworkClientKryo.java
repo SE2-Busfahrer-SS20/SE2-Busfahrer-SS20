@@ -64,7 +64,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     StartGameMessage sgm = (StartGameMessage) object;
                     Log.debug("Game can start now");
 
-                    playersStorage.setPlayerNames(((StartGameMessage)object).getPlayerList());
+                    //playersStorage.setPlayerNames(((StartGameMessage)object).getPlayerList());
                     playersStorage.initScores();
                     playersStorage.setState(GameState.READY);
                     playersStorage.setPlayersList(sgm.getPlayerList());
