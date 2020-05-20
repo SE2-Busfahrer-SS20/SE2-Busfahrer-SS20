@@ -7,7 +7,7 @@ import shared.model.impl.PlayersStorageImpl;
 
 public class CoughtServiceImpl implements CoughtService {
 
-    private static CoughtServiceImpl instance;
+    private static CoughtService instance;
 
 
     private List<Player> playerList;
@@ -21,11 +21,11 @@ public class CoughtServiceImpl implements CoughtService {
 
     private CoughtServiceImpl(){};
 
-    public static CoughtServiceImpl getInstance(){
-        if(CoughtServiceImpl.instance == null){
-            CoughtServiceImpl.instance = new CoughtServiceImpl();
+    public static CoughtService getInstance(){
+        if(instance == null){
+            instance = new CoughtServiceImpl();
         }
-        return CoughtServiceImpl.instance;
+        return instance;
     }
 
     public  boolean isCheating(){

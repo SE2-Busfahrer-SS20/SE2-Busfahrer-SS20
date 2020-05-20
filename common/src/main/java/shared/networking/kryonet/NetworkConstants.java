@@ -12,7 +12,6 @@ public class NetworkConstants {
   
     public static final String host ="192.168.0.227";
 
-
     // List for registered dto classes. Add needed classes to the array.
     public static final Class[] CLASS_LIST = {
             BaseMessage.class,
