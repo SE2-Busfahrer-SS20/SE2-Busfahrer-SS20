@@ -1,18 +1,26 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class EditPlayerActivity extends AppCompatActivity {
 
     EditText editText;
+    long lastClick;
+    Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +42,39 @@ public class EditPlayerActivity extends AppCompatActivity {
 
     // button click listener
     public void onClickChange(View v){
-        saveData(editText.getText().toString());
-        Toast.makeText(this, "Changed", Toast.LENGTH_SHORT).show();
+        if((System.currentTimeMillis() - lastClick) > 2000 ) {
+            lastClick = System.currentTimeMillis();
+            String text = editText.getText().toString();
+            if ((text.trim().length() < 3) || (text.trim().length() > 24))  {
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.error_toast,
+                        (ViewGroup) findViewById(R.id.error_toast));
+                TextView toastText = layout.findViewById(R.id.textToast);
+                toastText.setText("Your name must be at least 3 and max 24 characters long ");
+                toast = new Toast(this);
+                toast.setGravity(Gravity.TOP, 0, 300);
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setView(layout);
+                toast.show();
+            } else {
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.success_toast,
+                        (ViewGroup) findViewById(R.id.success_toast));
+                TextView toastText = layout.findViewById(R.id.textToastSc);
+                toastText.setText("Username successfully changed");
+                toast = new Toast(this);
+                toast.setGravity(Gravity.TOP, 0, 300);
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setView(layout);
+                toast.show();
+                saveData(editText.getText().toString().trim());
+            }
+        }
+    }
+
+    public void onClickChangeCancel(View v) {
+        Intent i = new Intent(EditPlayerActivity.this, MainMenuActivity.class);
+        startActivity(i);
     }
 
     private void saveData(String name){
@@ -44,5 +83,20 @@ public class EditPlayerActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("Player",name); // key, value
         editor.apply();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(toast != null){
+            toast.cancel();
+        }
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(toast != null){
+            toast.cancel();
+        }
     }
 }

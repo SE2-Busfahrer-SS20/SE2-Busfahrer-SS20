@@ -14,7 +14,7 @@ public interface PLabService {
     void registerCardCallback(Callback<Card[]> callback);
     void registerFinishedLabCallback(Callback<Boolean> callback);
     Card[] getPCards();
-    void finish();
+    void dealPoints(String playerName);
     List<String> getPlayerNames();
     void startLab();
 }

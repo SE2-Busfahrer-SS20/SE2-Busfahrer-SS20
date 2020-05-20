@@ -23,4 +23,20 @@ public interface Game {
      */
     public Card[] getpCards();
     void addPointsToPlayer(int tempID, int points);
+
+
+    int getCurrentPlayer();
+    void setCurrentPlayer(int currentPlayer);
+
+    /**
+     * Returns counter of gamers, which are already dealed there points.
+     * @return plapFinishedCounter.
+     */
+    int getPlapFinishedCount();
+
+    /**
+     * increases the finished counter per 1.
+     */
+    void playerFinishedPLap();
+
 }

@@ -7,6 +7,7 @@ import at.aau.server.service.impl.GameServiceImpl;
 import at.aau.server.service.impl.PLapServiceImpl;
 import shared.model.Player;
 import shared.networking.dto.BaseMessage;
+import shared.networking.dto.CheatedMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
 import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.RegisterMessage;
@@ -56,7 +57,8 @@ public class GameServer extends NetworkServerKryo {
                     messageCallback.callback((TextMessage) object);
                     connection.sendTCP(new TextMessage(RESPONSE_TEST));
                     Log.debug("Received TextMessage: " + ((TextMessage) object).getText());
-                } else {
+                }
+                else {
 
                     if (!gameService.gameExists()) {
 
@@ -64,21 +66,9 @@ public class GameServer extends NetworkServerKryo {
                             Log.debug("Received Register Message");
                             try {
                                 RegisterMessage msg = (RegisterMessage) object;
-                                gameService.createGame();  //Create empty Game Object
-                                Player player = gameService.addPlayer(msg.getPlayerName(),msg.getMACAdress(),connection);
-
-                                // send result to client.
-                                ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player, true);
-                                connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
-
-                                //Add Player to Playerlist in Wait UI
-                                NewPlayerMessage npm = new NewPlayerMessage(player.getName());
-                                connection.sendTCP(npm);
-
-                                //Define current client as master
+                                gameService.createGame(msg.getPlayerName(), msg.getMACAddress(), connection);  //outsourced to GameService
                                 connectionToMaster = connection;
 
-                               Log.info("Game created.");
                             } catch (Exception ex) {
                                 Log.error(ex.toString());
                                 // TODO: implement client error response and implement error handler in client.
@@ -95,7 +85,7 @@ public class GameServer extends NetworkServerKryo {
                         Log.debug("Received Register Message");
 
                         RegisterMessage msg = (RegisterMessage) object;
-                        Player player = gameService.addPlayer(msg.getPlayerName(),msg.getMACAdress(),connection);
+                        Player player = gameService.addPlayer(msg.getPlayerName(),msg.getMACAddress(),connection);
 
                         if(player!=null){ //if game is not full
                             Log.debug("new Player:"+player.getName());
@@ -112,21 +102,36 @@ public class GameServer extends NetworkServerKryo {
                     }
                     else if(object instanceof StartGameMessage){
                         Log.info("Game started");
+
                         gameService.startGame();
-                    } else if (object instanceof TextMessage) {
-                        Log.info("Got message from client", ((TextMessage) object).getText());
-                    } else if (object instanceof BaseMessage) {
-                        Log.info("Action not supported.");
-                        connection.sendTCP(new TextMessage("Action not supported."));
+
                     }
+
 
                     //Guess-Rounds
                     else if(object instanceof PlayedMessage){
                         PlayedMessage pM = (PlayedMessage) object;
-                        if(pM.getLap()==1){     //Black or Red
-                            gameService.GuessRound1(pM.getTempID(), pM.scored());
+                        gameService.GuessRound(pM.getLap(), pM.getTempID(), pM.scored());
+                    }
+
+
+                    // Player has cheated message
+                    else if(object instanceof CheatedMessage){
+                        CheatedMessage cM = (CheatedMessage) object;
+                        if(cM.hasCheated()){
+                            gameService.getPlayerList().get(cM.getTempID()).setCheatedThisRound(true);
                         }
                     }
+
+                    else if (object instanceof TextMessage) {
+                        Log.info("Got message from client", ((TextMessage) object).getText());
+                    }
+                    else if (object instanceof BaseMessage) {
+                        Log.info("Action not supported.");
+                        connection.sendTCP(new TextMessage("Action not supported."));
+                    }
+
+
                 }
             }
         });

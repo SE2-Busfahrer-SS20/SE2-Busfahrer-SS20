@@ -1,16 +1,18 @@
 package shared.networking.dto;
 
 
+import shared.model.GameState;
+
 //Dieses DTO wird von dem Spieler, der gerade dran ist, an den Server gesendet nachdem er seine Entscheidung getroffen hat.
 public class PlayedMessage extends BaseMessage {
 
-    int lap;
+    GameState lap;
     int tempID; //must be equal with Index in playerList.(ArrayList in Game Object)
     boolean scored; //Ob der Client Richtig geraten hat
 
     public PlayedMessage(){}
 
-    public PlayedMessage(int lap, int tempID, boolean scored){
+    public PlayedMessage(GameState lap, int tempID, boolean scored){
         this.lap=lap;
         this.tempID=tempID;
         this.scored=scored;
@@ -32,21 +34,13 @@ public class PlayedMessage extends BaseMessage {
         this.tempID = tempID;
     }
 
-    public int getLap() {
+    public GameState getLap() {
         return lap;
     }
 
-    public void setLap(int lap) {
+    public void setLap(GameState lap) {
         this.lap = lap;
     }
 }
 
 
-/*
-lap:
-1 = Guess 1: black or red
-2 = Guess 2:
-3 = Guess 3:
-4 = Guess 4:
-5 = ...Pyramid
- */

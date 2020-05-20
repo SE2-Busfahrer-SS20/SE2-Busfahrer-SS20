@@ -2,10 +2,7 @@ package at.aau.server.service;
 
 import com.esotericsoftware.kryonet.Connection;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -110,6 +107,10 @@ public class GameServiceTest {
         assertEquals(gameService.getGame().getPlayersCards(1).length, 4);
         assertEquals(gameService.getGame().getPlayersCards(2).length, 4);
         assertEquals(gameService.getGame().getPlayersCards(3).length, 4);
+    }
+    @Test
+    public void checkSingletonImplementation() {
+        Assert.assertEquals(gameService, GameServiceImpl.getInstance());
     }
 
     /**
