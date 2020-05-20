@@ -102,7 +102,9 @@ public class GameServer extends NetworkServerKryo {
                     }
                     else if(object instanceof StartGameMessage){
                         Log.info("Game started");
+
                         gameService.startGame();
+
                     }
 
 

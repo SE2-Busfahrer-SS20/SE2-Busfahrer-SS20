@@ -1,5 +1,6 @@
 package at.aau.busfahrer.presentation;
 
+import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -12,6 +13,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
@@ -26,10 +32,17 @@ import shared.model.GameState;
 import shared.model.GuessRoundListener;
 import shared.model.impl.PlayersStorageImpl;
 
+import shared.model.impl.playersStorage;
+import shared.networking.dto.PlayedMessage;
+
+
 
 public class GuessActivity extends AppCompatActivity implements GuessRoundListener {
+
+    Handler uiHandler;
     private Card[] cards;
     private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
+
     private GamePlayService gamePlayService = GamePlayServiceImpl.getInstance();
 
     private Button bt_cought;
@@ -46,7 +59,13 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private TextView tV_card2;
     private TextView tV_card3;
     private TextView tV_card4;
+
     private TextView tV_erwischt;
+
+    private Button bt_cought;
+    private Button btn_score;
+
+
 
     private boolean scored;
     private CheatService cheatService;
@@ -56,9 +75,12 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_guess);
+        uiHandler=new Handler();
+        btn_score = findViewById(R.id.bt_score);
 
         //Visibility
         bt_FirstOption = findViewById(R.id.bt_FirstOption);
@@ -91,31 +113,42 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         cheatService.startListen();
         //handleCheat(); //this coursed error
 
+
         //Register Callback
         playersStorage.registerGuessRoundListener(this);
 
         ///SCHUMMEL - Aufdeckfunktion
         //Only when I am cheating, the Text View is could be visbible
+        coughtService = CoughtServiceImpl.getInstance();
         tV_erwischt.setVisibility(View.INVISIBLE);
     }
 
 
     public void onClick_btCought(View view) {
         //if the current player was cheating, he gets one point and the textView will be visible
-        if (coughtService.isCheating() == true) {
-            //TextView "Erwischt!"
-            if (playersStorage.getCurrentTurn() == playersStorage.getTempID()) {
-                tV_erwischt.setVisibility(View.VISIBLE);
-            }
+
+        if (coughtService.isCheating()==true) {
+            //Wird momentan nur bei mir selbst angezeigt ZUSÄTZLICH soll auch beim Schummler angezeigt werden
+            tV_erwischt.setVisibility(View.VISIBLE);
 
             //after 5s the TextView is invisible
-            /*tV_erwischt.postDelayed(new Runnable() {
+            tV_erwischt.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     tV_erwischt.setVisibility(View.INVISIBLE);
                 }
-            }, 5000);*/
+            }, 5000);
         }
+
+    }
+    public void onClickScore(View v){
+
+        ScoreFragment scoreFragment = new ScoreFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("menu")
+                .replace(R.id.score_fragment,scoreFragment,"SCORE_FRAGMENT")
+                .commit();
     }
 
 
@@ -167,6 +200,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
     //Second Button used in Guess round 1 to 3 as: red, lower, between
     public void onClick_SecondOption(View view) {
+
         switch (playersStorage.getState()) {
             case LAP1A:
                 scored = gamePlayService.guessColor(cards[0], false);
@@ -201,9 +235,22 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         onPauseMode();
     }
 
+        
+    private void updateScoreButton(int score){
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                btn_score.setText("Score: "+score);
+            }
+        });
+    }
+
     @Override   //Callback - executed when receiving UpdateMessage from server (after each players turn)
     public void onUpdateMessage() {
-
+        
+        updateScoreButton(playersStorage.getScore().get(playersStorage.getTempID()));
+      
+  
         if (playersStorage.getCurrentTurn() == 0) {
             //This means that every player has finished the turn of the current round and the next round can be started
             boolean end = nextGameState();

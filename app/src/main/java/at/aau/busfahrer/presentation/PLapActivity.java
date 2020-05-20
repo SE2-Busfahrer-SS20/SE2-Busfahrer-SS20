@@ -45,10 +45,10 @@ public class PLapActivity extends AppCompatActivity {
         pLabService.startLab();
 
         playersStorage.setState(GameState.LAP2);
-        cards = playersStorage.getCards();
+        // cards = playersStorage.getCards();
 
         /** TODO: remove after testing. */
-        // cards = ((PLabServiceImpl) pLabService).getCards();
+        cards = ((PLabServiceImpl) pLabService).getCards();
         // ((PLabServiceImpl) pLabService).testCallback();
         /**
          *  Turns cards automatically.
