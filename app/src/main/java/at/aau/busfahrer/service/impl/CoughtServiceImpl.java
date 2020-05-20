@@ -45,6 +45,9 @@ public class CoughtServiceImpl implements CoughtService {
         //if the currentplayer has cheated, he get one point and I lose one point
         if (playerCheated.isCheatedThisRound()){
 
+
+            //CughtMessage an server schicken !!!
+
             //the player who cheated increases his score
             scoreCheater = playerCheated.getScore();
             scoreCheater++;
