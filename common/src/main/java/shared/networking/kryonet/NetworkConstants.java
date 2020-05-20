@@ -1,6 +1,8 @@
 package shared.networking.kryonet;
 
 
+import java.util.ArrayList;
+
 import shared.model.impl.PlayerImpl;
 import shared.networking.dto.*;
 import shared.networking.dto.BaseMessage;
@@ -45,7 +47,8 @@ public class NetworkConstants {
             CheatedMessage.class,
             StartPLabMessage.class,
             DealPointsMessage.class,
-            WinnerLooserMessage.class
+            WinnerLooserMessage.class,
+            ArrayList.class
     };
 
 }

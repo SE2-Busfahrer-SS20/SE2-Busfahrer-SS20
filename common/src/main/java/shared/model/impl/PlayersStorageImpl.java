@@ -1,6 +1,7 @@
 package shared.model.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import shared.model.Card;
 import shared.model.GameState;
@@ -19,7 +20,7 @@ public class PlayersStorageImpl implements PlayersStorage {
     private int currentTurn;
     private ArrayList<Integer> score;
     private ArrayList<Cheater> playerCheated;
-
+    private List<Player> playersList;
 
     //Singleton Pattern
     private static PlayersStorageImpl instance;
@@ -168,5 +169,13 @@ public class PlayersStorageImpl implements PlayersStorage {
             return true;
         }
         return false;
+    }
+
+    public List<Player> getPlayersList() {
+        return playersList;
+    }
+
+    public void setPlayersList(List<Player> playersList) {
+        this.playersList = playersList;
     }
 }

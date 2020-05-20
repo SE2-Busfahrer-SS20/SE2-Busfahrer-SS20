@@ -4,15 +4,13 @@ import java.util.List;
 import at.aau.busfahrer.service.CoughtService;
 import shared.model.Player;
 import shared.model.impl.PlayersStorageImpl;
-import shared.model.impl.GameImpl;
-import shared.networking.dto.PlayedMessage;
 
 public class CoughtServiceImpl implements CoughtService {
 
     private static CoughtServiceImpl instance;
 
+
     private List<Player> playerList;
-    private GameImpl gameImpl;
     private int currentPlayer;
     private Player playerCheated;
     private Player myself;
@@ -31,12 +29,9 @@ public class CoughtServiceImpl implements CoughtService {
     }
 
     public  boolean isCheating(){
+        pl = PlayersStorageImpl.getInstance();
         //Check wich player's turn it is
-        playerList = gameImpl.getPlayerList();
-        /*
-        Statt den GameImpl wird von PlayerStorage die PlayerListe geholt
-        Alles abändern wo GameImpl verwendet wird
-         */
+        playerList = pl.getPlayersList();
 
         //get the index of the curren player on the playerList
         currentPlayer = pl.getCurrentTurn();
