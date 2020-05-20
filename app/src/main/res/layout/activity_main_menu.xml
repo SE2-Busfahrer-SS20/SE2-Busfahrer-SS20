@@ -109,11 +109,15 @@
             android:layout_height="match_parent"
             android:elevation="5dp"
             tools:layout_editor_absoluteY="16dp">
+
             <Button
-                    android:text="Button"
-                    android:layout_width="376dp"
-                    android:layout_height="wrap_content" android:id="@+id/button4" tools:text="@string/plab_header"
-                    android:onClick="openPLab"/>
+                android:id="@+id/button4"
+                android:layout_width="376dp"
+                android:layout_height="wrap_content"
+                android:onClick="openPLab"
+                android:text="Button"
+                android:visibility="invisible"
+                tools:text="@string/plab_header" />
         </FrameLayout>
 
         <FrameLayout

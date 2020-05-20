@@ -14,11 +14,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
-
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.CheatService;
@@ -32,8 +27,6 @@ import shared.model.GameState;
 import shared.model.GuessRoundListener;
 import shared.model.impl.PlayersStorageImpl;
 
-import shared.model.impl.playersStorage;
-import shared.networking.dto.PlayedMessage;
 
 
 
@@ -110,7 +103,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         cheatService = CheatServiceImpl.getInstance();
         cheatService.setContext(getApplicationContext(), getClass().getName());
         cheatService.startListen();
-        //handleCheat(); //this coursed error
+        handleCheat(); //this coursed error
 
 
         //Register Callback
@@ -385,12 +378,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
-
-
-
-
-
-
 
 
 
