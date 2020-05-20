@@ -132,12 +132,5 @@ public class GameImpl implements Game {
     public void playerFinishedPLap() {
         plapFinishedCounter++;
     }
-
-    public int getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public void setCurrentPlayer(int currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
+    
 }
