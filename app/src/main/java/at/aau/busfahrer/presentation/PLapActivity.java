@@ -15,7 +15,7 @@ import at.aau.busfahrer.service.PLabService;
 import at.aau.busfahrer.service.impl.PLabServiceImpl;
 import shared.model.Card;
 import shared.model.GameState;
-import shared.model.impl.playersStorage;
+
 
 public class PLapActivity extends AppCompatActivity {
 
@@ -44,7 +44,7 @@ public class PLapActivity extends AppCompatActivity {
         });
         pLabService.startLab();
 
-        playersStorage.setState(GameState.LAP2);
+        //playersStorageOLD.setState(GameState.LAP2);
         // cards = playersStorage.getCards();
 
         /** TODO: remove after testing. */

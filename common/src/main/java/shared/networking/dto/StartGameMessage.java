@@ -16,4 +16,12 @@ public class StartGameMessage extends BaseMessage {
 
         this.playerList = playerList;
     }
+
+    /*private List<PlayerDTO>players;
+    setPlayerList(List<Player> playerList) {
+
+        for(Player p: playerList) {
+            this,players.add(newPlayerDTO(p.getName(), p.getScore())
+        }
+    }*/
 }

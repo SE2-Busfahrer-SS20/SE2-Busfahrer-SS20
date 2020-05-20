@@ -7,7 +7,7 @@ import shared.model.impl.PlayersStorageImpl;
 
 public class CoughtServiceImpl implements CoughtService {
 
-    private static CoughtServiceImpl instance;
+    private static CoughtService instance;
 
 
     private List<Player> playerList;
@@ -21,11 +21,11 @@ public class CoughtServiceImpl implements CoughtService {
 
     private CoughtServiceImpl(){};
 
-    public static CoughtServiceImpl getInstance(){
-        if(CoughtServiceImpl.instance == null){
-            CoughtServiceImpl.instance = new CoughtServiceImpl();
+    public static CoughtService getInstance(){
+        if(instance == null){
+            instance = new CoughtServiceImpl();
         }
-        return CoughtServiceImpl.instance;
+        return instance;
     }
 
     public  boolean isCheating(){
@@ -44,6 +44,9 @@ public class CoughtServiceImpl implements CoughtService {
         playerCheated = playerList.get(currentPlayer);
         //if the currentplayer has cheated, he get one point and I lose one point
         if (playerCheated.isCheatedThisRound()){
+
+
+            //CughtMessage an server schicken !!!
 
             //the player who cheated increases his score
             scoreCheater = playerCheated.getScore();
