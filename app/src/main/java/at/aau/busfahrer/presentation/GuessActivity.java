@@ -100,7 +100,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     }
 
     public void onClick_btCought(View view) {
-        //erwischt dto an Server schicken
         //if the current player was cheating, he gets one point and the textView will be visible
         if (coughtService.isCheating()==true) {
             //Wird momentan nur bei mir selbst angezeigt ZUSÄTZLICH soll auch beim Schummler angezeigt werden

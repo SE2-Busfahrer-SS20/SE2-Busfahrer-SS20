@@ -36,7 +36,6 @@ public class CoughtServiceImpl implements CoughtService {
         /*
         Statt den GameImpl wird von PlayerStorage die PlayerListe geholt
         Alles abändern wo GameImpl verwendet wird
-        Auch den curretnPlayer von PlayerStorage holen NICHT von GamImpl
          */
 
         //get the index of the curren player on the playerList
