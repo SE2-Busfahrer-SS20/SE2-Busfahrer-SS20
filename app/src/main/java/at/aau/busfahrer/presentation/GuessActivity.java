@@ -62,7 +62,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
     private TextView tV_erwischt;
 
-    private Button bt_cought;
     private Button btn_score;
 
 
