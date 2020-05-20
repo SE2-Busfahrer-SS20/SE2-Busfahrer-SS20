@@ -19,17 +19,15 @@ public class PlayersStorageImpl implements PlayersStorage {
     private boolean master=false;
     private int currentTurn;
     private ArrayList<Integer> score;
-    private ArrayList<Cheater> playerCheated;
     private List<Player> playersList;
+
 
     //Singleton Pattern
     private static PlayersStorageImpl instance;
 
     private PlayersStorageImpl(){
         playerNames = new ArrayList<String>();
-        playerCheated = new ArrayList<Cheater>();
         state=GameState.INIT;
-
     };
 
     public static synchronized PlayersStorageImpl getInstance(){
@@ -156,21 +154,6 @@ public class PlayersStorageImpl implements PlayersStorage {
         nextPlayersTurn(); //Callback
     }
 
-    public void updateCheaterList(Cheater cheater){
-        playerCheated.add(cheater);
-    }
-    public ArrayList<Cheater> getPlayerCheated() {
-        return playerCheated;
-    }
-
-    public boolean isCheater(int playerId){
-        for (int i = 0; i < playerCheated.size() ; i++) {
-            if(playerCheated.get(i).getPlayerId() == playerId);
-            return true;
-        }
-        return false;
-    }
-
     public List<Player> getPlayersList() {
         return playersList;
     }
@@ -179,3 +162,4 @@ public class PlayersStorageImpl implements PlayersStorage {
         this.playersList = playersList;
     }
 }
+
