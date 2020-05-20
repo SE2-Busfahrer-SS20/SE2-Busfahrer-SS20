@@ -3,6 +3,7 @@ package shared.model;
 import com.esotericsoftware.kryonet.Connection;
 
 import java.util.List;
+import java.util.Set;
 
 public interface Game {
 
@@ -16,9 +17,26 @@ public interface Game {
 
     public Deck getCardStack();
     public void setCardStack(Deck cardStack);
-
+    /**
+     * Cards for Pyramidenrunde.
+     * @return Card[]
+     */
+    public Card[] getpCards();
     void addPointsToPlayer(int tempID, int points);
 
-    void setCurrentPlayer(int currentPlayer);
+
     int getCurrentPlayer();
+    void setCurrentPlayer(int currentPlayer);
+
+    /**
+     * Returns counter of gamers, which are already dealed there points.
+     * @return plapFinishedCounter.
+     */
+    int getPlapFinishedCount();
+
+    /**
+     * increases the finished counter per 1.
+     */
+    void playerFinishedPLap();
+
 }

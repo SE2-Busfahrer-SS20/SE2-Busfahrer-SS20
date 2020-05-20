@@ -2,58 +2,49 @@ package at.aau.busfahrer.service.impl;
 
 import com.esotericsoftware.minlog.Log;
 
-import at.aau.busfahrer.service.GameService;
+import at.aau.busfahrer.service.GamePlayService;
 import shared.model.Card;
 import shared.networking.NetworkClient;
+import shared.networking.dto.CheatedMessage;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.RegisterMessage;
-
 import shared.networking.dto.StartGameMessage;
-
 import shared.networking.dto.PlayedMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 
-public class GameServiceImpl implements GameService {
+public class GamePlayServiceImpl implements GamePlayService {
 
     private NetworkClient client;
     private String host;
     //send this to Server !
 
     //SINGLETON PATTERN
-    private static GameServiceImpl Instance;
+    private static GamePlayServiceImpl Instance;
 
-    public static GameService getInstance(){
-        if(GameServiceImpl.Instance==null){
-            GameServiceImpl.Instance=new GameServiceImpl();
+    public static GamePlayService getInstance(){
+        if(GamePlayServiceImpl.Instance==null){
+            GamePlayServiceImpl.Instance=new GamePlayServiceImpl();
         }
-        return GameServiceImpl.Instance;
+        return GamePlayServiceImpl.Instance;
     }
 
-    private GameServiceImpl() {
-        this.client = new NetworkClientKryo();
+    private GamePlayServiceImpl() {
+        this.client = NetworkClientKryo.getInstance();
         this.host = shared.networking.kryonet.NetworkConstants.host;
     }
-
-    public void connect() {
-        //Whats this method designated for?
-    }
-
 
     @Override//can be deleted later
     public void createGame(int playercount) {
         //Must be declared final to get accessible in inner class
         final int pc=playercount;
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                CreateGameMessage cgm = new CreateGameMessage(pc);
-                try {
-                    client.connect(host);
-                    client.sendMessage(cgm);
-                } catch (Exception e) {
-                    Log.error(e.toString());
-                }
+        Thread thread = new Thread(() -> {
+            CreateGameMessage cgm = new CreateGameMessage(pc);
+            try {
+                client.connect(host);
+                client.sendMessage(cgm);
+            } catch (Exception e) {
+                Log.error(e.toString());
             }
         });
         thread.start();
@@ -62,16 +53,13 @@ public class GameServiceImpl implements GameService {
     @Override
     public void playGame(final String name, final String MACAddress){
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                RegisterMessage rm = new RegisterMessage(name, MACAddress);
-                try {
-                    client.connect(host);
-                    client.sendMessage(rm);
-                } catch (Exception e) {
-                    Log.error(e.toString());
-                }
+        Thread thread = new Thread(() -> {
+            RegisterMessage rm = new RegisterMessage(name, MACAddress);
+            try {
+                client.connect(host);
+                client.sendMessage(rm);
+            } catch (Exception e) {
+                Log.error(e.toString());
             }
         });
         thread.start();
@@ -89,6 +77,8 @@ public class GameServiceImpl implements GameService {
         thread.start();
     }
 
+    //////////GUESS ROUND/////////////////////////
+
     @Override
     public boolean guessColor(final int tempID, Card card, boolean guessBlack){
         boolean cardIsBlack=true;
@@ -96,10 +86,25 @@ public class GameServiceImpl implements GameService {
             cardIsBlack=false;
         }
         final boolean scored=guessBlack==cardIsBlack; //true if player guessed correct, otherwise false
-
         return scored;
 
     }
+
+    public boolean guessHigherLower(final int tempID, Card card, boolean guessHigher){
+
+        return false;
+    }
+
+    public boolean guessBetweenOutside(final int tempID, Card card, boolean guessBetween){
+
+        return false;
+    }
+    public boolean guessSuit(final int tempID, Card card, int suit){
+
+        return false;
+    }
+
+
 
     @Override
     public void nextPlayer(final int lap, final int tempID, final boolean scored){
@@ -108,6 +113,21 @@ public class GameServiceImpl implements GameService {
             public void run() {
                 PlayedMessage pM = new PlayedMessage(lap,tempID, scored);
                 client.sendMessage(pM);
+            }
+        });
+        thread.start();
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+
+
+    // network call for player cheated in game
+    public void sendMsgCheated(final int playerId, final boolean cheated, final long timeStamp, final int cheatType){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                CheatedMessage cM = new CheatedMessage(playerId,cheated,timeStamp,cheatType);
+                client.sendMessage(cM);
             }
         });
         thread.start();

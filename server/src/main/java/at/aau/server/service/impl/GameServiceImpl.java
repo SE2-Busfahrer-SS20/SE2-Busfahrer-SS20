@@ -1,6 +1,7 @@
 package at.aau.server.service.impl;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.minlog.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +12,39 @@ import shared.model.Game;
 import shared.model.GameState;
 import shared.model.Player;
 import shared.model.impl.GameImpl;
+import shared.networking.dto.ConfirmRegisterMessage;
+import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.StartGameMessage;
 import shared.networking.dto.UpdateMessage;
 
 public class GameServiceImpl implements GameService {
 
     private Game game;
+    // Instance for singleton.
+    private static GameServiceImpl instance;
 
-    public GameServiceImpl() {
+    private GameServiceImpl() {
+    }
+
+
+    /**
+     * Returns Singleton instance.
+     * @return instance
+     */
+    public static synchronized GameService getInstance() {
+        if (instance == null) {
+            instance = new GameServiceImpl();
+            return instance;
+        }
+        return instance;
+    }
+
+    /**
+     * This method destroy the Singleton Instance.
+     * It's needed for testing purposes.
+     */
+    public static synchronized void destroyInstance() {
+        instance = null;
     }
 
     @Override//Player list was moved into game object
@@ -67,6 +93,12 @@ public class GameServiceImpl implements GameService {
 
         //send start game message to each client
         StartGameMessage sgm = new StartGameMessage();
+        ArrayList<String> pList= new ArrayList<String>();
+        List<Player> playerList=game.getPlayerList();
+        for(int i=0;i<playerList.size();i++){
+            pList.add(playerList.get(i).getName());
+        }
+        sgm.setPlayerList(pList);
         int count = this.game.getPlayerCount();
         for(int i=0;i<count;i++){
             Connection con = this.game.getPlayerList().get(i).getConnection();
@@ -86,9 +118,23 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame() {
-        game=new GameImpl();
-              //Only one game possible
+    public void createGame(String masterName, String MACAddress,  Connection connection) {
+        createGame();
+
+        Player player = addPlayer(masterName,MACAddress, connection);
+
+        ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player, true);
+        connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
+
+        //Add Player to Playerlist in Wait UI
+        NewPlayerMessage npm = new NewPlayerMessage(player.getName());
+        connection.sendTCP(npm);
+
+        Log.info("Game created.");
+    }
+    // TODO: check if we still need this method ???
+    public void createGame(){
+        this.game=new GameImpl();
     }
 
     @Override
@@ -100,6 +146,13 @@ public class GameServiceImpl implements GameService {
     public Card[] getPlayersCards(int player) {
         return game.getPlayersCards(player);
     }
+
+    public void startPLab() {
+        this.game.setState(GameState.LAP2);
+
+    }
+
+    //Register
 
 
     //Methodes for Guess-Rounds
@@ -132,7 +185,9 @@ public class GameServiceImpl implements GameService {
 
             //CALL METHODE FOR PYRAMIDE HERE !!
         }
+
         game.setCurrentPlayer(nextPlayer);
+
         //send DTO updateMessage to all clients
         UpdateMessage uM = new UpdateMessage(nextPlayer, score);
         int count = this.game.getPlayerCount();
