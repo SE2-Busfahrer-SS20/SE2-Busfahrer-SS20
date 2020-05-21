@@ -115,11 +115,6 @@ public class PLabServiceImpl implements PLabService {
     }
 
     @Override
-    public Card[] getPCards() {
-        return pCards;
-    }
-
-    @Override
     public void dealPoints(String playerName) {
         this.client.registerCallback(WinnerLooserMessage.class, msg -> {
             Log.i("Callback started.", "Winner Looser Callback started.");
