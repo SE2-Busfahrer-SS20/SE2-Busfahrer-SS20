@@ -18,8 +18,6 @@ public class PLapActivity extends AppCompatActivity {
 
     // contains the cards on the hand of the Player.
     private Card[] cards;
-
-    private final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
     // contains the Ids of the TextViews where the Player cards should be displayed.
     private final int[] myCardIds = {R.id.tV_card1, R.id.tV_card2, R.id.tV_card3, R.id.tV_card4};
     // contains the Ids of the TextViews where the pyramid lab cards should be displayed.
@@ -89,7 +87,13 @@ public class PLapActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Helper Function to get row position of specific card.
+     * @param id
+     * @return ROW
+     */
     private int getRow(int id) {
+        final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
         if (id == R.id.tV_pcard1)
             return ROW1;
         else if ( id == R.id.tV_pcard2 || id == R.id.tV_pcard3)
