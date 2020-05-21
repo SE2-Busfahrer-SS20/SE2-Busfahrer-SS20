@@ -9,7 +9,9 @@ import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.PLabService;
 import shared.model.Card;
 import shared.model.Deck;
+import shared.model.PlayersStorage;
 import shared.model.impl.DeckImpl;
+import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.DealPointsMessage;
@@ -28,6 +30,7 @@ public class PLabServiceImpl implements PLabService {
     private NetworkClient client;
     private Card[] pCards = new Card[10];
     private List<String> playerNames = new ArrayList<>();
+    private PlayersStorage playersStorage;
     private static PLabService instance;
     // constants for rows.
     private final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
@@ -37,9 +40,11 @@ public class PLabServiceImpl implements PLabService {
     private PLabServiceImpl() {
 
         this.client = NetworkClientKryo.getInstance();
-
+        this.playersStorage = PlayersStorageImpl.getInstance();
+        this.cards = playersStorage.getCards();
         // TODO: remove, JUST FOR TESTING.
 
+        /*
         Deck deck = new DeckImpl();
         for(int i = 0; i < 4; i++)
             cards[i] = deck.drawCard();
@@ -153,6 +158,6 @@ public class PLabServiceImpl implements PLabService {
     public void testCallback() {
         this.cardCallback.callback(this.pCards);
     }*/
-    public Card[] getCards() {return cards;}
+    public Card[] getPlayerCards() {return cards;}
 
 }

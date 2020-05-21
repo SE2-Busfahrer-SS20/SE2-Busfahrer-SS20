@@ -13,7 +13,7 @@ public interface PLabService {
     int getMatchCount();
     void registerCardCallback(Callback<Card[]> callback);
     void registerFinishedLabCallback(Callback<Boolean> callback);
-    Card[] getPCards();
+    Card[] getPlayerCards();
     void dealPoints(String playerName);
     List<String> getPlayerNames();
     void startLab();

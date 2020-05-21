@@ -7,14 +7,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
-
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.PLabService;
 import at.aau.busfahrer.service.impl.PLabServiceImpl;
 import shared.model.Card;
-import shared.model.GameState;
 
 
 public class PLapActivity extends AppCompatActivity {
@@ -43,19 +40,13 @@ public class PLapActivity extends AppCompatActivity {
             });
         });
         pLabService.startLab();
-
-        //playersStorageOLD.setState(GameState.LAP2);
-        // cards = playersStorage.getCards();
-
-        /** TODO: remove after testing. */
-        cards = ((PLabServiceImpl) pLabService).getCards();
-        // ((PLabServiceImpl) pLabService).testCallback();
+        // load Player Cards, player cards will be stored in PlayerStorage.
+        cards = pLabService.getPlayerCards();
         /**
          *  Turns cards automatically.
          *  Cards must be turned to times.
          *  First one display cards, second one revert it.
          */
-
         for(int i = 0; i < 2; i++) {
             turnCards(myCardIds, cards);
         }
@@ -86,11 +77,6 @@ public class PLapActivity extends AppCompatActivity {
         Intent i = new Intent(PLapActivity.this, PLabFinished.class);
         startActivity(i);
     }
-
-    public void onDealPointClick(View v) {
-
-    }
-
     /**
      * Turns all Player cards at the beginning of the lab.
      *
