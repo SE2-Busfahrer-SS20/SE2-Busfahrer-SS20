@@ -30,7 +30,7 @@ public class GamePlayServiceImpl implements GamePlayService {
 
     private GamePlayServiceImpl() {
         this.client = NetworkClientKryo.getInstance();
-        this.host = shared.networking.kryonet.NetworkConstants.host;
+        this.host = "127.0.0.1"; // set default HostName value.
     }
 
     @Override//can be deleted later
@@ -177,6 +177,11 @@ public class GamePlayServiceImpl implements GamePlayService {
             }
         });
         thread.start();
+    }
+
+    @Override
+    public void setHostName(String hostname) {
+        this.host = hostname;
     }
 
     //Erwischt an den Sever schicken
