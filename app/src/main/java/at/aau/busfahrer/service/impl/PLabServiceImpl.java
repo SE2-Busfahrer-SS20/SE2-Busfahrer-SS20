@@ -34,23 +34,10 @@ public class PLabServiceImpl implements PLabService {
     private static PLabService instance;
     // constants for rows.
     private final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
-    // TODO: remove, JUST for TESTING.
-    private Card[] cards = new Card[4];
 
     private PLabServiceImpl() {
-
         this.client = NetworkClientKryo.getInstance();
         this.playersStorage = PlayersStorageImpl.getInstance();
-        this.cards = playersStorage.getCards();
-        // TODO: remove, JUST FOR TESTING.
-
-        /*
-        Deck deck = new DeckImpl();
-        for(int i = 0; i < 4; i++)
-            cards[i] = deck.drawCard();
-        /*
-        for(int i = 0; i < 10; i++)
-            pCards[i] = deck.drawCard();*/
     }
 
 
@@ -148,11 +135,5 @@ public class PLabServiceImpl implements PLabService {
             return (instance = new PLabServiceImpl());
         return instance;
     }
-    // TODO: remove comments, when they are not needed anymore.
-    /*
-    public void testCallback() {
-        this.cardCallback.callback(this.pCards);
-    }*/
-    public Card[] getPlayerCards() {return cards;}
-
+    public Card[] getPlayerCards() {return playersStorage.getCards();}
 }
