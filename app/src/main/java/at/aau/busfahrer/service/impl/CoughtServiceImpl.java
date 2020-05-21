@@ -31,7 +31,7 @@ public class CoughtServiceImpl implements CoughtService {
     public  boolean isCheating(){
         pl = PlayersStorageImpl.getInstance();
         //Check wich player's turn it is
-        playerList = pl.getPlayersList();
+        // playerList = pl.getPlayersList();
 
         //get the index of the curren player on the playerList
         currentPlayer = pl.getCurrentTurn();

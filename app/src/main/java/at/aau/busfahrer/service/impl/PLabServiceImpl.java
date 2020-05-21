@@ -9,7 +9,9 @@ import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.PLabService;
 import shared.model.Card;
 import shared.model.Deck;
+import shared.model.PlayersStorage;
 import shared.model.impl.DeckImpl;
+import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.DealPointsMessage;
@@ -28,24 +30,14 @@ public class PLabServiceImpl implements PLabService {
     private NetworkClient client;
     private Card[] pCards = new Card[10];
     private List<String> playerNames = new ArrayList<>();
+    private PlayersStorage playersStorage;
     private static PLabService instance;
     // constants for rows.
     private final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
-    // TODO: remove, JUST for TESTING.
-    private Card[] cards = new Card[4];
 
     private PLabServiceImpl() {
-
         this.client = NetworkClientKryo.getInstance();
-
-        // TODO: remove, JUST FOR TESTING.
-
-        Deck deck = new DeckImpl();
-        for(int i = 0; i < 4; i++)
-            cards[i] = deck.drawCard();
-        /*
-        for(int i = 0; i < 10; i++)
-            pCards[i] = deck.drawCard();*/
+        this.playersStorage = PlayersStorageImpl.getInstance();
     }
 
 
@@ -110,11 +102,6 @@ public class PLabServiceImpl implements PLabService {
     }
 
     @Override
-    public Card[] getPCards() {
-        return pCards;
-    }
-
-    @Override
     public void dealPoints(String playerName) {
         this.client.registerCallback(WinnerLooserMessage.class, msg -> {
             Log.i("Callback started.", "Winner Looser Callback started.");
@@ -148,11 +135,5 @@ public class PLabServiceImpl implements PLabService {
             return (instance = new PLabServiceImpl());
         return instance;
     }
-    // TODO: remove comments, when they are not needed anymore.
-    /*
-    public void testCallback() {
-        this.cardCallback.callback(this.pCards);
-    }*/
-    public Card[] getCards() {return cards;}
-
+    public Card[] getPlayerCards() {return playersStorage.getCards();}
 }
