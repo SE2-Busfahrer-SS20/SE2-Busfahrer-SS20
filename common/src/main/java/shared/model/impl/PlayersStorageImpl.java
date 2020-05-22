@@ -20,6 +20,7 @@ public class PlayersStorageImpl implements PlayersStorage {
     private int currentTurn;
     private ArrayList<Integer> score;
     private List<Player> playersList;
+    private Card[] bushmenCards;
 
 
     //Singleton Pattern
@@ -171,6 +172,14 @@ public class PlayersStorageImpl implements PlayersStorage {
 
     public void setPlayersList(List<Player> playersList) {
         this.playersList = playersList;
+    }
+
+    public void setBushmenCards(Card[] cards){
+        this.bushmenCards=cards;
+    }
+
+    public Card[] getBushmenCards(){
+        return bushmenCards;
     }
 }
 

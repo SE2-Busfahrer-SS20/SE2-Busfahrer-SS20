@@ -20,4 +20,7 @@ public interface PlayersStorage {
     GameState getState();
     void setState(GameState state);
 
+     void setBushmenCards(Card[] cards);
+     Card[] getBushmenCards();
+
 }

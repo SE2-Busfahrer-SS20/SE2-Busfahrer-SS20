@@ -86,6 +86,14 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     // call the correct callback to store cards and update UI Thread.
                     callbackMap.get(WinnerLooserMessage.class).callback((BaseMessage) object);
                 }
+
+                if (object instanceof BushmenMessage) {
+                   BushmenMessage bushmenMessage = (BushmenMessage) object;
+                    Log.info("Bushmen received");
+                    playersStorage.setBushmenCards(bushmenMessage.getCards());
+
+                }
+
                 // just for debugging purposes.
                 if (object instanceof TextMessage) {
                     Log.debug("Callback is instance of TextMessage");
@@ -115,4 +123,5 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             instance = new NetworkClientKryo();
         return instance;
     }
+
 }
