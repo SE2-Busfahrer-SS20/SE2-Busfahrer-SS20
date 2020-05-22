@@ -7,6 +7,7 @@ import at.aau.server.service.impl.GameServiceImpl;
 import at.aau.server.service.impl.PLapServiceImpl;
 import shared.model.Player;
 import shared.networking.dto.BaseMessage;
+import shared.networking.dto.BushmenMessage;
 import shared.networking.dto.CheatedMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
 import shared.networking.dto.NewPlayerMessage;
@@ -112,6 +113,15 @@ public class GameServer extends NetworkServerKryo {
                     else if(object instanceof PlayedMessage){
                         PlayedMessage pM = (PlayedMessage) object;
                         gameService.GuessRound(pM.getLap(), pM.getTempID(), pM.scored());
+                    }
+
+                    //Bushmen-Round
+                    else if (object instanceof BushmenMessage){
+                        BushmenMessage bushmenMessage = new BushmenMessage();
+                        bushmenMessage.setCards(gameService.getBushmenCards());
+                        for (int i = 0; i < gameService.getPlayerCount(); i++) {
+                            gameService.getPlayerList().get(i).getConnection().sendTCP(bushmenMessage);
+                        }
                     }
 
 
