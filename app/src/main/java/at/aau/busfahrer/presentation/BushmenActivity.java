@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -14,12 +15,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.service.GamePlayService;
+import shared.model.Card;
 import shared.model.impl.CardImpl;
 import shared.model.impl.DeckImpl;
-
+import shared.model.impl.PlayersStorageImpl;
+import shared.networking.NetworkClient;
+import shared.networking.dto.BushmenMessage;
+import shared.networking.kryonet.NetworkClientKryo;
 
 
 public class BushmenActivity extends AppCompatActivity {
+
+    private Card[] cardsserver;
+
+    private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
+
+    private NetworkClient networkClient = NetworkClientKryo.getInstance();
 
     private List<CardImpl> cards;
 
@@ -36,15 +47,20 @@ public class BushmenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread startThread = new Thread(() -> {
+            try {
+                Log.i("Bushmen Service", "Bushmen start was triggered.");
+                this.networkClient.sendMessage(new BushmenMessage());
+            } catch (Exception e) {
+                Log.e("Error in BushmenService", e.toString(),e);
+            }
+        });
+        startThread.start();
         hideAppTitleBar();
         setContentView(R.layout.activity_bushmen);
 
         TxtPunkte = findViewById(R.id.punkte);
 
-        //The cards are fetched from common
-        //till now this method only works after creating a new Game on the server
-        //Join a new game is not implemented yet
-        //cards= playersCards.getCards();
 
         //Kommt man zum Busfahrer startet man mit 10 Punkten
         PunkteAnzahlBusfahrer+=10;
@@ -56,13 +72,16 @@ public class BushmenActivity extends AppCompatActivity {
         isLooser = getIntent().getBooleanExtra("LOST_GAME", false);
     }
 
+    public void getBushmenCards(View view){
+       this.cardsserver= playersStorage.getBushmenCards();
+        System.out.println(cardsserver.toString());
+        System.out.println(cardsserver.length);
+    }
+
     private void UpdateAnzeige(){
         TxtPunkte.setText(String.valueOf(PunkteAnzahlBusfahrer));
     }
 
-    //The following 4 onClick-methodes are just relevant for Sprint 1 where we want to be able to turn each card
-    //in the final edition, the cards are turned by clicking on the buttons
-    //This feature may be usefull regarding to cheating
 
     public void onClickCard1(View v) {
         TextView tV=findViewById(R.id.tV_card1);
