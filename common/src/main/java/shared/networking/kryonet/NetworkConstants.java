@@ -10,7 +10,7 @@ public class NetworkConstants {
     public static final int TCP_PORT = 54555;
     // public static final int UDP_PORT = 54777; //needs to stay commented, because on AAU server there is only one port available
   
-    public static final String host ="192.168.0.227";
+    public static final String host ="192.168.8.102";
 
     // List for registered dto classes. Add needed classes to the array.
     public static final Class[] CLASS_LIST = {
@@ -37,7 +37,8 @@ public class NetworkConstants {
             StartPLabMessage.class,
             DealPointsMessage.class,
             WinnerLooserMessage.class,
-            ArrayList.class
+            ArrayList.class,
+            BushmenMessage.class
     };
 
 }
