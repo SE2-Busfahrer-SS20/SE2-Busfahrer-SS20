@@ -119,7 +119,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
     public void onClick_btCought(View view) {
         //if the current player was cheating, he gets one point and the textView will be visible
-        if(playersStorage.getTempID()==playersStorage.getCurrentTurn()){
+        //Wird momentan nur bei mir selbst angezeigt ZUSÄTZLICH soll auch beim Schummler angezeigt werden
             tV_erwischt.setVisibility(View.VISIBLE);
 
             //after 5s the TextView is invisible
@@ -129,10 +129,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                     tV_erwischt.setVisibility(View.INVISIBLE);
                 }
             }, 5000);
-        }
-
         /*if (coughtService.isCheating()==true) {
-            //Wird momentan nur bei mir selbst angezeigt ZUSÄTZLICH soll auch beim Schummler angezeigt werden
+
 
         }*/
 
