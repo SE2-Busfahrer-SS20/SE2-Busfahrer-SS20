@@ -64,13 +64,15 @@ public class EditPlayerActivity extends AppCompatActivity {
                 View layout = inflater.inflate(R.layout.success_toast,
                         (ViewGroup) findViewById(R.id.success_toast));
                 TextView toastText = layout.findViewById(R.id.textToastSc);
-                toastText.setText("Username successfully changed");
+                toastText.setText("Username or IP Adress successfully changed");
                 toast = new Toast(this);
                 toast.setGravity(Gravity.TOP, 0, 300);
                 toast.setDuration(Toast.LENGTH_SHORT);
                 toast.setView(layout);
                 toast.show();
                 saveData(editText.getText().toString().trim(), editHostName.getText().toString().trim());
+                Intent i = new Intent(EditPlayerActivity.this, MainMenuActivity.class);
+                startActivity(i);
             }
         }
     }
