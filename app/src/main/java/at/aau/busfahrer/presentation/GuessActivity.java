@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,7 +29,7 @@ import shared.model.GameState;
 import shared.model.GuessRoundListener;
 import shared.model.impl.PlayersStorageImpl;
 
-
+// *TODO remove card click listener in guess xml, because on click app can crash
 
 
 public class GuessActivity extends AppCompatActivity implements GuessRoundListener {
@@ -63,7 +64,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private boolean scored;
     private CheatService cheatService;
     private CoughtService coughtService;
-
     ///
 
     @Override
@@ -157,10 +157,10 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                         // Yes
                         .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                             // sending network call
-                            gamePlayService.sendMsgCheated(playersStorage.getTempID(), true, System.currentTimeMillis(), cheatService.getSensorType());
-                            CardUtility.turnCard(tV_card1, cards[0]);
                             cheatService.stopListen();
-                        })
+                            gamePlayService.sendMsgCheated(playersStorage.getTempID(), true, System.currentTimeMillis(), cheatService.getSensorType());
+                            turnCardOnCheat();
+                            })
                         // No
                         .setNegativeButton(android.R.string.no, (dialog, which) -> cheatService.resumeListen())
                         .setTitle("Are you sure you want to cheat?")
@@ -252,6 +252,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             boolean end = nextGameState();
             if (end) {
                 //After all Guess-Rounds start Pyramid Activity:
+                cheatService.stopListen(); // end listen for cheating in guess round
                 Intent i = new Intent(GuessActivity.this, PLapActivity.class);
                 startActivity(i);
             }
@@ -383,8 +384,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
-
-
+    // TODO  not needed anymore ?
     //The following 4 onClick-methodes are just relevant for Sprint 1 where we want to be able to turn each card
     //in the final edition, the cards are turned by clicking on the buttons
     //This feature may be usefull regarding to cheating
@@ -404,6 +404,49 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         // CardUtility.turnCard(tV_card4, cards[3]);
     }
 
+    // This methods shows the card in a Dialog Alert, if the player cheats.
+    public void turnCardOnCheat(){
+        TextView card = new TextView(this);
+        switch (playersStorage.getState()) {
+            case LAP1A:
+                card = CardUtility.turnCardGetView(tV_card1, cards[0]);
+                break;
+            case LAP1B:
+                card = CardUtility.turnCardGetView(tV_card2, cards[1]);
+                break;
+            case LAP1C:
+                card = CardUtility.turnCardGetView(tV_card3, cards[2]);
+                break;
+            case LAP1D:
+                card = CardUtility.turnCardGetView(tV_card4, cards[3]);
+                break;
+        }
+        card.setGravity(Gravity.CENTER);
+        AlertDialog at = new AlertDialog.Builder(GuessActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                .setTitle("Your next card is")
+                .setView(card).setNegativeButton(android.R.string.ok, (dialog, which) -> {
+                }).show();
+    }
+
+    // android lifecycle methods, needed because Android SensorListener also listen if App is in the background.
+    // app is in background
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cheatService.pauseListen();
+    }
+    // app is in foreground
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cheatService.resumeListen();
+    }
+    // app activity is destroyed
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cheatService.stopListen();
+    }
 }
 
     

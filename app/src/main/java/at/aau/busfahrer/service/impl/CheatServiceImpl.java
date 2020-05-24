@@ -60,7 +60,6 @@ public class CheatServiceImpl implements CheatService {
                     sensor = null;
                     sensorManager = null;
                     isSensorListen = false;
-                    playFairMode();
                     break;
                 default:
                     Log.e(TAG, "Sensor not found");
@@ -75,27 +74,30 @@ public class CheatServiceImpl implements CheatService {
 
     private void onPause(){
         Log.i(TAG,"Service paused");
-        sensorManager.unregisterListener(this);
-        isSensorListen = false;
+        if(isSensorListen && sensorManager != null){
+            sensorManager.unregisterListener(this);
+            isSensorListen = false;
+        }
     }
 
     private void onResume(){
         Log.i(TAG,"Service resume");
-        sensorManager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
-        isSensorListen = true;
+        if(!isSensorListen && sensorManager != null){
+            sensorManager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+            isSensorListen = true;
+        }
+
     }
 
     private void onStop(){
         Log.i(TAG,"Service killed");
+        if(isSensorListen && sensorManager != null){
         sensorManager.unregisterListener(this);
         context = null;
         sensorListener = null;
         sensorManager = null;
         isSensorListen = false;
-    }
-
-    private void playFairMode(){
-        // handle fair mode ...
+        }
     }
 
     @Override

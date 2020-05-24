@@ -26,6 +26,23 @@ public class CardUtility {
         }
     }
 
+    // this methods generate a new text view based on the card text view
+    public static TextView turnCardGetView(TextView tV, Card c) {
+        TextView newCard = new TextView(tV.getContext());
+        newCard.setText(tV.getText());
+        newCard.setTextSize(tV.getTextSize());
+        if (c.getSuit() == 1 || c.getSuit() == 2) {
+            newCard.setTextColor(Color.parseColor("#FF0000"));//Red
+        }
+        if (newCard.getText().equals("\uD83C\uDCA0")) {//if it shows the cards back-side
+            newCard.setText(c.toString());
+        } else {
+            newCard.setText("\uD83C\uDCA0");//set to card back side
+            newCard.setTextColor(Color.parseColor("#000000"));//black
+        }
+        return newCard;
+    }
+
     /**
      * Returns a Card object from a Card Array with the equal string value.
      * @param cardString
