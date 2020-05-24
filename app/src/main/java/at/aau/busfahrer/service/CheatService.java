@@ -17,4 +17,8 @@ public interface CheatService extends SensorEventListener {
     void setSensorListener(CheatServiceImpl.SensorListener sensorListener);
     void onSensorChanged(SensorEvent event);
     void onAccuracyChanged(Sensor sensor, int accuracy);
+    void sendMsgCheated(final boolean cheated, final long timeStamp, final int cheatType);
+    int getPlayerId();
+    void setPlayerId(int playerId);
+
 }

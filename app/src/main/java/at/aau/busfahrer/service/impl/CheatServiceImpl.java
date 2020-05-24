@@ -1,5 +1,8 @@
 package at.aau.busfahrer.service.impl;
 import at.aau.busfahrer.service.CheatService;
+import shared.networking.NetworkClient;
+import shared.networking.dto.CheatedMessage;
+import shared.networking.kryonet.NetworkClientKryo;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -22,6 +25,9 @@ public class CheatServiceImpl implements CheatService {
         void handle();
     }
 
+    private NetworkClient client = NetworkClientKryo.getInstance();
+
+    private int playerId;
     private Context context;
     private SensorListener sensorListener;
     private SensorManager sensorManager;
@@ -182,6 +188,24 @@ public class CheatServiceImpl implements CheatService {
     @Override @SuppressWarnings("unused")
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // NOT NEEDED
+    }
+
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
+    }
+
+    // network call for player cheated in game
+    public void sendMsgCheated(final boolean cheated, final long timeStamp, final int cheatType) {
+        Log.i(TAG,"Sending CheatMessage to Server");
+        Thread thread = new Thread(() -> {
+            CheatedMessage cM = new CheatedMessage(this.playerId, cheated, timeStamp, cheatType);
+            client.sendMessage(cM);
+        });
+        thread.start();
     }
 
 }
