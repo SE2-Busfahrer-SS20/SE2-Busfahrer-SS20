@@ -3,12 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import shared.model.Card;
-import shared.model.GameState;
-import shared.model.GuessRoundListener;
-import shared.model.Player;
-import shared.model.PreGameListener;
-import shared.model.PlayersStorage;
+import shared.model.*;
 
 public class PlayersStorageImpl implements PlayersStorage {
 
@@ -163,6 +158,17 @@ public class PlayersStorageImpl implements PlayersStorage {
         this.currentTurn=currentTurn;
         nextPlayersTurn(); //Callback
     }
+    public void setPlayerFromDTO(List<PlayerDTO> playerDTOList){
+        ArrayList<String> names= new ArrayList<>();
+        ArrayList<Integer> scores= new ArrayList<>();
 
+        for(int i=0;i<playerDTOList.size();i++){
+            names.add(playerDTOList.get(i).getName());
+            scores.add(playerDTOList.get(i).getScore());
+        }
+        this.playerNames=names;
+        this.score= scores;
+
+    }
 }
 

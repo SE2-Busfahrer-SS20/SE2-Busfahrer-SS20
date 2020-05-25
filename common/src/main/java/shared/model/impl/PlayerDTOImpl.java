@@ -1,12 +1,19 @@
 package shared.model.impl;
 
+import shared.model.Player;
 import shared.model.PlayerDTO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerDTOImpl implements PlayerDTO {
 
     private String name;
     private Integer score;
     private boolean isCheating;
+
+    public PlayerDTOImpl() {
+    }
 
     public PlayerDTOImpl(String name, Integer score, boolean isCheating) {
         this.name = name;
@@ -28,16 +35,27 @@ public class PlayerDTOImpl implements PlayerDTO {
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
     public Integer getScore() {
-        return null;
+        return score;
     }
 
     @Override
     public boolean isCheating() {
-        return false;
+        return isCheating;
+    }
+
+    public static List<PlayerDTO> getDTOFromPlayerList(List<Player> playerList){
+
+        List<PlayerDTO> playerListDTO= new ArrayList<>();
+
+        for (int i = 0; i < playerList.size(); i++) {
+            playerListDTO.add(new PlayerDTOImpl(playerList.get(i).getName(), playerList.get(i).getScore(), playerList.get(i).isCheated()));
+            System.out.println("\n\n"+playerList.get(i).getName());
+        }
+        return playerListDTO;
     }
 }

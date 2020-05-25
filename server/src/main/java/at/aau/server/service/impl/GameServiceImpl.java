@@ -7,11 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.aau.server.service.GameService;
-import shared.model.Card;
-import shared.model.Game;
-import shared.model.GameState;
-import shared.model.Player;
+import shared.model.*;
 import shared.model.impl.GameImpl;
+import shared.model.impl.PlayerDTOImpl;
 import shared.networking.dto.ConfirmRegisterMessage;
 import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.StartGameMessage;
@@ -94,6 +92,7 @@ public class GameServiceImpl implements GameService {
 
         //send start game message to each client
         StartGameMessage sgm = new StartGameMessage();
+        sgm.setPlayerList(PlayerDTOImpl.getDTOFromPlayerList(getPlayerList()));
 
         int count = this.game.getPlayerCount();
         for (int i = 0; i < count; i++) {
