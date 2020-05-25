@@ -6,15 +6,7 @@ import at.aau.server.service.PLapService;
 import at.aau.server.service.impl.GameServiceImpl;
 import at.aau.server.service.impl.PLapServiceImpl;
 import shared.model.Player;
-import shared.networking.dto.BaseMessage;
-import shared.networking.dto.CheatedMessage;
-import shared.networking.dto.ConfirmRegisterMessage;
-import shared.networking.dto.NewPlayerMessage;
-import shared.networking.dto.PlayedMessage;
-import shared.networking.dto.RegisterMessage;
-import shared.networking.dto.ServerActionResponse;
-import shared.networking.dto.StartGameMessage;
-import shared.networking.dto.TextMessage;
+import shared.networking.dto.*;
 import shared.networking.kryonet.NetworkServerKryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -28,6 +20,7 @@ public class GameServer extends NetworkServerKryo {
 
     private static final String REQUEST_TEST = "request test";
     private static final String RESPONSE_TEST = "response test";
+    private static final int CONN_RETRY = 5;
 
     private GameService gameService;
     private PLapService pLapService;
@@ -67,6 +60,7 @@ public class GameServer extends NetworkServerKryo {
                             try {
                                 RegisterMessage msg = (RegisterMessage) object;
                                 gameService.createGame(msg.getPlayerName(), msg.getMACAddress(), connection);  //outsourced to GameService
+                                checkGameStates();
                                 connectionToMaster = connection;
 
                             } catch (Exception ex) {
@@ -137,6 +131,29 @@ public class GameServer extends NetworkServerKryo {
         });
     }
 
+    private void checkGameStates() {
+        new Thread(() -> {
+            try {
+                short connLostCounter = 0;
+                while (this.gameService.gameExists()) {
+                    Thread.sleep(1000);
+                    int currentConnections = this.getConnections().length;
+                    if (connLostCounter > CONN_RETRY) {
+                        gameService.endGame();
+                        Log.info("Game ended unexpected.");
+                    } else if (currentConnections < gameService.getPlayerList().size()) {
+                        connLostCounter++;
+                        Log.debug("Connection lost. ConnLostCounter: " + connLostCounter);
+                    } else {
+                        connLostCounter = 0;
+                        Log.debug("ConnLostCouter was set to 0.");
+                    }
+                }
+            } catch (Exception e) {
+                Log.error(e.toString());
+            }
+        }).start();
+    }
     private void registerClasses() {
         for (Class c : CLASS_LIST)
             registerClass(c);
