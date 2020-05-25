@@ -120,20 +120,18 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     public void onClick_btCought(View view) {
         //if the current player was cheating, he gets one point and the textView will be visible
         //Wird momentan nur bei mir selbst angezeigt ZUSÄTZLICH soll auch beim Schummler angezeigt werden
-            tV_erwischt.setVisibility(View.VISIBLE);
-
-            //after 5s the TextView is invisible
-            tV_erwischt.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    tV_erwischt.setVisibility(View.INVISIBLE);
-                }
-            }, 5000);
+        //Message schicken  damit beim current player das TextView angezeigt wird.
+        tV_erwischt.setVisibility(View.VISIBLE);
+        //after 5s the TextView is invisible
+        tV_erwischt.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tV_erwischt.setVisibility(View.INVISIBLE);
+            }
+        }, 5000);
         /*if (coughtService.isCheating()==true) {
 
-
         }*/
-
     }
     public void onClickScore(View v){
 
