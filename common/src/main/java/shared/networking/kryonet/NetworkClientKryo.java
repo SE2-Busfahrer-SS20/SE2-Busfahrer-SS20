@@ -88,9 +88,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 }
 
                 if (object instanceof BushmenMessage) {
-                   BushmenMessage bushmenMessage = (BushmenMessage) object;
+                  // BushmenMessage bushmenMessage = (BushmenMessage) object;
                     Log.info("Bushmen received");
-                    playersStorage.setBushmenCards(bushmenMessage.getCards());
+                   // playersStorage.setBushmenCards(bushmenMessage.getCards());
+                    callbackMap.get(BushmenMessage.class).callback((BaseMessage) object);
 
                 }
 
