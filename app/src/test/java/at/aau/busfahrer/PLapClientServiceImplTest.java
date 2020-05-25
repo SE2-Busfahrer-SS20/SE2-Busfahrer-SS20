@@ -12,12 +12,10 @@ import shared.model.Card;
 import shared.model.Deck;
 import shared.model.impl.CardImpl;
 import shared.model.impl.DeckImpl;
-import shared.networking.NetworkClient;
 import shared.networking.kryonet.NetworkClientKryo;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.times;
 
 public class PLapClientServiceImplTest {
 
@@ -25,7 +23,6 @@ public class PLapClientServiceImplTest {
 
     @Mock
     NetworkClientKryo networkClient;
-
 
 
     @Before
@@ -53,9 +50,14 @@ public class PLapClientServiceImplTest {
             Mockito.verify(networkClient, atLeastOnce()).sendMessage(any());
         }
     }
+
+    /**
+     * check if the counter for gamer points in the pyramid lap works expected.
+     */
     @Test
     public void testRowCounter() {
         Card[] pCards = getPCards();
+        pCards[0] = new CardImpl(3); // set to a non picture card, otherwise checks will not work expected.
         // check if the match count is 0;
         Assert.assertEquals( 0, pLapClientService.getMatchCount());
         ((PLapClientServiceImpl) pLapClientService).setPCards(pCards);
@@ -77,6 +79,21 @@ public class PLapClientServiceImplTest {
         Assert.assertEquals( 10, pLapClientService.getMatchCount());
     }
 
+    @Test
+    public void checkPictureCardMissmatch() {
+        Card[] pCards = getPCards();
+        pCards[0] = new CardImpl(1, 10); // set to a non picture card, otherwise checks will not work expected.
+        pCards[1] = new CardImpl(3); // check match with invalid string.
+        ((PLapClientServiceImpl) pLapClientService).setPCards(pCards); // set cards
+
+        Assert.assertNull(pLapClientService.checkCardMatch(pCards[0].toString(), pCards, 4));
+        Assert.assertNull(pLapClientService.checkCardMatch("invalid", pCards, 4));
+    }
+
+    /**
+     * Helper Method to generate pyramid lap cards.
+     * @return pCards.
+     */
     private Card[] getPCards() {
         Deck deck = new DeckImpl();
         Card[] pCards = new Card[10];
