@@ -2,14 +2,19 @@ package at.aau.busfahrer.presentation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
+import at.aau.busfahrer.service.CheatService;
 import at.aau.busfahrer.service.PLabService;
+import at.aau.busfahrer.service.impl.CheatServiceImpl;
 import at.aau.busfahrer.service.impl.PLabServiceImpl;
 import shared.model.Card;
 
@@ -24,6 +29,7 @@ public class PLapActivity extends AppCompatActivity {
     private final int[] pCardIds = {R.id.tV_pcard1, R.id.tV_pcard2, R.id.tV_pcard3, R.id.tV_pcard4, R.id.tV_pcard5, R.id.tV_pcard6, R.id.tV_pcard7, R.id.tV_pcard8, R.id.tV_pcard9, R.id.tV_pcard10};
 
     private PLabService pLabService;
+    private CheatService cheatService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,13 @@ public class PLapActivity extends AppCompatActivity {
         for(int i = 0; i < 2; i++) {
             turnCards(myCardIds, cards);
         }
+
+        // Cheat service init
+        cheatService = CheatServiceImpl.getInstance();
+        cheatService.setContext(getApplicationContext(), getClass().getName());
+        cheatService.startListen();
+        handleCheat();
+
     }
 
     /**
@@ -102,4 +115,36 @@ public class PLapActivity extends AppCompatActivity {
             return ROW3;
         else return ROW4;
     }
+
+    /**
+     * Handles cheating, if Sensor event is triggered a confirmation dialog appears, if player press yes --> cheatedMessage sent to server
+     */
+    public void handleCheat() {
+        cheatService.setSensorListener(() -> {
+            cheatService.pauseListen();
+                new AlertDialog.Builder(PLapActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                        // Yes
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                            // sending network call
+                            cheatService.stopListen();
+                            cheatService.sendMsgCheated(true, System.currentTimeMillis(), cheatService.getSensorType());
+                            cheatEffect();
+                        })
+                        // No
+                        .setNegativeButton(android.R.string.no, (dialog, which) -> cheatService.resumeListen())
+                        .setTitle("Are you sure you want to cheat?")
+                        .setCancelable(false)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .create().show();
+        });
+    }
+
+    public void cheatEffect(){
+        /* TODO
+        Schummeln in der Pyramidenrunde:
+        Die nächste verdeckte Karte wird gleich wie eine aus deiner Hand sein.
+        */
+    }
+
+
 }

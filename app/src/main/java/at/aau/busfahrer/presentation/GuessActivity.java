@@ -103,6 +103,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         //Cheat Service
         cheatService = CheatServiceImpl.getInstance();
         cheatService.setContext(getApplicationContext(), getClass().getName());
+        cheatService.setPlayerId(playersStorage.getTempID());
         cheatService.startListen();
         handleCheat(); //this coursed error
 
@@ -158,7 +159,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                         .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                             // sending network call
                             cheatService.stopListen();
-                            gamePlayService.sendMsgCheated(playersStorage.getTempID(), true, System.currentTimeMillis(), cheatService.getSensorType());
+                            cheatService.sendMsgCheated(true, System.currentTimeMillis(), cheatService.getSensorType());
                             turnCardOnCheat();
                             })
                         // No
