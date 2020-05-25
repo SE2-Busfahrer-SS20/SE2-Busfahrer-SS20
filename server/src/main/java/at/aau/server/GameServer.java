@@ -6,6 +6,7 @@ import at.aau.server.service.PLapService;
 import at.aau.server.service.impl.GameServiceImpl;
 import at.aau.server.service.impl.PLapServiceImpl;
 import shared.model.Player;
+import shared.model.impl.PlayerDTOImpl;
 import shared.networking.dto.BaseMessage;
 import shared.networking.dto.CheatedMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
@@ -93,7 +94,8 @@ public class GameServer extends NetworkServerKryo {
                             connection.sendTCP(crm);
 
                             //Send message to Master to appear in PlayersList
-                            NewPlayerMessage npm = new NewPlayerMessage(player.getName());
+                            //NewPlayerMessage npm = new NewPlayerMessage(player.getName());
+                            NewPlayerMessage npm = new NewPlayerMessage(PlayerDTOImpl.getDTOFromPlayer(player));
                             connectionToMaster.sendTCP(npm);
                         }
                         else{
@@ -118,8 +120,13 @@ public class GameServer extends NetworkServerKryo {
                     // Player has cheated message
                     else if(object instanceof CheatedMessage){
                         CheatedMessage cM = (CheatedMessage) object;
-                        if(cM.hasCheated()){
+                        if(cM.hasCheated()) {
                             gameService.getPlayerList().get(cM.getTempID()).setCheatedThisRound(true);
+                        }
+                        int playerId = cM.getTempID();
+                        CheatedMessage updateClients = new CheatedMessage(playerId,true, cM.getTimeStamp(), cM.getCheatType());
+                        for (int i = 0; i < gameService.getPlayerList().size() ; i++) {
+                            gameService.getPlayerList().get(i).getConnection().sendTCP(updateClients);
                         }
                     }
 

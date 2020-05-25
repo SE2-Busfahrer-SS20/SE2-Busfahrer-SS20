@@ -173,6 +173,7 @@ public class GamePlayServiceImpl implements GamePlayService {
             @Override
             public void run() {
                 CheatedMessage cM = new CheatedMessage(playerId, cheated, timeStamp, cheatType);
+                System.out.println("\n\n\nCheated SERVER: "+cheated+"\n\n\n");
                 client.sendMessage(cM);
             }
         });
