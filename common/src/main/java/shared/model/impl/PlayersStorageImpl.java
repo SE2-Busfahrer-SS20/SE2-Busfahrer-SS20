@@ -186,5 +186,13 @@ public class PlayersStorageImpl implements PlayersStorage {
 //        this.isCheating=isCheating;
         this.playerList=playerDTOList;
     }
+
+    public boolean isCheating(int index){
+        return playerList.get(index).isCheating();
+    }
+    public void setCheating(int index){
+        playerList.get(index).setCheating(true);
+        System.out.println("\n\n\n"+playerList.get(index).isCheating()+"\n\n\n");
+    }
 }
 

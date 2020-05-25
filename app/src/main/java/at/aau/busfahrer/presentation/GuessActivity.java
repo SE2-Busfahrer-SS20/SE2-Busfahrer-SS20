@@ -118,20 +118,22 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
 
     public void onClick_btCought(View view) {
+        //playersStorage.setCheating(playersStorage.getCurrentTurn());
+        System.out.println("\n\n\n"+playersStorage.isCheating(playersStorage.getCurrentTurn())+"\n\n\n");
         //if the current player was cheating, he gets one point and the textView will be visible
 
-        if (coughtService.isCheating()==true) {
-            //Wird momentan nur bei mir selbst angezeigt ZUSÄTZLICH soll auch beim Schummler angezeigt werden
-            tV_erwischt.setVisibility(View.VISIBLE);
-
-            //after 5s the TextView is invisible
-            tV_erwischt.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    tV_erwischt.setVisibility(View.INVISIBLE);
-                }
-            }, 5000);
-        }
+//        if (coughtService.isCheating()==true) {
+//            //Wird momentan nur bei mir selbst angezeigt ZUSÄTZLICH soll auch beim Schummler angezeigt werden
+//            tV_erwischt.setVisibility(View.VISIBLE);
+//
+//            //after 5s the TextView is invisible
+//            tV_erwischt.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    tV_erwischt.setVisibility(View.INVISIBLE);
+//                }
+//            }, 5000);
+//        }
 
     }
     public void onClickScore(View v){

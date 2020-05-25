@@ -93,6 +93,18 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     if(callbackMap.get(TextMessage.class)!=null)
                     callbackMap.get(TextMessage.class).callback((BaseMessage) object);
                 }
+                if (object instanceof CheatedMessage) {
+                    Log.debug("CheatedMessage received");
+                    System.out.println("\n\n\n CLIENT : "+((CheatedMessage) object).hasCheated()+"\n\n\n");
+                    playersStorage.setCheating(((CheatedMessage) object).getTempID());
+                }
+//               if(object instanceof CheatedMessage){
+//                    Log.info("CheatedMessage received");
+//                    CheatedMessage uM = (CheatedMessage)object;
+//                    playersStorage.updateCheaterList(
+//                            new Cheater(uM.getTempID(),uM.hasCheated(),uM.getTimeStamp(),uM.getCheatType(),uM.getPlayerName()));
+//                }
+
             }
         });
     }

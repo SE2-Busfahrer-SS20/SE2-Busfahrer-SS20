@@ -30,7 +30,7 @@ public class PlayerDTOImpl implements PlayerDTO {
     }
 
     public void setCheating(boolean cheating) {
-        isCheating = cheating;
+        this.isCheating = cheating;
     }
 
     @Override
