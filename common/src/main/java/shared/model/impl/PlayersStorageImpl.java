@@ -10,18 +10,21 @@ public class PlayersStorageImpl implements PlayersStorage {
     private int tempID; //This ID equals the Index in playerList (ArrayList in Game object)
     private Card[] cards;
     private GameState state;
-    private ArrayList<String> playerNames;
+    //private ArrayList<String> playerNames;
     private boolean master=false;
     private int currentTurn;
-    private ArrayList<Integer> score;
+    //private ArrayList<Integer> score;
+    //private ArrayList<Boolean> isCheating;
+    private ArrayList<PlayerDTO> playerList;
 
 
     //Singleton Pattern
     private static PlayersStorageImpl instance;
 
     private PlayersStorageImpl(){
-        playerNames = new ArrayList<String>();
-        score= new ArrayList<Integer>();
+//        playerNames = new ArrayList<String>();
+//        score= new ArrayList<Integer>();
+        playerList= new ArrayList<PlayerDTO>();
         state=GameState.INIT;
     }
 
@@ -87,9 +90,13 @@ public class PlayersStorageImpl implements PlayersStorage {
     }
 
     public String getPlayerName(int index){
-        return playerNames.get(index);
+        return playerList.get(index).getName();
     }
-    public ArrayList<String> getPlayerNames(){
+    public ArrayList<String> getPlayerNamesList(){
+        ArrayList<String> playerNames= new ArrayList<>();
+        for(int i=0; i<playerList.size();i++){
+            playerNames.add(playerList.get(i).getName());
+        }
         return playerNames;
     }
     public  void addPlayerName(String name){
@@ -161,6 +168,8 @@ public class PlayersStorageImpl implements PlayersStorage {
     public void setPlayerFromDTO(List<PlayerDTO> playerDTOList){
         ArrayList<String> names= new ArrayList<>();
         ArrayList<Integer> scores= new ArrayList<>();
+        ArrayList<Boolean> isCheating= new ArrayList<>();
+
 
         for(int i=0;i<playerDTOList.size();i++){
             names.add(playerDTOList.get(i).getName());
@@ -168,7 +177,7 @@ public class PlayersStorageImpl implements PlayersStorage {
         }
         this.playerNames=names;
         this.score= scores;
-
+        this.isCheating=isCheating;
     }
 }
 
