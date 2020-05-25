@@ -16,7 +16,7 @@ public class PlayersStorageImpl implements PlayersStorage {
     private Card[] cards;
     private GameState state;
     private ArrayList<String> playerNames;
-    private boolean master=false;
+    private boolean master = false;
     private int currentTurn;
     private ArrayList<Integer> score;
     private List<Player> playersList;
@@ -26,15 +26,15 @@ public class PlayersStorageImpl implements PlayersStorage {
     //Singleton Pattern
     private static PlayersStorageImpl instance;
 
-    private PlayersStorageImpl(){
+    private PlayersStorageImpl() {
         playerNames = new ArrayList<String>();
-        score= new ArrayList<Integer>();
-        state=GameState.INIT;
+        score = new ArrayList<Integer>();
+        state = GameState.INIT;
     }
 
-    public static synchronized PlayersStorageImpl getInstance(){
-        if(PlayersStorageImpl.instance==null){
-            PlayersStorageImpl.instance=new PlayersStorageImpl();
+    public static synchronized PlayersStorageImpl getInstance() {
+        if (PlayersStorageImpl.instance == null) {
+            PlayersStorageImpl.instance = new PlayersStorageImpl();
         }
         return PlayersStorageImpl.instance;
     }
@@ -42,23 +42,24 @@ public class PlayersStorageImpl implements PlayersStorage {
     //Callback for WaitActivity
     private PreGameListener preGameListener;
 
-    public void registerPreGameListener(PreGameListener preGameListener){
-        this.preGameListener=preGameListener;
+    public void registerPreGameListener(PreGameListener preGameListener) {
+        this.preGameListener = preGameListener;
     }
-    private void updatePlayerList(){
-        new Thread(new Runnable(){
-            public void run(){
-                if (preGameListener !=null){
+
+    private void updatePlayerList() {
+        new Thread(new Runnable() {
+            public void run() {
+                if (preGameListener != null) {
                     preGameListener.onAdditionalPlayer();
                 }
             }
         }).start();
     }
 
-    private void gameStateChangedToReady(){
-        new Thread(new Runnable(){
-            public void run(){
-                if (preGameListener !=null){
+    private void gameStateChangedToReady() {
+        new Thread(new Runnable() {
+            public void run() {
+                if (preGameListener != null) {
                     preGameListener.onGameStart();
                 }
             }
@@ -68,16 +69,16 @@ public class PlayersStorageImpl implements PlayersStorage {
     //Callback for GuessActivity
     private GuessRoundListener guessRoundListener;
 
-    public void registerGuessRoundListener(GuessRoundListener guessRoundListener){
-        this.guessRoundListener=guessRoundListener;
+    public void registerGuessRoundListener(GuessRoundListener guessRoundListener) {
+        this.guessRoundListener = guessRoundListener;
     }
 
-    private void nextPlayersTurn(){
+    private void nextPlayersTurn() {
 
-        new Thread(new Runnable(){
+        new Thread(new Runnable() {
             @Override
-            public void run(){
-                if(guessRoundListener!=null){
+            public void run() {
+                if (guessRoundListener != null) {
                     guessRoundListener.onUpdateMessage();
                 }
             }
@@ -89,17 +90,20 @@ public class PlayersStorageImpl implements PlayersStorage {
     public Card[] getCards() {
         return cards;
     }
+
     public void setCards(Card[] cards) {
         this.cards = cards;
     }
 
-    public String getPlayerName(int index){
+    public String getPlayerName(int index) {
         return playerNames.get(index);
     }
-    public ArrayList<String> getPlayerNames(){
+
+    public ArrayList<String> getPlayerNames() {
         return playerNames;
     }
-    public  void addPlayerName(String name){
+
+    public void addPlayerName(String name) {
         playerNames.add(name);
         score.add(0);
         updatePlayerList();
@@ -108,6 +112,7 @@ public class PlayersStorageImpl implements PlayersStorage {
     public boolean isMaster() {
         return master;
     }
+
     public void setMaster(boolean master) {
         this.master = master;
     }
@@ -118,11 +123,10 @@ public class PlayersStorageImpl implements PlayersStorage {
 
     public void setState(GameState state) {
         //if game changes from init to ready, the WaitActivity needs to receive a callback to start the game!
-        if(this.state==GameState.INIT&&state==GameState.READY){
+        if (this.state == GameState.INIT && state == GameState.READY) {
             this.state = state;
             gameStateChangedToReady();
-        }
-        else
+        } else
             this.state = state;
     }
 
@@ -137,6 +141,7 @@ public class PlayersStorageImpl implements PlayersStorage {
     public int getCurrentTurn() {
         return currentTurn;
     }
+
     public void setCurrentTurn(int currentTurn) {
         this.currentTurn = currentTurn;
     }
@@ -152,17 +157,18 @@ public class PlayersStorageImpl implements PlayersStorage {
     public void setScore(ArrayList<Integer> score) {
         this.score = score;
     }
-    public void initScores(){
-        ArrayList<Integer> scores= new ArrayList<Integer>();
-        for(int i=0;i< getPlayerNames().size();i++){
+
+    public void initScores() {
+        ArrayList<Integer> scores = new ArrayList<Integer>();
+        for (int i = 0; i < getPlayerNames().size(); i++) {
             scores.add(0);
         }
-        this.score=scores;
+        this.score = scores;
     }
 
-    public void updateOnMessage(ArrayList<Integer> score, int currentTurn){
-        this.score=score;
-        this.currentTurn=currentTurn;
+    public void updateOnMessage(ArrayList<Integer> score, int currentTurn) {
+        this.score = score;
+        this.currentTurn = currentTurn;
         nextPlayersTurn(); //Callback
     }
 
@@ -174,12 +180,6 @@ public class PlayersStorageImpl implements PlayersStorage {
         this.playersList = playersList;
     }
 
-    public void setBushmenCards(Card[] cards){
-        this.bushmenCards=cards;
-    }
 
-    public Card[] getBushmenCards(){
-        return bushmenCards;
-    }
 }
 

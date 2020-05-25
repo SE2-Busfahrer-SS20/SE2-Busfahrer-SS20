@@ -135,6 +135,8 @@ public class GameImpl implements Game {
 
     public Card[] generateBushmenCards() {
         Card[] cards = new CardImpl[7];
+        cardStack= new DeckImpl();
+        cardStack.refill();
         for (int i = 0; i < cards.length; i++) {
             cards[i] = cardStack.drawCard();
         }
