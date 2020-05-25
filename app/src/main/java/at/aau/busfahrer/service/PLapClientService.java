@@ -7,7 +7,7 @@ import java.util.List;
 import shared.model.Card;
 import shared.networking.Callback;
 
-public interface PLabService {
+public interface PLapClientService {
 
     Card checkCardMatch(String cardString, Card[] cards, int row);
     int getMatchCount();
