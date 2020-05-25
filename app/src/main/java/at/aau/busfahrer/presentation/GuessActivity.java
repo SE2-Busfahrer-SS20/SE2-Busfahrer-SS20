@@ -241,8 +241,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     @Override   //Callback - executed when receiving UpdateMessage from server (after each players turn)
     public void onUpdateMessage() {
         
-        updateScoreButton(playersStorage.getScore().get(playersStorage.getTempID()));
-      
+        updateScoreButton(playersStorage.getScoreList().get(playersStorage.getTempID()));
+
   
         if (playersStorage.getCurrentTurn() == 0) {
             //This means that every player has finished the turn of the current round and the next round can be started

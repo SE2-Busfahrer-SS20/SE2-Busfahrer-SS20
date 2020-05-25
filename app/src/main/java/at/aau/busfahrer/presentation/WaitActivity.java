@@ -91,7 +91,7 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
             players[7] = (TextView) findViewById(R.id.playerName8);
             ArrayList<String> playerNames;
 
-            playerNames = playersStorage.getPlayerNames();
+            playerNames = playersStorage.getPlayerNamesList();
             int size = playerNames.size();
             for (int i = 0; i < 8 && i < size; i++) {
                 if (playerNames.get(i) != null) {

@@ -1,4 +1,5 @@
 package shared.model.impl;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,7 @@ public class PlayersStorageImpl implements PlayersStorage {
     private int currentTurn;
     //private ArrayList<Integer> score;
     //private ArrayList<Boolean> isCheating;
-    private ArrayList<PlayerDTO> playerList;
+    private List<PlayerDTO> playerList;
 
 
     //Singleton Pattern
@@ -94,14 +95,15 @@ public class PlayersStorageImpl implements PlayersStorage {
     }
     public ArrayList<String> getPlayerNamesList(){
         ArrayList<String> playerNames= new ArrayList<>();
+        System.out.println("\n\n"+playerList.size());
         for(int i=0; i<playerList.size();i++){
             playerNames.add(playerList.get(i).getName());
+            System.out.println(playerList.get(i).getName());
         }
         return playerNames;
     }
-    public  void addPlayerName(String name){
-        playerNames.add(name);
-        score.add(0);
+    public void addPlayer(PlayerDTO player){
+        playerList.add(player);
         updatePlayerList();
     }
 
@@ -141,43 +143,48 @@ public class PlayersStorageImpl implements PlayersStorage {
         this.currentTurn = currentTurn;
     }
 
-    public void setPlayerNames(ArrayList<String> playerNames) {
-        this.playerNames = playerNames;
+    public void setPlayerList(ArrayList<PlayerDTO> players) {
+        this.playerList = players;
     }
 
-    public ArrayList<Integer> getScore() {
-        return score;
-    }
-
-    public void setScore(ArrayList<Integer> score) {
-        this.score = score;
-    }
-    public void initScores(){
-        ArrayList<Integer> scores= new ArrayList<Integer>();
-        for(int i=0;i< getPlayerNames().size();i++){
-            scores.add(0);
+    public ArrayList<Integer> getScoreList() {
+        ArrayList<Integer> playerScores= new ArrayList<>();
+        for(int i=0; i<playerList.size();i++){
+            playerScores.add(playerList.get(i).getScore());
         }
-        this.score=scores;
+        return playerScores;
     }
 
-    public void updateOnMessage(ArrayList<Integer> score, int currentTurn){
-        this.score=score;
+//    public void setScore(ArrayList<Integer> score) {
+//        this.score = score;
+//    }
+//    public void initScores(){
+//        ArrayList<Integer> scores= new ArrayList<Integer>();
+//        for(int i=0;i< getPlayerNames().size();i++){
+//            scores.add(0);
+//        }
+//        this.score=scores;
+//    }
+
+    public void updateOnMessage(List<PlayerDTO> playerList, int currentTurn){
+        this.playerList=playerList;
         this.currentTurn=currentTurn;
         nextPlayersTurn(); //Callback
     }
     public void setPlayerFromDTO(List<PlayerDTO> playerDTOList){
-        ArrayList<String> names= new ArrayList<>();
-        ArrayList<Integer> scores= new ArrayList<>();
-        ArrayList<Boolean> isCheating= new ArrayList<>();
-
-
-        for(int i=0;i<playerDTOList.size();i++){
-            names.add(playerDTOList.get(i).getName());
-            scores.add(playerDTOList.get(i).getScore());
-        }
-        this.playerNames=names;
-        this.score= scores;
-        this.isCheating=isCheating;
+//        ArrayList<String> names= new ArrayList<>();
+//        ArrayList<Integer> scores= new ArrayList<>();
+//        ArrayList<Boolean> isCheating= new ArrayList<>();
+//
+//
+//        for(int i=0;i<playerDTOList.size();i++){
+//            names.add(playerDTOList.get(i).getName());
+//            scores.add(playerDTOList.get(i).getScore());
+//        }
+//        this.playerNames=names;
+//        this.score= scores;
+//        this.isCheating=isCheating;
+        this.playerList=playerDTOList;
     }
 }
 

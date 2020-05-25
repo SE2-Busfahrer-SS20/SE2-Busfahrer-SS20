@@ -58,4 +58,7 @@ public class PlayerDTOImpl implements PlayerDTO {
         }
         return playerListDTO;
     }
+    public static PlayerDTO getDTOFromPlayer(Player player){
+        return new PlayerDTOImpl(player.getName(), player.getScore(), player.isCheated());
+    }
 }

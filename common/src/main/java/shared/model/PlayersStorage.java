@@ -11,8 +11,8 @@ public interface PlayersStorage {
     void setCards(Card[] cards);
 
     String getPlayerName(int index);
-    ArrayList<String> getPlayerNames();
-    void addPlayerName(String name);
+    ArrayList<String> getPlayerNamesList();
+    //void addPlayerName(String name);
 
     boolean isMaster();
     void setMaster(boolean master);

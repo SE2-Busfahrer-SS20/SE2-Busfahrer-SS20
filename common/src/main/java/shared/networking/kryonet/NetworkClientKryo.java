@@ -56,12 +56,14 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
                 if(object instanceof NewPlayerMessage){
                     Log.debug("New Player in the Game");
-                    playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
+                    //playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
+                    playersStorage.addPlayer(((NewPlayerMessage)object).getPlayer());
                 }
 
                 if(object instanceof StartGameMessage){
                     StartGameMessage sgm = (StartGameMessage) object;
                     Log.debug("Game can start now");
+                    //playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
                     playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
 
                     playersStorage.setState(GameState.READY);
@@ -69,7 +71,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
                 if(object instanceof UpdateMessage){
                     UpdateMessage uM = (UpdateMessage)object;
-                    playersStorage.updateOnMessage(uM.getScore(),uM.getCurrentPlayer());
+                    playersStorage.updateOnMessage(uM.getPlayerList(),uM.getCurrentPlayer());
 
                 }
 

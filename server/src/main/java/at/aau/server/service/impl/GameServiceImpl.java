@@ -122,7 +122,9 @@ public class GameServiceImpl implements GameService {
         connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
 
         //Add Player to Playerlist in Wait UI
-        NewPlayerMessage npm = new NewPlayerMessage(player.getName());
+        //NewPlayerMessage npm = new NewPlayerMessage(player.getName());
+        System.out.println("\ntest\n"+PlayerDTOImpl.getDTOFromPlayer(player).getName()+"\n\n");
+        NewPlayerMessage npm = new NewPlayerMessage(PlayerDTOImpl.getDTOFromPlayer(player));
         connection.sendTCP(npm);
 
         Log.info("Game created.");
@@ -156,11 +158,9 @@ public class GameServiceImpl implements GameService {
             game.addPointsToPlayer(tempID, 1);
 
         //ArrayList of all players scores
-        ArrayList<Integer> score = new ArrayList<>();
-        for (int i = 0; i < game.getPlayerCount(); i++) {
-            int playerScore = game.getPlayerList().get(i).getScore();
-            score.add(playerScore);
-        }
+        List<PlayerDTO> playerList = PlayerDTOImpl.getDTOFromPlayerList(game.getPlayerList());
+
+        //TODO: was is mit reset?
         //Reset Cheating
         resetCheated();
 
@@ -175,7 +175,7 @@ public class GameServiceImpl implements GameService {
         game.setCurrentPlayer(nextPlayer);
 
         //send DTO updateMessage to all clients
-        UpdateMessage uM = new UpdateMessage(nextPlayer, score);
+        UpdateMessage uM = new UpdateMessage(nextPlayer, playerList);
         int count = this.game.getPlayerCount();
         for (int i = 0; i < count; i++) {
             Connection con = this.game.getPlayerList().get(i).getConnection();
