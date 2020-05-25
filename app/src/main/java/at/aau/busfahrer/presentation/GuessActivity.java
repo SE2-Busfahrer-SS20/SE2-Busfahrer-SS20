@@ -423,7 +423,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 break;
         }
         card.setGravity(Gravity.CENTER);
-        AlertDialog at = new AlertDialog.Builder(GuessActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+        AlertDialog at = new AlertDialog.Builder(GuessActivity.this, R.style.AlertDialogStyle)
                 .setTitle("Your next card is")
                 .setView(card).setNegativeButton(android.R.string.ok, (dialog, which) -> {
                 }).show();
