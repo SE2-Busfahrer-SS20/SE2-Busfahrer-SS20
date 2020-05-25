@@ -105,7 +105,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void endGame() {
-        throw new UnsupportedOperationException("Method not implemented yet.");
+        this.game = null;
     }
 
     @Override
