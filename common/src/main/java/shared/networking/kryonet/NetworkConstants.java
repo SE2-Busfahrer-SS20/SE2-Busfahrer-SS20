@@ -38,7 +38,8 @@ public class NetworkConstants {
             DealPointsMessage.class,
             WinnerLooserMessage.class,
             ArrayList.class,
-            BushmenMessage.class
+            BushmenMessage.class,
+            BushmenCardMessage.class
     };
 
 }
