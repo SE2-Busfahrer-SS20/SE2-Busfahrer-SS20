@@ -7,6 +7,7 @@ import shared.model.Card;
 import shared.model.GameState;
 import shared.networking.NetworkClient;
 import shared.networking.dto.CheatedMessage;
+import shared.networking.dto.CoughtMessage;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.StartGameMessage;
@@ -173,6 +174,7 @@ public class GamePlayServiceImpl implements GamePlayService {
             @Override
             public void run() {
                 CheatedMessage cM = new CheatedMessage(playerId, cheated, timeStamp, cheatType);
+                System.out.println("\n\n\nCheated SERVER: "+cheated+"\n\n\n");
                 client.sendMessage(cM);
             }
         });
@@ -184,7 +186,16 @@ public class GamePlayServiceImpl implements GamePlayService {
         this.host = hostname;
     }
 
-    //Erwischt an den Sever schicken
-
+    //Send CoughtMessage to the Server
+    public void sendMsgCought(final int indexCheater,final int indexCought,final int cheaterScore,final int coughtScore){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                CoughtMessage coughtMessage = new CoughtMessage(indexCheater,indexCought,cheaterScore,coughtScore);
+                client.sendMessage(coughtMessage);
+            }
+        });
+        thread.start();
+    }
 
 }

@@ -118,10 +118,10 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
 
     public void onClick_btCought(View view) {
-        //if the current player was cheating, he gets one point and the textView will be visible
-        if(playersStorage.getTempID()==playersStorage.getCurrentTurn()){
+        if(coughtService.isCheating()){
+            System.out.println("\n\n\n"+playersStorage.isCheating(playersStorage.getCurrentTurn())+"\n\n\n");
+            //TextView beim CurrentPlayer anzeigen!!!!!!!!!!!
             tV_erwischt.setVisibility(View.VISIBLE);
-
             //after 5s the TextView is invisible
             tV_erwischt.postDelayed(new Runnable() {
                 @Override
@@ -130,11 +130,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 }
             }, 5000);
         }
-
-        /*if (coughtService.isCheating()==true) {
-            //Wird momentan nur bei mir selbst angezeigt ZUSÄTZLICH soll auch beim Schummler angezeigt werden
-
-        }*/
 
     }
     public void onClickScore(View v){
@@ -244,8 +239,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     @Override   //Callback - executed when receiving UpdateMessage from server (after each players turn)
     public void onUpdateMessage() {
         
-        updateScoreButton(playersStorage.getScore().get(playersStorage.getTempID()));
-      
+        updateScoreButton(playersStorage.getScoreList().get(playersStorage.getTempID()));
+
   
         if (playersStorage.getCurrentTurn() == 0) {
             //This means that every player has finished the turn of the current round and the next round can be started
