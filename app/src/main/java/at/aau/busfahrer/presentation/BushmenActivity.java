@@ -41,9 +41,9 @@ public class BushmenActivity extends AppCompatActivity {
 
     TextView TxtPunkte;
 
-    private int PunkteAnzahlBusfahrer=0;
+    private int PunkteAnzahlBusfahrer = 0;
 
-    private int KartenCounter=0;
+    private int KartenCounter = 0;
 
     private boolean isLooser; // is true in case that the player is a looser.
 
@@ -52,22 +52,10 @@ public class BushmenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bushmen);
 
-        Thread startThread = new Thread(() -> {
-            try {
-                Log.i("Bushmen Service", "Bushmen start was triggered.");
-                this.networkClient.sendMessage(new BushmenMessage());
-            } catch (Exception e) {
-                Log.e("Error in BushmenService", e.toString(),e);
-            }
-
-        });
-        startThread.start();
-
         //Callback der aufgerufen wird wenn Client die Karten erhalten hat
-        networkClient.registerCallback(BushmenMessage.class,msg->{
-            BushmenMessage bushmenMessage=(BushmenMessage) msg;
-            this.cards=bushmenMessage.getCards();
-            test();
+        networkClient.registerCallback(BushmenMessage.class, msg -> {
+            BushmenMessage bushmenMessage = (BushmenMessage) msg;
+            this.cards = bushmenMessage.getCards();
             System.out.println(bushmenMessage.getCards().length);
         });
 
@@ -76,91 +64,90 @@ public class BushmenActivity extends AppCompatActivity {
 
 
         //Kommt man zum Busfahrer startet man mit 10 Punkten
-        PunkteAnzahlBusfahrer+=10;
+        PunkteAnzahlBusfahrer += 10;
         UpdateAnzeige();
 
         // Neue Initialisieren
         Reset_Game();
         // set looser variable. Value will be set in PLapFinished Activity.
         isLooser = getIntent().getBooleanExtra("LOST_GAME", false);
+        //Log.i("BushmenActiviy",)
     }
 
     //public void getBushmenCards(View view){
-      // this.cards= playersStorage.getBushmenCards(); // immer aufgerufen werden für die Karten !!
-       // System.out.println(cards.toString());
-        //System.out.println(cards.length);
-   // }
+    // this.cards= playersStorage.getBushmenCards(); // immer aufgerufen werden für die Karten !!
+    // System.out.println(cards.toString());
+    //System.out.println(cards.length);
+    // }
 
-    private void UpdateAnzeige(){
+    private void UpdateAnzeige() {
         TxtPunkte.setText(String.valueOf(PunkteAnzahlBusfahrer));
     }
 
 
     public void onClickCard1(View v) {
-        TextView tV=findViewById(R.id.tV_card1);
+        TextView tV = findViewById(R.id.tV_card1);
         turnCard(tV, cards[0]);
     }
 
     public void onClickCard2(View view) {
-        TextView tV=findViewById(R.id.tV_card2);
+        TextView tV = findViewById(R.id.tV_card2);
         turnCard(tV, cards[1]);
     }
 
     public void onClickCard3(View view) {
-        TextView tV=findViewById(R.id.tV_card3);
+        TextView tV = findViewById(R.id.tV_card3);
         turnCard(tV, cards[2]);
     }
 
     public void onClickCard4(View view) {
-        TextView tV=findViewById(R.id.tV_card4);
+        TextView tV = findViewById(R.id.tV_card4);
         turnCard(tV, cards[3]);
     }
 
     public void onClickCard5(View view) {
-        TextView tV=findViewById(R.id.tV_card5);
+        TextView tV = findViewById(R.id.tV_card5);
         turnCard(tV, cards[4]);
     }
 
     public void onClickCard6(View view) {
-        TextView tV=findViewById(R.id.tV_card6);
+        TextView tV = findViewById(R.id.tV_card6);
         turnCard(tV, cards[5]);
     }
 
     public void onClickCard7(View view) {
-        TextView tV=findViewById(R.id.tV_card7);
+        TextView tV = findViewById(R.id.tV_card7);
         turnCard(tV, cards[6]);
     }
 
-    public void turnCard(TextView tV, Card c)  {
+    public void turnCard(TextView tV, Card c) {
 
-        if(tV.getText()!="\uD83C\uDCA0")
+        if (tV.getText() != "\uD83C\uDCA0")
             return;
 
         // Karten Aufdecken
-        if(c.getSuit()==1 ){
+        if (c.getSuit() == 1) {
 
             tV.setText(c.toString());
             tV.setTextColor(Color.parseColor("#FF0000"));//Red
-        }
-        else
-        {
+        } else {
             tV.setText(c.toString());
             tV.setTextColor(Color.parseColor("#000000"));//Black
         }
 
         // Prüfung
         // Wenn Bube, König, Dame, Ass Dann Restart
-        if(c.getRank() == 0 || c.getRank() == 10 || c.getRank() == 11 || c.getRank() == 12  ) {
+        if (c.getRank() == 0 || c.getRank() == 10 || c.getRank() == 11 || c.getRank() == 12) {
             tV.setTextColor(Color.parseColor("#00C800"));//Green
 
             // Karten für Eingabe Sperren
-            Enable_Cards((TextView) findViewById(R.id.tV_card1),false);
-            Enable_Cards((TextView) findViewById(R.id.tV_card2),false);
-            Enable_Cards((TextView) findViewById(R.id.tV_card3),false);
-            Enable_Cards((TextView) findViewById(R.id.tV_card4),false);
-            Enable_Cards((TextView) findViewById(R.id.tV_card5),false);
-            Enable_Cards((TextView) findViewById(R.id.tV_card6),false);
-            Enable_Cards((TextView) findViewById(R.id.tV_card7),false);
+            Enable_Cards((TextView) findViewById(R.id.tV_card1), false);
+            Enable_Cards((TextView) findViewById(R.id.tV_card2), false);
+            Enable_Cards((TextView) findViewById(R.id.tV_card3), false);
+            Enable_Cards((TextView) findViewById(R.id.tV_card4), false);
+            Enable_Cards((TextView) findViewById(R.id.tV_card5), false);
+            Enable_Cards((TextView) findViewById(R.id.tV_card6), false);
+            Enable_Cards((TextView) findViewById(R.id.tV_card7), false);
 
 
             Handler handler = new Handler();
@@ -168,7 +155,7 @@ public class BushmenActivity extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                 // Erwischt man eine Bildkarte kommt Text verloren und neu beginnen
+                    // Erwischt man eine Bildkarte kommt Text verloren und neu beginnen
 
                     AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this);
                     dialog.setTitle("Verloren");
@@ -182,16 +169,16 @@ public class BushmenActivity extends AppCompatActivity {
 
             // Update der Punkte wenn er Bildkarte erwischt -5, andere Karten +3 Punkte
 
-            PunkteAnzahlBusfahrer-=5;
+            PunkteAnzahlBusfahrer -= 5;
             UpdateAnzeige();
-        }else {
-            PunkteAnzahlBusfahrer+=3;
+        } else {
+            PunkteAnzahlBusfahrer += 3;
             UpdateAnzeige();
             KartenCounter++;
 
-            if(KartenCounter==3){
+            if (KartenCounter == 3) {
 
-                AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this,AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
                 dialog.setTitle("Gewonnen");
                 dialog.setMessage("Sie sind der Gewinner");
                 dialog.setCancelable(false);
@@ -211,23 +198,18 @@ public class BushmenActivity extends AppCompatActivity {
         }
 
 
-
     }
 
-    private void Set_Card_Backsite(TextView tV)
-    {
+    private void Set_Card_Backsite(TextView tV) {
         tV.setText("\uD83C\uDCA0");//set  card to back side
         tV.setTextColor(Color.parseColor("#000000"));//black
     }
 
-    private  void Enable_Cards(TextView tv, boolean enable)
-    {
+    private void Enable_Cards(TextView tv, boolean enable) {
         tv.setEnabled(enable);
     }
 
-    private void Reset_Game()
-    {
-
+    private void Reset_Game() {
         // Karten Zurücksetzen
         Set_Card_Backsite((TextView) findViewById(R.id.tV_card1));
         Set_Card_Backsite((TextView) findViewById(R.id.tV_card2));
@@ -238,13 +220,13 @@ public class BushmenActivity extends AppCompatActivity {
         Set_Card_Backsite((TextView) findViewById(R.id.tV_card7));
 
         // Karten für Eingabe Freigeben
-        Enable_Cards((TextView) findViewById(R.id.tV_card1),true);
-        Enable_Cards((TextView) findViewById(R.id.tV_card2),true);
-        Enable_Cards((TextView) findViewById(R.id.tV_card3),true);
-        Enable_Cards((TextView) findViewById(R.id.tV_card4),true);
-        Enable_Cards((TextView) findViewById(R.id.tV_card5),true);
-        Enable_Cards((TextView) findViewById(R.id.tV_card6),true);
-        Enable_Cards((TextView) findViewById(R.id.tV_card7),true);
+        Enable_Cards((TextView) findViewById(R.id.tV_card1), true);
+        Enable_Cards((TextView) findViewById(R.id.tV_card2), true);
+        Enable_Cards((TextView) findViewById(R.id.tV_card3), true);
+        Enable_Cards((TextView) findViewById(R.id.tV_card4), true);
+        Enable_Cards((TextView) findViewById(R.id.tV_card5), true);
+        Enable_Cards((TextView) findViewById(R.id.tV_card6), true);
+        Enable_Cards((TextView) findViewById(R.id.tV_card7), true);
 
 
         // Karten NEU Austeilen
@@ -258,44 +240,29 @@ public class BushmenActivity extends AppCompatActivity {
 
 
         //Kartenzähler zurückgesetzt
-        KartenCounter=0;
+        KartenCounter = 0;
+
+        Thread startThread = new Thread(() -> {
+            try {
+                Log.i("Bushmen Service", "Bushmen start was triggered.");
+                this.networkClient.sendMessage(new BushmenMessage());
+            } catch (Exception e) {
+                Log.e("Error in BushmenService", e.toString(), e);
+            }
+
+        });
+        startThread.start();
+
 
     }
 
 
     // removes android status bar on top, for fullscreen
-    private void hideAppTitleBar(){
+    private void hideAppTitleBar() {
         //Remove title bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
-    public void turnCard2(TextView tV, Card c) {
-
-        if (tV.getText() != "\uD83C\uDCA0")
-            return;
-
-        // Karten Aufdecken
-        if (c.getSuit() == 1) {
-
-            tV.setText(c.toString());
-            tV.setTextColor(Color.parseColor("#FF0000"));//Red
-        } else {
-            tV.setText(c.toString());
-            tV.setTextColor(Color.parseColor("#000000"));//Black
-        }
-
-        // Prüfung
-        // Wenn Bube, König, Dame, Ass Dann Restart
-        if (c.getRank() == 0 || c.getRank() == 10 || c.getRank() == 11 || c.getRank() == 12) {
-            tV.setTextColor(Color.parseColor("#00C800"));//Green
-        }
-    }
-    public void test(){
-        System.out.println(cards.length);
-        for (int i = 0; i < cards.length ; i++) {
-            turnCard2(findViewById(bushmenCards[i]),cards[i]);
-
-        }
-    }
+    
 }
