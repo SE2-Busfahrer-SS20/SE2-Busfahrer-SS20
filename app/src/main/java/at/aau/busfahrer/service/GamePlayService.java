@@ -18,7 +18,6 @@ public interface GamePlayService {
     boolean guessSuit(Card card, int suit);
 
     void nextPlayer(final GameState lap, final int tempID, final boolean scored);
-    void sendMsgCheated(final int playerId, final boolean cheated, final long timeStamp, final int cheatType);
     void setHostName(String hostname);
     void sendMsgCought(final int indexCheater, final int indexCought, final int scoreCheater, final int scoreCought);
 
