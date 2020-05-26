@@ -31,6 +31,7 @@ public class CoughtServiceImpl implements CoughtService {
 
     public  boolean isCheating(){
         pl = PlayersStorageImpl.getInstance();
+        playerList = pl.getPlayerList();
         //Check wich player's turn it is
         //get the index of the curren player on the playerList
         currentPlayer = pl.getCurrentTurn();
@@ -42,19 +43,21 @@ public class CoughtServiceImpl implements CoughtService {
         //if the currentplayer has cheated, he get one point and I lose one point
         if (playerCheated.isCheating()){
 
-
             //CughtMessage an server schicken !!!
 
             //the player who cheated increases his score
-//            scoreCheater = playerCheated.getScore();
-//            scoreCheater++;
+            scoreCheater = playerCheated.getScore();
+            scoreCheater++;
+
 //            playerCheated.setScore(scoreCheater);
-//
-//            //myScore will be decremented one time
-//            myScore = myself.getScore();
-//            if(myScore!=0){
-//                myScore--;
-//            }
+
+            //myScore will be decremented one time
+            myScore = myself.getScore();
+            if(myScore!=0){
+                myScore--;
+            }
+
+
 //            myself.setScore(myScore);
             return true;
 

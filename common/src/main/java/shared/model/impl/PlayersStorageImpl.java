@@ -146,6 +146,9 @@ public class PlayersStorageImpl implements PlayersStorage {
     public void setPlayerList(ArrayList<PlayerDTO> players) {
         this.playerList = players;
     }
+    public List<PlayerDTO> getPlayerList(){
+        return this.playerList;
+    }
 
     public ArrayList<Integer> getScoreList() {
         ArrayList<Integer> playerScores= new ArrayList<>();
