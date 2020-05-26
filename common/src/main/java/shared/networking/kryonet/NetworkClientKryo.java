@@ -98,6 +98,13 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     System.out.println("\n\n\n CLIENT : "+((CheatedMessage) object).hasCheated()+"\n\n\n");
                     playersStorage.setCheating(((CheatedMessage) object).getTempID());
                 }
+                if(object instanceof CoughtMessage){
+                    Log.debug("CoughtMessage received");
+                    CoughtMessage coughtMessage = (CoughtMessage)object;
+                    //Playerstorage updaten it der neuen upgedated playerlist??
+                    playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).setScore(coughtMessage.getScoreCheater());
+                    playersStorage.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
+                }
 
             }
         });

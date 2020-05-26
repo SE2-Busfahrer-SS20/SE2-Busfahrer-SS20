@@ -10,6 +10,7 @@ import shared.model.impl.PlayerDTOImpl;
 import shared.networking.dto.BaseMessage;
 import shared.networking.dto.CheatedMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
+import shared.networking.dto.CoughtMessage;
 import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.PlayedMessage;
 import shared.networking.dto.RegisterMessage;
@@ -125,6 +126,18 @@ public class GameServer extends NetworkServerKryo {
                         }
                         int playerId = cM.getTempID();
                         CheatedMessage updateClients = new CheatedMessage(playerId,true, cM.getTimeStamp(), cM.getCheatType());
+                        for (int i = 0; i < gameService.getPlayerList().size() ; i++) {
+                            gameService.getPlayerList().get(i).getConnection().sendTCP(updateClients);
+                        }
+                    }
+                    else if(object instanceof CoughtMessage){
+                        CoughtMessage coughtMessage = (CoughtMessage)object;
+                        //Set the new Score of the Cheater
+                        gameService.getPlayerList().get(coughtMessage.getIndexCheater()).setScore(coughtMessage.getScoreCheater());
+                        //Set the new Score of the one how Cought
+                        gameService.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
+                        //Update the list by every client
+                        CoughtMessage updateClients = new CoughtMessage(coughtMessage.getIndexCheater(),coughtMessage.getScoreCought(), coughtMessage.getScoreCheater(), coughtMessage.getScoreCought());
                         for (int i = 0; i < gameService.getPlayerList().size() ; i++) {
                             gameService.getPlayerList().get(i).getConnection().sendTCP(updateClients);
                         }

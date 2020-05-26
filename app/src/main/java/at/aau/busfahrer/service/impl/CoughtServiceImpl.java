@@ -2,7 +2,7 @@ package at.aau.busfahrer.service.impl;
 
 import java.util.List;
 import at.aau.busfahrer.service.CoughtService;
-import shared.model.Player;
+import at.aau.busfahrer.service.GamePlayService;
 import shared.model.PlayerDTO;
 import shared.model.impl.PlayersStorageImpl;
 
@@ -19,6 +19,7 @@ public class CoughtServiceImpl implements CoughtService {
     private  int myScore;
     private PlayersStorageImpl pl;
     private int indexOfMe;
+    private GamePlayService gamePlayService;
 
     private CoughtServiceImpl(){};
 
@@ -30,6 +31,7 @@ public class CoughtServiceImpl implements CoughtService {
     }
 
     public  boolean isCheating(){
+        gamePlayService = GamePlayServiceImpl.getInstance();
         pl = PlayersStorageImpl.getInstance();
         playerList = pl.getPlayerList();
         //Check wich player's turn it is
@@ -43,13 +45,9 @@ public class CoughtServiceImpl implements CoughtService {
         //if the currentplayer has cheated, he get one point and I lose one point
         if (playerCheated.isCheating()){
 
-            //CughtMessage an server schicken !!!
-
             //the player who cheated increases his score
             scoreCheater = playerCheated.getScore();
             scoreCheater++;
-
-//            playerCheated.setScore(scoreCheater);
 
             //myScore will be decremented one time
             myScore = myself.getScore();
@@ -57,8 +55,7 @@ public class CoughtServiceImpl implements CoughtService {
                 myScore--;
             }
 
-
-//            myself.setScore(myScore);
+            gamePlayService.sendMsgCought(currentPlayer,indexOfMe,scoreCheater,myScore);
             return true;
 
         }else{

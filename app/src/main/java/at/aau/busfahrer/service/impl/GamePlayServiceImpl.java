@@ -186,13 +186,12 @@ public class GamePlayServiceImpl implements GamePlayService {
         this.host = hostname;
     }
 
-    //Erwischt an den Sever schicken
-    public void sendMsgCought(int indexCheater,int indexCought, int cheaterScore,int coughtScore){
+    //Send CoughtMessage to the Server
+    public void sendMsgCought(final int indexCheater,final int indexCought,final int cheaterScore,final int coughtScore){
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 CoughtMessage coughtMessage = new CoughtMessage(indexCheater,indexCought,cheaterScore,coughtScore);
-                //System.out.println("\n\n\nCheated SERVER: "+cheated+"\n\n\n");
                 client.sendMessage(coughtMessage);
             }
         });

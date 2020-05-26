@@ -5,4 +5,5 @@ public interface PlayerDTO {
     Integer getScore();
     boolean isCheating();
     void setCheating(boolean cheated);
+    void setScore(Integer score);
 }
