@@ -35,7 +35,8 @@ public class NetworkConstants {
             StartPLabMessage.class,
             DealPointsMessage.class,
             WinnerLooserMessage.class,
-            ArrayList.class
+            ArrayList.class,
+            CoughtMessage.class
     };
 
 }

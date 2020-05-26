@@ -44,17 +44,14 @@ public class CoughtServiceImpl implements CoughtService {
         playerCheated = playerList.get(currentPlayer);
         //if the currentplayer has cheated, he get one point and I lose one point
         if (playerCheated.isCheating()){
-
             //the player who cheated increases his score
             scoreCheater = playerCheated.getScore();
             scoreCheater++;
-
             //myScore will be decremented one time
             myScore = myself.getScore();
             if(myScore!=0){
                 myScore--;
             }
-
             gamePlayService.sendMsgCought(currentPlayer,indexOfMe,scoreCheater,myScore);
             return true;
 
