@@ -31,6 +31,7 @@ public class CardUtility {
         TextView newCard = new TextView(tV.getContext());
         newCard.setText(tV.getText());
         newCard.setTextSize(tV.getTextSize());
+        newCard.setTextColor(tV.getCurrentTextColor());
         if (c.getSuit() == 1 || c.getSuit() == 2) {
             newCard.setTextColor(Color.parseColor("#FF0000"));//Red
         }

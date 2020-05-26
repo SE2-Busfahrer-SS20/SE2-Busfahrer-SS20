@@ -58,4 +58,10 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="AlertDialogStyleCards" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:gravity">center</item>
+        <item name="background">@color/black</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
 </resources>
