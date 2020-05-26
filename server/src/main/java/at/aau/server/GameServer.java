@@ -7,6 +7,7 @@ import at.aau.server.service.impl.GameServiceImpl;
 import at.aau.server.service.impl.PLapServiceImpl;
 import shared.model.Player;
 import shared.networking.dto.BaseMessage;
+import shared.networking.dto.BushmenCardMessage;
 import shared.networking.dto.BushmenMessage;
 import shared.networking.dto.CheatedMessage;
 import shared.networking.dto.ConfirmRegisterMessage;
@@ -122,6 +123,13 @@ public class GameServer extends NetworkServerKryo {
                         for (int i = 0; i < gameService.getPlayerCount(); i++) {
                             gameService.getPlayerList().get(i).getConnection().sendTCP(bushmenMessage);
                         }
+                    }
+
+                    else if (object instanceof BushmenCardMessage){
+                        for (int i = 0; i < gameService.getPlayerCount(); i++) {
+                            gameService.getPlayerList().get(i).getConnection().sendTCP(object);
+                        }
+                        System.out.println("Send card to players"+object+gameService.getPlayerList());
                     }
 
 
