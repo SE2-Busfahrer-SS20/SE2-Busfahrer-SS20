@@ -11,8 +11,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.List;
+
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.service.GamePlayService;
 import shared.model.Card;
@@ -20,6 +23,7 @@ import shared.model.impl.CardImpl;
 import shared.model.impl.DeckImpl;
 import shared.model.impl.PlayersStorageImpl;
 import shared.networking.NetworkClient;
+import shared.networking.dto.BushmenCardMessage;
 import shared.networking.dto.BushmenMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 
@@ -59,6 +63,13 @@ public class BushmenActivity extends AppCompatActivity {
             System.out.println(bushmenMessage.getCards().length);
         });
 
+        networkClient.registerCallback(BushmenCardMessage.class, msg ->
+                runOnUiThread(() -> {
+                    BushmenCardMessage bushmenCardMessage = (BushmenCardMessage) msg;
+                    System.out.println(bushmenCardMessage.getCardId() + "CardID recieved");
+                    turnCardRecieved(bushmenCardMessage.getCardId(), bushmenCardMessage.getCard());
+                }));
+
 
         TxtPunkte = findViewById(R.id.punkte);
 
@@ -67,18 +78,16 @@ public class BushmenActivity extends AppCompatActivity {
         PunkteAnzahlBusfahrer += 10;
         UpdateAnzeige();
 
-        // Neue Initialisieren
-        Reset_Game();
+        isLooser = true;
         // set looser variable. Value will be set in PLapFinished Activity.
         isLooser = getIntent().getBooleanExtra("LOST_GAME", false);
+
+        // Neue Initialisieren
+        Reset_Game();
+
         //Log.i("BushmenActiviy",)
     }
 
-    //public void getBushmenCards(View view){
-    // this.cards= playersStorage.getBushmenCards(); // immer aufgerufen werden für die Karten !!
-    // System.out.println(cards.toString());
-    //System.out.println(cards.length);
-    // }
 
     private void UpdateAnzeige() {
         TxtPunkte.setText(String.valueOf(PunkteAnzahlBusfahrer));
@@ -86,41 +95,54 @@ public class BushmenActivity extends AppCompatActivity {
 
 
     public void onClickCard1(View v) {
-        TextView tV = findViewById(R.id.tV_card1);
-        turnCard(tV, cards[0]);
+        turnCardRequest(0);
     }
 
     public void onClickCard2(View view) {
-        TextView tV = findViewById(R.id.tV_card2);
-        turnCard(tV, cards[1]);
+        turnCardRequest(1);
     }
 
     public void onClickCard3(View view) {
-        TextView tV = findViewById(R.id.tV_card3);
-        turnCard(tV, cards[2]);
+
+        turnCardRequest(2);
     }
 
     public void onClickCard4(View view) {
-        TextView tV = findViewById(R.id.tV_card4);
-        turnCard(tV, cards[3]);
+        turnCardRequest(3);
     }
 
     public void onClickCard5(View view) {
-        TextView tV = findViewById(R.id.tV_card5);
-        turnCard(tV, cards[4]);
+        turnCardRequest(4);
     }
 
     public void onClickCard6(View view) {
-        TextView tV = findViewById(R.id.tV_card6);
-        turnCard(tV, cards[5]);
+        turnCardRequest(5);
     }
 
     public void onClickCard7(View view) {
-        TextView tV = findViewById(R.id.tV_card7);
-        turnCard(tV, cards[6]);
+        turnCardRequest(6);
     }
 
-    public void turnCard(TextView tV, Card c) {
+    public void turnCardRequest(int cardId) {
+
+        Thread startThread = new Thread(() -> {
+            try {
+                // Log.i("Bushmen Service", "BushmenCard turned" + cardId + " " + cards[cardId]);
+                System.out.println("Card turned" + cardId);
+                this.networkClient.sendMessage(new BushmenCardMessage(cardId, cards[cardId]));
+            } catch (Exception e) {
+                Log.e("Error in BushmenCard", e.toString(), e);
+            }
+
+        });
+        startThread.start();
+
+    }
+
+    public void turnCardRecieved(int cardId, Card c) {
+
+        TextView tV = findViewById(bushmenCards[cardId]);
+
 
         if (tV.getText() != "\uD83C\uDCA0")
             return;
@@ -220,13 +242,13 @@ public class BushmenActivity extends AppCompatActivity {
         Set_Card_Backsite((TextView) findViewById(R.id.tV_card7));
 
         // Karten für Eingabe Freigeben
-        Enable_Cards((TextView) findViewById(R.id.tV_card1), true);
-        Enable_Cards((TextView) findViewById(R.id.tV_card2), true);
-        Enable_Cards((TextView) findViewById(R.id.tV_card3), true);
-        Enable_Cards((TextView) findViewById(R.id.tV_card4), true);
-        Enable_Cards((TextView) findViewById(R.id.tV_card5), true);
-        Enable_Cards((TextView) findViewById(R.id.tV_card6), true);
-        Enable_Cards((TextView) findViewById(R.id.tV_card7), true);
+        Enable_Cards((TextView) findViewById(R.id.tV_card1), isLooser);
+        Enable_Cards((TextView) findViewById(R.id.tV_card2), isLooser);
+        Enable_Cards((TextView) findViewById(R.id.tV_card3), isLooser);
+        Enable_Cards((TextView) findViewById(R.id.tV_card4), isLooser);
+        Enable_Cards((TextView) findViewById(R.id.tV_card5), isLooser);
+        Enable_Cards((TextView) findViewById(R.id.tV_card6), isLooser);
+        Enable_Cards((TextView) findViewById(R.id.tV_card7), isLooser);
 
 
         // Karten NEU Austeilen
@@ -264,5 +286,5 @@ public class BushmenActivity extends AppCompatActivity {
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
-    
+
 }
