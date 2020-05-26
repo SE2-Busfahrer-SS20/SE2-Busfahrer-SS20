@@ -168,19 +168,6 @@ public class GamePlayServiceImpl implements GamePlayService {
     //////////////////////////////////////////////////////////////////////////
 
 
-    // network call for player cheated in game
-    public void sendMsgCheated(final int playerId, final boolean cheated, final long timeStamp, final int cheatType) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                CheatedMessage cM = new CheatedMessage(playerId, cheated, timeStamp, cheatType);
-                System.out.println("\n\n\nCheated SERVER: "+cheated+"\n\n\n");
-                client.sendMessage(cM);
-            }
-        });
-        thread.start();
-    }
-
     @Override
     public void setHostName(String hostname) {
         this.host = hostname;
