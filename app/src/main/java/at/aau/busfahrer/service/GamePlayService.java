@@ -19,5 +19,6 @@ public interface GamePlayService {
 
     void nextPlayer(final GameState lap, final int tempID, final boolean scored);
     void setHostName(String hostname);
+    void sendMsgCought(final int indexCheater, final int indexCought, final int scoreCheater, final int scoreCought);
 
 }

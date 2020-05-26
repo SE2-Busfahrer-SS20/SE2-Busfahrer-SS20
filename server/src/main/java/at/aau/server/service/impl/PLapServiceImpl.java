@@ -99,11 +99,13 @@ public class PLapServiceImpl implements PLapService {
     private void addListener() {
         server.addListener(new Listener() {
             public void received(Connection connection, Object object) {
-                if (object instanceof StartPLabMessage) {
+                // check if game exists.
+                if (!gameService.gameExists()) {
+                    Log.error("PLabService: Game does not exist anymore.");
+                } else if (object instanceof StartPLabMessage) {
                     Log.debug("PLab started for Connection: ", connection.toString());
                     startLab(connection);
-                }
-                if (object instanceof DealPointsMessage) {
+                } else if (object instanceof DealPointsMessage) {
                     DealPointsMessage msg = (DealPointsMessage) object;
                     Log.debug("PLab got Points.", + msg.getPoints() + " points for player: " + msg.getDestPlayerName());
                     finishLab(msg.getDestPlayerName(), msg.getPoints());
@@ -114,7 +116,7 @@ public class PLapServiceImpl implements PLapService {
     }
 
     /**
-     * Just for Testing. TODO: remove.
+     * Print Player Points for debugging purposes.
      */
     private void printPlayerPoints() {
         for(Player p : gameService.getGame().getPlayerList()) {
