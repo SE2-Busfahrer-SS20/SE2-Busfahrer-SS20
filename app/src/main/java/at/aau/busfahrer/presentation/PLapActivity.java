@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.TextView;
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
-import at.aau.busfahrer.service.PLabService;
-import at.aau.busfahrer.service.impl.PLabServiceImpl;
+import at.aau.busfahrer.service.PLapClientService;
+import at.aau.busfahrer.service.impl.PLapClientServiceImpl;
 import shared.model.Card;
 
 
@@ -23,23 +23,23 @@ public class PLapActivity extends AppCompatActivity {
     // contains the Ids of the TextViews where the pyramid lab cards should be displayed.
     private final int[] pCardIds = {R.id.tV_pcard1, R.id.tV_pcard2, R.id.tV_pcard3, R.id.tV_pcard4, R.id.tV_pcard5, R.id.tV_pcard6, R.id.tV_pcard7, R.id.tV_pcard8, R.id.tV_pcard9, R.id.tV_pcard10};
 
-    private PLabService pLabService;
+    private PLapClientService pLapClientService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pLabService = PLabServiceImpl.getInstance();
+        pLapClientService = PLapClientServiceImpl.getInstance();
         setContentView(R.layout.activity_p_lap);
-        pLabService.registerCardCallback(cards -> {
+        pLapClientService.registerCardCallback(cards -> {
             runOnUiThread(() -> {
                 // this.pCards = cards;
                 turnCards(pCardIds, cards);
                 turnCards(pCardIds, cards);
             });
         });
-        pLabService.startLab();
+        pLapClientService.startLab();
         // load Player Cards, player cards will be stored in PlayerStorage.
-        cards = pLabService.getPlayerCards();
+        cards = pLapClientService.getPlayerCards();
         /**
          *  Turns cards automatically.
          *  Cards must be turned to times.
@@ -60,7 +60,7 @@ public class PLapActivity extends AppCompatActivity {
     public void onClickCardPCard(View v) {
             TextView tV = findViewById(v.getId());
             // Parse Text value of the clicked TextView.
-            Card card = pLabService.checkCardMatch(tV.getText().toString(), cards, getRow(v.getId()));
+            Card card = pLapClientService.checkCardMatch(tV.getText().toString(), cards, getRow(v.getId()));
             if (card != null) {
                 CardUtility.turnCard(tV, card);
                // matchedCardsCount++;
@@ -68,7 +68,7 @@ public class PLapActivity extends AppCompatActivity {
             } else {
                 Log.d("CARD MATCH", "Sorry no match.");
             }
-            Log.d("CARD MATCH COUNTER: ", pLabService.getMatchCount() + "");
+            Log.d("CARD MATCH COUNTER: ", pLapClientService.getMatchCount() + "");
     }
 
     public void onNextLabClick(View v) {
