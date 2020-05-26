@@ -51,10 +51,7 @@ public class BushmenActivity extends AppCompatActivity {
 
     private boolean isLooser; // is true in case that the player is a looser.
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bushmen);
+    public BushmenActivity() {
 
         //Callback der aufgerufen wird wenn Client die Karten erhalten hat
         networkClient.registerCallback(BushmenMessage.class, msg -> {
@@ -69,6 +66,15 @@ public class BushmenActivity extends AppCompatActivity {
                     System.out.println(bushmenCardMessage.getCardId() + "CardID recieved");
                     turnCardRecieved(bushmenCardMessage.getCardId(), bushmenCardMessage.getCard());
                 }));
+
+
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_bushmen);
 
 
         TxtPunkte = findViewById(R.id.punkte);
