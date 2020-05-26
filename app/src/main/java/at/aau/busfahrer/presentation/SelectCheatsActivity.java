@@ -1,5 +1,6 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
+import at.aau.busfahrer.service.CheatService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,7 +40,7 @@ public class SelectCheatsActivity extends AppCompatActivity {
             if(sensortype != -1){
                 Intent i = new Intent(SelectCheatsActivity.this, WaitActivity.class);
                 startActivity(i);
-            CheatServiceImpl cheatService = CheatServiceImpl.getInstance();
+                CheatService cheatService = CheatServiceImpl.getInstance();
             cheatService.setSensorType(sensortype);
             }else{
                 Toast.makeText(SelectCheatsActivity.this, "Select Cheat first", Toast.LENGTH_SHORT).show();
