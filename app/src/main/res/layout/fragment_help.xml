@@ -13,9 +13,8 @@
         android:id="@+id/headerHelp"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:text="Spielanleitung"
-        android:theme="@style/mainMenuHeadTextView"
-        />
+        android:text="Game Instructions"
+        android:theme="@style/mainMenuHeadTextView" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

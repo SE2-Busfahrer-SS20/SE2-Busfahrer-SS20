@@ -191,7 +191,7 @@ public class PLapActivity extends AppCompatActivity {
 
     /**
     Changes the card from the player hand with the cheated card.
-     * @param pos selected card of the playerhand
+     * @param pos selected card of the player hand.
      */
     private void swapCard(int pos) {
         TextView t = findViewById(myCardIds[pos]);
@@ -199,7 +199,7 @@ public class PLapActivity extends AppCompatActivity {
         t.setTextColor(cheatCard.getCurrentTextColor());
         Card cheatCard = CardUtility.getCardFromString(this.cheatCard.getText().toString(), pLabService.getPlayerCards());
         cards[pos] = cheatCard;
-        // TODO get all pyramid cards instead of plab.playerCards
+        // * TODO get all pyramid cards instead of plabService.playerCards, -> NPE
     }
 
     /**
