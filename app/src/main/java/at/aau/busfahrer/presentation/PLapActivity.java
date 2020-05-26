@@ -7,55 +7,44 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
-
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
-import at.aau.busfahrer.service.PLabService;
-import at.aau.busfahrer.service.impl.PLabServiceImpl;
+import at.aau.busfahrer.service.PLapClientService;
+import at.aau.busfahrer.service.impl.PLapClientServiceImpl;
 import shared.model.Card;
-import shared.model.GameState;
 
 
 public class PLapActivity extends AppCompatActivity {
 
     // contains the cards on the hand of the Player.
     private Card[] cards;
-
-    private final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
     // contains the Ids of the TextViews where the Player cards should be displayed.
     private final int[] myCardIds = {R.id.tV_card1, R.id.tV_card2, R.id.tV_card3, R.id.tV_card4};
     // contains the Ids of the TextViews where the pyramid lab cards should be displayed.
     private final int[] pCardIds = {R.id.tV_pcard1, R.id.tV_pcard2, R.id.tV_pcard3, R.id.tV_pcard4, R.id.tV_pcard5, R.id.tV_pcard6, R.id.tV_pcard7, R.id.tV_pcard8, R.id.tV_pcard9, R.id.tV_pcard10};
 
-    private PLabService pLabService;
+    private PLapClientService pLapClientService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pLabService = PLabServiceImpl.getInstance();
+        pLapClientService = PLapClientServiceImpl.getInstance();
         setContentView(R.layout.activity_p_lap);
-        pLabService.registerCardCallback(cards -> {
+        pLapClientService.registerCardCallback(cards -> {
             runOnUiThread(() -> {
                 // this.pCards = cards;
                 turnCards(pCardIds, cards);
                 turnCards(pCardIds, cards);
             });
         });
-        pLabService.startLab();
-
-        //playersStorageOLD.setState(GameState.LAP2);
-        // cards = playersStorage.getCards();
-
-        /** TODO: remove after testing. */
-        cards = ((PLabServiceImpl) pLabService).getCards();
-        // ((PLabServiceImpl) pLabService).testCallback();
+        pLapClientService.startLab();
+        // load Player Cards, player cards will be stored in PlayerStorage.
+        cards = pLapClientService.getPlayerCards();
         /**
          *  Turns cards automatically.
          *  Cards must be turned to times.
          *  First one display cards, second one revert it.
          */
-
         for(int i = 0; i < 2; i++) {
             turnCards(myCardIds, cards);
         }
@@ -71,7 +60,7 @@ public class PLapActivity extends AppCompatActivity {
     public void onClickCardPCard(View v) {
             TextView tV = findViewById(v.getId());
             // Parse Text value of the clicked TextView.
-            Card card = pLabService.checkCardMatch(tV.getText().toString(), cards, getRow(v.getId()));
+            Card card = pLapClientService.checkCardMatch(tV.getText().toString(), cards, getRow(v.getId()));
             if (card != null) {
                 CardUtility.turnCard(tV, card);
                // matchedCardsCount++;
@@ -79,18 +68,13 @@ public class PLapActivity extends AppCompatActivity {
             } else {
                 Log.d("CARD MATCH", "Sorry no match.");
             }
-            Log.d("CARD MATCH COUNTER: ", pLabService.getMatchCount() + "");
+            Log.d("CARD MATCH COUNTER: ", pLapClientService.getMatchCount() + "");
     }
 
     public void onNextLabClick(View v) {
         Intent i = new Intent(PLapActivity.this, PLabFinished.class);
         startActivity(i);
     }
-
-    public void onDealPointClick(View v) {
-
-    }
-
     /**
      * Turns all Player cards at the beginning of the lab.
      *
@@ -103,7 +87,13 @@ public class PLapActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Helper Function to get row position of specific card.
+     * @param id
+     * @return ROW
+     */
     private int getRow(int id) {
+        final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
         if (id == R.id.tV_pcard1)
             return ROW1;
         else if ( id == R.id.tV_pcard2 || id == R.id.tV_pcard3)

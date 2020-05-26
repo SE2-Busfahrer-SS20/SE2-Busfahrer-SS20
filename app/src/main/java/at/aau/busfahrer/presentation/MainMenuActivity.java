@@ -71,7 +71,8 @@ public class MainMenuActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String name=sharedPreferences.getString("Player","name");
-
+        String hostname=sharedPreferences.getString("HostName","127.0.0.1");
+        gamesvc.setHostName(hostname);
         gamesvc.playGame(name, getMacAddr());
 
         Intent i = new Intent(MainMenuActivity.this, SelectCheatsActivity.class);
@@ -118,8 +119,4 @@ public class MainMenuActivity extends AppCompatActivity {
         return "";
     }
 
-    public void openPLab(View v) {
-        Intent i = new Intent(MainMenuActivity.this, PLapActivity.class);
-        startActivity(i);
-    }
 }

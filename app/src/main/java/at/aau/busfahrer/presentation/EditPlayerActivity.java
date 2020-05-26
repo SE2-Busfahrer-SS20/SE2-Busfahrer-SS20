@@ -19,6 +19,7 @@ import android.widget.Toast;
 public class EditPlayerActivity extends AppCompatActivity {
 
     EditText editText;
+    EditText editHostName;
     long lastClick;
     Toast toast;
 
@@ -30,6 +31,8 @@ public class EditPlayerActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
         editText = findViewById(R.id.EditPlayerText);
         editText.setText(sharedPreferences.getString("Player",null));
+        editHostName = findViewById(R.id.EditHostText);
+        editHostName.setText(sharedPreferences.getString("HostName","127.0.0.1"));
     }
 
     // removes android status bar on top, for fullscreen
@@ -61,13 +64,15 @@ public class EditPlayerActivity extends AppCompatActivity {
                 View layout = inflater.inflate(R.layout.success_toast,
                         (ViewGroup) findViewById(R.id.success_toast));
                 TextView toastText = layout.findViewById(R.id.textToastSc);
-                toastText.setText("Username successfully changed");
+                toastText.setText("Username or IP Adress successfully changed");
                 toast = new Toast(this);
                 toast.setGravity(Gravity.TOP, 0, 300);
                 toast.setDuration(Toast.LENGTH_SHORT);
                 toast.setView(layout);
                 toast.show();
-                saveData(editText.getText().toString().trim());
+                saveData(editText.getText().toString().trim(), editHostName.getText().toString().trim());
+                Intent i = new Intent(EditPlayerActivity.this, MainMenuActivity.class);
+                startActivity(i);
             }
         }
     }
@@ -77,11 +82,12 @@ public class EditPlayerActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    private void saveData(String name){
+    private void saveData(String name, String hostname){
         // saving player name to shared prefs
         SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("Player",name); // key, value
+        editor.putString("HostName",hostname);
         editor.apply();
     }
 

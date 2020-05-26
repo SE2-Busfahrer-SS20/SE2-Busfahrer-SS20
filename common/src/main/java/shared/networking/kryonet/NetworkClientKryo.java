@@ -56,22 +56,22 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
                 if(object instanceof NewPlayerMessage){
                     Log.debug("New Player in the Game");
-                    playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
+                    //playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
+                    playersStorage.addPlayer(((NewPlayerMessage)object).getPlayer());
                 }
 
                 if(object instanceof StartGameMessage){
                     StartGameMessage sgm = (StartGameMessage) object;
                     Log.debug("Game can start now");
+                    //playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
+                    playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
 
-                    //playersStorage.setPlayerNames(((StartGameMessage)object).getPlayerList());
-                    playersStorage.initScores();
                     playersStorage.setState(GameState.READY);
-                    playersStorage.setPlayersList(sgm.getPlayerList());
                 }
 
                 if(object instanceof UpdateMessage){
                     UpdateMessage uM = (UpdateMessage)object;
-                    playersStorage.updateOnMessage(uM.getScore(),uM.getCurrentPlayer());
+                    playersStorage.updateOnMessage(uM.getPlayerList(),uM.getCurrentPlayer());
 
                 }
 
@@ -108,6 +108,19 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     if(callbackMap.get(TextMessage.class)!=null)
                     callbackMap.get(TextMessage.class).callback((BaseMessage) object);
                 }
+                if (object instanceof CheatedMessage) {
+                    Log.debug("CheatedMessage received");
+                    System.out.println("\n\n\n CLIENT : "+((CheatedMessage) object).hasCheated()+"\n\n\n");
+                    playersStorage.setCheating(((CheatedMessage) object).getTempID());
+                }
+                if(object instanceof CoughtMessage){
+                    Log.debug("CoughtMessage received");
+                    CoughtMessage coughtMessage = (CoughtMessage)object;
+                    //Playerstorage updaten it der neuen upgedated playerlist??
+                    playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).setScore(coughtMessage.getScoreCheater());
+                    playersStorage.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
+                }
+
             }
         });
     }

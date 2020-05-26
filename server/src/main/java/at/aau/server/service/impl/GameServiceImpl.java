@@ -7,11 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.aau.server.service.GameService;
-import shared.model.Card;
-import shared.model.Game;
-import shared.model.GameState;
-import shared.model.Player;
+import shared.model.*;
 import shared.model.impl.GameImpl;
+import shared.model.impl.PlayerDTOImpl;
 import shared.networking.dto.ConfirmRegisterMessage;
 import shared.networking.dto.NewPlayerMessage;
 import shared.networking.dto.StartGameMessage;
@@ -94,10 +92,7 @@ public class GameServiceImpl implements GameService {
 
         //send start game message to each client
         StartGameMessage sgm = new StartGameMessage();
-
-        //Add playerList to StartGameMessage
-        //VERURSACHT PROBLEME
-        //sgm.setPlayerList(this.game.getPlayerList());
+        sgm.setPlayerList(PlayerDTOImpl.getDTOFromPlayerList(getPlayerList()));
 
         int count = this.game.getPlayerCount();
         for (int i = 0; i < count; i++) {
@@ -109,7 +104,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void endGame() {
-        throw new UnsupportedOperationException("Method not implemented yet.");
+        this.game = null;
     }
 
     @Override
@@ -127,7 +122,9 @@ public class GameServiceImpl implements GameService {
         connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
 
         //Add Player to Playerlist in Wait UI
-        NewPlayerMessage npm = new NewPlayerMessage(player.getName());
+        //NewPlayerMessage npm = new NewPlayerMessage(player.getName());
+        System.out.println("\ntest\n"+PlayerDTOImpl.getDTOFromPlayer(player).getName()+"\n\n");
+        NewPlayerMessage npm = new NewPlayerMessage(PlayerDTOImpl.getDTOFromPlayer(player));
         connection.sendTCP(npm);
 
         Log.info("Game created.");
@@ -161,11 +158,9 @@ public class GameServiceImpl implements GameService {
             game.addPointsToPlayer(tempID, 1);
 
         //ArrayList of all players scores
-        ArrayList<Integer> score = new ArrayList<>();
-        for (int i = 0; i < game.getPlayerCount(); i++) {
-            int playerScore = game.getPlayerList().get(i).getScore();
-            score.add(playerScore);
-        }
+        List<PlayerDTO> playerList = PlayerDTOImpl.getDTOFromPlayerList(game.getPlayerList());
+
+        //TODO: was is mit reset?
         //Reset Cheating
         resetCheated();
 
@@ -180,7 +175,7 @@ public class GameServiceImpl implements GameService {
         game.setCurrentPlayer(nextPlayer);
 
         //send DTO updateMessage to all clients
-        UpdateMessage uM = new UpdateMessage(nextPlayer, score);
+        UpdateMessage uM = new UpdateMessage(nextPlayer, playerList);
         int count = this.game.getPlayerCount();
         for (int i = 0; i < count; i++) {
             Connection con = this.game.getPlayerList().get(i).getConnection();

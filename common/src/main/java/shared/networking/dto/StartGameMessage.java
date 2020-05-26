@@ -1,27 +1,24 @@
 package shared.networking.dto;
 
 
+import shared.model.PlayerDTO;
+
 import java.util.List;
 
-import shared.model.Player;
-
 public class StartGameMessage extends BaseMessage {
-    private List<Player> playerList;
+    private List<PlayerDTO> playerList;
 
-    public List<Player> getPlayerList() {
-        return playerList;
-    }
-
-    public void setPlayerList(List<Player> playerList) {
-
+    public StartGameMessage(List<PlayerDTO> playerList) {
         this.playerList = playerList;
     }
 
-    /*private List<PlayerDTO>players;
-    setPlayerList(List<Player> playerList) {
+    public StartGameMessage(){}
 
-        for(Player p: playerList) {
-            this,players.add(newPlayerDTO(p.getName(), p.getScore())
-        }
-    }*/
+    public List<PlayerDTO> getPlayerList() {
+        return playerList;
+    }
+
+    public void setPlayerList(List<PlayerDTO> playerList) {
+        this.playerList = playerList;
+    }
 }
