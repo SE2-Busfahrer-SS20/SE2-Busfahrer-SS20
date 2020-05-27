@@ -88,21 +88,25 @@ public class Database {
                 throw new SQLException("Creating failed, no ID obtained.");
             }
 
+        }finally {
+            preparedStatement.close();
         }
 
-        preparedStatement.close();
+
         return key;
     }
     private void runPreparedStatement(String statement, String[] params) throws SQLException{
         runPreparedStatement(statement, params, false);
     }
     private ResultSet runPreparedStatementReturnList(String statement, String[] params) throws SQLException {
-        PreparedStatement preparedStatement= connection.prepareStatement(statement);
-
-        for(int count=0;params != null && count<params.length;count++){
-            preparedStatement.setString(count+1, params[count]);
+        try(PreparedStatement preparedStatement= connection.prepareStatement(statement)){
+            for(int count=0;params != null && count<params.length;count++){
+                preparedStatement.setString(count+1, params[count]);
+            }
+            return preparedStatement.executeQuery();
+        }catch (Exception e){
+            throw new SQLException("Failed Prepared statement!");
         }
-        return preparedStatement.executeQuery();
     }
     public User addUser(String mac, String name) throws SQLException {
         try {
