@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import shared.model.CoughtServiceListener;
 import shared.model.GameState;
 import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
@@ -120,10 +121,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
                     //Display the TextView on the currentPlayers Screen
                     if(coughtMessage.isCheated()){
-                        //TextView beim current player anzeigen!
-                        //Listener?? --> callback
-                        //callback registreieren und dann AUFRUFEN
-
+                        setTextViewVisible();
                     }
                 }
 
@@ -149,5 +147,22 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             instance = new NetworkClientKryo();
         return instance;
     }
+
+    private CoughtServiceListener coughtServiceListener;
+
+    public void coughtCallback(CoughtServiceListener coughtServiceListener){
+        this.coughtServiceListener = coughtServiceListener;
+    }
+    public void setTextViewVisible(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                coughtServiceListener.coughtTetxViewListener();
+
+            }
+        }).start();
+    }
+
+
 
 }
