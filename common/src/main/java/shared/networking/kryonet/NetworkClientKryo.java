@@ -116,9 +116,15 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 if(object instanceof CoughtMessage){
                     Log.debug("CoughtMessage received");
                     CoughtMessage coughtMessage = (CoughtMessage)object;
-                    //Playerstorage updaten it der neuen upgedated playerlist??
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).setScore(coughtMessage.getScoreCheater());
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
+                    //Display the TextView on the currentPlayers Screen
+                    if(coughtMessage.isCheated()){
+                        //TextView beim current player anzeigen!
+                        //Listener?? --> callback
+                        //callback registreieren und dann AUFRUFEN
+
+                    }
                 }
 
             }

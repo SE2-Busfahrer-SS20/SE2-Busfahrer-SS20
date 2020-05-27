@@ -122,6 +122,17 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         if(coughtService.isCheating()){
             System.out.println("\n\n\n"+playersStorage.isCheating(playersStorage.getCurrentTurn())+"\n\n\n");
             //TextView beim CurrentPlayer anzeigen!!!!!!!!!!!
+            tV_erwischt.setText("Cheater wurde erwischt!!!");
+            tV_erwischt.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_erwischt.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tV_erwischt.setVisibility(View.INVISIBLE);
+                }
+            }, 5000);
+        }else{
+            tV_erwischt.setText("Cheater wurde NICHT erwischt!!!");
             tV_erwischt.setVisibility(View.VISIBLE);
             //after 5s the TextView is invisible
             tV_erwischt.postDelayed(new Runnable() {
