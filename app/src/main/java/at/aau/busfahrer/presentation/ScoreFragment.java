@@ -27,9 +27,9 @@ public class ScoreFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_score, container, false);
-        String[] scoreItems= new String[playersStorage.getPlayerNames().size()];
+        String[] scoreItems= new String[playersStorage.getPlayerNamesList().size()];
         for(int i=0;i<scoreItems.length;i++){
-            scoreItems[i]=playersStorage.getPlayerName(i)+": "+playersStorage.getScore().get(i);
+            scoreItems[i]=playersStorage.getPlayerName(i)+": "+playersStorage.getScoreList().get(i);
         }
 
         ListView listView= (ListView) view.findViewById(R.id.scoreList);

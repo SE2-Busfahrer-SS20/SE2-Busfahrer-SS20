@@ -6,19 +6,18 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 import at.aau.busfahrer.presentation.utils.CardUtility;
-import at.aau.busfahrer.service.PLabService;
+import at.aau.busfahrer.service.PLapClientService;
 import shared.model.Card;
-import shared.model.Deck;
-import shared.model.impl.DeckImpl;
+import shared.model.PlayersStorage;
+import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.DealPointsMessage;
 import shared.networking.dto.StartPLabMessage;
 import shared.networking.dto.WinnerLooserMessage;
 import shared.networking.kryonet.NetworkClientKryo;
-import shared.networking.kryonet.NetworkConstants;
 
-public class PLabServiceImpl implements PLabService {
+public class PLapClientServiceImpl implements PLapClientService {
 
 
     // Counter for matched cards from pyramid and cards on the hand.
@@ -28,27 +27,15 @@ public class PLabServiceImpl implements PLabService {
     private NetworkClient client;
     private Card[] pCards = new Card[10];
     private List<String> playerNames = new ArrayList<>();
-    private static PLabService instance;
+    private PlayersStorage playersStorage;
+    private static PLapClientService instance;
     // constants for rows.
     private final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
-    // TODO: remove, JUST for TESTING.
-    private Card[] cards = new Card[4];
 
-    private PLabServiceImpl() {
-
+    private PLapClientServiceImpl() {
         this.client = NetworkClientKryo.getInstance();
-
-        // TODO: remove, JUST FOR TESTING.
-
-        Deck deck = new DeckImpl();
-        for(int i = 0; i < 4; i++)
-            cards[i] = deck.drawCard();
-        /*
-        for(int i = 0; i < 10; i++)
-            pCards[i] = deck.drawCard();*/
+        this.playersStorage = PlayersStorageImpl.getInstance();
     }
-
-
 
     /**
      *  Checks Card Rank of the clicked Card is equals to the one of the Cards on the Hand.
@@ -80,6 +67,11 @@ public class PLabServiceImpl implements PLabService {
         return null;
     }
 
+    /**
+     * starts the new Lap called PLap.
+     * Send message to the server to get 7 PLap cards afterwards.
+     * The registered Callback turn the cards, after the client received it.
+     */
     public void startLab() {
         this.client.registerCallback(StartPLabMessage.class, msg -> {
             Log.i("Callback started.", "");
@@ -107,11 +99,6 @@ public class PLabServiceImpl implements PLabService {
     @Override
     public void registerFinishedLabCallback(Callback<Boolean> callback) {
         this.finishedLabCallback = callback;
-    }
-
-    @Override
-    public Card[] getPCards() {
-        return pCards;
     }
 
     @Override
@@ -143,16 +130,25 @@ public class PLabServiceImpl implements PLabService {
         return matchCounter;
     }
 
-    public static synchronized PLabService getInstance() {
+    public static synchronized PLapClientService getInstance() {
         if (instance == null)
-            return (instance = new PLabServiceImpl());
+            instance = new PLapClientServiceImpl();
         return instance;
     }
-    // TODO: remove comments, when they are not needed anymore.
-    /*
-    public void testCallback() {
-        this.cardCallback.callback(this.pCards);
-    }*/
-    public Card[] getCards() {return cards;}
+    /**
+     * Method to destroy instance.
+     * Needed for testing purposes.
+     */
+    public static void destroyInstance() {
+        instance = null;
+    }
+    public Card[] getPlayerCards() {return playersStorage.getCards();}
 
+    /**
+     * needed for unit testing.
+     * @param cards
+     */
+    public void setPCards(Card[] cards) {
+        this.pCards = cards;
+    }
 }

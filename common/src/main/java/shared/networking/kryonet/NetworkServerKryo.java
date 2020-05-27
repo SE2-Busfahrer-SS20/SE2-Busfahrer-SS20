@@ -40,4 +40,8 @@ public class NetworkServerKryo implements NetworkServer, KryoNetComponent {
         server.addListener(listener);
     }
 
+    @Override
+    public Connection[] getConnections() {
+        return server.getConnections();
+    }
 }

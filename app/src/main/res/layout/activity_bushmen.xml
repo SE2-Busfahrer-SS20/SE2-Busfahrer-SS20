@@ -20,8 +20,8 @@
 
     <TextView
         android:id="@+id/tV_card4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="91dp"
+        android:layout_height="153dp"
         android:clickable="true"
         android:onClick="onClickCard4"
         android:text="🂠"
@@ -29,22 +29,26 @@
         android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tV_card3"
-        app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
+        app:layout_constraintHorizontal_bias="0.778"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerStartServer"
+        app:layout_constraintVertical_bias="0.765" />
 
     <TextView
         android:id="@+id/tV_card1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="96dp"
+        android:layout_height="139dp"
         android:clickable="true"
         android:onClick="onClickCard1"
         android:text="🂠"
         android:textColor="#000000"
         android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tV_card5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.115"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
+        app:layout_constraintTop_toBottomOf="@+id/headerStartServer"
+        app:layout_constraintVertical_bias="0.718" />
 
     <TextView
         android:id="@+id/tV_card5"
@@ -56,9 +60,11 @@
         android:textColor="#000000"
         android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tV_card2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.774"
         app:layout_constraintStart_toEndOf="@+id/tV_card1"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.158" />
 
     <TextView
         android:id="@+id/tV_card2"
@@ -71,8 +77,9 @@
         android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tV_card6"
-        app:layout_constraintStart_toEndOf="@+id/tV_card5"
-        app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerStartServer"
+        app:layout_constraintVertical_bias="0.455" />
 
     <TextView
         android:id="@+id/tV_card6"
@@ -85,8 +92,10 @@
         android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.475"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.174" />
 
     <TextView
         android:id="@+id/tV_card3"
@@ -98,9 +107,11 @@
         android:textColor="#000000"
         android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tV_card4"
-        app:layout_constraintStart_toEndOf="@+id/tV_card7"
-        app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.113"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerStartServer"
+        app:layout_constraintVertical_bias="0.094" />
 
     <TextView
         android:id="@+id/tV_card7"
@@ -112,9 +123,11 @@
         android:textColor="#000000"
         android:textSize="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tV_card4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.653"
         app:layout_constraintStart_toEndOf="@+id/tV_card2"
-        app:layout_constraintTop_toBottomOf="@+id/headerStartServer" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.493" />
 
     <TextView
         android:id="@+id/punkte"

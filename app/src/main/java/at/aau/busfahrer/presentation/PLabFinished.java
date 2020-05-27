@@ -12,21 +12,21 @@ import android.widget.TextView;
 import java.util.List;
 
 import at.aau.busfahrer.R;
-import at.aau.busfahrer.service.PLabService;
-import at.aau.busfahrer.service.impl.PLabServiceImpl;
+import at.aau.busfahrer.service.PLapClientService;
+import at.aau.busfahrer.service.impl.PLapClientServiceImpl;
 
 public class PLabFinished extends AppCompatActivity {
 
-    private PLabService pLabService;
+    private PLapClientService pLapClientService;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_p_lap_finished);
-        pLabService = PLabServiceImpl.getInstance();
-        updateList(pLabService.getPlayerNames());
-        pLabService.registerFinishedLabCallback(lostGame -> {
+        pLapClientService = PLapClientServiceImpl.getInstance();
+        updateList(pLapClientService.getPlayerNames());
+        pLapClientService.registerFinishedLabCallback(lostGame -> {
             runOnUiThread(() -> {
                 Intent bushmenIntent = new Intent(this, BushmenActivity.class);
                 bushmenIntent.putExtra("LOST_GAME", lostGame);
@@ -38,7 +38,7 @@ public class PLabFinished extends AppCompatActivity {
 
     public void dealButtonClick(View v) {
         String selectedPlayer = ((Spinner)findViewById(R.id.sP_name_spinner)).getSelectedItem().toString();
-        pLabService.dealPoints(selectedPlayer);
+        pLapClientService.dealPoints(selectedPlayer);
         setWait();
         v.setEnabled(false);
     }

@@ -1,18 +1,21 @@
 package shared.networking.dto;
 
+import shared.model.PlayerDTO;
+
 import java.util.ArrayList;
+import java.util.List;
 
 //Dieses DTO wird nach jedem Zug der Raterunden an alle Clients gesendet
 public class UpdateMessage extends BaseMessage {
 
     private int currentPlayer;  //in next round, it is this players turn
-    private ArrayList<Integer> score; //Points of all players
+    private List<PlayerDTO> playerList; //Points of all players
 
     public UpdateMessage(){}
 
-    public UpdateMessage(int currentPlayer, ArrayList<Integer> score) {
+    public UpdateMessage(int currentPlayer, List<PlayerDTO> playerList) {
         this.currentPlayer = currentPlayer;
-        this.score = score;
+        this.playerList= playerList;
     }
 
     public int getCurrentPlayer() {
@@ -23,12 +26,12 @@ public class UpdateMessage extends BaseMessage {
         this.currentPlayer = currentPlayer;
     }
 
-    public ArrayList<Integer> getScore() {
-        return score;
+    public List<PlayerDTO> getPlayerList() {
+        return playerList;
     }
 
-    public void setScore(ArrayList<Integer> score) {
-        this.score = score;
+    public void setPlayerList(List<PlayerDTO> playerList) {
+        this.playerList = playerList;
     }
 }
 
