@@ -39,4 +39,6 @@ public interface Game {
      */
     void playerFinishedPLap();
 
+    Card[] generateBushmenCards();
+
 }

@@ -110,6 +110,22 @@ public class GameServer extends NetworkServerKryo {
                         gameService.GuessRound(pM.getLap(), pM.getTempID(), pM.scored());
                     }
 
+                    //Bushmen-Round
+                    else if (object instanceof BushmenMessage){
+                        BushmenMessage bushmenMessage = new BushmenMessage();
+                        bushmenMessage.setCards(gameService.getBushmenCards());
+                        for (int i = 0; i < gameService.getPlayerCount(); i++) {
+                            gameService.getPlayerList().get(i).getConnection().sendTCP(bushmenMessage);
+                        }
+                    }
+
+                    else if (object instanceof BushmenCardMessage){
+                        for (int i = 0; i < gameService.getPlayerCount(); i++) {
+                            gameService.getPlayerList().get(i).getConnection().sendTCP(object);
+                        }
+                        System.out.println("Send card to players"+object+gameService.getPlayerList());
+                    }
+
 
                     // Player has cheated message
                     else if(object instanceof CheatedMessage){

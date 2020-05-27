@@ -189,6 +189,8 @@ public class GameServiceImpl implements GameService {
         }
     }
 
-
-
+    @Override
+    public Card[] getBushmenCards() {
+        return game.generateBushmenCards();
+    }
 }
