@@ -11,7 +11,9 @@ public class PlayersStorageImpl implements PlayersStorage {
     private int tempID; //This ID equals the Index in playerList (ArrayList in Game object)
     private Card[] cards;
     private GameState state;
-    //private ArrayList<String> playerNames;
+
+    private Card[] bushmenCards;
+   //private ArrayList<String> playerNames;
     private boolean master=false;
     private int currentTurn;
     //private ArrayList<Integer> score;
@@ -19,19 +21,22 @@ public class PlayersStorageImpl implements PlayersStorage {
     private List<PlayerDTO> playerList;
 
 
+
     //Singleton Pattern
     private static PlayersStorageImpl instance;
+
 
     private PlayersStorageImpl(){
 //        playerNames = new ArrayList<String>();
 //        score= new ArrayList<Integer>();
         playerList= new ArrayList<PlayerDTO>();
         state=GameState.INIT;
+
     }
 
-    public static synchronized PlayersStorageImpl getInstance(){
-        if(PlayersStorageImpl.instance==null){
-            PlayersStorageImpl.instance=new PlayersStorageImpl();
+    public static synchronized PlayersStorageImpl getInstance() {
+        if (PlayersStorageImpl.instance == null) {
+            PlayersStorageImpl.instance = new PlayersStorageImpl();
         }
         return PlayersStorageImpl.instance;
     }
@@ -39,23 +44,24 @@ public class PlayersStorageImpl implements PlayersStorage {
     //Callback for WaitActivity
     private PreGameListener preGameListener;
 
-    public void registerPreGameListener(PreGameListener preGameListener){
-        this.preGameListener=preGameListener;
+    public void registerPreGameListener(PreGameListener preGameListener) {
+        this.preGameListener = preGameListener;
     }
-    private void updatePlayerList(){
-        new Thread(new Runnable(){
-            public void run(){
-                if (preGameListener !=null){
+
+    private void updatePlayerList() {
+        new Thread(new Runnable() {
+            public void run() {
+                if (preGameListener != null) {
                     preGameListener.onAdditionalPlayer();
                 }
             }
         }).start();
     }
 
-    private void gameStateChangedToReady(){
-        new Thread(new Runnable(){
-            public void run(){
-                if (preGameListener !=null){
+    private void gameStateChangedToReady() {
+        new Thread(new Runnable() {
+            public void run() {
+                if (preGameListener != null) {
                     preGameListener.onGameStart();
                 }
             }
@@ -65,16 +71,16 @@ public class PlayersStorageImpl implements PlayersStorage {
     //Callback for GuessActivity
     private GuessRoundListener guessRoundListener;
 
-    public void registerGuessRoundListener(GuessRoundListener guessRoundListener){
-        this.guessRoundListener=guessRoundListener;
+    public void registerGuessRoundListener(GuessRoundListener guessRoundListener) {
+        this.guessRoundListener = guessRoundListener;
     }
 
-    private void nextPlayersTurn(){
+    private void nextPlayersTurn() {
 
-        new Thread(new Runnable(){
+        new Thread(new Runnable() {
             @Override
-            public void run(){
-                if(guessRoundListener!=null){
+            public void run() {
+                if (guessRoundListener != null) {
                     guessRoundListener.onUpdateMessage();
                 }
             }
@@ -86,6 +92,7 @@ public class PlayersStorageImpl implements PlayersStorage {
     public Card[] getCards() {
         return cards;
     }
+
     public void setCards(Card[] cards) {
         this.cards = cards;
     }
@@ -110,6 +117,7 @@ public class PlayersStorageImpl implements PlayersStorage {
     public boolean isMaster() {
         return master;
     }
+
     public void setMaster(boolean master) {
         this.master = master;
     }
@@ -120,11 +128,10 @@ public class PlayersStorageImpl implements PlayersStorage {
 
     public void setState(GameState state) {
         //if game changes from init to ready, the WaitActivity needs to receive a callback to start the game!
-        if(this.state==GameState.INIT&&state==GameState.READY){
+        if (this.state == GameState.INIT && state == GameState.READY) {
             this.state = state;
             gameStateChangedToReady();
-        }
-        else
+        } else
             this.state = state;
     }
 
@@ -139,6 +146,7 @@ public class PlayersStorageImpl implements PlayersStorage {
     public int getCurrentTurn() {
         return currentTurn;
     }
+
     public void setCurrentTurn(int currentTurn) {
         this.currentTurn = currentTurn;
     }
@@ -149,6 +157,7 @@ public class PlayersStorageImpl implements PlayersStorage {
     public List<PlayerDTO> getPlayerList(){
         return this.playerList;
     }
+
 
     public ArrayList<Integer> getScoreList() {
         ArrayList<Integer> playerScores= new ArrayList<>();
@@ -197,5 +206,7 @@ public class PlayersStorageImpl implements PlayersStorage {
         playerList.get(index).setCheating(true);
         System.out.println("\n\n\n"+playerList.get(index).isCheating()+"\n\n\n");
     }
+
+
 }
 

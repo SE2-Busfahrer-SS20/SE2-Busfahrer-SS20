@@ -52,7 +52,7 @@ public class CoughtServiceImpl implements CoughtService {
             if(myScore!=0){
                 myScore--;
             }
-            gamePlayService.sendMsgCought(currentPlayer,indexOfMe,scoreCheater,myScore);
+            gamePlayService.sendMsgCought(currentPlayer,indexOfMe,scoreCheater,myScore,playerCheated.isCheating());
             return true;
 
         }else{
@@ -64,7 +64,7 @@ public class CoughtServiceImpl implements CoughtService {
             //myScore will be increased one time
             myScore = myself.getScore();
             myScore++;
-            gamePlayService.sendMsgCought(currentPlayer,indexOfMe,scoreCheater,myScore);
+            gamePlayService.sendMsgCought(currentPlayer,indexOfMe,scoreCheater,myScore,playerCheated.isCheating());
             return false;
         }
 

@@ -5,15 +5,17 @@ public class CoughtMessage extends  BaseMessage {
     private int indexCought;
     private int scoreCheater;
     private int scoreCought;
+    private boolean cheated;
 
     public CoughtMessage(){
 
     }
-    public CoughtMessage(int indexCheater, int indexCought, int scoreCheater, int scoreCought) {
+    public CoughtMessage(int indexCheater, int indexCought, int scoreCheater, int scoreCought, boolean cheated) {
         this.indexCheater = indexCheater;
         this.indexCought = indexCought;
         this.scoreCheater = scoreCheater;
         this.scoreCought = scoreCought;
+        this.cheated = cheated;
     }
 
     public int getIndexCheater() {
@@ -46,5 +48,13 @@ public class CoughtMessage extends  BaseMessage {
 
     public void setScoreCought(int scoreCought) {
         this.scoreCought = scoreCought;
+    }
+
+    public boolean isCheated() {
+        return cheated;
+    }
+
+    public void setCheated(boolean cheated) {
+        this.cheated = cheated;
     }
 }

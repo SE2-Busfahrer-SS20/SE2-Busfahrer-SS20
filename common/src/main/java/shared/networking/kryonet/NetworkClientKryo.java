@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import shared.model.CoughtServiceListener;
 import shared.model.GameState;
 import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
@@ -86,6 +87,21 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     // call the correct callback to store cards and update UI Thread.
                     callbackMap.get(WinnerLooserMessage.class).callback((BaseMessage) object);
                 }
+
+                if (object instanceof BushmenMessage) {
+                  // BushmenMessage bushmenMessage = (BushmenMessage) object;
+                    Log.info("Bushmen received");
+                   // playersStorage.setBushmenCards(bushmenMessage.getCards());
+                    callbackMap.get(BushmenMessage.class).callback((BaseMessage) object);
+
+                }
+
+                if (object instanceof BushmenCardMessage) {
+                    Log.info("BushmenCard received" + object);
+                    callbackMap.get(BushmenCardMessage.class).callback((BushmenCardMessage) object);
+
+                }
+
                 // just for debugging purposes.
                 if (object instanceof TextMessage) {
                     Log.debug("Callback is instance of TextMessage");
@@ -101,9 +117,12 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 if(object instanceof CoughtMessage){
                     Log.debug("CoughtMessage received");
                     CoughtMessage coughtMessage = (CoughtMessage)object;
-                    //Playerstorage updaten it der neuen upgedated playerlist??
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).setScore(coughtMessage.getScoreCheater());
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
+                    //Display the TextView on the currentPlayers Screen
+                    if(coughtMessage.isCheated()){
+                        setTextViewVisible();
+                    }
                 }
 
             }
@@ -128,4 +147,22 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             instance = new NetworkClientKryo();
         return instance;
     }
+
+    private CoughtServiceListener coughtServiceListener;
+
+    public void coughtCallback(CoughtServiceListener coughtServiceListener){
+        this.coughtServiceListener = coughtServiceListener;
+    }
+    public void setTextViewVisible(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                coughtServiceListener.coughtTetxViewListener();
+
+            }
+        }).start();
+    }
+
+
+
 }
