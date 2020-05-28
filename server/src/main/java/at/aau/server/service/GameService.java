@@ -50,4 +50,5 @@ public interface GameService {
     Card[] getPlayersCards(int player);
     //Guess-Rounds
     void GuessRound(GameState lap, int tempID, boolean scored);
+    Card[] getBushmenCards();
 }

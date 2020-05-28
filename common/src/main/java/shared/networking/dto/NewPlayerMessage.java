@@ -1,19 +1,21 @@
 package shared.networking.dto;
 
+import shared.model.PlayerDTO;
+
 public class NewPlayerMessage extends BaseMessage {
-    private String playerName;
+    private PlayerDTO player;
 
     public NewPlayerMessage(){ }
 
-    public NewPlayerMessage(String playerName) {
-        this.playerName = playerName;
+    public NewPlayerMessage(PlayerDTO player) {
+        this.player= player;
     }
 
-    public String getPlayerName() {
-        return playerName;
+    public PlayerDTO getPlayer() {
+        return player;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public void setPlayer(PlayerDTO player) {
+        this.player = player;
     }
 }

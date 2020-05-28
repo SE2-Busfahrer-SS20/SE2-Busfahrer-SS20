@@ -3,6 +3,7 @@ package shared.networking.kryonet;
 import java.util.ArrayList;
 import java.util.List;
 
+import shared.model.impl.PlayerDTOImpl;
 import shared.model.impl.PlayerImpl;
 import shared.networking.dto.*;
 
@@ -24,7 +25,6 @@ public class NetworkConstants {
             PlayedMessage.class,
             shared.model.GameState.class,
             UpdateMessage.class,
-            CheatedMessage.class,
             shared.model.impl.CardImpl[].class,
             shared.model.impl.CardImpl.class,
             java.util.ArrayList.class,
@@ -32,10 +32,14 @@ public class NetworkConstants {
             com.esotericsoftware.kryonet.Connection.class,
             UpdateMessage.class,
             CheatedMessage.class,
+            PlayerDTOImpl.class,
             StartPLabMessage.class,
             DealPointsMessage.class,
             WinnerLooserMessage.class,
-            ArrayList.class
+            ArrayList.class,
+            BushmenMessage.class,
+            BushmenCardMessage.class,
+            CoughtMessage.class
     };
 
 }

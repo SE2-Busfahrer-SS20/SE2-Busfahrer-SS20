@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import shared.model.CoughtServiceListener;
 import shared.model.GameState;
 import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
@@ -56,21 +57,22 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
                 if(object instanceof NewPlayerMessage){
                     Log.debug("New Player in the Game");
-                    playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
+                    //playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
+                    playersStorage.addPlayer(((NewPlayerMessage)object).getPlayer());
                 }
 
                 if(object instanceof StartGameMessage){
                     StartGameMessage sgm = (StartGameMessage) object;
                     Log.debug("Game can start now");
+                    //playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
+                    playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
 
-                    //playersStorage.setPlayerNames(((StartGameMessage)object).getPlayerList());
-                    playersStorage.initScores();
                     playersStorage.setState(GameState.READY);
                 }
 
                 if(object instanceof UpdateMessage){
                     UpdateMessage uM = (UpdateMessage)object;
-                    playersStorage.updateOnMessage(uM.getScore(),uM.getCurrentPlayer());
+                    playersStorage.updateOnMessage(uM.getPlayerList(),uM.getCurrentPlayer());
 
                 }
 
@@ -85,6 +87,21 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     // call the correct callback to store cards and update UI Thread.
                     callbackMap.get(WinnerLooserMessage.class).callback((BaseMessage) object);
                 }
+
+                if (object instanceof BushmenMessage) {
+                  // BushmenMessage bushmenMessage = (BushmenMessage) object;
+                    Log.info("Bushmen received");
+                   // playersStorage.setBushmenCards(bushmenMessage.getCards());
+                    callbackMap.get(BushmenMessage.class).callback((BaseMessage) object);
+
+                }
+
+                if (object instanceof BushmenCardMessage) {
+                    Log.info("BushmenCard received" + object);
+                    callbackMap.get(BushmenCardMessage.class).callback((BushmenCardMessage) object);
+
+                }
+
                 // just for debugging purposes.
                 if (object instanceof TextMessage) {
                     Log.debug("Callback is instance of TextMessage");
@@ -92,6 +109,22 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     if(callbackMap.get(TextMessage.class)!=null)
                     callbackMap.get(TextMessage.class).callback((BaseMessage) object);
                 }
+                if (object instanceof CheatedMessage) {
+                    Log.debug("CheatedMessage received");
+                    System.out.println("\n\n\n CLIENT : "+((CheatedMessage) object).hasCheated()+"\n\n\n");
+                    playersStorage.setCheating(((CheatedMessage) object).getTempID());
+                }
+                if(object instanceof CoughtMessage){
+                    Log.debug("CoughtMessage received");
+                    CoughtMessage coughtMessage = (CoughtMessage)object;
+                    playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).setScore(coughtMessage.getScoreCheater());
+                    playersStorage.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
+                    //Display the TextView on the currentPlayers Screen
+                    if(coughtMessage.isCheated()){
+                        setTextViewVisible();
+                    }
+                }
+
             }
         });
     }
@@ -114,4 +147,22 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             instance = new NetworkClientKryo();
         return instance;
     }
+
+    private CoughtServiceListener coughtServiceListener;
+
+    public void coughtCallback(CoughtServiceListener coughtServiceListener){
+        this.coughtServiceListener = coughtServiceListener;
+    }
+    public void setTextViewVisible(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                coughtServiceListener.coughtTetxViewListener();
+
+            }
+        }).start();
+    }
+
+
+
 }

@@ -7,6 +7,7 @@ import shared.model.Card;
 import shared.model.GameState;
 import shared.networking.NetworkClient;
 import shared.networking.dto.CheatedMessage;
+import shared.networking.dto.CoughtMessage;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.RegisterMessage;
 import shared.networking.dto.StartGameMessage;
@@ -167,24 +168,21 @@ public class GamePlayServiceImpl implements GamePlayService {
     //////////////////////////////////////////////////////////////////////////
 
 
-    // network call for player cheated in game
-    public void sendMsgCheated(final int playerId, final boolean cheated, final long timeStamp, final int cheatType) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                CheatedMessage cM = new CheatedMessage(playerId, cheated, timeStamp, cheatType);
-                client.sendMessage(cM);
-            }
-        });
-        thread.start();
-    }
-
     @Override
     public void setHostName(String hostname) {
         this.host = hostname;
     }
 
-    //Erwischt an den Sever schicken
-
+    //Send CoughtMessage to the Server
+    public void sendMsgCought(final int indexCheater,final int indexCought,final int cheaterScore,final int coughtScore,final boolean cheated){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                CoughtMessage coughtMessage = new CoughtMessage(indexCheater,indexCought,cheaterScore,coughtScore,cheated);
+                client.sendMessage(coughtMessage);
+            }
+        });
+        thread.start();
+    }
 
 }
