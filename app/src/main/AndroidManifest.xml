@@ -19,6 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/menu_AppTheme">
+        <activity android:name=".presentation.HistoryActivity"></activity>
         <activity android:name=".presentation.PLabFinished" />
         <activity android:name=".presentation.PLapActivity" />
 
@@ -27,9 +28,9 @@
             android:value="true" />
 
         <activity android:name=".presentation.GuessActivity" />
-
-        <activity android:name=".presentation.BushmenActivity"
-            android:screenOrientation="sensorPortrait"/>
+        <activity
+            android:name=".presentation.BushmenActivity"
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".presentation.WaitActivity"
             android:screenOrientation="sensorPortrait" />
