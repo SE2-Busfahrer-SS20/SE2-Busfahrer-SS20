@@ -133,9 +133,6 @@ public class Database {
         List<User> allUsers= new ArrayList<>();
 
         ResultSet res = runPreparedStatementReturnList(sql, null);
-        if(res==null){
-            throw new NullPointerException("Failed creating List >>AllUsers<<");
-        }
         while (res.next()) {
             allUsers.add(new User(res.getInt("id"),res.getString("mac"), res.getString("name")));
         }
@@ -144,9 +141,7 @@ public class Database {
     public User getBestUser() throws SQLException {
 
         ResultSet res= runPreparedStatementReturnList("SELECT * FROM scores ORDER BY score DESC LIMIT 1;", null);
-        if(res==null){
-            throw new NullPointerException("Failed creating >>bestUser<<");
-        }
+
         if (res.next()){
             return getUserByID(res.getInt("userid"));
         }
@@ -156,9 +151,7 @@ public class Database {
 
         ResultSet res = runPreparedStatementReturnList("SELECT * FROM users\n" +
                 "WHERE mac=?;", new String[]{mac});
-        if(res==null){
-            throw new NullPointerException("Failed creating >>userByMAC<<");
-        }
+
         if (res.next()) {
             return new User(res.getInt("id"), res.getString("mac"), res.getString("name"));
         }
@@ -168,9 +161,7 @@ public class Database {
 
         ResultSet res = runPreparedStatementReturnList("SELECT * FROM users\n" +
                 "WHERE id=?;", new String[]{String.valueOf(id)});
-        if(res==null){
-            throw new NullPointerException("Failed creating >>userByID<<");
-        }
+
         if (res.next()) {
             return new User(id, res.getString("mac"), res.getString("name"));
         }
@@ -190,9 +181,7 @@ public class Database {
         List<Integer> scores= new ArrayList<>();
 
         ResultSet res =runPreparedStatementReturnList("SELECT score FROM scores WHERE userid = ?;", new String[]{String.valueOf(id)});
-        if(res==null){
-            throw new NullPointerException("Failed creating List >>AllScores<<");
-        }
+
         while (res.next()){
             scores.add(res.getInt("score"));
         }
@@ -201,9 +190,7 @@ public class Database {
     public int getNumberOfAllScores() throws SQLException {
         String sql =    "SELECT COUNT(*) AS rowcount FROM scores";
         ResultSet res= runPreparedStatementReturnList(sql, null);
-        if(res==null){
-            throw new NullPointerException("Failed creating Number >>allScores<<");
-        }
+
         if (res.next()){
             return res.getInt("rowcount") ;
         }
@@ -213,9 +200,7 @@ public class Database {
         String sql =    "SELECT COUNT(*) AS rowcount FROM users";
 
         ResultSet res= runPreparedStatementReturnList(sql, null);
-        if(res==null){
-            throw new NullPointerException("Failed creating >>numberOFAllUsers<<");
-        }
+
         if (res.next()){
             return res.getInt("rowcount") ;
         }
