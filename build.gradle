@@ -12,6 +12,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath "com.vanniktech:gradle-android-junit-jacoco-plugin:0.16.0"
         // classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
         // classpath 'com.esotericsoftware:kryonet:2.22.0-RC1'
 
