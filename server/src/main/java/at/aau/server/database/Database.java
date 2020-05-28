@@ -92,7 +92,10 @@ public class Database {
 
             }
         }finally {
-            preparedStatement.close();
+            if(preparedStatement!=null){
+                preparedStatement.close();
+            }
+
         }
         return key;
     }
