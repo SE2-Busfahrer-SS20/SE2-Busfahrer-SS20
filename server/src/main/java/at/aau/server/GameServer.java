@@ -155,7 +155,7 @@ public class GameServer extends NetworkServerKryo {
         }).start();
     }
     private void registerClasses() {
-        for (Class c : CLASS_LIST)
+        for (Class<?> c : CLASS_LIST)
             registerClass(c);
     }
 
