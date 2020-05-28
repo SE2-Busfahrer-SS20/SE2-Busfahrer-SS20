@@ -79,6 +79,7 @@ public class BushmenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bushmen);
 
+
         // Cheat service init
         cheatService = CheatServiceImpl.getInstance();
         cheatService.setContext(getApplicationContext(), getClass().getName());
@@ -229,6 +230,7 @@ public class BushmenActivity extends AppCompatActivity {
                         //Zurück zum Hauptmenü nach Sieg
                         Intent intent = new Intent(BushmenActivity.this, at.aau.busfahrer.presentation.MainMenuActivity.class);
                         startActivity(intent);
+                        cheatService.reset();
                     }
                 });
 
@@ -366,4 +368,22 @@ public class BushmenActivity extends AppCompatActivity {
         },3000);
     }
 
+    /**
+     * Android lifecycle methods, needed because Android SensorListener also listen if app is in the background.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cheatService.pauseListen();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cheatService.resumeListen();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cheatService.stopListen();
+    }
 }
