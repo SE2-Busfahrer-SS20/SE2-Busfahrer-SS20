@@ -51,8 +51,8 @@ public class GameServiceImpl implements GameService {
         return game.getPlayerList();
     }
 
-    public Player addPlayer(String name, String MACAdress, Connection connection) {
-        return game.addPlayer(name, MACAdress, connection);
+    public Player addPlayer(String name, String macAddress, Connection connection) {
+        return game.addPlayer(name, macAddress, connection);
     }
 
     @Override
@@ -113,10 +113,10 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame(String masterName, String MACAddress, Connection connection) {
+    public void createGame(String masterName, String macAddress, Connection connection) {
         createGame();
 
-        Player player = addPlayer(masterName, MACAddress, connection);
+        Player player = addPlayer(masterName, macAddress, connection);
 
         ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player, true);
         connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
@@ -152,7 +152,7 @@ public class GameServiceImpl implements GameService {
 
 
     @Override
-    public void GuessRound(GameState lap, int tempID, boolean scored) {
+    public void guessRound(GameState lap, int tempID, boolean scored) {
 
         if (scored)
             game.addPointsToPlayer(tempID, 1);

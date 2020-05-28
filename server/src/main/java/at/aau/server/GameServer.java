@@ -57,7 +57,7 @@ public class GameServer extends NetworkServerKryo {
                 //Guess-Rounds
                 if (object instanceof PlayedMessage) {
                     PlayedMessage pM = (PlayedMessage) object;
-                    gameService.GuessRound(pM.getLap(), pM.getTempID(), pM.scored());
+                    gameService.guessRound(pM.getLap(), pM.getTempID(), pM.scored());
                 }
             }
         };
