@@ -1,10 +1,10 @@
 package at.aau.server.database;
 
-import at.aau.server.database.Table.User;
+import at.aau.server.database.table.User;
 
 import org.junit.Before;
 import org.junit.Test;
-import java.io.IOException;
+
 import java.sql.SQLException;
 
 import static org.junit.Assert.*;
