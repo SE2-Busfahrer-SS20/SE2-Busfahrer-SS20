@@ -174,11 +174,11 @@ public class GamePlayServiceImpl implements GamePlayService {
     }
 
     //Send CoughtMessage to the Server
-    public void sendMsgCought(final int indexCheater,final int indexCought,final int cheaterScore,final int coughtScore){
+    public void sendMsgCought(final int indexCheater,final int indexCought,final int cheaterScore,final int coughtScore,final boolean cheated){
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                CoughtMessage coughtMessage = new CoughtMessage(indexCheater,indexCought,cheaterScore,coughtScore);
+                CoughtMessage coughtMessage = new CoughtMessage(indexCheater,indexCought,cheaterScore,coughtScore,cheated);
                 client.sendMessage(coughtMessage);
             }
         });

@@ -1,4 +1,4 @@
-package at.aau.server.database.Table;
+package at.aau.server.database.table;
 
 public class User implements Table{
     private int id;

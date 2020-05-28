@@ -25,14 +25,17 @@ import at.aau.busfahrer.service.impl.CheatServiceImpl;
 import at.aau.busfahrer.service.impl.CoughtServiceImpl;
 import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
 import shared.model.Card;
+import shared.model.CoughtServiceListener;
 import shared.model.GameState;
 import shared.model.GuessRoundListener;
 import shared.model.impl.PlayersStorageImpl;
+import shared.networking.NetworkClient;
+import shared.networking.kryonet.NetworkClientKryo;
 
 // *TODO remove card click listener in guess xml, because on click app can crash
 
 
-public class GuessActivity extends AppCompatActivity implements GuessRoundListener {
+public class GuessActivity extends AppCompatActivity implements GuessRoundListener, CoughtServiceListener {
 
     Handler uiHandler;
     private Card[] cards;
@@ -110,6 +113,9 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
         //Register Callback
         playersStorage.registerGuessRoundListener(this);
+        NetworkClientKryo networkClientKryo = (NetworkClientKryo) NetworkClientKryo.getInstance();
+        networkClientKryo.coughtCallback(this);
+
 
         ///SCHUMMEL - Aufdeckfunktion
         //Only when I am cheating, the Text View is could be visbible
@@ -122,6 +128,17 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         if(coughtService.isCheating()){
             System.out.println("\n\n\n"+playersStorage.isCheating(playersStorage.getCurrentTurn())+"\n\n\n");
             //TextView beim CurrentPlayer anzeigen!!!!!!!!!!!
+            tV_erwischt.setText("Cheater wurde erwischt!!!");
+            tV_erwischt.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_erwischt.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tV_erwischt.setVisibility(View.INVISIBLE);
+                }
+            }, 5000);
+        }else{
+            tV_erwischt.setText("Cheater wurde NICHT erwischt!!!");
             tV_erwischt.setVisibility(View.VISIBLE);
             //after 5s the TextView is invisible
             tV_erwischt.postDelayed(new Runnable() {
@@ -133,6 +150,25 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         }
 
     }
+    public void coughtTetxViewListener(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (playersStorage.getTempID() == playersStorage.getCurrentTurn()) {
+                    tV_erwischt.setVisibility(View.VISIBLE);
+                    //after 5s the TextView is invisible
+                    tV_erwischt.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            tV_erwischt.setVisibility(View.INVISIBLE);
+                        }
+                    }, 5000);
+                }
+            }
+        });
+    }
+
+
     public void onClickScore(View v){
 
         ScoreFragment scoreFragment = new ScoreFragment();
