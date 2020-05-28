@@ -20,7 +20,7 @@ buildscript {
     }
 }
 plugins {
-    id "org.sonarqube" version "2.8" apply true
+    id "org.sonarqube" version "2.8"
 }
 
 allprojects {
@@ -31,7 +31,11 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
 }
-
+sonarqube {
+    properties {
+        property "sonar.projectKey", "SE2-Busfahrer-SS20_SE2-Busfahrer-SS20"
+    }
+}
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

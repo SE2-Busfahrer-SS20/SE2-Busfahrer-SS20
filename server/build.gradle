@@ -36,11 +36,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 sourceSets.main.java.srcDirs = [ "src/main/java/" ]
 sourceSets.test.java.srcDirs = [ "src/test/java/" ]
 
-sonarqube {
-    properties {
-        property "sonar.projectKey", "SE2-Busfahrer-SS20_SE2-Busfahrer-SS20"
-    }
-}
+
 // project.tasks["sonarqube"].dependsOn "jacocoTestReport"
 
 dependencies {
