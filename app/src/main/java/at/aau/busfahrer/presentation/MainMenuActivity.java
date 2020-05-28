@@ -64,6 +64,10 @@ public class MainMenuActivity extends AppCompatActivity {
         Intent i = new Intent(MainMenuActivity.this, EditPlayerActivity.class);
         startActivity(i);
     }
+    // click listener Leaderboard button
+    public void onClickLeaderboard(View v){
+        System.out.println("test");
+    }
     // click listener PlayerEdit button
     public void onClickPlayGame(View v){
 
