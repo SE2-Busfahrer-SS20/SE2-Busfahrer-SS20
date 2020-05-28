@@ -74,23 +74,26 @@ public class Database {
     }
     private int runPreparedStatement(String statement, String[] params, boolean returnKEY) throws SQLException {
         int key=-1;
-        PreparedStatement preparedStatement= connection.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
-        for(int count=0;params!=null &&count<params.length;count++){
-            preparedStatement.setString(count+1, params[count]);
-        }
-        preparedStatement.executeUpdate();
-
-        try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-            if (generatedKeys.next()) {
-                key=generatedKeys.getInt(1);
+        PreparedStatement preparedStatement=null;
+        try{
+            preparedStatement= connection.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
+            for(int count=0;params!=null &&count<params.length;count++){
+                preparedStatement.setString(count+1, params[count]);
             }
-            else if(returnKEY){
-                throw new SQLException("Creating failed, no ID obtained.");
+            preparedStatement.executeUpdate();
+
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    key=generatedKeys.getInt(1);
+                }
+                else if(returnKEY){
+                    throw new SQLException("Creating failed, no ID obtained.");
+                }
+
             }
-
+        }finally {
+            preparedStatement.close();
         }
-
-        preparedStatement.close();
         return key;
     }
     private void runPreparedStatement(String statement, String[] params) throws SQLException{
@@ -102,7 +105,8 @@ public class Database {
         for(int count=0;params != null && count<params.length;count++){
             preparedStatement.setString(count+1, params[count]);
         }
-        return preparedStatement.executeQuery();
+        ResultSet res=preparedStatement.executeQuery();
+        return res;
     }
     public User addUser(String mac, String name) throws SQLException {
         try {
