@@ -1,12 +1,14 @@
 package at.aau.busfahrer.presentation;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -14,13 +16,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.List;
-
 import at.aau.busfahrer.R;
+import at.aau.busfahrer.presentation.utils.CardUtility;
+import at.aau.busfahrer.service.CheatService;
 import at.aau.busfahrer.service.GamePlayService;
+import at.aau.busfahrer.service.impl.CheatServiceImpl;
 import shared.model.Card;
-import shared.model.impl.CardImpl;
-import shared.model.impl.DeckImpl;
 import shared.model.impl.PlayersStorageImpl;
 import shared.networking.NetworkClient;
 import shared.networking.dto.BushmenCardMessage;
@@ -51,6 +52,8 @@ public class BushmenActivity extends AppCompatActivity {
 
     private boolean isLooser; // is true in case that the player is a looser.
 
+    private CheatService cheatService;
+
     public BushmenActivity() {
 
         //Callback der aufgerufen wird wenn Client die Karten erhalten hat
@@ -76,6 +79,10 @@ public class BushmenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bushmen);
 
+        // Cheat service init
+        cheatService = CheatServiceImpl.getInstance();
+        cheatService.setContext(getApplicationContext(), getClass().getName());
+        cheatService.startListen();
 
         TxtPunkte = findViewById(R.id.punkte);
 
@@ -92,6 +99,12 @@ public class BushmenActivity extends AppCompatActivity {
         Reset_Game();
 
         //Log.i("BushmenActiviy",)
+
+        if(isLooser){
+            handleCheat();
+        }else{
+            cheatService.stopListen();
+        }
     }
 
 
@@ -292,5 +305,28 @@ public class BushmenActivity extends AppCompatActivity {
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
+
+    /**
+     * This method handle's the cheat action if a player activates cheats.
+     */
+    public void handleCheat(){
+        cheatService.setSensorListener(() -> {
+            cheatService.pauseListen();
+            new AlertDialog.Builder(BushmenActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                    // Yes
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        // sending network call
+                        cheatService.stopListen();
+                        cheatService.sendMsgCheated(true, System.currentTimeMillis(), cheatService.getSensorType());
+                    })
+                    // No
+                    .setNegativeButton(android.R.string.no, (dialog, which) -> cheatService.resumeListen())
+                    .setTitle("Are you sure you want to cheat?").setCancelable(false)
+                    .setIcon(android.R.drawable.ic_dialog_alert).create()
+                    .show();
+        });
+    }
+
+
 
 }

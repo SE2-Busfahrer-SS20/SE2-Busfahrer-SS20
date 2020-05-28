@@ -26,6 +26,14 @@ public class CardUtility {
         }
     }
 
+    // turns a card back
+    public static void turnCardBack(TextView tV){
+        if(!tV.getText().equals("\uD83C\uDCA0")){
+            tV.setText("\uD83C\uDCA0");//set to card back side
+            tV.setTextColor(Color.parseColor("#000000"));//black
+        }
+    }
+
     // this methods generate a new text view based on the card text view
     public static TextView turnCardGetView(TextView tV, Card c) {
         TextView newCard = new TextView(tV.getContext());
