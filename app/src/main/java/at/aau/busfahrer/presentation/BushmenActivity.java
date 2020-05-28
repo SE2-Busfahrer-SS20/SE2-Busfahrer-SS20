@@ -318,6 +318,7 @@ public class BushmenActivity extends AppCompatActivity {
                         // sending network call
                         cheatService.stopListen();
                         cheatService.sendMsgCheated(true, System.currentTimeMillis(), cheatService.getSensorType());
+                        this.flipCards();
                     })
                     // No
                     .setNegativeButton(android.R.string.no, (dialog, which) -> cheatService.resumeListen())
@@ -327,6 +328,42 @@ public class BushmenActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This method turns some cards, after 1 second the turned cards gets turned back.
+     */
+    public void flipCards(){
+        TextView message = new TextView(this);
+                message.setText("Cards will get turned for 1 second, remember the cards!");
+        message.setTextColor(getResources().getColor(R.color.white));
+        message.setGravity(Gravity.CENTER);
+        message.setTextSize(20);
+        message.setPadding(15,55,15,55);
 
+        AlertDialog.Builder cheat = new AlertDialog.Builder(BushmenActivity.this, R.style.AlertDialogStyleCards)
+                .setView(message)
+                .setCancelable(false);
+        final Dialog dialog = cheat.create();
+        dialog.show();
+
+        Handler turn = new Handler();
+        turn.postDelayed(() -> {
+            dialog.dismiss();
+            for (int i = 0; i < bushmenCards.length ; i++) {
+                if(i % 2 == 1 || i == 0){
+                    CardUtility.turnCard(findViewById(bushmenCards[i]),cards[i]);
+                }
+            }
+        },2000);
+
+        // flip cards back
+        Handler reTurn = new Handler();
+        reTurn.postDelayed(() -> {
+            for (int i = 0; i < bushmenCards.length ; i++) {
+                if(i % 2 == 1 || i == 0){
+                    CardUtility.turnCardBack(findViewById(bushmenCards[i]));
+                }
+            }
+        },3000);
+    }
 
 }
