@@ -24,4 +24,5 @@ public interface CheatService extends SensorEventListener {
     void setPlayerId(int playerId);
     int randomNumber(int max, int min);
     TextView generateCard(TextView tv, Context context);
+    void reset();
 }

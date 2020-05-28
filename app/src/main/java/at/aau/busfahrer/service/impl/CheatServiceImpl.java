@@ -179,6 +179,11 @@ public class CheatServiceImpl implements CheatService {
         }
     }
 
+    @Override
+    public void reset(){
+        instance = null;
+    }
+
     // network call for player cheated in game
     public void sendMsgCheated(final boolean cheated, final long timeStamp, final int cheatType) {
         Log.i(TAG, "Sending CheatMessage to Server");
@@ -229,6 +234,5 @@ public class CheatServiceImpl implements CheatService {
     public Context getContext() {
         return context;
     }
-
 
 }
