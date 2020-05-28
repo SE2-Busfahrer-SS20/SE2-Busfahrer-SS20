@@ -91,7 +91,6 @@ public class GameServer extends NetworkServerKryo {
                         connection.sendTCP(crm);
 
                         //Send message to Master to appear in PlayersList
-                        //NewPlayerMessage npm = new NewPlayerMessage(player.getName());
                         NewPlayerMessage npm = new NewPlayerMessage(PlayerDTOImpl.getDTOFromPlayer(player));
                         connectionToMaster.sendTCP(npm);
                     } else {
