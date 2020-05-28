@@ -42,18 +42,10 @@ public class GameServer extends NetworkServerKryo {
         // start PLab Service.
         pLapService.start();
         Log.debug("Server started successfully.");
+        super.addListener(createBasicListener());
         super.addListener(new Listener() {
             public void received(Connection connection, Object object) {
                 // check if the game is null, to prevent NullPointerExceptions.
-                if (object == null) {
-                    Log.debug("Object is null");
-                } else if (object instanceof TextMessage && ((TextMessage) object).getText().equals(REQUEST_TEST)) {
-                    messageCallback.callback((TextMessage) object);
-                    connection.sendTCP(new TextMessage(RESPONSE_TEST));
-                    Log.debug("Received TextMessage: " + ((TextMessage) object).getText());
-                }
-                else {
-
                     if (!gameService.gameExists()) {
 
                         if (object instanceof RegisterMessage) {
@@ -162,10 +154,28 @@ public class GameServer extends NetworkServerKryo {
 
 
                 }
-            }
         });
     }
 
+    /**
+     * Create Listener for basic functionality.
+     * @return Listener.
+     */
+    private Listener createBasicListener() {
+        return new Listener() {
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object == null) {
+                    Log.debug("Object is null");
+                } else if (object instanceof TextMessage && ((TextMessage) object).getText().equals(REQUEST_TEST)) {
+                    if(messageCallback != null)
+                        messageCallback.callback((TextMessage) object);
+                    connection.sendTCP(new TextMessage(RESPONSE_TEST));
+                    Log.debug("Received TextMessage: " + ((TextMessage) object).getText());
+                }
+            }
+        };
+    }
     private void checkGameStates() {
         new Thread(() -> {
             try {
