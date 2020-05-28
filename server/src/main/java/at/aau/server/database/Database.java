@@ -48,9 +48,9 @@ public class Database {
     private void createUserTable() {
         // SQL statement for creating a new table
         String sql = "CREATE TABLE IF NOT EXISTS users (\n"
-                + "	id integer PRIMARY KEY,\n"
-                + "	mac text NOT NULL,\n"
-                + " name text NOT NULL\n"
+                + "id integer PRIMARY KEY,\n"
+                + "mac text NOT NULL,\n"
+                + "name text NOT NULL\n"
                 + ");";
         try {
             runPreparedStatement(sql, null);
@@ -62,8 +62,8 @@ public class Database {
     private void createScoreTable() {
         // SQL statement for creating a new table
         String sql = "CREATE TABLE IF NOT EXISTS scores (\n"
-                + "	userid integer NOT NULL,\n"
-                + "	score integer NOT NULL\n"
+                + "userid integer NOT NULL,\n"
+                + "score integer NOT NULL\n"
                 + ");";
         try {
             runPreparedStatement(sql, null);
@@ -74,23 +74,29 @@ public class Database {
     }
     private int runPreparedStatement(String statement, String[] params, boolean returnKEY) throws SQLException {
         int key=-1;
-        PreparedStatement preparedStatement= connection.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
-        for(int count=0;params!=null &&count<params.length;count++){
-            preparedStatement.setString(count+1, params[count]);
-        }
-        preparedStatement.executeUpdate();
-
-        try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-            if (generatedKeys.next()) {
-                key=generatedKeys.getInt(1);
+        PreparedStatement preparedStatement=null;
+        try{
+            preparedStatement= connection.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
+            for(int count=0;params!=null &&count<params.length;count++){
+                preparedStatement.setString(count+1, params[count]);
             }
-            else if(returnKEY){
-                throw new SQLException("Creating failed, no ID obtained.");
+            preparedStatement.executeUpdate();
+
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    key=generatedKeys.getInt(1);
+                }
+                else if(returnKEY){
+                    throw new SQLException("Creating failed, no ID obtained.");
+                }
+
+            }
+        }finally {
+            if(preparedStatement!=null){
+                preparedStatement.close();
             }
 
         }
-
-        preparedStatement.close();
         return key;
     }
     private void runPreparedStatement(String statement, String[] params) throws SQLException{
@@ -129,9 +135,6 @@ public class Database {
         List<User> allUsers= new ArrayList<>();
 
         ResultSet res = runPreparedStatementReturnList(sql, null);
-        if(res==null){
-            throw new NullPointerException("Failed creating List >>AllUsers<<");
-        }
         while (res.next()) {
             allUsers.add(new User(res.getInt("id"),res.getString("mac"), res.getString("name")));
         }
@@ -140,9 +143,7 @@ public class Database {
     public User getBestUser() throws SQLException {
 
         ResultSet res= runPreparedStatementReturnList("SELECT * FROM scores ORDER BY score DESC LIMIT 1;", null);
-        if(res==null){
-            throw new NullPointerException("Failed creating >>bestUser<<");
-        }
+
         if (res.next()){
             return getUserByID(res.getInt("userid"));
         }
@@ -152,9 +153,7 @@ public class Database {
 
         ResultSet res = runPreparedStatementReturnList("SELECT * FROM users\n" +
                 "WHERE mac=?;", new String[]{mac});
-        if(res==null){
-            throw new NullPointerException("Failed creating >>userByMAC<<");
-        }
+
         if (res.next()) {
             return new User(res.getInt("id"), res.getString("mac"), res.getString("name"));
         }
@@ -164,9 +163,7 @@ public class Database {
 
         ResultSet res = runPreparedStatementReturnList("SELECT * FROM users\n" +
                 "WHERE id=?;", new String[]{String.valueOf(id)});
-        if(res==null){
-            throw new NullPointerException("Failed creating >>userByID<<");
-        }
+
         if (res.next()) {
             return new User(id, res.getString("mac"), res.getString("name"));
         }
@@ -186,9 +183,7 @@ public class Database {
         List<Integer> scores= new ArrayList<>();
 
         ResultSet res =runPreparedStatementReturnList("SELECT score FROM scores WHERE userid = ?;", new String[]{String.valueOf(id)});
-        if(res==null){
-            throw new NullPointerException("Failed creating List >>AllScores<<");
-        }
+
         while (res.next()){
             scores.add(res.getInt("score"));
         }
@@ -197,9 +192,7 @@ public class Database {
     public int getNumberOfAllScores() throws SQLException {
         String sql =    "SELECT COUNT(*) AS rowcount FROM scores";
         ResultSet res= runPreparedStatementReturnList(sql, null);
-        if(res==null){
-            throw new NullPointerException("Failed creating Number >>allScores<<");
-        }
+
         if (res.next()){
             return res.getInt("rowcount") ;
         }
@@ -209,9 +202,7 @@ public class Database {
         String sql =    "SELECT COUNT(*) AS rowcount FROM users";
 
         ResultSet res= runPreparedStatementReturnList(sql, null);
-        if(res==null){
-            throw new NullPointerException("Failed creating >>numberOFAllUsers<<");
-        }
+
         if (res.next()){
             return res.getInt("rowcount") ;
         }
