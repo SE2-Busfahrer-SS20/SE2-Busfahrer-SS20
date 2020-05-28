@@ -160,7 +160,11 @@ public class PLapActivity extends AppCompatActivity {
      */
     private TextView getRandomCardFromPyramid() {
         final int randomIndex = cheatService.randomNumber(pCardIds.length,0);
-        TextView cheatedCard = cheatService.generateCard(findViewById(pCardIds[randomIndex]), this);
+        TextView cheatedCard;
+        do {
+            cheatedCard = cheatService.generateCard(findViewById(pCardIds[randomIndex]), this);
+        }while (cheatedCard.getText().equals("\uD83C\uDCA0"));
+
         AlertDialog.Builder showCardDialog = new AlertDialog.Builder(PLapActivity.this, R.style.AlertDialogStyle);
         showCardDialog.setTitle("Your random cheat card is")
                 .setView(cheatedCard)
@@ -184,6 +188,7 @@ public class PLapActivity extends AppCompatActivity {
         gridView.setNumColumns(2);
 
         final AlertDialog.Builder selectCardChange = new AlertDialog.Builder(PLapActivity.this, R.style.AlertDialogStyleCards)
+                .setTitle("Select a Card from your hand you want to change.")
                 .setView(gridView)
                 .setCancelable(false);
 
