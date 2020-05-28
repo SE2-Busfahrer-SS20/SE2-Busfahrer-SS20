@@ -1,6 +1,7 @@
 package at.aau.server;
 
 import java.io.IOException;
+
 import at.aau.server.service.GameService;
 import at.aau.server.service.PLapService;
 import at.aau.server.service.impl.GameServiceImpl;
@@ -23,8 +24,8 @@ public class GameServer extends NetworkServerKryo {
     private static final String RESPONSE_TEST = "response test";
     private static final int CONN_RETRY = 5;
 
-    private GameService gameService;
-    private PLapService pLapService;
+    private final GameService gameService;
+    private final PLapService pLapService;
 
     private Connection connectionToMaster;
 
@@ -43,123 +44,132 @@ public class GameServer extends NetworkServerKryo {
         pLapService.start();
         Log.debug("Server started successfully.");
         super.addListener(createBasicListener());
-        super.addListener(new Listener() {
+        super.addListener(createCheatListener());
+        super.addListener(createBushmenListener());
+        super.addListener(createGameListener());
+        super.addListener(createGuessListener());
+    }
+
+    private Listener createGuessListener() {
+        return new Listener() {
+            @Override
             public void received(Connection connection, Object object) {
-                // check if the game is null, to prevent NullPointerExceptions.
-                    if (!gameService.gameExists()) {
-
-                        if (object instanceof RegisterMessage) {
-                            Log.debug("Received Register Message");
-                            try {
-                                RegisterMessage msg = (RegisterMessage) object;
-                                gameService.createGame(msg.getPlayerName(), msg.getMACAddress(), connection);  //outsourced to GameService
-                                checkGameStates();
-                                connectionToMaster = connection;
-
-                            } catch (Exception ex) {
-                                Log.error(ex.toString());
-                                // TODO: implement client error response and implement error handler in client.
-                            }
-                        } else if (object instanceof BaseMessage) {
-                            String errmsg = "Action not supported.";
-                            Log.info(errmsg);
-                            connection.sendTCP(new TextMessage(errmsg));
-                        }
-                    }
-
-                    //join existing Game
-                    else if(object instanceof RegisterMessage){
-                        Log.debug("Received Register Message");
-
+                //Guess-Rounds
+                if (object instanceof PlayedMessage) {
+                    PlayedMessage pM = (PlayedMessage) object;
+                    gameService.GuessRound(pM.getLap(), pM.getTempID(), pM.scored());
+                }
+            }
+        };
+    }
+    private Listener createGameListener() {
+        return new Listener() {
+            // TODO: extract logical functionality.
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object instanceof RegisterMessage && !gameService.gameExists()) {
+                    Log.debug("Received Register Message");
+                    try {
                         RegisterMessage msg = (RegisterMessage) object;
-                        Player player = gameService.addPlayer(msg.getPlayerName(),msg.getMACAddress(),connection);
+                        gameService.createGame(msg.getPlayerName(), msg.getMACAddress(), connection);  //outsourced to GameService
+                        checkGameStates();
+                        connectionToMaster = connection;
+                    } catch (Exception ex) {
+                        Log.error(ex.toString());
+                    }
+                }
+                //join existing Game
+                else if (object instanceof RegisterMessage) {
+                    Log.debug("Received Register Message");
 
-                        if(player!=null){ //if game is not full
-                            Log.debug("new Player:"+player.getName());
-                            ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player);
-                            connection.sendTCP(crm);
+                    RegisterMessage msg = (RegisterMessage) object;
+                    Player player = gameService.addPlayer(msg.getPlayerName(), msg.getMACAddress(), connection);
 
-                            //Send message to Master to appear in PlayersList
-                            //NewPlayerMessage npm = new NewPlayerMessage(player.getName());
-                            NewPlayerMessage npm = new NewPlayerMessage(PlayerDTOImpl.getDTOFromPlayer(player));
-                            connectionToMaster.sendTCP(npm);
-                        }
-                        else{
+                    if (player != null) { //if game is not full
+                        Log.debug("new Player:" + player.getName());
+                        ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player);
+                        connection.sendTCP(crm);
+
+                        //Send message to Master to appear in PlayersList
+                        //NewPlayerMessage npm = new NewPlayerMessage(player.getName());
+                        NewPlayerMessage npm = new NewPlayerMessage(PlayerDTOImpl.getDTOFromPlayer(player));
+                        connectionToMaster.sendTCP(npm);
+                    } else {
                         connection.sendTCP(new ServerActionResponse("Game is full!", false));
-                        }
                     }
-                    else if(object instanceof StartGameMessage){
-                        Log.info("Game started");
+                } else if (object instanceof StartGameMessage) {
+                    Log.info("Game started");
 
-                        gameService.startGame();
-
-                    }
-
-
-                    //Guess-Rounds
-                    else if(object instanceof PlayedMessage){
-                        PlayedMessage pM = (PlayedMessage) object;
-                        gameService.GuessRound(pM.getLap(), pM.getTempID(), pM.scored());
-                    }
-
-                    //Bushmen-Round
-                    else if (object instanceof BushmenMessage){
-                        BushmenMessage bushmenMessage = new BushmenMessage();
-                        bushmenMessage.setCards(gameService.getBushmenCards());
-                        for (int i = 0; i < gameService.getPlayerCount(); i++) {
-                            gameService.getPlayerList().get(i).getConnection().sendTCP(bushmenMessage);
-                        }
-                    }
-
-                    else if (object instanceof BushmenCardMessage){
-                        for (int i = 0; i < gameService.getPlayerCount(); i++) {
-                            gameService.getPlayerList().get(i).getConnection().sendTCP(object);
-                        }
-                        System.out.println("Send card to players"+object+gameService.getPlayerList());
-                    }
-
-
-                    // Player has cheated message
-                    else if(object instanceof CheatedMessage){
-                        CheatedMessage cM = (CheatedMessage) object;
-                        if(cM.hasCheated()) {
-                            gameService.getPlayerList().get(cM.getTempID()).setCheatedThisRound(true);
-                        }
-                        int playerId = cM.getTempID();
-                        CheatedMessage updateClients = new CheatedMessage(playerId,true, cM.getTimeStamp(), cM.getCheatType());
-                        for (int i = 0; i < gameService.getPlayerList().size() ; i++) {
-                            gameService.getPlayerList().get(i).getConnection().sendTCP(updateClients);
-                        }
-                    }
-                    else if(object instanceof CoughtMessage){
-                        CoughtMessage coughtMessage = (CoughtMessage)object;
-                        //Set the new Score of the Cheater
-                        gameService.getPlayerList().get(coughtMessage.getIndexCheater()).setScore(coughtMessage.getScoreCheater());
-                        //Set the new Score of the one how Cought
-                        gameService.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
-                        //Update the list by every client
-                        CoughtMessage updateClients = new CoughtMessage(coughtMessage.getIndexCheater(),coughtMessage.getScoreCought(), coughtMessage.getScoreCheater(), coughtMessage.getScoreCought(),coughtMessage.isCheated());
-                        for (int i = 0; i < gameService.getPlayerList().size() ; i++) {
-                            gameService.getPlayerList().get(i).getConnection().sendTCP(updateClients);
-                        }
-                    }
-
-                    else if (object instanceof TextMessage) {
-                        Log.info("Got message from client", ((TextMessage) object).getText());
-                    }
-                    else if (object instanceof BaseMessage) {
-                        Log.info("Action not supported.");
-                        connection.sendTCP(new TextMessage("Action not supported."));
-                    }
-
+                    gameService.startGame();
 
                 }
-        });
+            }
+        };
+    }
+
+    private Listener createBushmenListener() {
+        return new Listener() {
+            // TODO: extract logical functionality.
+            @Override
+            public void received(Connection connection, Object object) {
+                //Bushmen-Round
+                if (object instanceof BushmenMessage) {
+                    BushmenMessage bushmenMessage = new BushmenMessage();
+                    bushmenMessage.setCards(gameService.getBushmenCards());
+                    for (int i = 0; i < gameService.getPlayerCount(); i++) {
+                        gameService.getPlayerList().get(i).getConnection().sendTCP(bushmenMessage);
+                    }
+                } else if (object instanceof BushmenCardMessage) {
+                    for (int i = 0; i < gameService.getPlayerCount(); i++) {
+                        gameService.getPlayerList().get(i).getConnection().sendTCP(object);
+                    }
+                    System.out.println("Send card to players" + object + gameService.getPlayerList());
+                }
+            }
+        };
+    }
+
+    /**
+     * Listener for cheating functionality.
+     *
+     * @return new Listener.
+     */
+    private Listener createCheatListener() {
+        // TODO: refactor to extract functionality in own class.
+        return new Listener() {
+            @Override
+            public void received(Connection connection, Object object) {
+                // Player has cheated message
+                if (object instanceof CheatedMessage) {
+                    CheatedMessage cM = (CheatedMessage) object;
+                    if (cM.hasCheated()) {
+                        gameService.getPlayerList().get(cM.getTempID()).setCheatedThisRound(true);
+                    }
+                    int playerId = cM.getTempID();
+                    CheatedMessage updateClients = new CheatedMessage(playerId, true, cM.getTimeStamp(), cM.getCheatType());
+                    for (int i = 0; i < gameService.getPlayerList().size(); i++) {
+                        gameService.getPlayerList().get(i).getConnection().sendTCP(updateClients);
+                    }
+                } else if (object instanceof CoughtMessage) {
+                    CoughtMessage coughtMessage = (CoughtMessage) object;
+                    //Set the new Score of the Cheater
+                    gameService.getPlayerList().get(coughtMessage.getIndexCheater()).setScore(coughtMessage.getScoreCheater());
+                    //Set the new Score of the one how Cought
+                    gameService.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
+                    //Update the list by every client
+                    CoughtMessage updateClients = new CoughtMessage(coughtMessage.getIndexCheater(), coughtMessage.getScoreCought(), coughtMessage.getScoreCheater(), coughtMessage.getScoreCought(), coughtMessage.isCheated());
+                    for (int i = 0; i < gameService.getPlayerList().size(); i++) {
+                        gameService.getPlayerList().get(i).getConnection().sendTCP(updateClients);
+                    }
+                }
+            }
+        };
     }
 
     /**
      * Create Listener for basic functionality.
-     * @return Listener.
+     *
+     * @return new Listener.
      */
     private Listener createBasicListener() {
         return new Listener() {
@@ -168,14 +178,18 @@ public class GameServer extends NetworkServerKryo {
                 if (object == null) {
                     Log.debug("Object is null");
                 } else if (object instanceof TextMessage && ((TextMessage) object).getText().equals(REQUEST_TEST)) {
-                    if(messageCallback != null)
+                    if (messageCallback != null)
                         messageCallback.callback((TextMessage) object);
                     connection.sendTCP(new TextMessage(RESPONSE_TEST));
                     Log.debug("Received TextMessage: " + ((TextMessage) object).getText());
+                } else if (object instanceof BaseMessage) {
+                    Log.info("Action not supported.");
+                    connection.sendTCP(new TextMessage("Action not supported."));
                 }
             }
         };
     }
+
     private void checkGameStates() {
         new Thread(() -> {
             try {
@@ -199,6 +213,7 @@ public class GameServer extends NetworkServerKryo {
             }
         }).start();
     }
+
     private void registerClasses() {
         for (Class<?> c : CLASS_LIST)
             registerClass(c);
