@@ -103,10 +103,10 @@ public class GameServiceTest {
 
 
         assertEquals(gameService.getGame().getPlayerCount(), players);
-        assertEquals(gameService.getGame().getPlayersCards(0).length, 4);
-        assertEquals(gameService.getGame().getPlayersCards(1).length, 4);
-        assertEquals(gameService.getGame().getPlayersCards(2).length, 4);
-        assertEquals(gameService.getGame().getPlayersCards(3).length, 4);
+        assertEquals(4, gameService.getGame().getPlayersCards(0).length);
+        assertEquals(4, gameService.getGame().getPlayersCards(1).length);
+        assertEquals(4, gameService.getGame().getPlayersCards(2).length);
+        assertEquals(4, gameService.getGame().getPlayersCards(3).length);
     }
     @Test
     public void checkSingletonImplementation() {
