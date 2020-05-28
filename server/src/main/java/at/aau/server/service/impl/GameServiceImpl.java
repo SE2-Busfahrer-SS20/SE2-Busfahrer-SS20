@@ -2,10 +2,7 @@ package at.aau.server.service.impl;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.minlog.Log;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import at.aau.server.service.GameService;
 import shared.model.*;
 import shared.model.impl.GameImpl;
@@ -21,10 +18,7 @@ public class GameServiceImpl implements GameService {
     // Instance for singleton.
     private static GameServiceImpl instance;
 
-    private GameServiceImpl() {
-    }
-
-
+    private GameServiceImpl() { }
     /**
      * Returns Singleton instance.
      *
@@ -123,7 +117,7 @@ public class GameServiceImpl implements GameService {
 
         //Add Player to Playerlist in Wait UI
         //NewPlayerMessage npm = new NewPlayerMessage(player.getName());
-        System.out.println("\ntest\n"+PlayerDTOImpl.getDTOFromPlayer(player).getName()+"\n\n");
+        Log.debug("\ntest\n"+PlayerDTOImpl.getDTOFromPlayer(player).getName()+"\n\n");
         NewPlayerMessage npm = new NewPlayerMessage(PlayerDTOImpl.getDTOFromPlayer(player));
         connection.sendTCP(npm);
 
