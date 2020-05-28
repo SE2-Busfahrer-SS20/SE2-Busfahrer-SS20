@@ -47,12 +47,8 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     classDirectories = files([debugTree])
     executionData = files("${buildDir}/jacoco/testDebugUnitTest.exec")
 }
-sonarqube {
-    properties {
-        property "sonar.projectKey", "SE2-Busfahrer-SS20_SE2-Busfahrer-SS20"
-    }
-}
-project.tasks["sonarqube"].dependsOn "jacocoTestReport"
+
+// project.tasks["sonarqube"].dependsOn "jacocoTestReport"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

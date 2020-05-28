@@ -41,7 +41,7 @@ sonarqube {
         property "sonar.projectKey", "SE2-Busfahrer-SS20_SE2-Busfahrer-SS20"
     }
 }
-project.tasks["sonarqube"].dependsOn "jacocoTestReport"
+// project.tasks["sonarqube"].dependsOn "jacocoTestReport"
 
 dependencies {
     implementation project(":common")
