@@ -48,9 +48,9 @@ public class Database {
     private void createUserTable() {
         // SQL statement for creating a new table
         String sql = "CREATE TABLE IF NOT EXISTS users (\n"
-                + "	id integer PRIMARY KEY,\n"
-                + "	mac text NOT NULL,\n"
-                + " name text NOT NULL\n"
+                + "id integer PRIMARY KEY,\n"
+                + "mac text NOT NULL,\n"
+                + "name text NOT NULL\n"
                 + ");";
         try {
             runPreparedStatement(sql, null);
@@ -62,8 +62,8 @@ public class Database {
     private void createScoreTable() {
         // SQL statement for creating a new table
         String sql = "CREATE TABLE IF NOT EXISTS scores (\n"
-                + "	userid integer NOT NULL,\n"
-                + "	score integer NOT NULL\n"
+                + "userid integer NOT NULL,\n"
+                + "score integer NOT NULL\n"
                 + ");";
         try {
             runPreparedStatement(sql, null);
@@ -105,8 +105,7 @@ public class Database {
         for(int count=0;params != null && count<params.length;count++){
             preparedStatement.setString(count+1, params[count]);
         }
-        ResultSet res=preparedStatement.executeQuery();
-        return res;
+        return preparedStatement.executeQuery();
     }
     public User addUser(String mac, String name) throws SQLException {
         try {
