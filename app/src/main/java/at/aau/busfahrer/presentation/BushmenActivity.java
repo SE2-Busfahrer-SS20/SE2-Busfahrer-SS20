@@ -314,7 +314,7 @@ public class BushmenActivity extends AppCompatActivity {
     public void handleCheat(){
         cheatService.setSensorListener(() -> {
             cheatService.pauseListen();
-            new AlertDialog.Builder(BushmenActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+            new AlertDialog.Builder(BushmenActivity.this, R.style.AlertDialogStyleDark)
                     // Yes
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                         // sending network call

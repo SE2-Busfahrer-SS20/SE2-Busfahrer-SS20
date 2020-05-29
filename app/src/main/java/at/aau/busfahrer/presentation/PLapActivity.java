@@ -159,7 +159,7 @@ public class PLapActivity extends AppCompatActivity {
      * @return Card TextView for the Dialog.
      */
     private TextView getRandomCardFromPyramid() {
-        int randomIndex = cheatService.randomNumber(pCardIds.length,0);
+        int randomIndex = cheatService.randomNumber(pCardIds.length);
         TextView cheatedCard = cheatService.generateCard(findViewById(pCardIds[randomIndex]), this);
 
         // if random card is already turned

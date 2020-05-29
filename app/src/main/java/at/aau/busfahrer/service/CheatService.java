@@ -22,7 +22,7 @@ public interface CheatService extends SensorEventListener {
     void sendMsgCheated(final boolean cheated, final long timeStamp, final int cheatType);
     int getPlayerId();
     void setPlayerId(int playerId);
-    int randomNumber(int max, int min);
+    int randomNumber(int max);
     TextView generateCard(TextView tv, Context context);
     void reset();
 }

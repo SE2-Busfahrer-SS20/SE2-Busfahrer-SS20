@@ -14,6 +14,8 @@ import android.hardware.SensorManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.TextView;
+
+import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
 public class CheatServiceImpl implements CheatService {
@@ -194,8 +196,9 @@ public class CheatServiceImpl implements CheatService {
         thread.start();
     }
 
-    public int randomNumber(int max, int min) {
-        return (int) ((Math.random() * (max + min)));
+    public int randomNumber(int max) {
+        SecureRandom random = new SecureRandom ();
+        return random.nextInt(max);
     }
 
     public TextView generateCard(TextView tv, Context context) {
