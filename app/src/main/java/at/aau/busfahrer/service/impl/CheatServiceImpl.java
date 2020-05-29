@@ -39,7 +39,6 @@ public class CheatServiceImpl implements CheatService {
     private SensorListener sensorListener;
     private SensorManager sensorManager;
     private Sensor sensor;
-    private String activityName;
     private long lastUpdateMs;
     private boolean isSensorListen = false;
 
@@ -232,7 +231,6 @@ public class CheatServiceImpl implements CheatService {
     }
     public void setContext(Context context, String name) {
         this.context = context;
-        this.activityName = name;
     }
     public Context getContext() {
         return context;
