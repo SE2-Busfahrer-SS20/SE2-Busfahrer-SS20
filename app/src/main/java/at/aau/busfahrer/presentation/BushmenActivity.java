@@ -93,6 +93,15 @@ public class BushmenActivity extends AppCompatActivity {
         Reset_Game();
 
         //Log.i("BushmenActiviy",)
+        // Für den Zuschauer wird angezeigt, dass er Zuschauer ist
+
+        TextView textView= findViewById(R.id.headerBushmen);
+
+        if(isLooser){
+            textView.setText("Oh dear! You have to drive with the bus");
+        }else {
+            textView.setText("Your can only watch!");
+        }
     }
 
 
