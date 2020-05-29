@@ -176,7 +176,7 @@ public class BushmenActivity extends AppCompatActivity {
         // Prüfung
         // Wenn Bube, König, Dame, Ass Dann Restart
         if (c.getRank() == 0 || c.getRank() == 10 || c.getRank() == 11 || c.getRank() == 12) {
-            tV.setTextColor(Color.parseColor("#00C800"));//Green
+           // tV.setTextColor(Color.parseColor("#00C800"));//Green
 
             // Karten für Eingabe Sperren
             Enable_Cards((TextView) findViewById(R.id.tV_card1), false);
