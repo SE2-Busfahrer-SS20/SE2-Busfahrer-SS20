@@ -138,7 +138,7 @@ public class PLapActivity extends AppCompatActivity {
     private void handleCheatPLab() {
         cheatService.setSensorListener(() -> {
             cheatService.pauseListen();
-                new AlertDialog.Builder(PLapActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                new AlertDialog.Builder(PLapActivity.this, R.style.AlertDialogStyleDark)
                         // Yes
                         .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                             // sending network call
@@ -159,11 +159,17 @@ public class PLapActivity extends AppCompatActivity {
      * @return Card TextView for the Dialog.
      */
     private TextView getRandomCardFromPyramid() {
-        final int randomIndex = cheatService.randomNumber(pCardIds.length,0);
-        TextView cheatedCard;
-        do {
-            cheatedCard = cheatService.generateCard(findViewById(pCardIds[randomIndex]), this);
-        }while (cheatedCard.getText().equals("\uD83C\uDCA0"));
+        int randomIndex = cheatService.randomNumber(pCardIds.length,0);
+        TextView cheatedCard = cheatService.generateCard(findViewById(pCardIds[randomIndex]), this);
+
+        // if random card is already turned
+        if (cheatedCard.getText().equals("\uD83C\uDCA0")){
+            for (int i = 0; i < pCardIds.length ; i++) {
+                if (cheatedCard.getText().equals("\uD83C\uDCA0")){
+                    cheatedCard = cheatService.generateCard(findViewById(pCardIds[i]), this);
+                }
+            }
+        }
 
         AlertDialog.Builder showCardDialog = new AlertDialog.Builder(PLapActivity.this, R.style.AlertDialogStyle);
         showCardDialog.setTitle("Your random cheat card is")
