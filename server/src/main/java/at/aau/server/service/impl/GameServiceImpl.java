@@ -2,10 +2,7 @@ package at.aau.server.service.impl;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.minlog.Log;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import at.aau.server.service.GameService;
 import shared.model.*;
 import shared.model.impl.GameImpl;
@@ -21,10 +18,7 @@ public class GameServiceImpl implements GameService {
     // Instance for singleton.
     private static GameServiceImpl instance;
 
-    private GameServiceImpl() {
-    }
-
-
+    private GameServiceImpl() { }
     /**
      * Returns Singleton instance.
      *
@@ -51,8 +45,8 @@ public class GameServiceImpl implements GameService {
         return game.getPlayerList();
     }
 
-    public Player addPlayer(String name, String MACAdress, Connection connection) {
-        return game.addPlayer(name, MACAdress, connection);
+    public Player addPlayer(String name, String macAddress, Connection connection) {
+        return game.addPlayer(name, macAddress, connection);
     }
 
     @Override
@@ -113,17 +107,17 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame(String masterName, String MACAddress, Connection connection) {
+    public void createGame(String masterName, String macAddress, Connection connection) {
         createGame();
 
-        Player player = addPlayer(masterName, MACAddress, connection);
+        Player player = addPlayer(masterName, macAddress, connection);
 
         ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player, true);
         connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
 
         //Add Player to Playerlist in Wait UI
         //NewPlayerMessage npm = new NewPlayerMessage(player.getName());
-        System.out.println("\ntest\n"+PlayerDTOImpl.getDTOFromPlayer(player).getName()+"\n\n");
+        Log.debug("\ntest\n"+PlayerDTOImpl.getDTOFromPlayer(player).getName()+"\n\n");
         NewPlayerMessage npm = new NewPlayerMessage(PlayerDTOImpl.getDTOFromPlayer(player));
         connection.sendTCP(npm);
 
@@ -152,7 +146,7 @@ public class GameServiceImpl implements GameService {
 
 
     @Override
-    public void GuessRound(GameState lap, int tempID, boolean scored) {
+    public void guessRound(GameState lap, int tempID, boolean scored) {
 
         if (scored)
             game.addPointsToPlayer(tempID, 1);

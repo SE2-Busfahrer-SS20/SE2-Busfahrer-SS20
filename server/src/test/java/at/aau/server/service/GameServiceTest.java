@@ -64,15 +64,15 @@ public class GameServiceTest {
         gameService.addPlayer("elias", "macAdress", null);
         List<Player> playerList = gameService.getGame().getPlayerList();
         System.out.println("SIZE:"+gameService.getGame().getPlayerCount());
-        assertEquals(gameService.getGame().getPlayerCount(), 1);
+        assertEquals(1, gameService.getGame().getPlayerCount());
     }
 
     @Test
     public void checkGameStates() throws PlayerLimitExceededException {
         gameService.createGame();
-        assertEquals(gameService.getGame().getState(), GameState.INIT);
+        assertEquals(GameState.INIT, gameService.getGame().getState());
         gameService.startGame();
-        assertEquals(gameService.getGame().getState(), GameState.STARTED);
+        assertEquals(GameState.STARTED, gameService.getGame().getState());
         gameService.nextLab();
         /*
         assertEquals(gameService.getGame().getState(), GameState.LAB1);
@@ -102,11 +102,11 @@ public class GameServiceTest {
         assertEquals((gameService.getGame().getCardStack()).size(), (52 - (players * 4)));
 
 
-        assertEquals(gameService.getGame().getPlayerCount(), players);
-        assertEquals(gameService.getGame().getPlayersCards(0).length, 4);
-        assertEquals(gameService.getGame().getPlayersCards(1).length, 4);
-        assertEquals(gameService.getGame().getPlayersCards(2).length, 4);
-        assertEquals(gameService.getGame().getPlayersCards(3).length, 4);
+        assertEquals(players, gameService.getGame().getPlayerCount());
+        assertEquals(4, gameService.getGame().getPlayersCards(0).length);
+        assertEquals(4, gameService.getGame().getPlayersCards(1).length);
+        assertEquals(4, gameService.getGame().getPlayersCards(2).length);
+        assertEquals(4, gameService.getGame().getPlayersCards(3).length);
     }
     @Test
     public void checkSingletonImplementation() {

@@ -1,4 +1,4 @@
-package at.aau.server.database.Table;
+package at.aau.server.database.table;
 
 public class Score implements Table{
     private int userid;
