@@ -197,16 +197,16 @@ public class BushmenActivity extends AppCompatActivity {
             }, 2000);
 
 
-            // Update der Punkte wenn er Bildkarte erwischt -5, andere Karten +3 Punkte
+            // Update der Punkte wenn er Bildkarte erwischt +3, andere Karten -4 Punkte
 
-            PunkteAnzahlBusfahrer -= 5;
+            PunkteAnzahlBusfahrer += 3;
             UpdateAnzeige();
         } else {
-            PunkteAnzahlBusfahrer += 3;
+            PunkteAnzahlBusfahrer -= 4;
             UpdateAnzeige();
             KartenCounter++;
 
-            if (KartenCounter == 3) {
+            if (KartenCounter == 4) {
 
                 AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
                 dialog.setTitle("Gewonnen");
