@@ -1,6 +1,7 @@
 package at.aau.busfahrer.presentation;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -177,23 +178,24 @@ public class BushmenActivity extends AppCompatActivity {
             Enable_Cards((TextView) findViewById(R.id.tV_card6), false);
             Enable_Cards((TextView) findViewById(R.id.tV_card7), false);
 
+            AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this);
+            dialog.setTitle("Verloren");
+            dialog.setMessage("Busfahrerrunde beginnt von vorne");
+            final Dialog dialog1 = dialog.create();
+            dialog1.show();
 
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
 
-                    // Erwischt man eine Bildkarte kommt Text verloren und neu beginnen
-
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this);
-                    dialog.setTitle("Verloren");
-                    dialog.setMessage("Busfahrerrunde beginnt von vorne");
-                    dialog.show();
+                    dialog1.dismiss();
 
                     // Neu Starten
                     Reset_Game();
                 }
-            }, 1000);
+            }, 2000);
+
 
             // Update der Punkte wenn er Bildkarte erwischt -5, andere Karten +3 Punkte
 
