@@ -197,7 +197,6 @@ public class PLapActivity extends AppCompatActivity {
                 .setTitle("Select a Card from your hand you want to change.")
                 .setView(gridView)
                 .setCancelable(false);
-
         final Dialog dialog = selectCardChange.create();
         dialog.show();
         // item click listener, returns the selected card index
@@ -207,16 +206,18 @@ public class PLapActivity extends AppCompatActivity {
     }
 
     /**
-    Changes the card from the player hand with the cheated card.
-     * @param pos selected card of the player hand.
+     * Changes the card from the player hand with the cheated card.
+     * pyramidCard: updates the TextView in the player hand.
+     * cards: cheatedCard is inserted in the player hand.
+     * @param pos selected card from Dialog.
      */
     private void swapCard(int pos) {
-        TextView t = findViewById(myCardIds[pos]);
-        t.setText(cheatCard.getText());
-        t.setTextColor(cheatCard.getCurrentTextColor());
-        // Card cheatCard = CardUtility.getCardFromString(this.cheatCard.getText().toString(), pLabService.getPlayerCards());
-        // cards[pos] = cheatCard;
-        // * TODO get all pyramid cards instead of plabService.playerCards, -> NPE
+        TextView pyramidCard = findViewById(myCardIds[pos]);
+        pyramidCard.setText(cheatCard.getText());
+        pyramidCard.setTextColor(cheatCard.getCurrentTextColor());
+
+        Card newCheatedCard = CardUtility.getCardFromString(this.cheatCard.getText().toString(), pLapClientService.getPCards());
+        cards[pos] = newCheatedCard;
     }
 
     /**
