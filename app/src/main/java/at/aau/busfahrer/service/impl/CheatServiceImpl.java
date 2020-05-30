@@ -180,8 +180,7 @@ public class CheatServiceImpl implements CheatService {
         }
     }
 
-    @Override
-    public void reset(){
+    public static void reset(){
         instance = null;
     }
 
@@ -232,8 +231,6 @@ public class CheatServiceImpl implements CheatService {
     public void setContext(Context context, String name) {
         this.context = context;
     }
-    public Context getContext() {
-        return context;
-    }
+    public Context getContext() { return context; }
 
 }

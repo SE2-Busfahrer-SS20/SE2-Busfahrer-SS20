@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
@@ -230,7 +231,7 @@ public class BushmenActivity extends AppCompatActivity {
                         //Zurück zum Hauptmenü nach Sieg
                         Intent intent = new Intent(BushmenActivity.this, at.aau.busfahrer.presentation.MainMenuActivity.class);
                         startActivity(intent);
-                        cheatService.reset();
+                        CheatServiceImpl.reset();
                     }
                 });
 
@@ -336,7 +337,8 @@ public class BushmenActivity extends AppCompatActivity {
     public void flipCards(){
         TextView message = new TextView(this);
                 message.setText("Cards will get turned for 1 second, remember the cards!");
-        message.setTextColor(getResources().getColor(R.color.white));
+        message.setTextColor(ContextCompat.getColor(this, R.color.white));
+
         message.setGravity(Gravity.CENTER);
         message.setTextSize(20);
         message.setPadding(15,55,15,55);
