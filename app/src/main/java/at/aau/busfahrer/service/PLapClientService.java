@@ -17,4 +17,5 @@ public interface PLapClientService {
     void dealPoints(String playerName);
     List<String> getPlayerNames();
     void startLab();
+    Card[] getPCards();
 }

@@ -151,4 +151,8 @@ public class PLapClientServiceImpl implements PLapClientService {
     public void setPCards(Card[] cards) {
         this.pCards = cards;
     }
+
+    public Card[] getPCards(){
+        return this.pCards;
+    }
 }
