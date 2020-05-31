@@ -7,10 +7,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.viewpager.widget.ViewPager;
 import at.aau.busfahrer.R;
+import at.aau.busfahrer.service.LeaderboardService;
+import at.aau.busfahrer.service.impl.LeaderboardServiceImpl;
 
 
 public class HistoryActivity extends AppCompatActivity {
 
+    private LeaderboardService leaderboardService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +22,9 @@ public class HistoryActivity extends AppCompatActivity {
         // Hide the status bar.
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+
+        leaderboardService=LeaderboardServiceImpl.getInstance();
+        leaderboardService.updateScoreList();
 
         String[] scoreItems= new String[]{"Philipp: 10","Larissa: 9","Markus: 8","Elias: 7","Volte: 6","Gery: 10"};
 
@@ -31,4 +37,5 @@ public class HistoryActivity extends AppCompatActivity {
         );
         listView.setAdapter(listViewAdapter);
     }
+
 }
