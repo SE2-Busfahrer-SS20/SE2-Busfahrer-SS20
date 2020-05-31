@@ -90,6 +90,13 @@ public class PLapActivity extends AppCompatActivity {
     }
     public void onClick_btCought(View view) {
         tV_cought.setVisibility(View.VISIBLE);
+        //after 5s the TextView is invisible
+        tV_cought.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tV_cought.setVisibility(View.INVISIBLE);
+            }
+        }, 5000);
     }
 
 
