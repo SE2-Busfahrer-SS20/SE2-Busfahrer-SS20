@@ -89,7 +89,7 @@ public class PLapActivity extends AppCompatActivity {
 
     }
     public void onClick_btCought(View view) {
-
+        tV_cought.setVisibility(View.VISIBLE);
     }
 
 
