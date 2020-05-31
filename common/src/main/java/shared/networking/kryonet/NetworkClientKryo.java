@@ -124,7 +124,9 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                         setTextViewVisible();
                     }
                 }
-
+                if(object instanceof LeaderboardMessage) {
+                    Log.debug("\n=====================\nLeaderboardMessage received");
+                }
             }
         });
     }
