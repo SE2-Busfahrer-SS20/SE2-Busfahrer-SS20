@@ -69,4 +69,23 @@ public class CoughtServiceImpl implements CoughtService {
         }
 
     }
+    public boolean isCheatingPlap(){
+        gamePlayService = GamePlayServiceImpl.getInstance();
+        pl = PlayersStorageImpl.getInstance();
+        playerList = pl.getPlayerList();
+        indexOfMe = pl.getTempID();
+        boolean cheated = false;
+
+        for (int i = 0; i<playerList.size();i++){
+            if(i != indexOfMe){
+                if(playerList.get(i).isCheating()){
+                    cheated = true;
+                    break;
+                }else{
+                    return false;
+                }
+            }
+        }
+        return cheated;
+    }
 }
