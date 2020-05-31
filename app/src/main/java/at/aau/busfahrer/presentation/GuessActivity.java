@@ -155,6 +155,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             @Override
             public void run() {
                 if (playersStorage.getTempID() == playersStorage.getCurrentTurn()) {
+                    tV_erwischt.setText("Erwischt!!!!");
                     tV_erwischt.setVisibility(View.VISIBLE);
                     //after 5s the TextView is invisible
                     tV_erwischt.postDelayed(new Runnable() {

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -18,11 +19,14 @@ import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 
 import at.aau.busfahrer.service.CheatService;
+import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 import at.aau.busfahrer.service.PLapClientService;
+import at.aau.busfahrer.service.impl.CoughtServiceImpl;
 import at.aau.busfahrer.service.impl.PLapClientServiceImpl;
 
 import shared.model.Card;
+import shared.model.CoughtServiceListener;
 
 
 public class PLapActivity extends AppCompatActivity {
@@ -40,6 +44,11 @@ public class PLapActivity extends AppCompatActivity {
     private TextView cheatCard;
 
     private PLapClientService pLapClientService;
+
+    //CoughtService
+    private Button bt_cought;
+    private TextView tV_cought;
+    private CoughtService coughtService;
 
 
     @Override
@@ -72,7 +81,37 @@ public class PLapActivity extends AppCompatActivity {
         cheatService.startListen();
         handleCheatPLab();
 
+        //CoughtService
+        bt_cought = findViewById(R.id.bt_caught);
+        tV_cought = findViewById(R.id.tV_Cought);
+        coughtService = CoughtServiceImpl.getInstance();
+        tV_cought.setVisibility(View.INVISIBLE);
+
     }
+    public void onClick_btCought(View view) {
+        if(coughtService.isCheatingPlap()){
+            tV_cought.setText("Cheater wurde erwischt!!");
+            tV_cought.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_cought.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tV_cought.setVisibility(View.INVISIBLE);
+                }
+            }, 5000);
+        }else {
+            tV_cought.setText("Cheater wurde NICHT erwischt!!");
+            tV_cought.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_cought.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tV_cought.setVisibility(View.INVISIBLE);
+                }
+            }, 5000);
+        }
+    }
+
 
     /**
      * On Click Listener for the pyramid cards.
