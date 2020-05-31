@@ -1,11 +1,16 @@
 package at.aau.server;
 
 import java.io.IOException;
+import java.util.List;
+
+import at.aau.server.database.Database;
+import at.aau.server.database.Table.User;
 import at.aau.server.service.GameService;
 import at.aau.server.service.PLapService;
 import at.aau.server.service.impl.GameServiceImpl;
 import at.aau.server.service.impl.PLapServiceImpl;
 import shared.model.Player;
+import shared.model.PlayerDTO;
 import shared.model.impl.PlayerDTOImpl;
 import shared.networking.dto.*;
 import shared.networking.kryonet.NetworkServerKryo;
@@ -25,13 +30,14 @@ public class GameServer extends NetworkServerKryo {
 
     private GameService gameService;
     private PLapService pLapService;
-
+    private Database db;
     private Connection connectionToMaster;
 
     GameServer() {
         Log.set(Log.LEVEL_DEBUG); // set log level for Minlog.
         gameService = GameServiceImpl.getInstance();
         pLapService = new PLapServiceImpl(this);
+        db= Database.getInstance();
         registerClasses();
     }
 
@@ -68,7 +74,22 @@ public class GameServer extends NetworkServerKryo {
                                 Log.error(ex.toString());
                                 // TODO: implement client error response and implement error handler in client.
                             }
-                        } else if (object instanceof BaseMessage) {
+                        }
+                        else if(object instanceof LeaderboardMessage){
+                            Log.info("LeaderboardMessage received!");
+                            try {
+                                List<PlayerDTO> playerDTOList=db.getLeaderboardAscending();
+                                System.out.println(playerDTOList.size());
+                                connection.sendTCP(new LeaderboardMessage(playerDTOList));
+                                System.out.println("Leaderboard-List sent to Client!");
+
+                            }
+                            catch (Exception e){
+                                e.printStackTrace();
+                                Log.error("Failed to query db!");
+                            }
+                        }
+                        else if (object instanceof BaseMessage) {
                             String errmsg = "Action not supported.";
                             Log.info(errmsg);
                             connection.sendTCP(new TextMessage(errmsg));
