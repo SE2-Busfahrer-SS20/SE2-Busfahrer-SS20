@@ -95,7 +95,7 @@ public class CoughtServiceImpl implements CoughtService {
             }
         }
         //If I cought Nobody, i get one point
-        if(cheated == false){
+        if(!cheated ){
             myScore = myself.getScore();
             myScore++;
 
