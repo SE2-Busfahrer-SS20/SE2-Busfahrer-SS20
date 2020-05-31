@@ -88,6 +88,10 @@ public class PLapActivity extends AppCompatActivity {
         tV_cought.setVisibility(View.INVISIBLE);
 
     }
+    public void onClick_btCought(View view) {
+
+    }
+
 
     /**
      * On Click Listener for the pyramid cards.
