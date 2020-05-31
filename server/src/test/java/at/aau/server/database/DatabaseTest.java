@@ -2,10 +2,14 @@ package at.aau.server.database;
 
 import at.aau.server.database.Table.User;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import shared.model.PlayerDTO;
+
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -73,8 +77,22 @@ public class DatabaseTest {
         db.emptyUserTable();
         assertEquals(0, db.getNumberOfAllUsers());
     }
+    @Test
     public void emptyScoreTest() throws SQLException {
         db.emptyScoreTable();
         assertEquals(0, db.getNumberOfAllScores());
+    }
+    @Test
+    public void getLeaderboardAscendingTest(){
+        try {
+            List<PlayerDTO> playerDTOList=db.getLeaderboardAscending();
+            System.out.println(playerDTOList.size());
+            for (int i=0;i<playerDTOList.size();i++){
+                System.out.println("Name: "+playerDTOList.get(i).getName()+" Score: "+playerDTOList.get(i).getScore());
+            }
+        }catch (Exception e){
+            Assert.fail();
+        }
+
     }
 }
