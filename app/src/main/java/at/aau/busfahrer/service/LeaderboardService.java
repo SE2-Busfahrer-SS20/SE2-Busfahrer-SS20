@@ -11,4 +11,5 @@ public interface LeaderboardService {
     void connect();
     String getHostname();
     void setHostname(String hostname);
+    void disconnect();
 }

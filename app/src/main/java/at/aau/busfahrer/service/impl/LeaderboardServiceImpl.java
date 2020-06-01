@@ -12,7 +12,7 @@ import java.util.List;
 
 public class LeaderboardServiceImpl implements LeaderboardService{
     private static LeaderboardService instance;
-    private final NetworkClient client;
+    private NetworkClient client;
     private List<String> ScoreList;
     private String hostname;
     private Callback<List<PlayerDTO>> playerCallback;
@@ -27,7 +27,6 @@ public class LeaderboardServiceImpl implements LeaderboardService{
     }
 
     private LeaderboardServiceImpl(){
-        client = NetworkClientKryo.getInstance();
         this.hostname = "127.0.0.1"; // set default HostName value.
     }
     public static LeaderboardService getInstance() {
@@ -38,6 +37,7 @@ public class LeaderboardServiceImpl implements LeaderboardService{
     }
     @Override
     public void connect(){
+        client = NetworkClientKryo.getInstance();
         Thread thread = new Thread(() -> {
             LeaderboardMessage lbm = new LeaderboardMessage();
             try {
@@ -56,7 +56,10 @@ public class LeaderboardServiceImpl implements LeaderboardService{
             playerCallback.callback(playerList);
         });
     }
-
+    @Override
+    public void disconnect(){
+        client.close();
+    }
     @Override
     public void registerPlayerListCallback(Callback<List<PlayerDTO>> callback) {
         this.playerCallback=callback;
