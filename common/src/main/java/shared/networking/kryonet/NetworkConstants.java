@@ -9,7 +9,7 @@ import shared.networking.dto.*;
 
 public class NetworkConstants {
 
-    public static final int TCP_PORT = 54555;
+    public static final int TCP_PORT = 53213;
     // public static final int UDP_PORT = 54777; //needs to stay commented, because on AAU server there is only one port available
 
     // List for registered dto classes. Add needed classes to the array.
