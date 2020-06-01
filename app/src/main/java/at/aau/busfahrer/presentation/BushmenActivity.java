@@ -358,21 +358,26 @@ public class BushmenActivity extends AppCompatActivity {
     }
 
     /**
-     * Android lifecycle methods, needed because Android SensorListener also listen if app is in the background.
+     * Android lifecycle methods, handling app state.
      */
     @Override
     protected void onPause() {
         super.onPause();
         cheatService.pauseListen();
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        cheatService.resumeListen();
-    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         cheatService.stopListen();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cheatService.resumeListen();
+    }
+
+
+
 }
