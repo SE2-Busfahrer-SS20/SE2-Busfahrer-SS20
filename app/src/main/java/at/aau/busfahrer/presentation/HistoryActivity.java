@@ -36,8 +36,7 @@ public class HistoryActivity extends AppCompatActivity {
             });
         });
         leaderboardService.updateScoreList();
-
-        String[] scoreItems= new String[]{"Philipp: 10","Larissa: 9","Markus: 8","Elias: 7","Volte: 6","Gery: 10"};
+        leaderboardService.connect();
 
         ListView listView= (ListView) decorView.findViewById(R.id.historyList);
 
