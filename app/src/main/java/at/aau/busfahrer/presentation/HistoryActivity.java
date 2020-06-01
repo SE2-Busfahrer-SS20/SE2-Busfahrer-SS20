@@ -1,5 +1,6 @@
 package at.aau.busfahrer.presentation;
 
+import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -27,11 +28,15 @@ public class HistoryActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
+
+
+
         leaderboardService=LeaderboardServiceImpl.getInstance();
+        leaderboardService.setHostname(sharedPreferences.getString("HostName","127.0.0.1"));
         leaderboardService.registerPlayerListCallback(playerList->{
 
             runOnUiThread(() -> {
-                System.out.println("\n\n\nCALLBACK FUNCTION!!!!");
                 updateList(playerList);
             });
         });
