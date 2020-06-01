@@ -26,7 +26,6 @@ import at.aau.busfahrer.service.impl.CoughtServiceImpl;
 import at.aau.busfahrer.service.impl.PLapClientServiceImpl;
 
 import shared.model.Card;
-import shared.model.CoughtServiceListener;
 
 
 public class PLapActivity extends AppCompatActivity {
