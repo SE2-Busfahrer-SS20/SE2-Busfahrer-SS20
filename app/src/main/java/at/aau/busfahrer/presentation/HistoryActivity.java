@@ -38,6 +38,15 @@ public class HistoryActivity extends AppCompatActivity {
         leaderboardService.updateScoreList();
         leaderboardService.connect();
 
+    }
+    private void updateList(List<PlayerDTO> playerList){
+
+        //String[] scoreItems= new String[]{"Philipp: 10","Larissa: 9","Markus: 8","Elias: 7","Volte: 6","Gery: 10"};
+        String[] scoreItems= new String[playerList.size()];
+        for(int i=0;i<scoreItems.length;i++){
+            scoreItems[i]=playerList.get(i).getName()+": "+playerList.get(i).getScore();
+        }
+        View decorView = getWindow().getDecorView();
         ListView listView= (ListView) decorView.findViewById(R.id.historyList);
 
         ArrayAdapter<String> listViewAdapter= new ArrayAdapter<String>(
@@ -47,5 +56,4 @@ public class HistoryActivity extends AppCompatActivity {
         );
         listView.setAdapter(listViewAdapter);
     }
-
 }
