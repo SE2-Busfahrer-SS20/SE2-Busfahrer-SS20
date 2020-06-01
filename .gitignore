@@ -4,6 +4,7 @@
 *.ap_
 *.aab
 *.html
+!about.html
 .DS_Store
 
 # Files for the ART/Dalvik VM

@@ -1,6 +1,7 @@
 package shared.networking.kryonet;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import shared.model.impl.PlayerDTOImpl;
 import shared.model.impl.PlayerImpl;
@@ -12,7 +13,7 @@ public class NetworkConstants {
     // public static final int UDP_PORT = 54777; //needs to stay commented, because on AAU server there is only one port available
 
     // List for registered dto classes. Add needed classes to the array.
-    public static final Class[] CLASS_LIST = {
+    public static final Class<?>[] CLASS_LIST = {
             BaseMessage.class,
             TextMessage.class,
             RegisterMessage.class,
