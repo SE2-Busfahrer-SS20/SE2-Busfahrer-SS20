@@ -86,10 +86,8 @@ public class DatabaseTest {
     public void getLeaderboardAscendingTest(){
         try {
             List<PlayerDTO> playerDTOList=db.getLeaderboardAscending();
-            System.out.println(playerDTOList.size());
-            for (int i=0;i<playerDTOList.size();i++){
-                System.out.println("Name: "+playerDTOList.get(i).getName()+" Score: "+playerDTOList.get(i).getScore());
-            }
+            Assert.assertEquals(5, playerDTOList.size());
+            Assert.assertNotEquals(playerDTOList.get(0).getScore(), playerDTOList.get(4).getScore());
         }catch (Exception e){
             Assert.fail();
         }
