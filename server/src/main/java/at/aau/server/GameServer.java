@@ -54,6 +54,7 @@ public class GameServer extends NetworkServerKryo {
         super.addListener(createBushmenListener());
         super.addListener(createGameListener());
         super.addListener(createGuessListener());
+        super.addListener(createLeaderboardListener());
     }
 
     private Listener createGuessListener() {
@@ -194,7 +195,25 @@ public class GameServer extends NetworkServerKryo {
             }
         };
     }
+    private Listener createLeaderboardListener() {
+        return new Listener() {
+            @Override
+            public void received(Connection connection, Object object) {
+                if(object instanceof LeaderboardMessage){
+                    Log.info("LeaderboardMessage received!");
+                    try {
+                        List<PlayerDTO> playerDTOList=db.getLeaderboardAscending();
+                        connection.sendTCP(new LeaderboardMessage(playerDTOList));
 
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                        Log.error("Failed to query db!");
+                    }
+                }
+            }
+        };
+    }
     private void checkGameStates() {
         new Thread(() -> {
             try {
