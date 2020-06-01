@@ -30,19 +30,20 @@ public class HistoryActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
 
-
-
         leaderboardService=LeaderboardServiceImpl.getInstance();
         leaderboardService.setHostname(sharedPreferences.getString("HostName","127.0.0.1"));
-        leaderboardService.registerPlayerListCallback(playerList->{
-
-            runOnUiThread(() -> {
-                updateList(playerList);
-            });
-        });
-        leaderboardService.updateScoreList();
+        leaderboardService.registerPlayerListCallback(playerList-> runOnUiThread(() -> {
+            updateList(playerList);
+        }));
         leaderboardService.connect();
+        leaderboardService.updateScoreList();
 
+
+    }
+    @Override
+    public void onBackPressed() {
+        leaderboardService.disconnect();
+        super.onBackPressed();
     }
     private void updateList(List<PlayerDTO> playerList){
 
@@ -52,9 +53,9 @@ public class HistoryActivity extends AppCompatActivity {
             scoreItems[i]=playerList.get(i).getName()+": "+playerList.get(i).getScore();
         }
         View decorView = getWindow().getDecorView();
-        ListView listView= (ListView) decorView.findViewById(R.id.historyList);
+        ListView listView= decorView.findViewById(R.id.historyList);
 
-        ArrayAdapter<String> listViewAdapter= new ArrayAdapter<String>(
+        ArrayAdapter<String> listViewAdapter= new ArrayAdapter<>(
                 getApplication(),
                 android.R.layout.simple_list_item_1,
                 scoreItems
