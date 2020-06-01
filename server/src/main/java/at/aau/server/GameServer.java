@@ -123,21 +123,6 @@ public class GameServer extends NetworkServerKryo {
                         gameService.startGame();
 
                     }
-                    /*else if(object instanceof LeaderboardMessage){
-                        Log.info("LeaderboardMessage received!");
-                        try {
-                            List<PlayerDTO> playerDTOList=db.getLeaderboardAscending();
-                            System.out.println(playerDTOList.size());
-                            connection.sendTCP(new LeaderboardMessage(playerDTOList));
-                            System.out.println("Leaderboard-List sent to Client!");
-
-                        }
-                        catch (Exception e){
-                            e.printStackTrace();
-                            Log.error("Failed to query db!");
-                        }
-                    }*/
-
                     //Guess-Rounds
                     else if(object instanceof PlayedMessage){
                         PlayedMessage pM = (PlayedMessage) object;
