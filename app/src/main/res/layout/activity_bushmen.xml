@@ -8,10 +8,9 @@
 
 
     <TextView
-        android:id="@+id/headerStartServer"
+        android:id="@+id/headerBushmen"
         android:layout_width="0dp"
         android:layout_height="45dp"
-        android:text="Oh dear!! You have to drive with the bus :)"
         android:theme="@style/mainMenuHeadTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -31,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.778"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerStartServer"
+        app:layout_constraintTop_toBottomOf="@+id/headerBushmen"
         app:layout_constraintVertical_bias="0.765" />
 
     <TextView
@@ -47,7 +46,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.115"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerStartServer"
+        app:layout_constraintTop_toBottomOf="@+id/headerBushmen"
         app:layout_constraintVertical_bias="0.718" />
 
     <TextView
@@ -78,7 +77,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tV_card6"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerStartServer"
+        app:layout_constraintTop_toBottomOf="@+id/headerBushmen"
         app:layout_constraintVertical_bias="0.455" />
 
     <TextView
@@ -110,7 +109,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.113"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerStartServer"
+        app:layout_constraintTop_toBottomOf="@+id/headerBushmen"
         app:layout_constraintVertical_bias="0.094" />
 
     <TextView

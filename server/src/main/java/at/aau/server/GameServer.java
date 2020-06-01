@@ -1,12 +1,16 @@
 package at.aau.server;
 
 import java.io.IOException;
+import java.util.List;
 
+import at.aau.server.database.Database;
+import at.aau.server.database.table.User;
 import at.aau.server.service.GameService;
 import at.aau.server.service.PLapService;
 import at.aau.server.service.impl.GameServiceImpl;
 import at.aau.server.service.impl.PLapServiceImpl;
 import shared.model.Player;
+import shared.model.PlayerDTO;
 import shared.model.impl.PlayerDTOImpl;
 import shared.networking.dto.*;
 import shared.networking.kryonet.NetworkServerKryo;
@@ -24,6 +28,7 @@ public class GameServer extends NetworkServerKryo {
     private static final String RESPONSE_TEST = "response test";
     private static final int CONN_RETRY = 5;
 
+    private Database db;
     private final GameService gameService;
     private final PLapService pLapService;
 
@@ -33,6 +38,7 @@ public class GameServer extends NetworkServerKryo {
         Log.set(Log.LEVEL_DEBUG); // set log level for Minlog.
         gameService = GameServiceImpl.getInstance();
         pLapService = new PLapServiceImpl(this);
+        db= Database.getInstance();
         registerClasses();
     }
 
@@ -48,6 +54,7 @@ public class GameServer extends NetworkServerKryo {
         super.addListener(createBushmenListener());
         super.addListener(createGameListener());
         super.addListener(createGuessListener());
+        super.addListener(createLeaderboardListener());
     }
 
     private Listener createGuessListener() {
@@ -188,7 +195,25 @@ public class GameServer extends NetworkServerKryo {
             }
         };
     }
+    private Listener createLeaderboardListener() {
+        return new Listener() {
+            @Override
+            public void received(Connection connection, Object object) {
+                if(object instanceof LeaderboardMessage){
+                    Log.info("LeaderboardMessage received!");
+                    try {
+                        List<PlayerDTO> playerDTOList=db.getLeaderboardAscending();
+                        connection.sendTCP(new LeaderboardMessage(playerDTOList));
 
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                        Log.error("Failed to query db!");
+                    }
+                }
+            }
+        };
+    }
     private void checkGameStates() {
         new Thread(() -> {
             try {
@@ -212,7 +237,6 @@ public class GameServer extends NetworkServerKryo {
             }
         }).start();
     }
-
     private void registerClasses() {
         for (Class<?> c : CLASS_LIST)
             registerClass(c);

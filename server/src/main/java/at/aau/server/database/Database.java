@@ -13,6 +13,9 @@ import java.util.List;
 import at.aau.server.database.table.Score;
 import at.aau.server.database.table.User;
 import com.esotericsoftware.minlog.Log;
+import shared.model.Player;
+import shared.model.PlayerDTO;
+import shared.model.impl.PlayerDTOImpl;
 
 public class Database {
 
@@ -207,6 +210,20 @@ public class Database {
             return res.getInt("rowcount") ;
         }
         throw new SQLException("Could not query number of  all Users!");
+    }
+    public List getLeaderboardAscending()throws SQLException{
+        List<PlayerDTO> playerlist=new ArrayList<PlayerDTO>();
+
+        String sql= "select users.name, scores.score \n" +
+                    "from users\n" +
+                    "inner join scores on users.id=scores.userid\n" +
+                    "order by scores.score ASC;";
+        ResultSet res= runPreparedStatementReturnList(sql, null);
+
+        while (res.next()){
+            playerlist.add(new PlayerDTOImpl(res.getString("name"), res.getInt("score"), false));
+        }
+        return playerlist;
     }
     public void emptyUserTable() throws SQLException {
         String sql="DELETE FROM users;";

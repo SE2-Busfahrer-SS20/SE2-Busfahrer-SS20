@@ -35,7 +35,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client.getKryo().register(c);
     }
 
-
+    @Override
+    public void close(){
+        client.close();
+    }
     @Override
     public void connect(String host) throws IOException {
         client.start();
@@ -124,7 +127,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                         setTextViewVisible();
                     }
                 }
-
+                if(object instanceof LeaderboardMessage) {
+                    Log.debug("\n=====================\nLeaderboardMessage received");
+                    callbackMap.get(LeaderboardMessage.class).callback((LeaderboardMessage)object);
+                }
             }
         });
     }
@@ -154,13 +160,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         this.coughtServiceListener = coughtServiceListener;
     }
     public void setTextViewVisible(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                coughtServiceListener.coughtTetxViewListener();
-
-            }
-        }).start();
+        new Thread(() -> coughtServiceListener.coughtTetxViewListener()).start();
     }
 
 
