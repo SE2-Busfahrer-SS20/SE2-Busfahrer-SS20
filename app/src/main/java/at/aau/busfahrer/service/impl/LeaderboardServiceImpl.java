@@ -5,9 +5,7 @@ import com.esotericsoftware.minlog.Log;
 import shared.model.PlayerDTO;
 import shared.networking.Callback;
 import shared.networking.NetworkClient;
-import shared.networking.dto.CheatedMessage;
 import shared.networking.dto.LeaderboardMessage;
-import shared.networking.dto.RegisterMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 
 import java.util.List;
@@ -16,12 +14,21 @@ public class LeaderboardServiceImpl implements LeaderboardService{
     private static LeaderboardService instance;
     private final NetworkClient client;
     private List<String> ScoreList;
-    private String host;
+    private String hostname;
     private Callback<List<PlayerDTO>> playerCallback;
+
+    @Override
+    public String getHostname() {
+        return hostname;
+    }
+    @Override
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
 
     private LeaderboardServiceImpl(){
         client = NetworkClientKryo.getInstance();
-        this.host = "192.168.0.105"; // set default HostName value.
+        this.hostname = "127.0.0.1"; // set default HostName value.
     }
     public static LeaderboardService getInstance() {
         if (instance == null) {
@@ -34,7 +41,7 @@ public class LeaderboardServiceImpl implements LeaderboardService{
         Thread thread = new Thread(() -> {
             LeaderboardMessage lbm = new LeaderboardMessage();
             try {
-                client.connect(host);
+                client.connect(hostname);
                 client.sendMessage(lbm);
             } catch (Exception e) {
                 Log.error(e.toString());
@@ -44,7 +51,6 @@ public class LeaderboardServiceImpl implements LeaderboardService{
     }
     @Override
     public void updateScoreList(){
-        System.out.println("updatescorelist");
         this.client.registerCallback(LeaderboardMessage.class, msg ->{
             List<PlayerDTO> playerList =((LeaderboardMessage)msg).getPlayerList();
             playerCallback.callback(playerList);
