@@ -61,21 +61,7 @@ public class GameServer extends NetworkServerKryo {
                 else {
 
                     if (!gameService.gameExists()) {
-
-                        if (object instanceof RegisterMessage) {
-                            Log.debug("Received Register Message");
-                            try {
-                                RegisterMessage msg = (RegisterMessage) object;
-                                gameService.createGame(msg.getPlayerName(), msg.getMACAddress(), connection);  //outsourced to GameService
-                                checkGameStates();
-                                connectionToMaster = connection;
-
-                            } catch (Exception ex) {
-                                Log.error(ex.toString());
-                                // TODO: implement client error response and implement error handler in client.
-                            }
-                        }
-                        else if(object instanceof LeaderboardMessage){
+                        if(object instanceof LeaderboardMessage){
                             Log.info("LeaderboardMessage received!");
                             try {
                                 List<PlayerDTO> playerDTOList=db.getLeaderboardAscending();
@@ -89,6 +75,20 @@ public class GameServer extends NetworkServerKryo {
                                 Log.error("Failed to query db!");
                             }
                         }
+                        else if (object instanceof RegisterMessage) {
+                            Log.debug("Received Register Message");
+                            try {
+                                RegisterMessage msg = (RegisterMessage) object;
+                                gameService.createGame(msg.getPlayerName(), msg.getMACAddress(), connection);  //outsourced to GameService
+                                checkGameStates();
+                                connectionToMaster = connection;
+
+                            } catch (Exception ex) {
+                                Log.error(ex.toString());
+                                // TODO: implement client error response and implement error handler in client.
+                            }
+                        }
+
                         else if (object instanceof BaseMessage) {
                             String errmsg = "Action not supported.";
                             Log.info(errmsg);
@@ -123,7 +123,20 @@ public class GameServer extends NetworkServerKryo {
                         gameService.startGame();
 
                     }
+                    /*else if(object instanceof LeaderboardMessage){
+                        Log.info("LeaderboardMessage received!");
+                        try {
+                            List<PlayerDTO> playerDTOList=db.getLeaderboardAscending();
+                            System.out.println(playerDTOList.size());
+                            connection.sendTCP(new LeaderboardMessage(playerDTOList));
+                            System.out.println("Leaderboard-List sent to Client!");
 
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                            Log.error("Failed to query db!");
+                        }
+                    }*/
 
                     //Guess-Rounds
                     else if(object instanceof PlayedMessage){

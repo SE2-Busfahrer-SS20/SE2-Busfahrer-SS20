@@ -126,6 +126,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 }
                 if(object instanceof LeaderboardMessage) {
                     Log.debug("\n=====================\nLeaderboardMessage received");
+                    callbackMap.get(LeaderboardMessage.class).callback((LeaderboardMessage)object);
                 }
             }
         });

@@ -5,15 +5,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.viewpager.widget.ViewPager;
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.service.LeaderboardService;
 import at.aau.busfahrer.service.impl.LeaderboardServiceImpl;
+import shared.model.PlayerDTO;
+
+import java.util.List;
 
 
 public class HistoryActivity extends AppCompatActivity {
 
     private LeaderboardService leaderboardService;
+    private List<PlayerDTO> playerList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +28,13 @@ public class HistoryActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
 
         leaderboardService=LeaderboardServiceImpl.getInstance();
+        leaderboardService.registerPlayerListCallback(playerList->{
+
+            runOnUiThread(() -> {
+                System.out.println("\n\n\nCALLBACK FUNCTION!!!!");
+                updateList(playerList);
+            });
+        });
         leaderboardService.updateScoreList();
 
         String[] scoreItems= new String[]{"Philipp: 10","Larissa: 9","Markus: 8","Elias: 7","Volte: 6","Gery: 10"};
