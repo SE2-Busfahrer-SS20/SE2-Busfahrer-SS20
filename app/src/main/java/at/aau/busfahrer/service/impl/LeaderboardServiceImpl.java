@@ -49,28 +49,6 @@ public class LeaderboardServiceImpl implements LeaderboardService{
             List<PlayerDTO> playerList =((LeaderboardMessage)msg).getPlayerList();
             playerCallback.callback(playerList);
         });
-        /*Thread startThread = new Thread(() -> {
-            try {
-                System.out.println("Leaderboard was triggered");
-                this.client.sendMessage(new LeaderboardMessage());
-            } catch (Exception e) {
-                System.out.println("Leaderboardmessage Fail!");
-            }
-        });
-        startThread.start();*/
-
-/*        Thread thread = new Thread(() -> {
-            LeaderboardMessage lbm = new LeaderboardMessage();
-
-            try {
-                client.connect(host);
-                client.sendMessage(lbm);
-            } catch (Exception e) {
-                Log.error(e.toString());
-            }
-        });
-        thread.start();
-        System.out.println("Client LeaderboardMessage sent!");*/
     }
 
     @Override
