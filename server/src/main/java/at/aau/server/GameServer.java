@@ -65,9 +65,7 @@ public class GameServer extends NetworkServerKryo {
                             Log.info("LeaderboardMessage received!");
                             try {
                                 List<PlayerDTO> playerDTOList=db.getLeaderboardAscending();
-                                System.out.println(playerDTOList.size());
                                 connection.sendTCP(new LeaderboardMessage(playerDTOList));
-                                System.out.println("Leaderboard-List sent to Client!");
 
                             }
                             catch (Exception e){

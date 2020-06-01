@@ -123,7 +123,6 @@ public class GameServiceImpl implements GameService {
 
         //Add Player to Playerlist in Wait UI
         //NewPlayerMessage npm = new NewPlayerMessage(player.getName());
-        System.out.println("\ntest\n"+PlayerDTOImpl.getDTOFromPlayer(player).getName()+"\n\n");
         NewPlayerMessage npm = new NewPlayerMessage(PlayerDTOImpl.getDTOFromPlayer(player));
         connection.sendTCP(npm);
 
