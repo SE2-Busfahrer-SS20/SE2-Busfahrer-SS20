@@ -1,7 +1,7 @@
 package at.aau.busfahrer.presentation;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,18 +14,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.List;
-
 import at.aau.busfahrer.R;
-import at.aau.busfahrer.service.GamePlayService;
 import shared.model.Card;
-import shared.model.impl.CardImpl;
-import shared.model.impl.DeckImpl;
-import shared.model.impl.PlayersStorageImpl;
 import shared.networking.NetworkClient;
 import shared.networking.dto.BushmenCardMessage;
 import shared.networking.dto.BushmenMessage;
 import shared.networking.kryonet.NetworkClientKryo;
+
+@SuppressWarnings("unused")
 
 
 public class BushmenActivity extends AppCompatActivity {
@@ -34,14 +30,9 @@ public class BushmenActivity extends AppCompatActivity {
     private Card[] cards;
 
     private final int[] bushmenCards = {R.id.tV_card1, R.id.tV_card2, R.id.tV_card3, R.id.tV_card4, R.id.tV_card5, R.id.tV_card6, R.id.tV_card7};
-
-    private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
-
+    
     private NetworkClient networkClient = NetworkClientKryo.getInstance();
-
-    //private List<CardImpl> cards;
-
-    private GamePlayService gamePlayService;
+    
 
     TextView TxtPunkte;
 
@@ -57,13 +48,13 @@ public class BushmenActivity extends AppCompatActivity {
         networkClient.registerCallback(BushmenMessage.class, msg -> {
             BushmenMessage bushmenMessage = (BushmenMessage) msg;
             this.cards = bushmenMessage.getCards();
-            System.out.println(bushmenMessage.getCards().length);
+            Log.i("Bushmen","BushmenCards"+bushmenMessage.getCards().length);
         });
 
         networkClient.registerCallback(BushmenCardMessage.class, msg ->
                 runOnUiThread(() -> {
                     BushmenCardMessage bushmenCardMessage = (BushmenCardMessage) msg;
-                    System.out.println(bushmenCardMessage.getCardId() + "CardID recieved");
+                    Log.i("Bushmen","BushmenCards recieved"+bushmenCardMessage.getCardId());
                     turnCardRecieved(bushmenCardMessage.getCardId(), bushmenCardMessage.getCard());
                 }));
 
@@ -75,27 +66,36 @@ public class BushmenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bushmen);
-
+        hideAppTitleBar();
 
         TxtPunkte = findViewById(R.id.punkte);
 
 
         //Kommt man zum Busfahrer startet man mit 10 Punkten
         PunkteAnzahlBusfahrer += 10;
-        UpdateAnzeige();
+        updateAnzeige();
 
         isLooser = true;
         // set looser variable. Value will be set in PLapFinished Activity.
         isLooser = getIntent().getBooleanExtra("LOST_GAME", false);
 
         // Neue Initialisieren
-        Reset_Game();
+        resetGame();
 
-        //Log.i("BushmenActiviy",)
+        
+        // Für den Zuschauer wird angezeigt, dass er Zuschauer ist
+
+        TextView textView= findViewById(R.id.headerBushmen);
+
+        if(isLooser){
+            textView.setText("Oh dear! You have to drive with the bus");
+        }else {
+            textView.setText("Your can only watch!");
+        }
     }
 
 
-    private void UpdateAnzeige() {
+    private void updateAnzeige() {
         TxtPunkte.setText(String.valueOf(PunkteAnzahlBusfahrer));
     }
 
@@ -133,8 +133,7 @@ public class BushmenActivity extends AppCompatActivity {
 
         Thread startThread = new Thread(() -> {
             try {
-                // Log.i("Bushmen Service", "BushmenCard turned" + cardId + " " + cards[cardId]);
-                System.out.println("Card turned" + cardId);
+              Log.i("Bushmen","Card turned"+cardId);
                 this.networkClient.sendMessage(new BushmenCardMessage(cardId, cards[cardId]));
             } catch (Exception e) {
                 Log.e("Error in BushmenCard", e.toString(), e);
@@ -166,57 +165,51 @@ public class BushmenActivity extends AppCompatActivity {
         // Prüfung
         // Wenn Bube, König, Dame, Ass Dann Restart
         if (c.getRank() == 0 || c.getRank() == 10 || c.getRank() == 11 || c.getRank() == 12) {
-            tV.setTextColor(Color.parseColor("#00C800"));//Green
 
             // Karten für Eingabe Sperren
-            Enable_Cards((TextView) findViewById(R.id.tV_card1), false);
-            Enable_Cards((TextView) findViewById(R.id.tV_card2), false);
-            Enable_Cards((TextView) findViewById(R.id.tV_card3), false);
-            Enable_Cards((TextView) findViewById(R.id.tV_card4), false);
-            Enable_Cards((TextView) findViewById(R.id.tV_card5), false);
-            Enable_Cards((TextView) findViewById(R.id.tV_card6), false);
-            Enable_Cards((TextView) findViewById(R.id.tV_card7), false);
+            enableCards((TextView) findViewById(R.id.tV_card1), false);
+            enableCards((TextView) findViewById(R.id.tV_card2), false);
+            enableCards((TextView) findViewById(R.id.tV_card3), false);
+            enableCards((TextView) findViewById(R.id.tV_card4), false);
+            enableCards((TextView) findViewById(R.id.tV_card5), false);
+            enableCards((TextView) findViewById(R.id.tV_card6), false);
+            enableCards((TextView) findViewById(R.id.tV_card7), false);
 
+            AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this);
+            dialog.setTitle("Verloren");
+            dialog.setMessage("Busfahrerrunde beginnt von vorne");
+            final Dialog dialog1 = dialog.create();
+            dialog1.show();
 
             Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+            handler.postDelayed(() -> {
 
-                    // Erwischt man eine Bildkarte kommt Text verloren und neu beginnen
+                dialog1.dismiss();
 
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this);
-                    dialog.setTitle("Verloren");
-                    dialog.setMessage("Busfahrerrunde beginnt von vorne");
-                    dialog.show();
+                // Neu Starten
+                resetGame();
+            }, 2000);
 
-                    // Neu Starten
-                    Reset_Game();
-                }
-            }, 1000);
 
-            // Update der Punkte wenn er Bildkarte erwischt -5, andere Karten +3 Punkte
+            // Update der Punkte wenn er Bildkarte erwischt +3, andere Karten -4 Punkte
 
-            PunkteAnzahlBusfahrer -= 5;
-            UpdateAnzeige();
-        } else {
             PunkteAnzahlBusfahrer += 3;
-            UpdateAnzeige();
+            updateAnzeige();
+        } else {
+            PunkteAnzahlBusfahrer -= 4;
+            updateAnzeige();
             KartenCounter++;
 
-            if (KartenCounter == 3) {
+            if (KartenCounter == 4) {
 
                 AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
                 dialog.setTitle("Gewonnen");
                 dialog.setMessage("Sie sind der Gewinner");
                 dialog.setCancelable(false);
-                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Zurück zum Hauptmenü nach Sieg
-                        Intent intent = new Intent(BushmenActivity.this, at.aau.busfahrer.presentation.MainMenuActivity.class);
-                        startActivity(intent);
-                    }
+                dialog.setPositiveButton("OK", (dialog12, which) -> {
+                    //Zurück zum Hauptmenü nach Sieg
+                    Intent intent = new Intent(BushmenActivity.this, MainMenuActivity.class);
+                    startActivity(intent);
                 });
 
                 AlertDialog alert = dialog.create();
@@ -228,43 +221,36 @@ public class BushmenActivity extends AppCompatActivity {
 
     }
 
-    private void Set_Card_Backsite(TextView tV) {
+    private void setCardBacksite(TextView tV) {
         tV.setText("\uD83C\uDCA0");//set  card to back side
         tV.setTextColor(Color.parseColor("#000000"));//black
     }
 
-    private void Enable_Cards(TextView tv, boolean enable) {
+    private void enableCards(TextView tv, boolean enable) {
         tv.setEnabled(enable);
     }
 
-    private void Reset_Game() {
+    private void resetGame() {
         // Karten Zurücksetzen
-        Set_Card_Backsite((TextView) findViewById(R.id.tV_card1));
-        Set_Card_Backsite((TextView) findViewById(R.id.tV_card2));
-        Set_Card_Backsite((TextView) findViewById(R.id.tV_card3));
-        Set_Card_Backsite((TextView) findViewById(R.id.tV_card4));
-        Set_Card_Backsite((TextView) findViewById(R.id.tV_card5));
-        Set_Card_Backsite((TextView) findViewById(R.id.tV_card6));
-        Set_Card_Backsite((TextView) findViewById(R.id.tV_card7));
+        setCardBacksite((TextView) findViewById(R.id.tV_card1));
+        setCardBacksite((TextView) findViewById(R.id.tV_card2));
+        setCardBacksite((TextView) findViewById(R.id.tV_card3));
+        setCardBacksite((TextView) findViewById(R.id.tV_card4));
+        setCardBacksite((TextView) findViewById(R.id.tV_card5));
+        setCardBacksite((TextView) findViewById(R.id.tV_card6));
+        setCardBacksite((TextView) findViewById(R.id.tV_card7));
 
         // Karten für Eingabe Freigeben
-        Enable_Cards((TextView) findViewById(R.id.tV_card1), isLooser);
-        Enable_Cards((TextView) findViewById(R.id.tV_card2), isLooser);
-        Enable_Cards((TextView) findViewById(R.id.tV_card3), isLooser);
-        Enable_Cards((TextView) findViewById(R.id.tV_card4), isLooser);
-        Enable_Cards((TextView) findViewById(R.id.tV_card5), isLooser);
-        Enable_Cards((TextView) findViewById(R.id.tV_card6), isLooser);
-        Enable_Cards((TextView) findViewById(R.id.tV_card7), isLooser);
+        enableCards((TextView) findViewById(R.id.tV_card1), isLooser);
+        enableCards((TextView) findViewById(R.id.tV_card2), isLooser);
+        enableCards((TextView) findViewById(R.id.tV_card3), isLooser);
+        enableCards((TextView) findViewById(R.id.tV_card4), isLooser);
+        enableCards((TextView) findViewById(R.id.tV_card5), isLooser);
+        enableCards((TextView) findViewById(R.id.tV_card6), isLooser);
+        enableCards((TextView) findViewById(R.id.tV_card7), isLooser);
 
 
         // Karten NEU Austeilen
-
-        // Neues Deck erstellen
-        //DeckImpl t = new DeckImpl();
-        //t.refill(); // Neu Mischen
-
-        // karten neu Auflegen
-        //cards= t.getCards();
 
 
         //Kartenzähler zurückgesetzt

@@ -3,18 +3,19 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+       // classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
     }
 }
 plugins {
     id 'java'
-    id 'org.sonarqube'
     id 'jacoco'
+//    id 'com.github.johnrengelman.shadow'
 }
+/*
 jacoco {
     toolVersion = "0.8.5"
     reportsDir = file("$buildDir/customJacocoReportDir")
-}
+}*/
 
 jacocoTestReport {
     reports {
@@ -28,20 +29,18 @@ jar {
                 'Main-Class': 'at.aau.server.Main'
         )
     }
+    from {
+        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
-apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'java'
+
 sourceCompatibility = JavaVersion.VERSION_1_8
 sourceSets.main.java.srcDirs = [ "src/main/java/" ]
 sourceSets.test.java.srcDirs = [ "src/test/java/" ]
 
-sonarqube {
-    properties {
-        property "sonar.projectKey", "SE2-Busfahrer-SS20_SE2-Busfahrer-SS20"
-    }
-}
-project.tasks["sonarqube"].dependsOn "jacocoTestReport"
+
+// project.tasks["sonarqube"].dependsOn "jacocoTestReport"
 
 dependencies {
     implementation project(":common")

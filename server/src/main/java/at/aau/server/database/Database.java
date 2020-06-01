@@ -10,8 +10,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.aau.server.database.Table.Score;
-import at.aau.server.database.Table.User;
+import at.aau.server.database.table.Score;
+import at.aau.server.database.table.User;
 import com.esotericsoftware.minlog.Log;
 import shared.model.Player;
 import shared.model.PlayerDTO;

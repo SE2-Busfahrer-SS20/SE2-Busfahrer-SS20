@@ -1,6 +1,6 @@
 package at.aau.server.database;
 
-import at.aau.server.database.Table.User;
+import at.aau.server.database.table.User;
 
 import org.junit.Assert;
 import org.junit.Before;

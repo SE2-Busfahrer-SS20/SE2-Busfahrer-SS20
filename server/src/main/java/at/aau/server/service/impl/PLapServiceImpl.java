@@ -98,6 +98,7 @@ public class PLapServiceImpl implements PLapService {
 
     private void addListener() {
         server.addListener(new Listener() {
+            @Override
             public void received(Connection connection, Object object) {
                 // check if game exists.
                 if (!gameService.gameExists()) {
