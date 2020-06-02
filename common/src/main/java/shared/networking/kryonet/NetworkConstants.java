@@ -1,8 +1,6 @@
 package shared.networking.kryonet;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import shared.model.impl.PlayerDTOImpl;
 import shared.model.impl.PlayerImpl;
 import shared.networking.dto.*;

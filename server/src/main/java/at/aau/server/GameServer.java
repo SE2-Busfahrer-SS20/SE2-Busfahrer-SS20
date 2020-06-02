@@ -204,11 +204,9 @@ public class GameServer extends NetworkServerKryo {
                     try {
                         List<PlayerDTO> playerDTOList=db.getLeaderboardAscending();
                         connection.sendTCP(new LeaderboardMessage(playerDTOList));
-
                     }
                     catch (Exception e){
-                        e.printStackTrace();
-                        Log.error("Failed to query db!");
+                        Log.error("Failed to query db!", e);
                     }
                 }
             }
