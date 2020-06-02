@@ -161,7 +161,7 @@ public class GameServer extends NetworkServerKryo {
                     //Set the new Score of the one how Cought
                     gameService.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
                     //Update the list by every client
-                    CoughtMessage updateClients = new CoughtMessage(coughtMessage.getIndexCheater(), coughtMessage.getScoreCought(), coughtMessage.getScoreCheater(), coughtMessage.getScoreCought(), coughtMessage.isCheated());
+                    CoughtMessage updateClients = new CoughtMessage(coughtMessage.getIndexCheater(), coughtMessage.getIndexCought(), coughtMessage.getScoreCheater(), coughtMessage.getScoreCought(), coughtMessage.isCheated());
                     for (int i = 0; i < gameService.getPlayerList().size(); i++) {
                         gameService.getPlayerList().get(i).getConnection().sendTCP(updateClients);
                     }
