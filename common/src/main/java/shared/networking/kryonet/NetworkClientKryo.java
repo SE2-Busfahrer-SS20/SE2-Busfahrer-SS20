@@ -73,8 +73,18 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
                 if(object instanceof NewPlayerMessage){
                     Log.debug("New Player in the Game");
+                    boolean alreadyExists=false;
                     //playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
-                    playersStorage.addPlayer(((NewPlayerMessage)object).getPlayer());
+                    for(int i=0;i<playersStorage.getPlayerList().size();i++){
+                        if(playersStorage.getPlayerList().get(i).getName() == ((NewPlayerMessage)object).getPlayer().getName()){
+                            alreadyExists=true;
+                        }
+                    }
+                    if(!alreadyExists){
+                        playersStorage.addPlayer(((NewPlayerMessage)object).getPlayer());
+                    }
+
+
                 }
 
                 if(object instanceof StartGameMessage){
