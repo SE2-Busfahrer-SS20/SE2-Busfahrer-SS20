@@ -191,7 +191,7 @@ public class BushmenActivity extends AppCompatActivity {
             enableCards((TextView) findViewById(R.id.tV_card6), false);
             enableCards((TextView) findViewById(R.id.tV_card7), false);
 
-            AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
             dialog.setTitle("Verloren");
             dialog.setMessage("Busfahrerrunde beginnt von vorne");
             final Dialog dialog1 = dialog.create();
@@ -218,7 +218,7 @@ public class BushmenActivity extends AppCompatActivity {
 
             if (KartenCounter == 4) {
 
-                AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this);
                 dialog.setTitle("Gewonnen");
                 dialog.setMessage("Sie sind der Gewinner");
                 dialog.setCancelable(false);

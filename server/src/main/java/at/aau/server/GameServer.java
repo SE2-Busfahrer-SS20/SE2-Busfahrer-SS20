@@ -2,9 +2,7 @@ package at.aau.server;
 
 import java.io.IOException;
 import java.util.List;
-
 import at.aau.server.database.Database;
-import at.aau.server.database.table.User;
 import at.aau.server.service.GameService;
 import at.aau.server.service.PLapService;
 import at.aau.server.service.impl.GameServiceImpl;
