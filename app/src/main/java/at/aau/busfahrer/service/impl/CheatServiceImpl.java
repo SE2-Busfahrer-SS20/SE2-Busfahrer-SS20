@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CheatServiceImpl implements CheatService {
 
-    private final NetworkClient client = NetworkClientKryo.getInstance();
+    private  NetworkClient client;
     private static final String TAG = "CheatServiceImpl";
     private static final int TYPE_FAIR = 0;
 
@@ -186,6 +186,7 @@ public class CheatServiceImpl implements CheatService {
 
     // network call for player cheated in game
     public void sendMsgCheated(final boolean cheated, final long timeStamp, final int cheatType) {
+        client = NetworkClientKryo.getInstance();
         Log.i(TAG, "Sending CheatMessage to Server");
         Thread thread = new Thread(() -> {
             CheatedMessage cM = new CheatedMessage(this.playerId, cheated, timeStamp, cheatType);

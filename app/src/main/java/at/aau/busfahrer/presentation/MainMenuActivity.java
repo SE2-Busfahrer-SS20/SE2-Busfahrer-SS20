@@ -1,32 +1,21 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
-import at.aau.busfahrer.service.GamePlayService;
-import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.esotericsoftware.minlog.Log;
-
-import java.net.NetworkInterface;
-import java.util.Collections;
-import java.util.List;
 
 public class MainMenuActivity extends AppCompatActivity {
-    GamePlayService gamesvc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_main_menu);
-        gamesvc = GamePlayServiceImpl.getInstance();
     }
 
       // click listener about button
@@ -71,19 +60,9 @@ public class MainMenuActivity extends AppCompatActivity {
     }
     // click listener PlayerEdit button
     public void onClickPlayGame(View v){
-
-        //SEND REGISTERMESSAGE TO SERVER
-        SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
-        String name=sharedPreferences.getString("Player","name");
-        String hostname=sharedPreferences.getString("HostName","127.0.0.1");
-        gamesvc.setHostName(hostname);
-        gamesvc.playGame(name, getMacAddr());
-
         Intent i = new Intent(MainMenuActivity.this, SelectCheatsActivity.class);
         startActivity(i);
-
     }
-
 
     // remove status bar on top, fullscreen mode.
     private void hideAppTitleBar(){
@@ -94,33 +73,6 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
 
-    private  String getMacAddr() {
-        //This code was found on StackOverFlow:
-            //https://stackoverflow.com/questions/33159224/getting-mac-address-in-android-6-0
-        try {
-            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface nif : all) {
-                if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
 
-                byte[] macBytes = nif.getHardwareAddress();
-                if (macBytes == null) {
-                    return "";
-                }
-
-                StringBuilder res1 = new StringBuilder();
-                for (byte b : macBytes) {
-                    res1.append(Integer.toHexString(b & 0xFF) + ":");
-                }
-
-                if (res1.length() > 0) {
-                    res1.deleteCharAt(res1.length() - 1);
-                }
-                return res1.toString();
-            }
-        } catch (Exception e) {
-            Log.error(e.toString());
-        }
-        return "";
-    }
 
 }
