@@ -274,7 +274,7 @@ public class BushmenActivity extends AppCompatActivity {
     // removes android status bar on top, for fullscreen
     private void hideAppTitleBar() {
         //Remove title bar
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+       // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
