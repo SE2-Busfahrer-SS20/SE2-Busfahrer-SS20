@@ -20,8 +20,6 @@ public class HelpFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_help, container, false);
-
-        return view;
+        return inflater.inflate(R.layout.fragment_help, container, false);
     }
 }

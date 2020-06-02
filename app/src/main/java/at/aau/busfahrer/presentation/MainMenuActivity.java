@@ -74,7 +74,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
         //SEND REGISTERMESSAGE TO SERVER
         SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
         String name=sharedPreferences.getString("Player","name");
         String hostname=sharedPreferences.getString("HostName","127.0.0.1");
         gamesvc.setHostName(hostname);

@@ -23,7 +23,7 @@ public interface GameService {
      * @return boolean status,  false in case of a full List.
      */
 
-    Player addPlayer(String name, String MACAdress, Connection connection);
+    Player addPlayer(String name, String macadress, Connection connection);
 
 
     /**
@@ -45,8 +45,6 @@ public interface GameService {
     void createGame();
     void createGame(String masterName, String MACAddress, Connection connection) throws PlayerLimitExceededException;
     boolean gameExists();
-    //Card[][] getPlayercardList();
-    // Deck getCardStack();
     Card[] getPlayersCards(int player);
     //Guess-Rounds
     void guessRound(GameState lap, int tempID, boolean scored);

@@ -44,8 +44,6 @@ public class PLapActivity extends AppCompatActivity {
 
     private PLapClientService pLapClientService;
 
-    //CoughtService
-    private Button bt_cought;
     private TextView tV_cought;
     private CoughtService coughtService;
 
@@ -55,11 +53,10 @@ public class PLapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         pLapClientService = PLapClientServiceImpl.getInstance();
         setContentView(R.layout.activity_p_lap);
-        pLapClientService.registerCardCallback(cards -> {
+        pLapClientService.registerCardCallback(pCards -> {
             runOnUiThread(() -> {
-                // this.pCards = cards;
-                turnCards(pCardIds, cards);
-                turnCards(pCardIds, cards);
+                turnCards(pCardIds, pCards);
+                turnCards(pCardIds, pCards);
             });
         });
         pLapClientService.startLab();
@@ -81,33 +78,24 @@ public class PLapActivity extends AppCompatActivity {
         handleCheatPLab();
 
         //CoughtService
-        bt_cought = findViewById(R.id.bt_caught);
+        //CoughtService
+        Button bt_cought = findViewById(R.id.bt_caught);
         tV_cought = findViewById(R.id.tV_Cought);
         coughtService = CoughtServiceImpl.getInstance();
         tV_cought.setVisibility(View.INVISIBLE);
 
     }
-    public void onClick_btCought(View view) {
+    public void onClickBtCought(View view) {
         if(coughtService.isCheatingPlap()){
             tV_cought.setText("Cheater wurde erwischt!!");
             tV_cought.setVisibility(View.VISIBLE);
             //after 5s the TextView is invisible
-            tV_cought.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    tV_cought.setVisibility(View.INVISIBLE);
-                }
-            }, 5000);
+            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
         }else {
             tV_cought.setText("Cheater wurde NICHT erwischt!!");
             tV_cought.setVisibility(View.VISIBLE);
             //after 5s the TextView is invisible
-            tV_cought.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    tV_cought.setVisibility(View.INVISIBLE);
-                }
-            }, 5000);
+            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
         }
     }
 
@@ -125,7 +113,6 @@ public class PLapActivity extends AppCompatActivity {
             Card card = pLapClientService.checkCardMatch(tV.getText().toString(), cards, getRow(v.getId()));
             if (card != null) {
                 CardUtility.turnCard(tV, card);
-               // matchedCardsCount++;
                 Log.d("CARD MATCH", "Your card matched with one from pyramid.");
             } else {
                 Log.d("CARD MATCH", "Sorry no match.");
@@ -144,7 +131,7 @@ public class PLapActivity extends AppCompatActivity {
      * @param ids   Ids of the TextViews which are containing the cards.
      * @param cards The Card array with Players cards.
      */
-    private void turnCards(int ids[], Card cards[]) {
+    private void turnCards(int[] ids, Card[] cards) {
         for (int i = 0; i < cards.length; i++) {
             CardUtility.turnCard(findViewById(ids[i]), cards[i]);
         }
@@ -156,7 +143,11 @@ public class PLapActivity extends AppCompatActivity {
      * @return ROW
      */
     private int getRow(int id) {
-        final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
+        final int ROW1 = 1;
+        final int ROW2 = 2;
+        final int ROW3 = 3;
+        final int ROW4 = 4;
+
         if (id == R.id.tV_pcard1)
             return ROW1;
         else if ( id == R.id.tV_pcard2 || id == R.id.tV_pcard3)
