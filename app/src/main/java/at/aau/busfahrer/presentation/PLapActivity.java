@@ -176,7 +176,7 @@ public class PLapActivity extends AppCompatActivity {
     private void handleCheatPLab() {
         cheatService.setSensorListener(() -> {
             cheatService.pauseListen();
-                new AlertDialog.Builder(PLapActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                new AlertDialog.Builder(PLapActivity.this, R.style.AlertDialogStyleDark)
                         // Yes
                         .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                             // sending network call
@@ -197,8 +197,18 @@ public class PLapActivity extends AppCompatActivity {
      * @return Card TextView for the Dialog.
      */
     private TextView getRandomCardFromPyramid() {
-        final int randomIndex = cheatService.randomNumber(pCardIds.length,0);
+        int randomIndex = cheatService.randomNumber(pCardIds.length);
         TextView cheatedCard = cheatService.generateCard(findViewById(pCardIds[randomIndex]), this);
+
+        // if random card is already turned
+        if (cheatedCard.getText().equals("\uD83C\uDCA0")){
+            for (int i = 0; i < pCardIds.length ; i++) {
+                if (cheatedCard.getText().equals("\uD83C\uDCA0")){
+                    cheatedCard = cheatService.generateCard(findViewById(pCardIds[i]), this);
+                }
+            }
+        }
+
         AlertDialog.Builder showCardDialog = new AlertDialog.Builder(PLapActivity.this, R.style.AlertDialogStyle);
         showCardDialog.setTitle("Your random cheat card is")
                 .setView(cheatedCard)
@@ -222,9 +232,9 @@ public class PLapActivity extends AppCompatActivity {
         gridView.setNumColumns(2);
 
         final AlertDialog.Builder selectCardChange = new AlertDialog.Builder(PLapActivity.this, R.style.AlertDialogStyleCards)
+                .setTitle("Select a Card from your hand you want to change.")
                 .setView(gridView)
                 .setCancelable(false);
-
         final Dialog dialog = selectCardChange.create();
         dialog.show();
         // item click listener, returns the selected card index
@@ -234,16 +244,18 @@ public class PLapActivity extends AppCompatActivity {
     }
 
     /**
-    Changes the card from the player hand with the cheated card.
-     * @param pos selected card of the player hand.
+     * Changes the card from the player hand with the cheated card.
+     * pyramidCard: updates the TextView in the player hand.
+     * cards: cheatedCard is inserted in the player hand.
+     * @param pos selected card from Dialog.
      */
     private void swapCard(int pos) {
-        TextView t = findViewById(myCardIds[pos]);
-        t.setText(cheatCard.getText());
-        t.setTextColor(cheatCard.getCurrentTextColor());
-        // Card cheatCard = CardUtility.getCardFromString(this.cheatCard.getText().toString(), pLabService.getPlayerCards());
-        // cards[pos] = cheatCard;
-        // * TODO get all pyramid cards instead of plabService.playerCards, -> NPE
+        TextView pyramidCard = findViewById(myCardIds[pos]);
+        pyramidCard.setText(cheatCard.getText());
+        pyramidCard.setTextColor(cheatCard.getCurrentTextColor());
+
+        Card newCheatedCard = CardUtility.getCardFromString(this.cheatCard.getText().toString(), pLapClientService.getPCards());
+        cards[pos] = newCheatedCard;
     }
 
     /**

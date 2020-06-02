@@ -14,6 +14,8 @@ import android.hardware.SensorManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.TextView;
+
+import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
 public class CheatServiceImpl implements CheatService {
@@ -37,7 +39,6 @@ public class CheatServiceImpl implements CheatService {
     private SensorListener sensorListener;
     private SensorManager sensorManager;
     private Sensor sensor;
-    private String activityName;
     private long lastUpdateMs;
     private boolean isSensorListen = false;
 
@@ -179,6 +180,10 @@ public class CheatServiceImpl implements CheatService {
         }
     }
 
+    public static void reset(){
+        instance = null;
+    }
+
     // network call for player cheated in game
     public void sendMsgCheated(final boolean cheated, final long timeStamp, final int cheatType) {
         Log.i(TAG, "Sending CheatMessage to Server");
@@ -189,8 +194,9 @@ public class CheatServiceImpl implements CheatService {
         thread.start();
     }
 
-    public int randomNumber(int max, int min) {
-        return (int) ((Math.random() * (max + min)));
+    public int randomNumber(int max) {
+        SecureRandom random = new SecureRandom ();
+        return random.nextInt(max);
     }
 
     public TextView generateCard(TextView tv, Context context) {
@@ -224,11 +230,7 @@ public class CheatServiceImpl implements CheatService {
     }
     public void setContext(Context context, String name) {
         this.context = context;
-        this.activityName = name;
     }
-    public Context getContext() {
-        return context;
-    }
-
+    public Context getContext() { return context; }
 
 }

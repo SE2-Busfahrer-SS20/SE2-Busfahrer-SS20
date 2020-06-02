@@ -186,7 +186,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         cheatService.setSensorListener(() -> {
             cheatService.pauseListen();
             if (playersStorage.getTempID() == playersStorage.getCurrentTurn()) {
-                new AlertDialog.Builder(GuessActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                new AlertDialog.Builder(GuessActivity.this, R.style.AlertDialogStyleDark)
                         // Yes
                         .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                             // sending network call
@@ -453,9 +453,11 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             case LAP1D:
                 card = CardUtility.turnCardGetView(tV_card4, cards[3]);
                 break;
+            default:
+                break;
         }
         card.setGravity(Gravity.CENTER);
-        AlertDialog at = new AlertDialog.Builder(GuessActivity.this, R.style.AlertDialogStyle)
+        new AlertDialog.Builder(GuessActivity.this, R.style.AlertDialogStyle)
                 .setTitle("Your next card is")
                 .setView(card).setNegativeButton(android.R.string.ok, (dialog, which) -> {
                 }).show();
