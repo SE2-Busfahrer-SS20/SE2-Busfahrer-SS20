@@ -1,8 +1,7 @@
 package at.aau.busfahrer.presentation;
+
 import at.aau.busfahrer.*;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -94,15 +93,15 @@ public class EditPlayerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(toast != null){
-            toast.cancel();
-        }
+        cancelToast();
     }
     @Override
     protected void onStop() {
         super.onStop();
-        if(toast != null){
+        cancelToast();
+    }
+    private void cancelToast() {
+        if(toast != null)
             toast.cancel();
-        }
     }
 }

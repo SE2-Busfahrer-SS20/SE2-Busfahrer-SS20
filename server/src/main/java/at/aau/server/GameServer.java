@@ -2,9 +2,7 @@ package at.aau.server;
 
 import java.io.IOException;
 import java.util.List;
-
 import at.aau.server.database.Database;
-import at.aau.server.database.table.User;
 import at.aau.server.service.GameService;
 import at.aau.server.service.PLapService;
 import at.aau.server.service.impl.GameServiceImpl;
@@ -18,7 +16,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
-import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
+import static shared.networking.kryonet.NetworkConstants.getClassList;
 
 
 public class GameServer extends NetworkServerKryo {
@@ -204,11 +202,9 @@ public class GameServer extends NetworkServerKryo {
                     try {
                         List<PlayerDTO> playerDTOList=db.getLeaderboardAscending();
                         connection.sendTCP(new LeaderboardMessage(playerDTOList));
-
                     }
                     catch (Exception e){
-                        e.printStackTrace();
-                        Log.error("Failed to query db!");
+                        Log.error("Failed to query db!", e);
                     }
                 }
             }
@@ -238,7 +234,7 @@ public class GameServer extends NetworkServerKryo {
         }).start();
     }
     private void registerClasses() {
-        for (Class<?> c : CLASS_LIST)
+        for (Class<?> c : getClassList())
             registerClass(c);
     }
 

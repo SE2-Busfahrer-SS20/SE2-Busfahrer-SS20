@@ -17,7 +17,6 @@ import java.util.List;
 public class HistoryActivity extends AppCompatActivity {
 
     private LeaderboardService leaderboardService;
-    private List<PlayerDTO> playerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,6 @@ public class HistoryActivity extends AppCompatActivity {
     }
     private void updateList(List<PlayerDTO> playerList){
 
-        //String[] scoreItems= new String[]{"Philipp: 10","Larissa: 9","Markus: 8","Elias: 7","Volte: 6","Gery: 10"};
         String[] scoreItems= new String[playerList.size()];
         for(int i=0;i<scoreItems.length;i++){
             scoreItems[i]=playerList.get(i).getName()+": "+playerList.get(i).getScore();

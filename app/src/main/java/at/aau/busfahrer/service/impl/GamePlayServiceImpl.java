@@ -6,7 +6,6 @@ import at.aau.busfahrer.service.GamePlayService;
 import shared.model.Card;
 import shared.model.GameState;
 import shared.networking.NetworkClient;
-import shared.networking.dto.CheatedMessage;
 import shared.networking.dto.CoughtMessage;
 import shared.networking.dto.CreateGameMessage;
 import shared.networking.dto.RegisterMessage;
@@ -20,13 +19,13 @@ public class GamePlayServiceImpl implements GamePlayService {
     private String host;
 
     //SINGLETON PATTERN
-    private static GamePlayServiceImpl Instance;
+    private static GamePlayServiceImpl instance;
 
     public static GamePlayService getInstance() {
-        if (GamePlayServiceImpl.Instance == null) {
-            GamePlayServiceImpl.Instance = new GamePlayServiceImpl();
+        if (GamePlayServiceImpl.instance == null) {
+            GamePlayServiceImpl.instance = new GamePlayServiceImpl();
         }
-        return GamePlayServiceImpl.Instance;
+        return GamePlayServiceImpl.instance;
     }
 
     private GamePlayServiceImpl() {
