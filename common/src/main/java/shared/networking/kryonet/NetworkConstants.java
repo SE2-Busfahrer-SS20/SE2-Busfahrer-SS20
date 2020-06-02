@@ -11,7 +11,7 @@ public class NetworkConstants {
     // public static final int UDP_PORT = 54777; //needs to stay commented, because on AAU server there is only one port available
 
     // List for registered dto classes. Add needed classes to the array.
-    public static final Class<?>[] CLASS_LIST = {
+    private static final Class<?>[] CLASS_LIST = {
             BaseMessage.class,
             TextMessage.class,
             RegisterMessage.class,
@@ -40,5 +40,8 @@ public class NetworkConstants {
             CoughtMessage.class,
             LeaderboardMessage.class
     };
+    public static Class<?>[] getClassList() {
+        return CLASS_LIST;
+    }
 
 }

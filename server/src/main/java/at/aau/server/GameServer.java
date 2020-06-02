@@ -16,7 +16,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
-import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
+import static shared.networking.kryonet.NetworkConstants.getClassList;
 
 
 public class GameServer extends NetworkServerKryo {
@@ -234,7 +234,7 @@ public class GameServer extends NetworkServerKryo {
         }).start();
     }
     private void registerClasses() {
-        for (Class<?> c : CLASS_LIST)
+        for (Class<?> c : getClassList())
             registerClass(c);
     }
 

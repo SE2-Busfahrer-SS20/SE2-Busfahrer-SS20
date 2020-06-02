@@ -16,7 +16,7 @@ import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.*;
 
-import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
+import static shared.networking.kryonet.NetworkConstants.getClassList;
 
 public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
@@ -144,7 +144,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     private void registerClasses() {
-        for (Class c : CLASS_LIST)
+        for (Class c : getClassList())
             registerClass(c);
     }
 
