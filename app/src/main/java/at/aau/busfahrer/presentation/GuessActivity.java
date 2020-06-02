@@ -188,7 +188,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
 
     //First Button used in Guess round 1 to 3 as: black, higher, outside
-    public void onClick_FirstOption(View view) {
+    public void onClickFirstOption(View view) {
         switch (playersStorage.getState()) {
             case LAP1A:
                 scored = gamePlayService.guessColor(cards[0], true);
@@ -207,7 +207,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     }
 
     //Second Button used in Guess round 1 to 3 as: red, lower, between
-    public void onClick_SecondOption(View view) {
+    public void onClickSecondOption(View view) {
 
         switch (playersStorage.getState()) {
             case LAP1A:
@@ -227,10 +227,10 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     }
 
     //for round 4
-    public void onClick_Spade(View view)    { guessSuit(0); }
-    public void onClick_Heart(View view)    { guessSuit(1); }
-    public void onClick_Diamond(View view)  { guessSuit(2); }
-    public void onClick_Club(View view)     { guessSuit(3); }
+    public void onClickSpade(View view)    { guessSuit(0); }
+    public void onClickHeart(View view)    { guessSuit(1); }
+    public void onClickDiamond(View view)  { guessSuit(2); }
+    public void onClickClub(View view)     { guessSuit(3); }
 
     private void guessSuit(int suit){
         scored=gamePlayService.guessSuit(cards[3], suit);
@@ -238,7 +238,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         onAnswer(scored);
     }
 
-    public void onClick_feedback(View view) {
+    public void onClickFeedback(View view) {
         gamePlayService.nextPlayer(playersStorage.getState(), playersStorage.getTempID(), scored);
         onPauseMode();
     }
