@@ -94,15 +94,15 @@ public class EditPlayerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(toast != null){
-            toast.cancel();
-        }
+        cancelToast();
     }
     @Override
     protected void onStop() {
         super.onStop();
-        if(toast != null){
+        cancelToast();
+    }
+    private void cancelToast() {
+        if(toast != null)
             toast.cancel();
-        }
     }
 }
