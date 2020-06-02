@@ -1,8 +1,8 @@
 package at.aau.busfahrer.presentation;
 
 import android.os.Handler;
+import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,14 +14,12 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.CheatService;
 import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.GamePlayService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
-
 import at.aau.busfahrer.service.impl.CoughtServiceImpl;
 import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
 import shared.model.Card;
@@ -29,7 +27,6 @@ import shared.model.CoughtServiceListener;
 import shared.model.GameState;
 import shared.model.GuessRoundListener;
 import shared.model.impl.PlayersStorageImpl;
-import shared.networking.NetworkClient;
 import shared.networking.kryonet.NetworkClientKryo;
 
 // *TODO remove card click listener in guess xml, because on click app can crash
@@ -124,47 +121,29 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     }
 
 
-    public void onClick_btCought(View view) {
+    public void onClickBtCought(View view) {
         if(coughtService.isCheating()){
-            System.out.println("\n\n\n"+playersStorage.isCheating(playersStorage.getCurrentTurn())+"\n\n\n");
+            Log.i( "Player is cheating","\n\n\n"+playersStorage.isCheating(playersStorage.getCurrentTurn())+"\n\n\n");
             //TextView beim CurrentPlayer anzeigen!!!!!!!!!!!
             tV_erwischt.setText("Cheater wurde erwischt!!!");
             tV_erwischt.setVisibility(View.VISIBLE);
             //after 5s the TextView is invisible
-            tV_erwischt.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    tV_erwischt.setVisibility(View.INVISIBLE);
-                }
-            }, 5000);
+            tV_erwischt.postDelayed(() -> tV_erwischt.setVisibility(View.INVISIBLE), 5000);
         }else{
             tV_erwischt.setText("Cheater wurde NICHT erwischt!!!");
             tV_erwischt.setVisibility(View.VISIBLE);
             //after 5s the TextView is invisible
-            tV_erwischt.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    tV_erwischt.setVisibility(View.INVISIBLE);
-                }
-            }, 5000);
+            tV_erwischt.postDelayed(() -> tV_erwischt.setVisibility(View.INVISIBLE), 5000);
         }
 
     }
     public void coughtTetxViewListener(){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (playersStorage.getTempID() == playersStorage.getCurrentTurn()) {
-                    tV_erwischt.setText("Erwischt!!!!");
-                    tV_erwischt.setVisibility(View.VISIBLE);
-                    //after 5s the TextView is invisible
-                    tV_erwischt.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            tV_erwischt.setVisibility(View.INVISIBLE);
-                        }
-                    }, 5000);
-                }
+        runOnUiThread(() -> {
+            if (playersStorage.getTempID() == playersStorage.getCurrentTurn()) {
+                tV_erwischt.setText("Erwischt!!!!");
+                tV_erwischt.setVisibility(View.VISIBLE);
+                //after 5s the TextView is invisible
+                tV_erwischt.postDelayed(() -> tV_erwischt.setVisibility(View.INVISIBLE), 5000);
             }
         });
     }
@@ -266,12 +245,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
         
     private void updateScoreButton(int score){
-        uiHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                btn_score.setText("Score: "+score);
-            }
-        });
+        uiHandler.post(() -> btn_score.setText("Score: "+score));
     }
 
     @Override   //Callback - executed when receiving UpdateMessage from server (after each players turn)
@@ -303,72 +277,66 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     //This methode changes visibility of UI elements when it is not this players turn
     private void onPauseMode() {
         //Execute on runOnUIThread to enable calling this funiction in other thread
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                tV_guessQuestion.setText("wait till it is your turn..");   //TODO: Extend this to "it's playernames turn"
-                bt_FirstOption.setVisibility(View.INVISIBLE);
-                bt_SecondOption.setVisibility(View.INVISIBLE);
-                bt_Spade.setVisibility(View.INVISIBLE);
-                bt_Heart.setVisibility(View.INVISIBLE);
-                bt_Diamond.setVisibility(View.INVISIBLE);
-                bt_Club.setVisibility(View.INVISIBLE);
-                bt_cought.setVisibility(View.VISIBLE);
+        runOnUiThread(() -> {
+            tV_guessQuestion.setText("wait till it is your turn..");   //TODO: Extend this to "it's playernames turn"
+            bt_FirstOption.setVisibility(View.INVISIBLE);
+            bt_SecondOption.setVisibility(View.INVISIBLE);
+            bt_Spade.setVisibility(View.INVISIBLE);
+            bt_Heart.setVisibility(View.INVISIBLE);
+            bt_Diamond.setVisibility(View.INVISIBLE);
+            bt_Club.setVisibility(View.INVISIBLE);
+            bt_cought.setVisibility(View.VISIBLE);
 
-                tV_feedback.setVisibility(View.INVISIBLE);
-            }
+            tV_feedback.setVisibility(View.INVISIBLE);
         });
     }
 
     //This methode changes visibility of UI elements when it is not players turn
     private void onPlayMode() {
         //Execute on runOnUIThread to enable calling this funiction in other thread
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                bt_Spade.setVisibility(View.INVISIBLE);
-                bt_Heart.setVisibility(View.INVISIBLE);
-                bt_Diamond.setVisibility(View.INVISIBLE);
-                bt_Club.setVisibility(View.INVISIBLE);
-                bt_FirstOption.setVisibility(View.VISIBLE);
-                bt_SecondOption.setVisibility(View.VISIBLE);
-                bt_cought.setVisibility(View.INVISIBLE);
+        runOnUiThread(() -> {
+            bt_Spade.setVisibility(View.INVISIBLE);
+            bt_Heart.setVisibility(View.INVISIBLE);
+            bt_Diamond.setVisibility(View.INVISIBLE);
+            bt_Club.setVisibility(View.INVISIBLE);
+            bt_FirstOption.setVisibility(View.VISIBLE);
+            bt_SecondOption.setVisibility(View.VISIBLE);
+            bt_cought.setVisibility(View.INVISIBLE);
 
-                tV_card1.setTextColor(Color.parseColor("#000000"));
-                tV_card2.setTextColor(Color.parseColor("#000000"));
-                tV_card3.setTextColor(Color.parseColor("#000000"));
-                tV_card4.setTextColor(Color.parseColor("#000000"));
+            tV_card1.setTextColor(Color.parseColor("#000000"));
+            tV_card2.setTextColor(Color.parseColor("#000000"));
+            tV_card3.setTextColor(Color.parseColor("#000000"));
+            tV_card4.setTextColor(Color.parseColor("#000000"));
 
-                switch (playersStorage.getState()) {
-                    case LAP1A:
-                        tV_guessQuestion.setText("Guess if the first card is red or black");
-                        bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_black);
-                        bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_red);
-                        break;
-                    case LAP1B:
-                        tV_guessQuestion.setText("Guess if the second cards rank is higher or lower than first cards rank.");
-                        bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_black);
-                        bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_black);
-                        bt_FirstOption.setText("Higher");
-                        bt_SecondOption.setText("Lower");
-                        break;
-                    case LAP1C:
-                        tV_guessQuestion.setText("Guess if the third cards rank is between or outside the first and second card.");
-                        bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_black);
-                        bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_black);
-                        bt_FirstOption.setText("Between");
-                        bt_SecondOption.setText("Outside");
-                        break;
-                    case LAP1D:
-                        tV_guessQuestion.setText("Guess the fouth cards suit.");
-                        bt_Spade.setVisibility(View.VISIBLE);
-                        bt_Heart.setVisibility(View.VISIBLE);
-                        bt_Diamond.setVisibility(View.VISIBLE);
-                        bt_Club.setVisibility(View.VISIBLE);
-                        bt_FirstOption.setVisibility(View.INVISIBLE);
-                        bt_SecondOption.setVisibility(View.INVISIBLE);
-                        break;
-                }
+            switch (playersStorage.getState()) {
+                case LAP1A:
+                    tV_guessQuestion.setText("Guess if the first card is red or black");
+                    bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_black);
+                    bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_red);
+                    break;
+                case LAP1B:
+                    tV_guessQuestion.setText("Guess if the second cards rank is higher or lower than first cards rank.");
+                    bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_black);
+                    bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_black);
+                    bt_FirstOption.setText("Higher");
+                    bt_SecondOption.setText("Lower");
+                    break;
+                case LAP1C:
+                    tV_guessQuestion.setText("Guess if the third cards rank is between or outside the first and second card.");
+                    bt_FirstOption.setBackgroundResource(R.drawable.bg_btn_black);
+                    bt_SecondOption.setBackgroundResource(R.drawable.bg_btn_black);
+                    bt_FirstOption.setText("Between");
+                    bt_SecondOption.setText("Outside");
+                    break;
+                case LAP1D:
+                    tV_guessQuestion.setText("Guess the fouth cards suit.");
+                    bt_Spade.setVisibility(View.VISIBLE);
+                    bt_Heart.setVisibility(View.VISIBLE);
+                    bt_Diamond.setVisibility(View.VISIBLE);
+                    bt_Club.setVisibility(View.VISIBLE);
+                    bt_FirstOption.setVisibility(View.INVISIBLE);
+                    bt_SecondOption.setVisibility(View.INVISIBLE);
+                    break;
             }
         });
     }
