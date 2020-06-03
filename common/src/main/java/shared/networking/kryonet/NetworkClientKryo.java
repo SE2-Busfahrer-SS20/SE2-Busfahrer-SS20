@@ -16,7 +16,7 @@ import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.*;
 
-import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
+import static shared.networking.kryonet.NetworkConstants.getClassList;
 
 public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
@@ -25,6 +25,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     // Callback Map to store callbacks for every DTO Class. HashMap to access object in O(1).
     private Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
     private static NetworkClient instance;
+    Listener listenLeaderboardmessage;
 
     private NetworkClientKryo() {
         client = new Client();
@@ -35,13 +36,28 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client.getKryo().register(c);
     }
 
-
+    @Override
+    public void close(){
+        client.removeListener(listenLeaderboardmessage);
+        client.close();
+    }
     @Override
     public void connect(String host) throws IOException {
         client.start();
         client.connect(5000, host, NetworkConstants.TCP_PORT);
         //Here the client receives messages from the server !
+        listenLeaderboardmessage= new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
 
+                if(object instanceof LeaderboardMessage) {
+                    Log.debug("\n=====================\nLeaderboardMessage received");
+                    callbackMap.get(LeaderboardMessage.class).callback((LeaderboardMessage)object);
+                }
+            }
+        };
+
+        client.addListener(listenLeaderboardmessage);
         client.addListener(new Listener() {
             public void received(Connection connection, Object object) {
                 // handle null objects or not known Objects.
@@ -57,8 +73,18 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
                 if(object instanceof NewPlayerMessage){
                     Log.debug("New Player in the Game");
+                    boolean alreadyExists=false;
                     //playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
-                    playersStorage.addPlayer(((NewPlayerMessage)object).getPlayer());
+                    for(int i=0;i<playersStorage.getPlayerList().size();i++){
+                        if(playersStorage.getPlayerList().get(i).getName() == ((NewPlayerMessage)object).getPlayer().getName()){
+                            alreadyExists=true;
+                        }
+                    }
+                    if(!alreadyExists){
+                        playersStorage.addPlayer(((NewPlayerMessage)object).getPlayer());
+                    }
+
+
                 }
 
                 if(object instanceof StartGameMessage){
@@ -124,7 +150,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                         setTextViewVisible();
                     }
                 }
-
             }
         });
     }
@@ -138,7 +163,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     private void registerClasses() {
-        for (Class c : CLASS_LIST)
+        for (Class c : getClassList())
             registerClass(c);
     }
 
@@ -154,13 +179,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         this.coughtServiceListener = coughtServiceListener;
     }
     public void setTextViewVisible(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                coughtServiceListener.coughtTetxViewListener();
-
-            }
-        }).start();
+        new Thread(() -> coughtServiceListener.coughtTetxViewListener()).start();
     }
 
 

@@ -27,8 +27,9 @@ Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming 
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="plab_header">Pyramiden Lab</string>
     <string name="card_backcover">🂠</string>
-    <string name="plab_nextButton">Next Lab</string>
+    <string name="plab_nextButton">Next Lap</string>
     <string name="plab_selectButton">Deal Points</string>
     <string name="deal_button_text">Deal Points</string>
     <string name="host_input_label">Enter Server IP Address</string>
+    <string name="button_erwischt">Erwischt!</string>
 </resources>

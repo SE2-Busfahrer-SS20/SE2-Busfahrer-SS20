@@ -21,7 +21,7 @@ public class CoughtServiceImpl implements CoughtService {
     private int indexOfMe;
     private GamePlayService gamePlayService;
 
-    private CoughtServiceImpl(){};
+    private CoughtServiceImpl(){}
 
     public static CoughtService getInstance(){
         if(instance == null){

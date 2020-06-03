@@ -1,12 +1,14 @@
 package at.aau.server;
 
 import java.io.IOException;
-
+import java.util.List;
+import at.aau.server.database.Database;
 import at.aau.server.service.GameService;
 import at.aau.server.service.PLapService;
 import at.aau.server.service.impl.GameServiceImpl;
 import at.aau.server.service.impl.PLapServiceImpl;
 import shared.model.Player;
+import shared.model.PlayerDTO;
 import shared.model.impl.PlayerDTOImpl;
 import shared.networking.dto.*;
 import shared.networking.kryonet.NetworkServerKryo;
@@ -14,7 +16,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
-import static shared.networking.kryonet.NetworkConstants.CLASS_LIST;
+import static shared.networking.kryonet.NetworkConstants.getClassList;
 
 
 public class GameServer extends NetworkServerKryo {
@@ -24,6 +26,7 @@ public class GameServer extends NetworkServerKryo {
     private static final String RESPONSE_TEST = "response test";
     private static final int CONN_RETRY = 5;
 
+    private Database db;
     private final GameService gameService;
     private final PLapService pLapService;
 
@@ -33,6 +36,7 @@ public class GameServer extends NetworkServerKryo {
         Log.set(Log.LEVEL_DEBUG); // set log level for Minlog.
         gameService = GameServiceImpl.getInstance();
         pLapService = new PLapServiceImpl(this);
+        db= Database.getInstance();
         registerClasses();
     }
 
@@ -48,6 +52,7 @@ public class GameServer extends NetworkServerKryo {
         super.addListener(createBushmenListener());
         super.addListener(createGameListener());
         super.addListener(createGuessListener());
+        super.addListener(createLeaderboardListener());
     }
 
     private Listener createGuessListener() {
@@ -156,7 +161,7 @@ public class GameServer extends NetworkServerKryo {
                     //Set the new Score of the one how Cought
                     gameService.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
                     //Update the list by every client
-                    CoughtMessage updateClients = new CoughtMessage(coughtMessage.getIndexCheater(), coughtMessage.getScoreCought(), coughtMessage.getScoreCheater(), coughtMessage.getScoreCought(), coughtMessage.isCheated());
+                    CoughtMessage updateClients = new CoughtMessage(coughtMessage.getIndexCheater(), coughtMessage.getIndexCought(), coughtMessage.getScoreCheater(), coughtMessage.getScoreCought(), coughtMessage.isCheated());
                     for (int i = 0; i < gameService.getPlayerList().size(); i++) {
                         gameService.getPlayerList().get(i).getConnection().sendTCP(updateClients);
                     }
@@ -181,14 +186,31 @@ public class GameServer extends NetworkServerKryo {
                         messageCallback.callback((TextMessage) object);
                     connection.sendTCP(new TextMessage(RESPONSE_TEST));
                     Log.debug("Received TextMessage: " + ((TextMessage) object).getText());
-                } else if (object instanceof BaseMessage) {
+                } else if (object instanceof BaseMessage && !(object instanceof LeaderboardMessage)) {
                     Log.info("Action not supported.");
                     connection.sendTCP(new TextMessage("Action not supported."));
                 }
             }
         };
     }
-
+    private Listener createLeaderboardListener() {
+        return new Listener() {
+            @Override
+            public void received(Connection connection, Object object) {
+                if(object instanceof LeaderboardMessage){
+                    Log.info("LeaderboardMessage received!");
+                    try {
+                        List<PlayerDTO> playerDTOList=db.getLeaderboardAscending();
+                        connection.sendTCP(new LeaderboardMessage(playerDTOList));
+                        connection.close();
+                    }
+                    catch (Exception e){
+                        Log.error("Failed to query db!", e);
+                    }
+                }
+            }
+        };
+    }
     private void checkGameStates() {
         new Thread(() -> {
             try {
@@ -212,9 +234,8 @@ public class GameServer extends NetworkServerKryo {
             }
         }).start();
     }
-
     private void registerClasses() {
-        for (Class<?> c : CLASS_LIST)
+        for (Class<?> c : getClassList())
             registerClass(c);
     }
 

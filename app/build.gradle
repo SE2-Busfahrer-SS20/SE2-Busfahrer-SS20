@@ -55,4 +55,5 @@ dependencies {
     implementation project(":common")
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.gms:play-services-ads:19.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
 }

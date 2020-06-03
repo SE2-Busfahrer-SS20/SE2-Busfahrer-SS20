@@ -6,6 +6,8 @@
     android:textAppearance="?android:attr/textAppearanceListItemSmall"
     android:gravity="center"
     android:textAlignment="center"
+    android:paddingTop="20dp"
+    android:padding="5dp"
     android:textSize="100sp"
     android:textColor="#FFFFFF"
     android:background="@color/browser_actions_text_color"

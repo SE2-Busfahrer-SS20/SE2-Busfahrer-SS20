@@ -2,16 +2,24 @@ package at.aau.busfahrer.presentation;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.core.content.ContextCompat;
+
+import at.aau.busfahrer.presentation.utils.CardUtility;
+import at.aau.busfahrer.service.CheatService;
+import at.aau.busfahrer.service.impl.CheatServiceImpl;
+
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.service.BushmenService;
 import at.aau.busfahrer.service.impl.BushmenServiceImpl;
@@ -30,6 +38,8 @@ public class BushmenActivity extends AppCompatActivity {
 
 
     private BushmenService bushmenService;
+
+    private CheatService cheatService;
 
     public BushmenActivity() {
 
@@ -54,6 +64,15 @@ public class BushmenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bushmen);
 
 
+        // Cheat service init
+        cheatService = CheatServiceImpl.getInstance();
+        cheatService.setContext(getApplicationContext(), getClass().getName());
+        cheatService.startListen();
+
+        TxtPunkte = findViewById(R.id.punkte);
+
+
+
         TxtPunkte = findViewById(R.id.punkte);
 
         // set looser variable. Value will be set in PLapFinished Activity.
@@ -66,10 +85,14 @@ public class BushmenActivity extends AppCompatActivity {
         // Für den Zuschauer wird angezeigt, dass er Zuschauer ist
         TextView textView = findViewById(R.id.headerBushmen);
 
+
         if(bushmenService.isLooser()){
+
             textView.setText("Oh dear! You have to drive with the bus");
+            handleCheat();
         }else {
             textView.setText("Your can only watch!");
+            cheatService.stopListen();
         }
     }
 
@@ -155,7 +178,7 @@ public class BushmenActivity extends AppCompatActivity {
             enableCards(findViewById(R.id.tV_card6), false);
             enableCards(findViewById(R.id.tV_card7), false);
 
-            AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
             dialog.setTitle("Verloren");
             dialog.setMessage("Busfahrerrunde beginnt von vorne");
             final Dialog dialog1 = dialog.create();
@@ -185,7 +208,7 @@ public class BushmenActivity extends AppCompatActivity {
 
             if (bushmenService.hasWon()) {
 
-                AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this);
                 dialog.setTitle("Gewonnen");
 
                 String gewinnerNachricht = bushmenService.isLooser() ? "Sie sind der Gewinner" : "Danke für's Zuschauen";
@@ -196,6 +219,7 @@ public class BushmenActivity extends AppCompatActivity {
                     //Zurück zum Hauptmenü nach Sieg
                     Intent intent = new Intent(BushmenActivity.this, MainMenuActivity.class);
                     startActivity(intent);
+                    CheatServiceImpl.reset();
                 });
 
                 AlertDialog alert = dialog.create();
@@ -262,9 +286,93 @@ public class BushmenActivity extends AppCompatActivity {
     // removes android status bar on top, for fullscreen
     private void hideAppTitleBar() {
         //Remove title bar
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
+
+    /**
+     * This method handle's the cheat action if a player activates cheats.
+     */
+    public void handleCheat(){
+        cheatService.setSensorListener(() -> {
+            cheatService.pauseListen();
+            new AlertDialog.Builder(BushmenActivity.this, R.style.AlertDialogStyleDark)
+                    // Yes
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        // sending network call
+                        cheatService.stopListen();
+                        cheatService.sendMsgCheated(true, System.currentTimeMillis(), cheatService.getSensorType());
+                        this.flipCards();
+                    })
+                    // No
+                    .setNegativeButton(android.R.string.no, (dialog, which) -> cheatService.resumeListen())
+                    .setTitle("Are you sure you want to cheat?").setCancelable(false)
+                    .setIcon(android.R.drawable.ic_dialog_alert).create()
+                    .show();
+        });
+    }
+
+    /**
+     * This method turns some cards, after 1 second the turned cards gets turned back.
+     */
+    public void flipCards(){
+        TextView message = new TextView(this);
+                message.setText("Cards will get turned for 1 second, remember the cards!");
+        message.setTextColor(ContextCompat.getColor(this, R.color.white));
+
+        message.setGravity(Gravity.CENTER);
+        message.setTextSize(20);
+        message.setPadding(15,55,15,55);
+
+        AlertDialog.Builder cheat = new AlertDialog.Builder(BushmenActivity.this, R.style.AlertDialogStyleCards)
+                .setView(message)
+                .setCancelable(false);
+        final Dialog dialog = cheat.create();
+        dialog.show();
+
+        Handler turn = new Handler();
+        turn.postDelayed(() -> {
+            dialog.dismiss();
+            for (int i = 0; i < bushmenCards.length ; i++) {
+                if(i % 2 == 1 || i == 0){
+                    CardUtility.turnCard(findViewById(bushmenCards[i]),cards[i]);
+                }
+            }
+        },2000);
+
+        // flip cards back
+        Handler reTurn = new Handler();
+        reTurn.postDelayed(() -> {
+            for (int i = 0; i < bushmenCards.length ; i++) {
+                if(i % 2 == 1 || i == 0){
+                    CardUtility.turnCardBack(findViewById(bushmenCards[i]));
+                }
+            }
+        },3000);
+    }
+
+    /**
+     * Android lifecycle methods, handling app state.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cheatService.pauseListen();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cheatService.stopListen();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cheatService.resumeListen();
+    }
+
+
 
 }

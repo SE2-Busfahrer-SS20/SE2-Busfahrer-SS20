@@ -32,16 +32,16 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
 
         //Change visability
         LinearLayout playerList = findViewById(R.id.playerList);
-        Button bt_start = findViewById(R.id.bt_start);
+        Button btStart = findViewById(R.id.bt_start);
         ImageView logo = findViewById(R.id.logo);
         if(playersStorage.isMaster()){
             playerList.setVisibility(View.VISIBLE);
-            bt_start.setVisibility(View.VISIBLE);
+            btStart.setVisibility(View.VISIBLE);
             logo.setVisibility(View.INVISIBLE);
             updatePlayerList();
         }else{
             playerList.setVisibility(View.INVISIBLE);
-            bt_start.setVisibility(View.INVISIBLE);
+            btStart.setVisibility(View.INVISIBLE);
             logo.setVisibility(View.VISIBLE);
         }
 

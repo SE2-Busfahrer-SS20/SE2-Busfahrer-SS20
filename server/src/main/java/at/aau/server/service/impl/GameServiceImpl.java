@@ -45,8 +45,8 @@ public class GameServiceImpl implements GameService {
         return game.getPlayerList();
     }
 
-    public Player addPlayer(String name, String macAddress, Connection connection) {
-        return game.addPlayer(name, macAddress, connection);
+    public Player addPlayer(String name, String macadress, Connection connection) {
+        return game.addPlayer(name, macadress, connection);
     }
 
     @Override
@@ -116,7 +116,6 @@ public class GameServiceImpl implements GameService {
         connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
 
         //Add Player to Playerlist in Wait UI
-        //NewPlayerMessage npm = new NewPlayerMessage(player.getName());
         Log.debug("\ntest\n"+PlayerDTOImpl.getDTOFromPlayer(player).getName()+"\n\n");
         NewPlayerMessage npm = new NewPlayerMessage(PlayerDTOImpl.getDTOFromPlayer(player));
         connection.sendTCP(npm);
