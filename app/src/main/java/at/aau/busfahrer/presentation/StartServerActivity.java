@@ -15,7 +15,7 @@ import android.widget.Spinner;
 
 //THIS ACTIVITY IS NOT USED AT ALL IN THE CURRENT VERSION
 public class StartServerActivity extends AppCompatActivity {
-
+    /*
     Spinner spinner;
     Integer playercount;
     GamePlayService gamesvc;
@@ -57,4 +57,6 @@ public class StartServerActivity extends AppCompatActivity {
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
+
+     */
 }

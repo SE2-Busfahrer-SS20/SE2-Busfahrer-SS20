@@ -33,6 +33,7 @@ public class GamePlayServiceImpl implements GamePlayService {
         this.host = "127.0.0.1"; // set default HostName value.
     }
 
+/*
     @Override//can be deleted later
     public void createGame(int playercount) {
         //Must be declared final to get accessible in inner class
@@ -49,6 +50,7 @@ public class GamePlayServiceImpl implements GamePlayService {
         });
         thread.start();
     }
+     */
 
     @Override
     public void playGame(final String name, final String MACAddress) {
@@ -96,8 +98,6 @@ public class GamePlayServiceImpl implements GamePlayService {
         int rank=rank(card);
         int rankRef=rank(reference);
 
-        System.out.println("****************RANK: "+rank+"\tREFERENCE RANK: "+rankRef);
-
         //equal cards count as correct guess
         if(rank==rankRef)
             return true;
@@ -123,8 +123,9 @@ public class GamePlayServiceImpl implements GamePlayService {
         }
 
         //equal cards count as correct guess
-        if (rank == rankLow || rank == rankHigh)
+        if (rank == rankLow || rank == rankHigh) {
             return true;
+        }
 
         if (rank > rankLow && rank < rankHigh)    //isBetween ref cards
             return guessBetween;
@@ -140,7 +141,6 @@ public class GamePlayServiceImpl implements GamePlayService {
         else
             return false;
     }
-
 
     @Override
     public void nextPlayer(final GameState lap, final int tempID, final boolean scored) {
