@@ -21,7 +21,7 @@ public class CoughtServiceImpl implements CoughtService {
     private int indexOfMe;
     private GamePlayService gamePlayService;
 
-    private CoughtServiceImpl(){};
+    private CoughtServiceImpl(){}
 
     public static CoughtService getInstance(){
         if(instance == null){
@@ -68,5 +68,48 @@ public class CoughtServiceImpl implements CoughtService {
             return false;
         }
 
+    }
+    public boolean isCheatingPlap(){
+        gamePlayService = GamePlayServiceImpl.getInstance();
+        pl = PlayersStorageImpl.getInstance();
+        playerList = pl.getPlayerList();
+        indexOfMe = pl.getTempID();
+        myself = playerList.get(indexOfMe);
+        boolean cheated = false;
+
+        for (int i = 0; i<playerList.size();i++){
+            if(i != indexOfMe){
+                if(playerList.get(i).isCheating()){
+                    scoreCheater = playerList.get(i).getScore();
+                    scoreCheater++;
+                    myScore = myself.getScore();
+                    if(myScore!=0){
+                        myScore--;
+                    }
+                    gamePlayService.sendMsgCought(i,indexOfMe,scoreCheater,myScore,playerList.get(i).isCheating());
+                    cheated = true;
+                    break;
+                }else{
+                    cheated = false;
+                }
+            }
+        }
+        //If I cought Nobody, i get one point
+        if(!cheated ){
+            myScore = myself.getScore();
+            myScore++;
+
+//            for (int j = 0; j< playerList.size();j++){
+//                if(j != indexOfMe){
+//                    scoreCheater = playerList.get(j).getScore();
+//                    if(scoreCheater!=0){
+//                        scoreCheater--;
+//                    }
+//                    gamePlayService.sendMsgCought(j,indexOfMe,scoreCheater,myScore,playerList.get(j).isCheating());
+//                }
+//            }
+        }
+
+        return cheated;
     }
 }

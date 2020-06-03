@@ -28,4 +28,9 @@ public interface NetworkClient {
      * @param message
      */
     void sendMessage(BaseMessage message);
+    /**
+     * Close connection.
+     *
+     */
+    void close();
 }

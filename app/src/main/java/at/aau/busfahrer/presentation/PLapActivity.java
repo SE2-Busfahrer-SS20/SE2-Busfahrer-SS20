@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -18,8 +19,10 @@ import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 
 import at.aau.busfahrer.service.CheatService;
+import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 import at.aau.busfahrer.service.PLapClientService;
+import at.aau.busfahrer.service.impl.CoughtServiceImpl;
 import at.aau.busfahrer.service.impl.PLapClientServiceImpl;
 
 import shared.model.Card;
@@ -41,17 +44,19 @@ public class PLapActivity extends AppCompatActivity {
 
     private PLapClientService pLapClientService;
 
+    private TextView tV_cought;
+    private CoughtService coughtService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pLapClientService = PLapClientServiceImpl.getInstance();
         setContentView(R.layout.activity_p_lap);
-        pLapClientService.registerCardCallback(cards -> {
+        pLapClientService.registerCardCallback(pCards -> {
             runOnUiThread(() -> {
-                // this.pCards = cards;
-                turnCards(pCardIds, cards);
-                turnCards(pCardIds, cards);
+                turnCards(pCardIds, pCards);
+                turnCards(pCardIds, pCards);
             });
         });
         pLapClientService.startLab();
@@ -72,7 +77,28 @@ public class PLapActivity extends AppCompatActivity {
         cheatService.startListen();
         handleCheatPLab();
 
+        //CoughtService
+        //CoughtService
+        Button bt_cought = findViewById(R.id.bt_caught);
+        tV_cought = findViewById(R.id.tV_Cought);
+        coughtService = CoughtServiceImpl.getInstance();
+        tV_cought.setVisibility(View.INVISIBLE);
+
     }
+    public void onClickBtCought(View view) {
+        if(coughtService.isCheatingPlap()){
+            tV_cought.setText("Cheater wurde erwischt!!");
+            tV_cought.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
+        }else {
+            tV_cought.setText("Cheater wurde NICHT erwischt!!");
+            tV_cought.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
+        }
+    }
+
 
     /**
      * On Click Listener for the pyramid cards.
@@ -87,7 +113,6 @@ public class PLapActivity extends AppCompatActivity {
             Card card = pLapClientService.checkCardMatch(tV.getText().toString(), cards, getRow(v.getId()));
             if (card != null) {
                 CardUtility.turnCard(tV, card);
-               // matchedCardsCount++;
                 Log.d("CARD MATCH", "Your card matched with one from pyramid.");
             } else {
                 Log.d("CARD MATCH", "Sorry no match.");
@@ -106,7 +131,7 @@ public class PLapActivity extends AppCompatActivity {
      * @param ids   Ids of the TextViews which are containing the cards.
      * @param cards The Card array with Players cards.
      */
-    private void turnCards(int ids[], Card cards[]) {
+    private void turnCards(int[] ids, Card[] cards) {
         for (int i = 0; i < cards.length; i++) {
             CardUtility.turnCard(findViewById(ids[i]), cards[i]);
         }
@@ -118,7 +143,11 @@ public class PLapActivity extends AppCompatActivity {
      * @return ROW
      */
     private int getRow(int id) {
-        final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
+        final int ROW1 = 1;
+        final int ROW2 = 2;
+        final int ROW3 = 3;
+        final int ROW4 = 4;
+
         if (id == R.id.tV_pcard1)
             return ROW1;
         else if ( id == R.id.tV_pcard2 || id == R.id.tV_pcard3)
@@ -138,7 +167,7 @@ public class PLapActivity extends AppCompatActivity {
     private void handleCheatPLab() {
         cheatService.setSensorListener(() -> {
             cheatService.pauseListen();
-                new AlertDialog.Builder(PLapActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                new AlertDialog.Builder(PLapActivity.this, R.style.AlertDialogStyleDark)
                         // Yes
                         .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                             // sending network call
@@ -159,8 +188,18 @@ public class PLapActivity extends AppCompatActivity {
      * @return Card TextView for the Dialog.
      */
     private TextView getRandomCardFromPyramid() {
-        final int randomIndex = cheatService.randomNumber(pCardIds.length,0);
+        int randomIndex = cheatService.randomNumber(pCardIds.length);
         TextView cheatedCard = cheatService.generateCard(findViewById(pCardIds[randomIndex]), this);
+
+        // if random card is already turned
+        if (cheatedCard.getText().equals("\uD83C\uDCA0")){
+            for (int i = 0; i < pCardIds.length ; i++) {
+                if (cheatedCard.getText().equals("\uD83C\uDCA0")){
+                    cheatedCard = cheatService.generateCard(findViewById(pCardIds[i]), this);
+                }
+            }
+        }
+
         AlertDialog.Builder showCardDialog = new AlertDialog.Builder(PLapActivity.this, R.style.AlertDialogStyle);
         showCardDialog.setTitle("Your random cheat card is")
                 .setView(cheatedCard)
@@ -184,9 +223,9 @@ public class PLapActivity extends AppCompatActivity {
         gridView.setNumColumns(2);
 
         final AlertDialog.Builder selectCardChange = new AlertDialog.Builder(PLapActivity.this, R.style.AlertDialogStyleCards)
+                .setTitle("Select a Card from your hand you want to change.")
                 .setView(gridView)
                 .setCancelable(false);
-
         final Dialog dialog = selectCardChange.create();
         dialog.show();
         // item click listener, returns the selected card index
@@ -196,16 +235,18 @@ public class PLapActivity extends AppCompatActivity {
     }
 
     /**
-    Changes the card from the player hand with the cheated card.
-     * @param pos selected card of the player hand.
+     * Changes the card from the player hand with the cheated card.
+     * pyramidCard: updates the TextView in the player hand.
+     * cards: cheatedCard is inserted in the player hand.
+     * @param pos selected card from Dialog.
      */
     private void swapCard(int pos) {
-        TextView t = findViewById(myCardIds[pos]);
-        t.setText(cheatCard.getText());
-        t.setTextColor(cheatCard.getCurrentTextColor());
-        // Card cheatCard = CardUtility.getCardFromString(this.cheatCard.getText().toString(), pLabService.getPlayerCards());
-        // cards[pos] = cheatCard;
-        // * TODO get all pyramid cards instead of plabService.playerCards, -> NPE
+        TextView pyramidCard = findViewById(myCardIds[pos]);
+        pyramidCard.setText(cheatCard.getText());
+        pyramidCard.setTextColor(cheatCard.getCurrentTextColor());
+
+        Card newCheatedCard = CardUtility.getCardFromString(this.cheatCard.getText().toString(), pLapClientService.getPCards());
+        cards[pos] = newCheatedCard;
     }
 
     /**

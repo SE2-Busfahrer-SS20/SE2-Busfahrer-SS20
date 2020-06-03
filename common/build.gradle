@@ -29,12 +29,6 @@ jar {
 }
 
 sourceCompatibility = 1.8
-sonarqube {
-    properties {
-        property "sonar.projectKey", "SE2-Busfahrer-SS20_SE2-Busfahrer-SS20"
-    }
-}
-project.tasks["sonarqube"].dependsOn "jacocoTestReport"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

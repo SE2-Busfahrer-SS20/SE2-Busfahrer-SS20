@@ -54,6 +54,22 @@
         app:layout_constraintTop_toBottomOf="@+id/help" />
 
     <Button
+        android:id="@+id/leaderboard"
+        style="@style/button_orange"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:onClick="onClickLeaderboard"
+        android:text="Leaderboard"
+        android:theme="@style/button_orange"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_player" />
+
+    <Button
         android:id="@+id/report"
         android:layout_width="wrap_content"
         android:layout_height="29dp"
@@ -86,13 +102,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="64dp"
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/report"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_player"
+        app:layout_constraintTop_toBottomOf="@+id/leaderboard"
         app:srcCompat="@drawable/gamelogo" />
 
     <androidx.constraintlayout.widget.Guideline

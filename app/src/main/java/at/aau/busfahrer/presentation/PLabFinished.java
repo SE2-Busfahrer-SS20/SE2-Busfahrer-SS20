@@ -26,13 +26,11 @@ public class PLabFinished extends AppCompatActivity {
         setContentView(R.layout.activity_p_lap_finished);
         pLapClientService = PLapClientServiceImpl.getInstance();
         updateList(pLapClientService.getPlayerNames());
-        pLapClientService.registerFinishedLabCallback(lostGame -> {
-            runOnUiThread(() -> {
-                Intent bushmenIntent = new Intent(this, BushmenActivity.class);
-                bushmenIntent.putExtra("LOST_GAME", lostGame);
-                startActivity(bushmenIntent);
-            });
-        });
+        pLapClientService.registerFinishedLabCallback(lostGame -> runOnUiThread(() -> {
+            Intent bushmenIntent = new Intent(this, BushmenActivity.class);
+            bushmenIntent.putExtra("LOST_GAME", lostGame);
+            startActivity(bushmenIntent);
+        }));
         findViewById(R.id.progressBar_pfinished).setVisibility(View.INVISIBLE);
     }
 
