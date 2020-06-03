@@ -26,6 +26,8 @@ public class GamePlayServiceImplTest {
     private ArrayList<Card> Diamond;//Red
     private ArrayList<Card> Club;   //Black
 
+    private ArrayList<shared.model.Card>[] allCards;
+
     @Before
     public void initGamePlayServiceTest(){
         GamePlayService=GamePlayServiceImpl.getInstance();
@@ -33,6 +35,7 @@ public class GamePlayServiceImplTest {
         Heart=new ArrayList<>();
         Diamond=new ArrayList<>();
         Club=new ArrayList<>();
+        allCards=new ArrayList[4];
 
         for(int i=0; i<13 ;i++){
             Spade.add(new CardImpl  (0,i));//Spade
@@ -40,6 +43,10 @@ public class GamePlayServiceImplTest {
             Diamond.add(new CardImpl(2,i));//Diamond
             Club.add(new CardImpl   (3,i));//Club
         }
+        allCards[0]=Spade;
+        allCards[1]=Heart;
+        allCards[2]=Diamond;
+        allCards[3]=Club;
     }
 
     //Test GuessColor
@@ -85,59 +92,61 @@ public class GamePlayServiceImplTest {
 
     //Test GuessHigherLower
     @Test
-    public void guesHigherLower1(){ //Tests if ace is allways seen as highest card
+    public void guesHigherLower_TestAces(){ //Tests if ace is allways seen as highest card
 
         Card[] aces=new Card[4];
         for(int i=0;i<4;i++){
             aces[i]=new CardImpl(i,0);
         }
 
-        for(int i=0;i<4;i++) {   //loop all suits
-            for (int j = 1; j < 13; j++) { //loop all ranks
-
-                Card card = new CardImpl(i, j);
-                for (int k = 0; k < 4; k++) {   //loop all suits for reference card
-                    for (int l = j+1; l < 13; l++) {  //loop all higher ranks for reference card
-                        Card reference = new CardImpl(k, l);
-                        Assert.assertFalse(GamePlayService.guessHigherLower(card, reference, true));
-                    }
-
-                }
-            }
-        }
-
         for(int i=0;i<4;i++) {
             //Ace higher than all other cards
             for (int j = 0; j < Spade.size(); j++) {
                 //test if return true when guessing right
-                Assert.assertTrue(GamePlayService.guessHigherLower(aces[i], Spade.get(j),   true));
-                Assert.assertTrue(GamePlayService.guessHigherLower(aces[i], Heart.get(j),   true));
-                Assert.assertTrue(GamePlayService.guessHigherLower(aces[i], Diamond.get(j), true));
-                Assert.assertTrue(GamePlayService.guessHigherLower(aces[i], Club.get(j),    true));
-
+                for (ArrayList<Card> allCard : allCards) {
+                    Assert.assertTrue(GamePlayService.guessHigherLower(aces[i], allCard.get(j), true));
+                }
                 //test if return false when guessing wrong
-
-                Assert.assertFalse(GamePlayService.guessHigherLower(aces[i], Spade.get(j),   false));
-                Assert.assertFalse(GamePlayService.guessHigherLower(aces[i], Heart.get(j),   false));
-                Assert.assertFalse(GamePlayService.guessHigherLower(aces[i], Diamond.get(j), false));
-                Assert.assertFalse(GamePlayService.guessHigherLower(aces[i], Club.get(j),    false));
+                if(j!=0) {//Because same cards allways return true
+                    for (ArrayList<Card> allCard : allCards) {
+                        Assert.assertFalse(GamePlayService.guessHigherLower(aces[i], allCard.get(j), false));
+                    }
+                }
             }
 
             //All other Cards lower than ace
             for (int j = 1; j < Spade.size(); j++) {//loop all cards but aces
                 //test if return true when guessing right
-                Assert.assertTrue(GamePlayService.guessHigherLower(Spade.get(j),    aces[i], false));
-                Assert.assertTrue(GamePlayService.guessHigherLower(Heart.get(j),    aces[i], false));
-                Assert.assertTrue(GamePlayService.guessHigherLower(Diamond.get(j),  aces[i], false));
-                Assert.assertTrue(GamePlayService.guessHigherLower(Club.get(j),     aces[i], false));
+                for (ArrayList<Card> allCard : allCards) {
+                    Assert.assertTrue(GamePlayService.guessHigherLower(allCard.get(j), aces[i], false));
+                }
 
                 //test if return false when guessing wrong
-                Assert.assertFalse(GamePlayService.guessHigherLower(Spade.get(j),    aces[i], false));
-                Assert.assertFalse(GamePlayService.guessHigherLower(Heart.get(j),    aces[i], false));
-                Assert.assertFalse(GamePlayService.guessHigherLower(Diamond.get(j),  aces[i], false));
-                Assert.assertFalse(GamePlayService.guessHigherLower(Club.get(j),     aces[i], false));
+                for (ArrayList<Card> allCard : allCards) {
+                    Assert.assertFalse(GamePlayService.guessHigherLower(allCard.get(j), aces[i], true));
+                }
             }
         }
     }
 
+    @Test
+    public void guessHigherLower_TestAllCards(){
+        for(int i=0;i<4;i++) {   //loop all suits
+            for (int j = 1; j < 13; j++) { //loop all ranks
+
+                Card lower = new CardImpl(i, j);
+                for (int k = 0; k < 4; k++) {   //loop all suits for reference lower
+                    for (int l = j+1; l < 13; l++) {  //loop all higher ranks for reference-card
+                        Card higher = new CardImpl(k, l);
+
+                        Assert.assertTrue(GamePlayService.guessHigherLower(higher, lower, true)); //TestCase: card is higher, guessed correct
+                        Assert.assertFalse(GamePlayService.guessHigherLower(higher, lower, false)); //TestCase: card is higher, guessed wrong
+
+                        Assert.assertTrue(GamePlayService.guessHigherLower(lower, higher, false)); //TestCase: card is lower, guessed correct
+                        Assert.assertFalse(GamePlayService.guessHigherLower(lower, higher, true)); //TestCase: card is lower, guessed wrong
+                    }
+                }
+            }
+        }
+    }
 }
