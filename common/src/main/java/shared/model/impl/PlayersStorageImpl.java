@@ -49,21 +49,17 @@ public class PlayersStorageImpl implements PlayersStorage {
     }
 
     private void updatePlayerList() {
-        new Thread(new Runnable() {
-            public void run() {
-                if (preGameListener != null) {
-                    preGameListener.onAdditionalPlayer();
-                }
+        new Thread(() -> {
+            if (preGameListener != null) {
+                preGameListener.onAdditionalPlayer();
             }
         }).start();
     }
 
     private void gameStateChangedToReady() {
-        new Thread(new Runnable() {
-            public void run() {
-                if (preGameListener != null) {
-                    preGameListener.onGameStart();
-                }
+        new Thread(() -> {
+            if (preGameListener != null) {
+                preGameListener.onGameStart();
             }
         }).start();
     }
@@ -77,12 +73,9 @@ public class PlayersStorageImpl implements PlayersStorage {
 
     private void nextPlayersTurn() {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (guessRoundListener != null) {
-                    guessRoundListener.onUpdateMessage();
-                }
+        new Thread(() -> {
+            if (guessRoundListener != null) {
+                guessRoundListener.onUpdateMessage();
             }
         }).start();
 
