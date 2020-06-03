@@ -1,8 +1,24 @@
-apply plugin: 'java'
 
+plugins {
+    id 'java'
+    id 'org.sonarqube'
+    id 'jacoco'
+}
 repositories {
     mavenCentral()
+    jcenter()
+}
 
+
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
 }
 
 jar {
@@ -13,7 +29,6 @@ jar {
 }
 
 sourceCompatibility = 1.8
-
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
