@@ -93,14 +93,12 @@ public class GamePlayServiceImpl implements GamePlayService {
     @Override
     //Guess-Round #2
     public boolean guessHigherLower(Card card, Card reference, boolean guessHigher) {
-        int rank=card.getRank();
-        int rankRef=card.getRank();
 
-        //change rank of ace to 13
-        if (rank == 0)
-            rank = 13;
-        if (rankRef == 0)
-            rankRef = 13;
+
+        int rank=rank(card);
+        int rankRef=rank(reference);
+
+        System.out.println("****************RANK: "+rank+"\tREFERENCE RANK: "+rankRef);
 
         //equal cards count as correct guess
         if(rank==rankRef)
@@ -116,21 +114,15 @@ public class GamePlayServiceImpl implements GamePlayService {
     //Guess-Round #3
     public boolean guessBetweenOutside(Card card, Card refOne, Card refTwo, boolean guessBetween) {
         int rank, rankLow, rankHigh;
-        rank = card.getRank();
-        if (refOne.getRank() < refTwo.getRank()) {
-            rankLow = refOne.getRank();
-            rankHigh = refTwo.getRank();
-        } else {
-            rankLow = refOne.getRank();
-            rankHigh = refTwo.getRank();
+        rank = rank(card);
+
+        if(rank(refOne)<rank(refTwo)){
+            rankLow=rank(refOne);
+            rankHigh=rank(refTwo);
+        }else {
+            rankLow=rank(refTwo);
+            rankHigh=rank(refOne);
         }
-        //change rank of ace to 13
-        if (rank == 0)
-            rank = 13;
-        if (rankLow == 0)
-            rankLow = 13;
-        if (rankHigh == 0)
-            rankHigh = 13;
 
         //equal cards count as correct guess
         if (rank == rankLow || rank == rankHigh)
@@ -164,6 +156,12 @@ public class GamePlayServiceImpl implements GamePlayService {
         thread.start();
     }
 
+    private int rank(Card card){
+        int rank=card.getRank();
+        if(rank==0)
+            rank=13;
+        return rank;
+    }
     //////////////////////////////////////////////////////////////////////////
 
 
