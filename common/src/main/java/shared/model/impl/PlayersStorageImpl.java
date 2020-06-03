@@ -20,7 +20,7 @@ public class PlayersStorageImpl implements PlayersStorage {
 
 
     private PlayersStorageImpl(){
-        playerList= new ArrayList<PlayerDTO>();
+        playerList= new ArrayList<>();
         state=GameState.INIT;
     }
 
@@ -150,35 +150,12 @@ public class PlayersStorageImpl implements PlayersStorage {
         return playerScores;
     }
 
-//    public void setScore(ArrayList<Integer> score) {
-//        this.score = score;
-//    }
-//    public void initScores(){
-//        ArrayList<Integer> scores= new ArrayList<Integer>();
-//        for(int i=0;i< getPlayerNames().size();i++){
-//            scores.add(0);
-//        }
-//        this.score=scores;
-//    }
-
     public void updateOnMessage(List<PlayerDTO> playerList, int currentTurn){
         this.playerList=playerList;
         this.currentTurn=currentTurn;
         nextPlayersTurn(); //Callback
     }
     public void setPlayerFromDTO(List<PlayerDTO> playerDTOList){
-//        ArrayList<String> names= new ArrayList<>();
-//        ArrayList<Integer> scores= new ArrayList<>();
-//        ArrayList<Boolean> isCheating= new ArrayList<>();
-//
-//
-//        for(int i=0;i<playerDTOList.size();i++){
-//            names.add(playerDTOList.get(i).getName());
-//            scores.add(playerDTOList.get(i).getScore());
-//        }
-//        this.playerNames=names;
-//        this.score= scores;
-//        this.isCheating=isCheating;
         this.playerList=playerDTOList;
     }
 
