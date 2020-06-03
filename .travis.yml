@@ -49,7 +49,7 @@ android:
 
 script:
   - chmod +x gradlew                        # make executable
-  - ./gradlew test jacocoTestReport combinedTestReportRelease
+  - ./gradlew test jacocoTestReport jacocoTestReportRelease
   - ./gradlew lint
   - ./gradlew sonarqube
 

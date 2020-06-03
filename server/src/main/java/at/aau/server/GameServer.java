@@ -165,6 +165,7 @@ public class GameServer extends NetworkServerKryo {
                     for (int i = 0; i < gameService.getPlayerList().size(); i++) {
                         gameService.getPlayerList().get(i).getConnection().sendTCP(updateClients);
                     }
+
                 }
             }
         };

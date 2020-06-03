@@ -6,7 +6,8 @@
 *.html
 !about.html
 .DS_Store
-
+# exclude db files
+*.db
 # Files for the ART/Dalvik VM
 *.dex
 
