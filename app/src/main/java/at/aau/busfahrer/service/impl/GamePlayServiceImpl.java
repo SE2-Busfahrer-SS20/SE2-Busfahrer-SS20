@@ -93,8 +93,6 @@ public class GamePlayServiceImpl implements GamePlayService {
     @Override
     //Guess-Round #2
     public boolean guessHigherLower(Card card, Card reference, boolean guessHigher) {
-
-
         int rank=rank(card);
         int rankRef=rank(reference);
 
