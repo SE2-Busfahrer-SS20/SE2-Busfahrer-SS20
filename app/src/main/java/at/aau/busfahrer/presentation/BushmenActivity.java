@@ -336,7 +336,7 @@ public class BushmenActivity extends AppCompatActivity {
             dialog.dismiss();
             for (int i = 0; i < bushmenCards.length ; i++) {
                 if(i % 2 == 1 || i == 0){
-                    CardUtility.turnCard(findViewById(bushmenCards[i]),cards[i]);
+                    CardUtility.turnCard(findViewById(bushmenCards[i]),bushmenService.getCards().get(i));
                 }
             }
         },2000);
