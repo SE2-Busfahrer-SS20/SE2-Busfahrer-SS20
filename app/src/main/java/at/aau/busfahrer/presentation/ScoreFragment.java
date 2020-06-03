@@ -34,7 +34,7 @@ public class ScoreFragment extends Fragment {
 
         ListView listView= (ListView) view.findViewById(R.id.scoreList);
 
-        ArrayAdapter<String> listViewAdapter= new ArrayAdapter<String>(
+        ArrayAdapter<String> listViewAdapter= new ArrayAdapter<>(
                 getActivity(),
                 android.R.layout.simple_list_item_1,
                 scoreItems
