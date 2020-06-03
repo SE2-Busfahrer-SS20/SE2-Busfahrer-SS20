@@ -85,10 +85,9 @@ public class PlayersStorageImpl implements PlayersStorage {
     }
     public ArrayList<String> getPlayerNamesList(){
         ArrayList<String> playerNames= new ArrayList<>();
-        System.out.println("\n\n"+playerList.size());
+
         for(int i=0; i<playerList.size();i++){
             playerNames.add(playerList.get(i).getName());
-            System.out.println(playerList.get(i).getName());
         }
         return playerNames;
     }
@@ -164,7 +163,6 @@ public class PlayersStorageImpl implements PlayersStorage {
     }
     public void setCheating(int index){
         playerList.get(index).setCheating(true);
-        System.out.println("\n\n\n"+playerList.get(index).isCheating()+"\n\n\n");
     }
 
 
