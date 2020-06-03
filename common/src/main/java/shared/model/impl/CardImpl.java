@@ -18,8 +18,8 @@ public class CardImpl implements Card {
 
 
     public CardImpl() { //just for test purpose to solve error: " Caused by: com.esotericsoftware.kryo.KryoException: Class cannot be created (missing no-arg constructor): shared.model.impl.CardImpl"
-        suit = 1;   //Herz
-        rank = 1;   //Ass
+        suit = 0;   //Herz
+        rank = 0;   //Ass
     }
     public int getSuit( )
     {

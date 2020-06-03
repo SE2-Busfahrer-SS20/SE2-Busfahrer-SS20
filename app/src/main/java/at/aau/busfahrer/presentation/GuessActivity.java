@@ -277,8 +277,10 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     //This methode changes visibility of UI elements when it is not this players turn
     private void onPauseMode() {
         //Execute on runOnUIThread to enable calling this funiction in other thread
+
         runOnUiThread(() -> {
-            tV_guessQuestion.setText("wait till it is your turn..");   //TODO: Extend this to "it's playernames turn"
+            String currentPlayerName=playersStorage.getPlayerName(playersStorage.getCurrentTurn());
+            tV_guessQuestion.setText(currentPlayerName+" is playing.");
             bt_FirstOption.setVisibility(View.INVISIBLE);
             bt_SecondOption.setVisibility(View.INVISIBLE);
             bt_Spade.setVisibility(View.INVISIBLE);
@@ -286,7 +288,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             bt_Diamond.setVisibility(View.INVISIBLE);
             bt_Club.setVisibility(View.INVISIBLE);
             bt_cought.setVisibility(View.VISIBLE);
-
             tV_feedback.setVisibility(View.INVISIBLE);
         });
     }
