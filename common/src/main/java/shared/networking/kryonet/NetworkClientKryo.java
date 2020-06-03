@@ -59,11 +59,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
         client.addListener(listenLeaderboardmessage);
         client.addListener(new Listener() {
+            @Override
             public void received(Connection connection, Object object) {
-                // handle null objects or not known Objects.
-                if (!(object instanceof BaseMessage)) {
-                    // Log.info("Network Client Listener Error: Received Object is null or not from Type BaseMessage.");
-                } else if (object instanceof ConfirmRegisterMessage) {
+
+                if (object instanceof ConfirmRegisterMessage) {
                     Log.debug("Registration Confirmed");
                     playersStorage.setMaster(((ConfirmRegisterMessage)object).isMaster());
                     playersStorage.setCards(((ConfirmRegisterMessage)object).getCards());
@@ -74,7 +73,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 if(object instanceof NewPlayerMessage){
                     Log.debug("New Player in the Game");
                     boolean alreadyExists=false;
-                    //playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
                     for(int i=0;i<playersStorage.getPlayerList().size();i++){
                         if(playersStorage.getPlayerList().get(i).getName().equals(((NewPlayerMessage)object).getPlayer().getName())){
                             alreadyExists=true;
@@ -88,9 +86,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 }
 
                 if(object instanceof StartGameMessage){
-                    StartGameMessage sgm = (StartGameMessage) object;
                     Log.debug("Game can start now");
-                    //playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
                     playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
 
                     playersStorage.setState(GameState.READY);
@@ -133,11 +129,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     Log.debug("Callback is instance of TextMessage");
                     Log.debug("Text of TextMessage: "+((TextMessage) (object)).getText());
                     if(callbackMap.get(TextMessage.class)!=null)
-                    callbackMap.get(TextMessage.class).callback((BaseMessage) object);
+                        callbackMap.get(TextMessage.class).callback((BaseMessage) object);
                 }
                 if (object instanceof CheatedMessage) {
                     Log.debug("CheatedMessage received");
-                    System.out.println("\n\n\n CLIENT : "+((CheatedMessage) object).hasCheated()+"\n\n\n");
+                    Log.debug("\n\n\n CLIENT : "+((CheatedMessage) object).hasCheated()+"\n\n\n");
                     playersStorage.setCheating(((CheatedMessage) object).getTempID());
                 }
                 if(object instanceof CoughtMessage){
@@ -145,10 +141,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     CoughtMessage coughtMessage = (CoughtMessage)object;
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).setScore(coughtMessage.getScoreCheater());
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
-                    //Display the TextView on the currentPlayers Screen
-//                    if(coughtMessage.isCheated()){
-//
-//                    }
+
                     setTextViewVisible();
                 }
             }

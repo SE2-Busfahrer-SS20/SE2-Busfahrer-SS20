@@ -3,17 +3,17 @@ package shared.networking.dto;
 public class RegisterMessage extends BaseMessage {
 
     private String playerName;
-    private String MACAddress;
+    private String MacAddress;
 
     public RegisterMessage() {}
     public RegisterMessage(String playerName, String MACAdress) {
         this.playerName = playerName;
-        this.MACAddress = MACAdress;
+        this.MacAddress = MACAdress;
     }
 
     public String getPlayerName() {
         return playerName;
     }
-    public String getMACAddress(){return MACAddress; }
+    public String getMacAddress(){return MacAddress; }
 
 }
