@@ -13,7 +13,6 @@ import java.util.List;
 public class LeaderboardServiceImpl implements LeaderboardService{
     private static LeaderboardService instance;
     private NetworkClient client;
-    private List<String> ScoreList;
     private String hostname;
     private Callback<List<PlayerDTO>> playerCallback;
 

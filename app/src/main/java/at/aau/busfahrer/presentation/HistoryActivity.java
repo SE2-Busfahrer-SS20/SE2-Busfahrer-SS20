@@ -31,9 +31,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         leaderboardService=LeaderboardServiceImpl.getInstance();
         leaderboardService.setHostname(sharedPreferences.getString("HostName","127.0.0.1"));
-        leaderboardService.registerPlayerListCallback(playerList-> runOnUiThread(() -> {
-            updateList(playerList);
-        }));
+        leaderboardService.registerPlayerListCallback(playerList-> runOnUiThread(() -> updateList(playerList)));
         leaderboardService.connect();
         leaderboardService.updateScoreList();
 

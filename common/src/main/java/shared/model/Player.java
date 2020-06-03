@@ -17,7 +17,7 @@ public interface Player {
     void addPoints(int points);
 
     int getTempID();
-    void setTempID(int ID);
+    void setTempID(int id);
 
     boolean isCheated();
     void setCheated(boolean cheated);
