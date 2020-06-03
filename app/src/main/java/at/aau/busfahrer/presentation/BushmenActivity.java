@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,17 +22,12 @@ import shared.networking.kryonet.NetworkClientKryo;
 @SuppressWarnings("unused")
 public class BushmenActivity extends AppCompatActivity {
 
-//    private Card[] cards;
-
     private final int[] bushmenCards = {R.id.tV_card1, R.id.tV_card2, R.id.tV_card3, R.id.tV_card4, R.id.tV_card5, R.id.tV_card6, R.id.tV_card7};
     
     private NetworkClient networkClient = NetworkClientKryo.getInstance();
 
     TextView TxtPunkte;
 
-//    private int PunkteAnzahlBusfahrer = 0;
-
-//    private int KartenCounter = 0;
 
     private BushmenService bushmenService;
 
@@ -46,18 +42,6 @@ public class BushmenActivity extends AppCompatActivity {
                 turnCardRecieved(cardId, card);
             });
         });
-//        networkClient.registerCallback(BushmenMessage.class, msg -> {
-//            BushmenMessage bushmenMessage = (BushmenMessage) msg;
-//            this.cards = bushmenMessage.getCards();
-//            Log.i("Bushmen","BushmenCards"+bushmenMessage.getCards().length);
-//        });
-
-//        networkClient.registerCallback(BushmenCardMessage.class, msg ->
-//                runOnUiThread(() -> {
-//                    BushmenCardMessage bushmenCardMessage = (BushmenCardMessage) msg;
-//                    Log.i("Bushmen","BushmenCards recieved"+bushmenCardMessage.getCardId());
-//                    turnCardRecieved(bushmenCardMessage.getCardId(), bushmenCardMessage.getCard());
-//                }));
 
 
     }
@@ -66,8 +50,9 @@ public class BushmenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bushmen);
         hideAppTitleBar();
+        setContentView(R.layout.activity_bushmen);
+
 
         TxtPunkte = findViewById(R.id.punkte);
 
@@ -277,7 +262,7 @@ public class BushmenActivity extends AppCompatActivity {
     // removes android status bar on top, for fullscreen
     private void hideAppTitleBar() {
         //Remove title bar
-       // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
