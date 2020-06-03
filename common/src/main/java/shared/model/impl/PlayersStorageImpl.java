@@ -1,7 +1,5 @@
 package shared.model.impl;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import shared.model.*;
@@ -12,26 +10,18 @@ public class PlayersStorageImpl implements PlayersStorage {
     private Card[] cards;
     private GameState state;
 
-    private Card[] bushmenCards;
-   //private ArrayList<String> playerNames;
+
     private boolean master=false;
     private int currentTurn;
-    //private ArrayList<Integer> score;
-    //private ArrayList<Boolean> isCheating;
     private List<PlayerDTO> playerList;
-
-
 
     //Singleton Pattern
     private static PlayersStorageImpl instance;
 
 
     private PlayersStorageImpl(){
-//        playerNames = new ArrayList<String>();
-//        score= new ArrayList<Integer>();
         playerList= new ArrayList<PlayerDTO>();
         state=GameState.INIT;
-
     }
 
     public static synchronized PlayersStorageImpl getInstance() {
