@@ -133,7 +133,7 @@ public class PlayersStorageImpl implements PlayersStorage {
         this.currentTurn = currentTurn;
     }
 
-    public void setPlayerList(ArrayList<PlayerDTO> players) {
+    public void setPlayerList(List<PlayerDTO> players) {
         this.playerList = players;
     }
     public List<PlayerDTO> getPlayerList(){
@@ -141,7 +141,7 @@ public class PlayersStorageImpl implements PlayersStorage {
     }
 
 
-    public ArrayList<Integer> getScoreList() {
+    public List<Integer> getScoreList() {
         ArrayList<Integer> playerScores= new ArrayList<>();
         for(int i=0; i<playerList.size();i++){
             playerScores.add(playerList.get(i).getScore());
