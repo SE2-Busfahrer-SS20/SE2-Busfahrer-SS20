@@ -1,7 +1,9 @@
 package at.aau.busfahrer.service.impl;
 
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import at.aau.busfahrer.service.BushmenService;
 import shared.model.Card;
 import shared.networking.NetworkClient;
@@ -26,6 +28,8 @@ public class BushmenServiceImpl implements BushmenService {
         punkteAnzahlBusfahrer = 10;
         isLooser = true;
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
 
     @Override
     public void setUpCardTurnCallback(BiConsumer<Integer, Card> callback) {
