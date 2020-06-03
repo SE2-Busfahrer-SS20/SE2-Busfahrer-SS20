@@ -186,7 +186,7 @@ public class GameServer extends NetworkServerKryo {
                         messageCallback.callback((TextMessage) object);
                     connection.sendTCP(new TextMessage(RESPONSE_TEST));
                     Log.debug("Received TextMessage: " + ((TextMessage) object).getText());
-                } else if (object instanceof BaseMessage) {
+                } else if (object instanceof BaseMessage && !(object instanceof LeaderboardMessage)) {
                     Log.info("Action not supported.");
                     connection.sendTCP(new TextMessage("Action not supported."));
                 }
@@ -202,6 +202,7 @@ public class GameServer extends NetworkServerKryo {
                     try {
                         List<PlayerDTO> playerDTOList=db.getLeaderboardAscending();
                         connection.sendTCP(new LeaderboardMessage(playerDTOList));
+                        connection.close();
                     }
                     catch (Exception e){
                         Log.error("Failed to query db!", e);

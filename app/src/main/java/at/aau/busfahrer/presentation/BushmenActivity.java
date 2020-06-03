@@ -12,60 +12,46 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.core.content.ContextCompat;
 
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.CheatService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 
-
 import at.aau.busfahrer.R;
+import at.aau.busfahrer.service.BushmenService;
+import at.aau.busfahrer.service.impl.BushmenServiceImpl;
 import shared.model.Card;
 import shared.networking.NetworkClient;
-import shared.networking.dto.BushmenCardMessage;
-import shared.networking.dto.BushmenMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 
 @SuppressWarnings("unused")
-
-
 public class BushmenActivity extends AppCompatActivity {
-
-
-    private Card[] cards;
 
     private final int[] bushmenCards = {R.id.tV_card1, R.id.tV_card2, R.id.tV_card3, R.id.tV_card4, R.id.tV_card5, R.id.tV_card6, R.id.tV_card7};
     
     private NetworkClient networkClient = NetworkClientKryo.getInstance();
-    
 
     TextView TxtPunkte;
 
-    private int PunkteAnzahlBusfahrer = 0;
 
-    private int KartenCounter = 0;
-
-    private boolean isLooser; // is true in case that the player is a looser.
+    private BushmenService bushmenService;
 
     private CheatService cheatService;
 
     public BushmenActivity() {
 
-        //Callback der aufgerufen wird wenn Client die Karten erhalten hat
-        networkClient.registerCallback(BushmenMessage.class, msg -> {
-            BushmenMessage bushmenMessage = (BushmenMessage) msg;
-            this.cards = bushmenMessage.getCards();
-            Log.i("Bushmen","BushmenCards"+bushmenMessage.getCards().length);
-        });
+        bushmenService = new BushmenServiceImpl(networkClient);
 
-        networkClient.registerCallback(BushmenCardMessage.class, msg ->
-                runOnUiThread(() -> {
-                    BushmenCardMessage bushmenCardMessage = (BushmenCardMessage) msg;
-                    Log.i("Bushmen","BushmenCards recieved"+bushmenCardMessage.getCardId());
-                    turnCardRecieved(bushmenCardMessage.getCardId(), bushmenCardMessage.getCard());
-                }));
+        bushmenService.setUpCardTurnCallback((cardId, card) -> {
+            Log.i("Bushmen","BushmenCards recieved"+cardId + " " + card);
+
+            runOnUiThread(() -> {
+                turnCardRecieved(cardId, card);
+            });
+        });
 
 
     }
@@ -74,8 +60,9 @@ public class BushmenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bushmen);
         hideAppTitleBar();
+        setContentView(R.layout.activity_bushmen);
+
 
         // Cheat service init
         cheatService = CheatServiceImpl.getInstance();
@@ -85,23 +72,22 @@ public class BushmenActivity extends AppCompatActivity {
         TxtPunkte = findViewById(R.id.punkte);
 
 
-        //Kommt man zum Busfahrer startet man mit 10 Punkten
-        PunkteAnzahlBusfahrer += 10;
-        updateAnzeige();
 
-        isLooser = true;
+        TxtPunkte = findViewById(R.id.punkte);
+
         // set looser variable. Value will be set in PLapFinished Activity.
-        isLooser = getIntent().getBooleanExtra("LOST_GAME", false);
+        bushmenService.setLooser(getIntent().getBooleanExtra("LOST_GAME", false));
 
         // Neue Initialisieren
         resetGame();
-
+        updateAnzeige();
         
         // Für den Zuschauer wird angezeigt, dass er Zuschauer ist
+        TextView textView = findViewById(R.id.headerBushmen);
 
-        TextView textView= findViewById(R.id.headerBushmen);
-      
-        if(isLooser){
+
+        if(bushmenService.isLooser()){
+
             textView.setText("Oh dear! You have to drive with the bus");
             handleCheat();
         }else {
@@ -112,7 +98,7 @@ public class BushmenActivity extends AppCompatActivity {
 
 
     private void updateAnzeige() {
-        TxtPunkte.setText(String.valueOf(PunkteAnzahlBusfahrer));
+        TxtPunkte.setText("" + bushmenService.getPunkteAnzahlBusfahrer());
     }
 
 
@@ -150,7 +136,8 @@ public class BushmenActivity extends AppCompatActivity {
         Thread startThread = new Thread(() -> {
             try {
               Log.i("Bushmen","Card turned"+cardId);
-                this.networkClient.sendMessage(new BushmenCardMessage(cardId, cards[cardId]));
+//                this.networkClient.sendMessage(new BushmenCardMessage(cardId, cards[cardId]));
+                this.bushmenService.turnCard(cardId);
             } catch (Exception e) {
                 Log.e("Error in BushmenCard", e.toString(), e);
             }
@@ -183,13 +170,13 @@ public class BushmenActivity extends AppCompatActivity {
         if (c.getRank() == 0 || c.getRank() == 10 || c.getRank() == 11 || c.getRank() == 12) {
 
             // Karten für Eingabe Sperren
-            enableCards((TextView) findViewById(R.id.tV_card1), false);
-            enableCards((TextView) findViewById(R.id.tV_card2), false);
-            enableCards((TextView) findViewById(R.id.tV_card3), false);
-            enableCards((TextView) findViewById(R.id.tV_card4), false);
-            enableCards((TextView) findViewById(R.id.tV_card5), false);
-            enableCards((TextView) findViewById(R.id.tV_card6), false);
-            enableCards((TextView) findViewById(R.id.tV_card7), false);
+            enableCards(findViewById(R.id.tV_card1), false);
+            enableCards(findViewById(R.id.tV_card2), false);
+            enableCards(findViewById(R.id.tV_card3), false);
+            enableCards(findViewById(R.id.tV_card4), false);
+            enableCards(findViewById(R.id.tV_card5), false);
+            enableCards(findViewById(R.id.tV_card6), false);
+            enableCards(findViewById(R.id.tV_card7), false);
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
             dialog.setTitle("Verloren");
@@ -209,18 +196,24 @@ public class BushmenActivity extends AppCompatActivity {
 
             // Update der Punkte wenn er Bildkarte erwischt +3, andere Karten -4 Punkte
 
-            PunkteAnzahlBusfahrer += 3;
+//            PunkteAnzahlBusfahrer += 3;
+            bushmenService.addPunkteAnzahlBusfahrer(3);
             updateAnzeige();
         } else {
-            PunkteAnzahlBusfahrer -= 4;
+//            PunkteAnzahlBusfahrer -= 4;
+            bushmenService.addPunkteAnzahlBusfahrer(-4);
             updateAnzeige();
-            KartenCounter++;
+//            KartenCounter++;
+            bushmenService.incrementKartenCounter();
 
-            if (KartenCounter == 4) {
+            if (bushmenService.hasWon()) {
 
                 AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this);
                 dialog.setTitle("Gewonnen");
-                dialog.setMessage("Sie sind der Gewinner");
+
+                String gewinnerNachricht = bushmenService.isLooser() ? "Sie sind der Gewinner" : "Danke für's Zuschauen";
+                dialog.setMessage(gewinnerNachricht);
+
                 dialog.setCancelable(false);
                 dialog.setPositiveButton("OK", (dialog12, which) -> {
                     //Zurück zum Hauptmenü nach Sieg
@@ -231,11 +224,8 @@ public class BushmenActivity extends AppCompatActivity {
 
                 AlertDialog alert = dialog.create();
                 alert.show();
-
             }
         }
-
-
     }
 
     private void setCardBacksite(TextView tV) {
@@ -249,34 +239,39 @@ public class BushmenActivity extends AppCompatActivity {
 
     private void resetGame() {
         // Karten Zurücksetzen
-        setCardBacksite((TextView) findViewById(R.id.tV_card1));
-        setCardBacksite((TextView) findViewById(R.id.tV_card2));
-        setCardBacksite((TextView) findViewById(R.id.tV_card3));
-        setCardBacksite((TextView) findViewById(R.id.tV_card4));
-        setCardBacksite((TextView) findViewById(R.id.tV_card5));
-        setCardBacksite((TextView) findViewById(R.id.tV_card6));
-        setCardBacksite((TextView) findViewById(R.id.tV_card7));
+        setCardBacksite(findViewById(R.id.tV_card1));
+        setCardBacksite(findViewById(R.id.tV_card2));
+        setCardBacksite(findViewById(R.id.tV_card3));
+        setCardBacksite(findViewById(R.id.tV_card4));
+        setCardBacksite(findViewById(R.id.tV_card5));
+        setCardBacksite(findViewById(R.id.tV_card6));
+        setCardBacksite(findViewById(R.id.tV_card7));
 
         // Karten für Eingabe Freigeben
-        enableCards((TextView) findViewById(R.id.tV_card1), isLooser);
-        enableCards((TextView) findViewById(R.id.tV_card2), isLooser);
-        enableCards((TextView) findViewById(R.id.tV_card3), isLooser);
-        enableCards((TextView) findViewById(R.id.tV_card4), isLooser);
-        enableCards((TextView) findViewById(R.id.tV_card5), isLooser);
-        enableCards((TextView) findViewById(R.id.tV_card6), isLooser);
-        enableCards((TextView) findViewById(R.id.tV_card7), isLooser);
+        boolean isLooser = bushmenService.isLooser();
+
+        enableCards(findViewById(R.id.tV_card1), isLooser);
+        enableCards(findViewById(R.id.tV_card2), isLooser);
+        enableCards(findViewById(R.id.tV_card3), isLooser);
+        enableCards(findViewById(R.id.tV_card4), isLooser);
+        enableCards(findViewById(R.id.tV_card5), isLooser);
+        enableCards(findViewById(R.id.tV_card6), isLooser);
+        enableCards(findViewById(R.id.tV_card7), isLooser);
 
 
         // Karten NEU Austeilen
 
 
         //Kartenzähler zurückgesetzt
-        KartenCounter = 0;
+//        KartenCounter = 0;
+        bushmenService.resetKartenCounter();
+        bushmenService.resetPunkteAnzahlBusfahrer();
 
         Thread startThread = new Thread(() -> {
             try {
                 Log.i("Bushmen Service", "Bushmen start was triggered.");
-                this.networkClient.sendMessage(new BushmenMessage());
+//                this.networkClient.sendMessage(new BushmenMessage());
+                this.bushmenService.startBushmanRound();
             } catch (Exception e) {
                 Log.e("Error in BushmenService", e.toString(), e);
             }
@@ -341,7 +336,7 @@ public class BushmenActivity extends AppCompatActivity {
             dialog.dismiss();
             for (int i = 0; i < bushmenCards.length ; i++) {
                 if(i % 2 == 1 || i == 0){
-                    CardUtility.turnCard(findViewById(bushmenCards[i]),cards[i]);
+                    CardUtility.turnCard(findViewById(bushmenCards[i]),bushmenService.getCards().get(i));
                 }
             }
         },2000);
