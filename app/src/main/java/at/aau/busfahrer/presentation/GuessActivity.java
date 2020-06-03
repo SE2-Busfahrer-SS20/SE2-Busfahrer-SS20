@@ -140,11 +140,14 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     public void coughtTetxViewListener(){
         runOnUiThread(() -> {
             if (playersStorage.getTempID() == playersStorage.getCurrentTurn()) {
-                tV_erwischt.setText("Erwischt!!!!");
-                tV_erwischt.setVisibility(View.VISIBLE);
-                //after 5s the TextView is invisible
-                tV_erwischt.postDelayed(() -> tV_erwischt.setVisibility(View.INVISIBLE), 5000);
+                if(playersStorage.getPlayerList().get(playersStorage.getCurrentTurn()).isCheating()){
+                    tV_erwischt.setText("Erwischt!!!!");
+                    tV_erwischt.setVisibility(View.VISIBLE);
+                    //after 5s the TextView is invisible
+                    tV_erwischt.postDelayed(() -> tV_erwischt.setVisibility(View.INVISIBLE), 5000);
+                }
             }
+            updateScoreButton(playersStorage.getScoreList().get(playersStorage.getTempID()));
         });
     }
 
