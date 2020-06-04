@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import shared.model.CoughtServiceListener;
+import shared.model.CoughtServiceListenerPlap;
 import shared.model.GameState;
 import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
@@ -150,6 +151,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 //
 //                    }
                     setTextViewVisible();
+                    //Kann zu problemen kommen wenn der boolean cheted auf false gesetzt wird,
+                    if(playersStorage.getTempID() == coughtMessage.getIndexCheater() && playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).isCheating() ){
+                        setTextViewVisiblePlap();
+                    }
                 }
             }
         });
@@ -175,12 +180,19 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     private CoughtServiceListener coughtServiceListener;
+    private CoughtServiceListenerPlap coughtServiceListenerPlap;
 
     public void coughtCallback(CoughtServiceListener coughtServiceListener){
         this.coughtServiceListener = coughtServiceListener;
     }
     public void setTextViewVisible(){
         new Thread(() -> coughtServiceListener.coughtTetxViewListener()).start();
+    }
+    public void coughtCallbackPlap(CoughtServiceListenerPlap coughtServiceListenerPlap){
+        this.coughtServiceListenerPlap = coughtServiceListenerPlap;
+    }
+    public void setTextViewVisiblePlap(){
+        new Thread(() -> coughtServiceListenerPlap.coughtTextViewListenerPlap()).start();
     }
 
 
