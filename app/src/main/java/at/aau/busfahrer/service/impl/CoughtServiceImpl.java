@@ -62,10 +62,12 @@ public class CoughtServiceImpl implements CoughtService {
             scoreCheater = playerCheated.getScore();
             if(scoreCheater!=0){
                 scoreCheater--;
+                playerCheated.setScore(scoreCheater);
             }
             //myScore will be increased one time
             myScore = myself.getScore();
             myScore++;
+            myself.setScore(myScore);
             gamePlayService.sendMsgCought(currentPlayer,indexOfMe,scoreCheater,myScore,playerCheated.isCheating());
             return false;
         }
