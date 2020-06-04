@@ -4,7 +4,6 @@ import at.aau.busfahrer.service.CheatService;
 import shared.networking.NetworkClient;
 import shared.networking.dto.CheatedMessage;
 import shared.networking.kryonet.NetworkClientKryo;
-import shared.networking.kryonet.NetworkServerKryo;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,6 +18,13 @@ import android.widget.TextView;
 import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This Service class handles cheating using Android Sensors.
+ * The player can choose between three types (Light, Accelerometer, Fair).
+ * The service is started on UI by triggering SensorEvents in the game.
+ * In all 3 game rounds the player has the possibility to cheat once, after one valid cheating attempt the
+ * CheatService is deactivated. Every successful cheat event is sent to the Server.
+ */
 public class CheatServiceImpl implements CheatService {
 
     private static final String TAG = "CheatServiceImpl";
@@ -30,13 +36,15 @@ public class CheatServiceImpl implements CheatService {
     private static CheatService instance;
 
 
+    /**
+     Callback for UI Update Call
+     */
     public interface SensorListener {
         void handle();
     }
 
     private int playerId;
     private int sensorType;
-
     private Context context;
     private SensorListener sensorListener;
     private SensorManager sensorManager;
@@ -44,7 +52,6 @@ public class CheatServiceImpl implements CheatService {
     private long lastUpdateMs;
     private boolean isSensorListen = false;
 
-    @SuppressWarnings("unused")
     private CheatServiceImpl() {
     }
 
@@ -55,10 +62,18 @@ public class CheatServiceImpl implements CheatService {
         return instance;
     }
 
+    /**
+     * Register a callback for ui calls
+     * @param sensorListener UI Callback
+     */
     public void setSensorListener(SensorListener sensorListener) {
         this.sensorListener = sensorListener;
     }
 
+    /**
+     * Initializes the CheatService including
+     * SensorManager, Sensor, cheatType and then start listening for sensor events.
+     */
     private void onStart() {
         Log.i(TAG, "Service started");
         if(!testMode){
@@ -88,6 +103,9 @@ public class CheatServiceImpl implements CheatService {
         }
     }
 
+    /**
+    Pause listening for sensor events, needed for synchronize with android lifecycle.
+     */
     private void onPause() {
         Log.i(TAG, "Service paused");
         if (isSensorListen && sensorManager != null) {
@@ -96,15 +114,20 @@ public class CheatServiceImpl implements CheatService {
         }
     }
 
+    /**
+     Resume listening for sensor events, needed for synchronize with android lifecycle.
+     */
     private void onResume() {
         Log.i(TAG, "Service resume");
         if (!isSensorListen && sensorManager != null) {
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
             isSensorListen = true;
         }
-
     }
 
+    /**
+        Kills the CheatService, stop listening.
+     */
     private void onStop() {
         Log.i(TAG, "Service killed");
         if (isSensorListen && sensorManager != null) {
@@ -125,6 +148,12 @@ public class CheatServiceImpl implements CheatService {
         }
     }
 
+    /**
+    This is triggered when a accelerometer sensor event fires. The method checks if the event
+    is a cheating attempt from the player by calculating the amount of shaking force.
+     @param time timeStamp when the event occurred.
+     @param values sensorEvent values (x,y,z) detected movement.
+     */
     @Override
     public void getAccelerometer(float[] values, long time) {
         long timestamp = TimeUnit.MILLISECONDS.convert(time, TimeUnit.NANOSECONDS);
@@ -143,7 +172,12 @@ public class CheatServiceImpl implements CheatService {
             }
         }
     }
-
+    /**
+     This is triggered when a light sensor event fires. The method checks if the event
+     is a cheating attempt from the player by calculating light intensity.
+     @param time timeStamp when the event occurred.
+     @param values sensorEvent value(x), detected light level
+     */
     @Override
     public void getLight(float[] values, long time) {
         long timestamp = TimeUnit.MILLISECONDS.convert(time, TimeUnit.NANOSECONDS);
@@ -159,6 +193,7 @@ public class CheatServiceImpl implements CheatService {
             }
         }
     }
+
 
     public void startListen() {
         onStart();
@@ -185,11 +220,19 @@ public class CheatServiceImpl implements CheatService {
         }
     }
 
+    /**
+     * Kills cheatService singleton instance
+     */
     public static void reset(){
         instance = null;
     }
 
-    // network call for player cheated in game
+    /**
+     * Sending a Network call to the Server if a player cheated.
+     * @param cheated  true when cheat is successful.
+     * @param timeStamp time of cheat attempt.
+     * @param cheatType selected cheatType from the player
+     */
     public void sendMsgCheated(final boolean cheated, final long timeStamp, final int cheatType) {
         NetworkClient client = NetworkClientKryo.getInstance();
         Log.i(TAG, "Sending CheatMessage to Server");
@@ -200,11 +243,22 @@ public class CheatServiceImpl implements CheatService {
         thread.start();
     }
 
+    /**
+     * Generates a positive random number.
+     * @param max highest number limit.
+     * @return random number
+     */
     public int randomNumber(int max) {
         SecureRandom random = new SecureRandom ();
         return random.nextInt(max);
     }
 
+    /**
+     * Generates a Card TextView by copying an existing TextViw.
+     * @param tv copied input TextView
+     * @param context Context where TextView is used.
+     * @return New TextView based on the input TextView.
+     */
     public TextView generateCard(TextView tv, Context context) {
         TextView cheatCard = new TextView(context);
         cheatCard.setText(tv.getText());
@@ -219,9 +273,8 @@ public class CheatServiceImpl implements CheatService {
         // NOT NEEDED
     }
 
-    /**
-     * Getter and Setter some of these methods are used for testing.
-     */
+    // Getter and Setter Methods
+
     public int getPlayerId() {
         return playerId;
     }
