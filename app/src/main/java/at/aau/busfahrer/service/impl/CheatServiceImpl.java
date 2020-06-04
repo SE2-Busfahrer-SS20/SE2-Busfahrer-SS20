@@ -237,6 +237,26 @@ public class CheatServiceImpl implements CheatService {
     public void setContext(Context context, String name) {
         this.context = context;
     }
-    public Context getContext() { return context; }
+    public Context getContext() {
+        return context;
+    }
+    public SensorManager getSensorManager() {
+        return sensorManager;
+    }
+    public void setSensorManager(SensorManager sensorManager){
+        this.sensorManager = sensorManager;
+    }
+    public static int getTypeFair() {
+        return TYPE_FAIR;
+    }
+    public Sensor getSensor() {
+        return sensor;
+    }
+    public boolean isSensorListen() {
+        return isSensorListen;
+    }
+    public void setTestMode(boolean testMode){
+        this.testMode = testMode;
+    }
 
 }
