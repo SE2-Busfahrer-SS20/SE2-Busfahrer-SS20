@@ -1,7 +1,5 @@
 package shared.model.impl;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import shared.model.*;
@@ -12,12 +10,9 @@ public class PlayersStorageImpl implements PlayersStorage {
     private Card[] cards;
     private GameState state;
 
-    private Card[] bushmenCards;
-   //private ArrayList<String> playerNames;
+
     private boolean master=false;
     private int currentTurn;
-    //private ArrayList<Integer> score;
-    //private ArrayList<Boolean> isCheating;
     private List<PlayerDTO> playerList;
 
 
@@ -30,11 +25,8 @@ public class PlayersStorageImpl implements PlayersStorage {
 
 
     private PlayersStorageImpl(){
-//        playerNames = new ArrayList<String>();
-//        score= new ArrayList<Integer>();
-        playerList= new ArrayList<PlayerDTO>();
+        playerList= new ArrayList<>();
         state=GameState.INIT;
-
     }
 
     public static synchronized PlayersStorageImpl getInstance() {
@@ -52,21 +44,17 @@ public class PlayersStorageImpl implements PlayersStorage {
     }
 
     private void updatePlayerList() {
-        new Thread(new Runnable() {
-            public void run() {
-                if (preGameListener != null) {
-                    preGameListener.onAdditionalPlayer();
-                }
+        new Thread(() -> {
+            if (preGameListener != null) {
+                preGameListener.onAdditionalPlayer();
             }
         }).start();
     }
 
     private void gameStateChangedToReady() {
-        new Thread(new Runnable() {
-            public void run() {
-                if (preGameListener != null) {
-                    preGameListener.onGameStart();
-                }
+        new Thread(() -> {
+            if (preGameListener != null) {
+                preGameListener.onGameStart();
             }
         }).start();
     }
@@ -80,12 +68,9 @@ public class PlayersStorageImpl implements PlayersStorage {
 
     private void nextPlayersTurn() {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (guessRoundListener != null) {
-                    guessRoundListener.onUpdateMessage();
-                }
+        new Thread(() -> {
+            if (guessRoundListener != null) {
+                guessRoundListener.onUpdateMessage();
             }
         }).start();
 
@@ -105,10 +90,9 @@ public class PlayersStorageImpl implements PlayersStorage {
     }
     public ArrayList<String> getPlayerNamesList(){
         ArrayList<String> playerNames= new ArrayList<>();
-        System.out.println("\n\n"+playerList.size());
+
         for(int i=0; i<playerList.size();i++){
             playerNames.add(playerList.get(i).getName());
-            System.out.println(playerList.get(i).getName());
         }
         return playerNames;
     }
@@ -154,7 +138,7 @@ public class PlayersStorageImpl implements PlayersStorage {
         this.currentTurn = currentTurn;
     }
 
-    public void setPlayerList(ArrayList<PlayerDTO> players) {
+    public void setPlayerList(List<PlayerDTO> players) {
         this.playerList = players;
     }
     public List<PlayerDTO> getPlayerList(){
@@ -162,7 +146,7 @@ public class PlayersStorageImpl implements PlayersStorage {
     }
 
 
-    public ArrayList<Integer> getScoreList() {
+    public List<Integer> getScoreList() {
         ArrayList<Integer> playerScores= new ArrayList<>();
         for(int i=0; i<playerList.size();i++){
             playerScores.add(playerList.get(i).getScore());
@@ -170,35 +154,12 @@ public class PlayersStorageImpl implements PlayersStorage {
         return playerScores;
     }
 
-//    public void setScore(ArrayList<Integer> score) {
-//        this.score = score;
-//    }
-//    public void initScores(){
-//        ArrayList<Integer> scores= new ArrayList<Integer>();
-//        for(int i=0;i< getPlayerNames().size();i++){
-//            scores.add(0);
-//        }
-//        this.score=scores;
-//    }
-
     public void updateOnMessage(List<PlayerDTO> playerList, int currentTurn){
         this.playerList=playerList;
         this.currentTurn=currentTurn;
         nextPlayersTurn(); //Callback
     }
     public void setPlayerFromDTO(List<PlayerDTO> playerDTOList){
-//        ArrayList<String> names= new ArrayList<>();
-//        ArrayList<Integer> scores= new ArrayList<>();
-//        ArrayList<Boolean> isCheating= new ArrayList<>();
-//
-//
-//        for(int i=0;i<playerDTOList.size();i++){
-//            names.add(playerDTOList.get(i).getName());
-//            scores.add(playerDTOList.get(i).getScore());
-//        }
-//        this.playerNames=names;
-//        this.score= scores;
-//        this.isCheating=isCheating;
         this.playerList=playerDTOList;
     }
 
@@ -207,7 +168,6 @@ public class PlayersStorageImpl implements PlayersStorage {
     }
     public void setCheating(int index){
         playerList.get(index).setCheating(true);
-        System.out.println("\n\n\n"+playerList.get(index).isCheating()+"\n\n\n");
     }
 
 

@@ -12,7 +12,6 @@ public interface PlayersStorage {
 
     String getPlayerName(int index);
     ArrayList<String> getPlayerNamesList();
-    //void addPlayerName(String name);
 
     boolean isMaster();
     void setMaster(boolean master);

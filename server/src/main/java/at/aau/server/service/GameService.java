@@ -6,7 +6,6 @@ import java.util.List;
 
 import shared.exceptions.PlayerLimitExceededException;
 import shared.model.Card;
-import shared.model.Deck;
 import shared.model.Game;
 import shared.model.GameState;
 import shared.model.Player;
@@ -43,7 +42,7 @@ public interface GameService {
     void endGame();
     Game getGame();
     void createGame();
-    void createGame(String masterName, String MACAddress, Connection connection) throws PlayerLimitExceededException;
+    void createGame(String masterName, String MacAddress, Connection connection) throws PlayerLimitExceededException;
     boolean gameExists();
     Card[] getPlayersCards(int player);
     //Guess-Rounds

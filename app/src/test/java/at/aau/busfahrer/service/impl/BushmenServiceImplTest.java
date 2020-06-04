@@ -42,7 +42,6 @@ public class BushmenServiceImplTest {
     @Test
     public void kartenCounter_incrementBy1() {
         service.incrementKartenCounter();
-
         Assert.assertEquals(service.getKartenCounter(), 1);
     }
 

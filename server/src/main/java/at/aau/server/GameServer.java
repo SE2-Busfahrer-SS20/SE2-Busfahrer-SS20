@@ -76,7 +76,7 @@ public class GameServer extends NetworkServerKryo {
                     Log.debug("Received Register Message");
                     try {
                         RegisterMessage msg = (RegisterMessage) object;
-                        gameService.createGame(msg.getPlayerName(), msg.getMACAddress(), connection);  //outsourced to GameService
+                        gameService.createGame(msg.getPlayerName(), msg.getMacAddress(), connection);  //outsourced to GameService
                         checkGameStates();
                         connectionToMaster = connection;
                     } catch (Exception ex) {
@@ -88,7 +88,7 @@ public class GameServer extends NetworkServerKryo {
                     Log.debug("Received Register Message");
 
                     RegisterMessage msg = (RegisterMessage) object;
-                    Player player = gameService.addPlayer(msg.getPlayerName(), msg.getMACAddress(), connection);
+                    Player player = gameService.addPlayer(msg.getPlayerName(), msg.getMacAddress(), connection);
 
                     if (player != null) { //if game is not full
                         Log.debug("new Player:" + player.getName());

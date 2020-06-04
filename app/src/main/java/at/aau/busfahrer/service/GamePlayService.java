@@ -5,7 +5,7 @@ import shared.model.GameState;
 
 public interface GamePlayService {
 
-    void createGame(int playercount);
+    //void createGame(int playercount); //Was only needed in version with create game / join game structure
 
     void playGame(String name, String MACAddress);
 

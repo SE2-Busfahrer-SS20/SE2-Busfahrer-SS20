@@ -9,7 +9,7 @@ public class PlayerImpl implements Player {
 
     private int tempID; //=Index in playerList //-1 if not an element of this list
     private String name;
-    private String MACAdress;
+    private String MacAdress;
     private Card[] cards;
     private Connection connection;
     private int score;
@@ -22,7 +22,7 @@ public class PlayerImpl implements Player {
     public PlayerImpl(String name,String MACAdress, Card[] cards, Connection connection ) {
         tempID=-1;
         this.name = name;
-        this.MACAdress=MACAdress;
+        this.MacAdress=MACAdress;
         this.cards=cards;
         this.connection = connection;
         this.score=0;
@@ -37,7 +37,7 @@ public class PlayerImpl implements Player {
 
     @Override
     public String getMACAdress() {
-        return this.MACAdress;
+        return this.MacAdress;
     }
 
     @Override
