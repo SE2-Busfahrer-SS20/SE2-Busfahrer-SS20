@@ -85,18 +85,16 @@ public class CoughtServiceImpl implements CoughtService {
         boolean cheated = false;
 
         for (int i = 0; i < playerList.size(); i++) {
-            if (i != indexOfMe) {
-                if (playerList.get(i).isCheating()) {
-                    scoreCheater = playerList.get(i).getScore();
-                    scoreCheater++;
-                    myScore = myself.getScore();
-                    if (myScore != 0) {
-                        myScore--;
-                    }
-                    //Idee boolean nachdem er erwischt wurde wieder auf false setzten, sodass beim neuerlichen kliken auf erwischt, dieser spieer nicht mehr erwischt werden kann.
-                    gamePlayService.sendMsgCought(i, indexOfMe, scoreCheater, myScore, playerList.get(i).isCheating());
-                    cheated = true;
+            if (i != indexOfMe && playerList.get(i).isCheating()) {
+                scoreCheater = playerList.get(i).getScore();
+                scoreCheater++;
+                myScore = myself.getScore();
+                if (myScore != 0) {
+                    myScore--;
                 }
+                //Idee boolean nachdem er erwischt wurde wieder auf false setzten, sodass beim neuerlichen kliken auf erwischt, dieser spieer nicht mehr erwischt werden kann.
+                gamePlayService.sendMsgCought(i, indexOfMe, scoreCheater, myScore, playerList.get(i).isCheating());
+                cheated = true;
             }
         }
         //If I cought Nobody, i get one point
