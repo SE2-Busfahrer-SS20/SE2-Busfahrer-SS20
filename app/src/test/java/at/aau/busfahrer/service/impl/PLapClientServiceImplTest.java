@@ -1,4 +1,4 @@
-package at.aau.busfahrer;
+package at.aau.busfahrer.service.impl;
 
 import at.aau.busfahrer.service.PLapClientService;
 import at.aau.busfahrer.service.impl.PLapClientServiceImpl;
@@ -77,6 +77,11 @@ public class PLapClientServiceImplTest {
         // check the most upper row of the pyramid. Counter should be increased about 4.
         pLapClientService.checkCardMatch(pCards[0].toString(), pCards, 1);
         Assert.assertEquals( 10, pLapClientService.getMatchCount());
+
+        // check if method returns null on no match.
+        pCards[0] = new CardImpl(13);
+        Assert.assertNull(pLapClientService.checkCardMatch(pCards[0].toString(), pCards, 4));
+
     }
 
     @Test

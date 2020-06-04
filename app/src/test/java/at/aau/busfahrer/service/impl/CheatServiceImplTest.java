@@ -1,4 +1,4 @@
-package at.aau.busfahrer;
+package at.aau.busfahrer.service.impl;
 import android.hardware.Sensor;
 import org.junit.After;
 import org.junit.Before;
