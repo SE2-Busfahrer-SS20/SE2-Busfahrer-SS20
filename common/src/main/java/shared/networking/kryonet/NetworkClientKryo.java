@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import shared.model.CoughtServiceListener;
+import shared.model.CoughtServiceListenerPlap;
 import shared.model.GameState;
 import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
@@ -20,10 +21,10 @@ import static shared.networking.kryonet.NetworkConstants.getClassList;
 
 public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
-    private Client client;
-    private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
+    private final Client client;
+    private final PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
     // Callback Map to store callbacks for every DTO Class. HashMap to access object in O(1).
-    private Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
+    private final Map<Class<?>, Callback<BaseMessage>> callbackMap = new HashMap<>();
     private static NetworkClient instance;
     Listener listenLeaderboardmessage;
 
@@ -32,7 +33,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         registerClasses();
     }
 
-    public void registerClass(Class c) {
+    public void registerClass(Class<?> c) {
         client.getKryo().register(c);
     }
 
@@ -98,10 +99,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
                 }
 
-                if (object instanceof StartPLabMessage) {
+                if (object instanceof StartPLapMessage) {
                     Log.info("StartPlaBMesssage received");
                     // call the correct callback to store cards and update UI Thread.
-                    callbackMap.get(StartPLabMessage.class).callback((BaseMessage) object);
+                    callbackMap.get(StartPLapMessage.class).callback((BaseMessage) object);
                 }
 
                 if (object instanceof WinnerLooserMessage) {
@@ -143,6 +144,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
 
                     setTextViewVisible();
+                    //Kann zu problemen kommen wenn der boolean cheted auf false gesetzt wird,
+                    if(playersStorage.getTempID() == coughtMessage.getIndexCheater() && playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).isCheating() ){
+                        setTextViewVisiblePlap();
+                    }
                 }
             }
         });
@@ -157,7 +162,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     private void registerClasses() {
-        for (Class c : getClassList())
+        for (Class<?> c : getClassList())
             registerClass(c);
     }
 
@@ -168,12 +173,19 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     private CoughtServiceListener coughtServiceListener;
+    private CoughtServiceListenerPlap coughtServiceListenerPlap;
 
     public void coughtCallback(CoughtServiceListener coughtServiceListener){
         this.coughtServiceListener = coughtServiceListener;
     }
     public void setTextViewVisible(){
         new Thread(() -> coughtServiceListener.coughtTetxViewListener()).start();
+    }
+    public void coughtCallbackPlap(CoughtServiceListenerPlap coughtServiceListenerPlap){
+        this.coughtServiceListenerPlap = coughtServiceListenerPlap;
+    }
+    public void setTextViewVisiblePlap(){
+        new Thread(() -> coughtServiceListenerPlap.coughtTextViewListenerPlap()).start();
     }
 
 

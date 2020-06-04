@@ -31,7 +31,7 @@ public class NetworkConstants {
             UpdateMessage.class,
             CheatedMessage.class,
             PlayerDTOImpl.class,
-            StartPLabMessage.class,
+            StartPLapMessage.class,
             DealPointsMessage.class,
             WinnerLooserMessage.class,
             ArrayList.class,

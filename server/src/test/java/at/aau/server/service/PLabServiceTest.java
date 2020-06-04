@@ -13,7 +13,7 @@ import org.mockito.junit.MockitoRule;
 import shared.model.Card;
 import shared.model.Player;
 import shared.networking.dto.BaseMessage;
-import shared.networking.dto.StartPLabMessage;
+import shared.networking.dto.StartPLapMessage;
 import shared.networking.dto.WinnerLooserMessage;
 
 import java.util.ArrayList;
@@ -100,9 +100,9 @@ public class PLabServiceTest {
         }
         @Test
         public void testStartPLabDto() {
-                StartPLabMessage noarg = new StartPLabMessage();
+                StartPLapMessage noarg = new StartPLapMessage();
                 Assert.assertTrue(noarg instanceof BaseMessage);
-                StartPLabMessage msg = new StartPLabMessage(new Card[10], getStringPlayerList());
+                StartPLapMessage msg = new StartPLapMessage(new Card[10], getStringPlayerList());
                 Assert.assertEquals(msg.getPlayerNames(),getStringPlayerList());
         }
 

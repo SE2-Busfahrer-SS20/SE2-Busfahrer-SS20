@@ -14,7 +14,7 @@ import at.aau.server.service.PLapService;
 import shared.model.Game;
 import shared.model.Player;
 import shared.networking.dto.DealPointsMessage;
-import shared.networking.dto.StartPLabMessage;
+import shared.networking.dto.StartPLapMessage;
 import shared.networking.dto.WinnerLooserMessage;
 
 
@@ -41,7 +41,7 @@ public class PLapServiceImpl implements PLapService {
         if(this.gameService.getGame() != null) {
             Log.info("PLAb Started", "start send message to " + connection.toString() );
             connection.sendTCP(
-                    new StartPLabMessage(this.gameService.getGame().getpCards(), getPlayerNames())
+                    new StartPLapMessage(this.gameService.getGame().getpCards(), getPlayerNames())
             );
         } else {
             Log.error("Game Object is null!, You need to start a game first.");
@@ -103,7 +103,7 @@ public class PLapServiceImpl implements PLapService {
                 // check if game exists.
                 if (!gameService.gameExists()) {
                     Log.error("PLabService: Game does not exist anymore.");
-                } else if (object instanceof StartPLabMessage) {
+                } else if (object instanceof StartPLapMessage) {
                     Log.debug("PLab started for Connection: ", connection.toString());
                     startLab(connection);
                 } else if (object instanceof DealPointsMessage) {

@@ -1,8 +1,7 @@
-package at.aau.busfahrer;
-
-import android.content.Context;
+package at.aau.busfahrer.service.impl;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.content.Context;
 
 import org.junit.After;
 import org.junit.Before;
@@ -13,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import at.aau.busfahrer.service.CheatService;
-import at.aau.busfahrer.service.impl.CheatServiceImpl;
 
 
 import static org.junit.Assert.*;
