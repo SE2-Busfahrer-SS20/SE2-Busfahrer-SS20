@@ -112,7 +112,6 @@ public class PLapActivity extends AppCompatActivity implements CoughtServiceList
             tV_cought.setVisibility(View.VISIBLE);
             //after 5s the TextView is invisible
             tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
-            //updateScoreButton(playersStorage.getScoreList().get(playersStorage.getTempID()));
         });
     }
 
