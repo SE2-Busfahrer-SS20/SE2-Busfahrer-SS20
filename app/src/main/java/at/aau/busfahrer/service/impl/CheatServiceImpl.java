@@ -4,6 +4,7 @@ import at.aau.busfahrer.service.CheatService;
 import shared.networking.NetworkClient;
 import shared.networking.dto.CheatedMessage;
 import shared.networking.kryonet.NetworkClientKryo;
+import shared.networking.kryonet.NetworkServerKryo;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -20,13 +21,14 @@ import java.util.concurrent.TimeUnit;
 
 public class CheatServiceImpl implements CheatService {
 
-    private  NetworkClient client;
     private static final String TAG = "CheatServiceImpl";
-    private static final int TYPE_FAIR = 0;
+    public static final int TYPE_FAIR = 0;
+    private boolean testMode = false;
 
     @SuppressLint("StaticFieldLeak")
     // using ApplicationContext solves this problem, context is not saved.
     private static CheatService instance;
+
 
     public interface SensorListener {
         void handle();
@@ -59,7 +61,9 @@ public class CheatServiceImpl implements CheatService {
 
     private void onStart() {
         Log.i(TAG, "Service started");
-        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        if(!testMode){
+            sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        }
         if (sensorManager != null) {
             switch (sensorType) {
                 case Sensor.TYPE_ACCELEROMETER:
@@ -115,18 +119,18 @@ public class CheatServiceImpl implements CheatService {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            getAccelerometer(event);
+            getAccelerometer(event.values, event.timestamp);
         } else if (sensor.getType() == Sensor.TYPE_LIGHT) {
-            getLight(event);
+            getLight(event.values, event.timestamp);
         }
     }
 
-    private void getAccelerometer(SensorEvent event) {
-        long timestamp = TimeUnit.MILLISECONDS.convert(event.timestamp, TimeUnit.NANOSECONDS);
-        float x = event.values[0];
-        float y = event.values[1];
-        float z = event.values[2];
-
+    @Override
+    public void getAccelerometer(float[] values, long time) {
+        long timestamp = TimeUnit.MILLISECONDS.convert(time, TimeUnit.NANOSECONDS);
+        float x = values[0];
+        float y = values[1];
+        float z = values[2];
         if ((timestamp - lastUpdateMs) > 500) {
             float accelerationSqrt = (x * x + y * y + z * z)
                     / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
@@ -140,9 +144,10 @@ public class CheatServiceImpl implements CheatService {
         }
     }
 
-    private void getLight(SensorEvent event) {
-        long timestamp = TimeUnit.MILLISECONDS.convert(event.timestamp, TimeUnit.NANOSECONDS);
-        float lux = event.values[0];
+    @Override
+    public void getLight(float[] values, long time) {
+        long timestamp = TimeUnit.MILLISECONDS.convert(time, TimeUnit.NANOSECONDS);
+        float lux = values[0];
 
         if ((timestamp - lastUpdateMs) > 800) {
             if (lux < 5) {
@@ -186,7 +191,7 @@ public class CheatServiceImpl implements CheatService {
 
     // network call for player cheated in game
     public void sendMsgCheated(final boolean cheated, final long timeStamp, final int cheatType) {
-        client = NetworkClientKryo.getInstance();
+        NetworkClient client = NetworkClientKryo.getInstance();
         Log.i(TAG, "Sending CheatMessage to Server");
         Thread thread = new Thread(() -> {
             CheatedMessage cM = new CheatedMessage(this.playerId, cheated, timeStamp, cheatType);
@@ -215,7 +220,7 @@ public class CheatServiceImpl implements CheatService {
     }
 
     /**
-     * Getter and Setter
+     * Getter and Setter some of these methods are used for testing.
      */
     public int getPlayerId() {
         return playerId;
