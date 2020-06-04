@@ -21,6 +21,9 @@ public class PlayersStorageImpl implements PlayersStorage {
     private List<PlayerDTO> playerList;
 
 
+    public static void reset() {
+        PlayersStorageImpl.instance = null;
+    }
 
     //Singleton Pattern
     private static PlayersStorageImpl instance;

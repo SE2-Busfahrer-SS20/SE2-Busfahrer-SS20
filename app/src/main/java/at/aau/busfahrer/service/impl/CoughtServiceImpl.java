@@ -47,10 +47,12 @@ public class CoughtServiceImpl implements CoughtService {
             //the player who cheated increases his score
             scoreCheater = playerCheated.getScore();
             scoreCheater++;
+            playerCheated.setScore(scoreCheater);
             //myScore will be decremented one time
             myScore = myself.getScore();
             if(myScore!=0){
                 myScore--;
+                myself.setScore(myScore);
             }
             gamePlayService.sendMsgCought(currentPlayer,indexOfMe,scoreCheater,myScore,playerCheated.isCheating());
             return true;

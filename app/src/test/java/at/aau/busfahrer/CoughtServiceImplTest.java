@@ -16,7 +16,6 @@ public class CoughtServiceImplTest {
     private PlayersStorageImpl playersStorage;
     private PlayerDTOImpl player1;
     private PlayerDTOImpl player2;
-
     @Before
     public void setup() {
         this.coughtService = CoughtServiceImpl.getInstance();
@@ -30,6 +29,7 @@ public class CoughtServiceImplTest {
     @After
     public void destroy() {
         coughtService = null;
+        PlayersStorageImpl.reset();
     }
 
     @Test
@@ -49,11 +49,11 @@ public class CoughtServiceImplTest {
         playersStorage.setTempID(0);
         Assert.assertEquals(false,coughtService.isCheating());
     }
-//    @Test
-//    public void testIsCheatingTrueScore(){
-//        playersStorage.setCurrentTurn(0);
-//        playersStorage.setTempID(1);
-//        coughtService.isCheating();
-//        Assert.assertEquals(4,(int) playersStorage.getPlayerList().get(1).getScore());
-//    }
+    @Test
+    public void testIsCheatingTrueScore(){
+        playersStorage.setCurrentTurn(0);
+        playersStorage.setTempID(1);
+        coughtService.isCheating();
+        Assert.assertEquals(4,(int) playersStorage.getPlayerList().get(1).getScore());
+    }
 }
