@@ -387,6 +387,7 @@ public class BushmenActivity extends AppCompatActivity {
 
     public void OnClick_bt_Cought(View view){
 
+
     }
 
 }
