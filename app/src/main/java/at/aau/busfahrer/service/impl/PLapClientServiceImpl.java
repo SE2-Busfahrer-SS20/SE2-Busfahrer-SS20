@@ -2,7 +2,6 @@ package at.aau.busfahrer.service.impl;
 
 
 import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 import at.aau.busfahrer.presentation.utils.CardUtility;
@@ -30,7 +29,10 @@ public class PLapClientServiceImpl implements PLapClientService {
     private PlayersStorage playersStorage;
     private static PLapClientService instance;
     // constants for rows.
-    private final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
+    private final static int ROW1 = 1;
+    private final static int ROW2 = 2;
+    private final static int ROW3 = 3;
+    private final static int ROW4 = 4;
 
     private PLapClientServiceImpl() {
         this.client = NetworkClientKryo.getInstance();
@@ -59,7 +61,7 @@ public class PLapClientServiceImpl implements PLapClientService {
                     matchCounter += 3;
                 else if (row == ROW3)
                     matchCounter += 2;
-                else
+                else if (row == ROW4)
                     matchCounter += 1;
                 return card;
             }
