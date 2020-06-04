@@ -99,10 +99,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
                 }
 
-                if (object instanceof StartPLabMessage) {
+                if (object instanceof StartPLapMessage) {
                     Log.info("StartPlaBMesssage received");
                     // call the correct callback to store cards and update UI Thread.
-                    callbackMap.get(StartPLabMessage.class).callback((BaseMessage) object);
+                    callbackMap.get(StartPLapMessage.class).callback((BaseMessage) object);
                 }
 
                 if (object instanceof WinnerLooserMessage) {

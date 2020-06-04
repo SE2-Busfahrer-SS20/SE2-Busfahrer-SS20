@@ -12,7 +12,7 @@ import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.DealPointsMessage;
-import shared.networking.dto.StartPLabMessage;
+import shared.networking.dto.StartPLapMessage;
 import shared.networking.dto.WinnerLooserMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 
@@ -75,17 +75,17 @@ public class PLapClientServiceImpl implements PLapClientService {
      * The registered Callback turn the cards, after the client received it.
      */
     public void startLab() {
-        this.client.registerCallback(StartPLabMessage.class, msg -> {
+        this.client.registerCallback(StartPLapMessage.class, msg -> {
             Log.i("Callback started.", "");
-            this.pCards = ((StartPLabMessage) msg).getPlabCards();
-            this.playerNames = ((StartPLabMessage) msg).getPlayerNames();
+            this.pCards = ((StartPLapMessage) msg).getPlabCards();
+            this.playerNames = ((StartPLapMessage) msg).getPlayerNames();
             cardCallback.callback(pCards);
         });
 
         Thread startThread = new Thread(() -> {
             try {
                 Log.i("PLab Service", "PLab start was triggered.");
-                this.client.sendMessage(new StartPLabMessage());
+                this.client.sendMessage(new StartPLapMessage());
             } catch (Exception e) {
                 Log.e("Error in PLabService", e.toString(),e);
             }
