@@ -25,6 +25,7 @@ import at.aau.busfahrer.service.impl.CheatServiceImpl;
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.service.BushmenService;
 import at.aau.busfahrer.service.impl.BushmenServiceImpl;
+import at.aau.busfahrer.service.impl.CoughtServiceImpl;
 import shared.model.Card;
 import shared.networking.NetworkClient;
 import shared.networking.kryonet.NetworkClientKryo;
@@ -93,6 +94,7 @@ public class BushmenActivity extends AppCompatActivity {
 
         bt_cought = findViewById(R.id.bt_caught);
         tV_cought = findViewById(R.id.tV_Cought);
+        coughtService = CoughtServiceImpl.getInstance();
 
         if(bushmenService.isLooser()){
 
@@ -383,6 +385,8 @@ public class BushmenActivity extends AppCompatActivity {
         cheatService.resumeListen();
     }
 
+    public void OnClick_bt_Cought(View view){
 
+    }
 
 }
