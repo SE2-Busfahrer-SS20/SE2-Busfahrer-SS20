@@ -15,6 +15,11 @@ public class PlayersStorageImpl implements PlayersStorage {
     private int currentTurn;
     private List<PlayerDTO> playerList;
 
+
+    public static void reset() {
+        PlayersStorageImpl.instance = null;
+    }
+
     //Singleton Pattern
     private static PlayersStorageImpl instance;
 

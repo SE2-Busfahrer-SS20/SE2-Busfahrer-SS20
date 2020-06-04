@@ -26,9 +26,11 @@ import at.aau.busfahrer.service.impl.CoughtServiceImpl;
 import at.aau.busfahrer.service.impl.PLapClientServiceImpl;
 
 import shared.model.Card;
+import shared.model.CoughtServiceListenerPlap;
+import shared.networking.kryonet.NetworkClientKryo;
 
 
-public class PLapActivity extends AppCompatActivity {
+public class PLapActivity extends AppCompatActivity implements CoughtServiceListenerPlap {
 
     // contains the cards on the hand of the Player.
     private Card[] cards;
@@ -46,6 +48,7 @@ public class PLapActivity extends AppCompatActivity {
 
     private TextView tV_cought;
     private CoughtService coughtService;
+
 
 
     @Override
@@ -84,6 +87,9 @@ public class PLapActivity extends AppCompatActivity {
         coughtService = CoughtServiceImpl.getInstance();
         tV_cought.setVisibility(View.INVISIBLE);
 
+        NetworkClientKryo networkClientKryo = (NetworkClientKryo) NetworkClientKryo.getInstance();
+        networkClientKryo.coughtCallbackPlap(this);
+
     }
     public void onClickBtCought(View view) {
         if(coughtService.isCheatingPlap()){
@@ -97,6 +103,17 @@ public class PLapActivity extends AppCompatActivity {
             //after 5s the TextView is invisible
             tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
         }
+    }
+
+    @Override
+    public void coughtTextViewListenerPlap() {
+        runOnUiThread(() -> {
+            tV_cought.setText("Erwischt!!!!");
+            tV_cought.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
+            //updateScoreButton(playersStorage.getScoreList().get(playersStorage.getTempID()));
+        });
     }
 
 
