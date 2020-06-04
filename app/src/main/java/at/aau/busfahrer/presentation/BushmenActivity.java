@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +19,7 @@ import androidx.core.content.ContextCompat;
 
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.CheatService;
+import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 
 import at.aau.busfahrer.R;
@@ -40,6 +42,10 @@ public class BushmenActivity extends AppCompatActivity {
     private BushmenService bushmenService;
 
     private CheatService cheatService;
+    //CoughtFunction
+    private CoughtService coughtService;
+    private Button bt_cought;
+    private TextView tV_cought;
 
     public BushmenActivity() {
 
@@ -85,14 +91,18 @@ public class BushmenActivity extends AppCompatActivity {
         // Für den Zuschauer wird angezeigt, dass er Zuschauer ist
         TextView textView = findViewById(R.id.headerBushmen);
 
+        bt_cought = findViewById(R.id.bt_caught);
+        tV_cought = findViewById(R.id.tV_Cought);
 
         if(bushmenService.isLooser()){
 
             textView.setText("Oh dear! You have to drive with the bus");
             handleCheat();
+            bt_cought.setVisibility(View.INVISIBLE);
         }else {
             textView.setText("Your can only watch!");
             cheatService.stopListen();
+            bt_cought.setVisibility(View.VISIBLE);
         }
     }
 
