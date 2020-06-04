@@ -25,11 +25,11 @@ import java.util.List;
 
 public class SelectCheatsActivity extends AppCompatActivity {
 
-    Button start;
-    Button light;
-    Button shake;
-    Button fair;
-    int sensortype = -1;
+    private Button light;
+    private Button shake;
+    private Button fair;
+    private int sensortype = -1;
+    private GamePlayService gamesvc = GamePlayServiceImpl.getInstance();
 
 
     @Override
@@ -40,27 +40,26 @@ public class SelectCheatsActivity extends AppCompatActivity {
         light = findViewById(R.id.button3);
         shake = findViewById(R.id.button6);
         fair = findViewById(R.id.button7);
-
-
-
-        start = findViewById(R.id.bt_start);
-
-        start.setOnClickListener(v -> {
-            //Open WaitActivity
-            if(sensortype != -1){
-
-
-                Intent i = new Intent(SelectCheatsActivity.this, WaitActivity.class);
-                startActivity(i);
-                CheatService cheatService = CheatServiceImpl.getInstance();
-                cheatService.setSensorType(sensortype);
-            }else{
-                Toast.makeText(SelectCheatsActivity.this, "Select Cheat first", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
     }
+
+    public void onClickStart(View v){
+        if(sensortype != -1){
+            //SEND REGISTERMESSAGE TO SERVER
+            SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
+            String name=sharedPreferences.getString("Player","name");
+            String hostname=sharedPreferences.getString("HostName","127.0.0.1");
+            gamesvc.setHostName(hostname);
+            gamesvc.playGame(name, getMacAddr());
+
+            CheatService cheatService = CheatServiceImpl.getInstance();
+            cheatService.setSensorType(sensortype);
+            Intent i = new Intent(SelectCheatsActivity.this, WaitActivity.class);
+            startActivity(i);
+        }else{
+            Toast.makeText(SelectCheatsActivity.this, "Select Cheat first", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     @SuppressWarnings("unused")
     public void onRadioButtonClicked(View view){
@@ -90,6 +89,35 @@ public class SelectCheatsActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
+    private  String getMacAddr() {
+        //This code was found on StackOverFlow:
+        //https://stackoverflow.com/questions/33159224/getting-mac-address-in-android-6-0
+        try {
+            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface nif : all) {
+                if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
+
+                byte[] macBytes = nif.getHardwareAddress();
+                if (macBytes == null) {
+                    return "";
+                }
+
+                StringBuilder res1 = new StringBuilder();
+                for (byte b : macBytes) {
+                    res1.append(Integer.toHexString(b & 0xFF) + ":");
+                }
+
+                if (res1.length() > 0) {
+                    res1.deleteCharAt(res1.length() - 1);
+                }
+                return res1.toString();
+            }
+        } catch (Exception e) {
+            Log.error(e.toString());
+        }
+        return "";
     }
 
 
