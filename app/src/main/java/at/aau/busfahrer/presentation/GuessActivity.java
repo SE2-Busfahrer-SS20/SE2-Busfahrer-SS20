@@ -59,12 +59,12 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
     private Button btn_score;
 
-
-
     private boolean scored;
     private CheatService cheatService;
     private CoughtService coughtService;
-    ///
+
+    final String white ="#000000";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,19 +107,16 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         cheatService.startListen();
         handleCheat(); //this coursed error
 
-
         //Register Callback
         playersStorage.registerGuessRoundListener(this);
         NetworkClientKryo networkClientKryo = (NetworkClientKryo) NetworkClientKryo.getInstance();
         networkClientKryo.coughtCallback(this);
-
 
         ///SCHUMMEL - Aufdeckfunktion
         //Only when I am cheating, the Text View is could be visbible
         coughtService = CoughtServiceImpl.getInstance();
         tV_erwischt.setVisibility(View.INVISIBLE);
     }
-
 
     public void onClickBtCought(View view) {
         if(coughtService.isCheating()){
@@ -139,14 +136,14 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     }
     public void coughtTetxViewListener(){
         runOnUiThread(() -> {
-            if (playersStorage.getTempID() == playersStorage.getCurrentTurn()) {
-                if(playersStorage.getPlayerList().get(playersStorage.getCurrentTurn()).isCheating()){
+            if (playersStorage.getTempID() == playersStorage.getCurrentTurn() &&
+                playersStorage.getPlayerList().get(playersStorage.getCurrentTurn()).isCheating()) {
+
                     tV_erwischt.setText("Erwischt!!!!");
                     tV_erwischt.setVisibility(View.VISIBLE);
                     //after 5s the TextView is invisible
                     tV_erwischt.postDelayed(() -> tV_erwischt.setVisibility(View.INVISIBLE), 5000);
                 }
-            }
             updateScoreButton(playersStorage.getScoreList().get(playersStorage.getTempID()));
         });
     }
@@ -205,6 +202,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 scored = gamePlayService.guessBetweenOutside(cards[2], cards[0], cards[1] ,true);
                 CardUtility.turnCard(tV_card3, cards[2]);
                 break;
+            default:
+                System.out.println("Invalid input");
         }
         onAnswer(scored);
     }
@@ -225,6 +224,8 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 scored = gamePlayService.guessBetweenOutside(cards[2], cards[0], cards[1] ,false);
                 CardUtility.turnCard(tV_card3, cards[2]);
                 break;
+            default:
+                System.out.println("Invalid input");
         }
         onAnswer(scored);
     }
@@ -280,8 +281,10 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     //This methode changes visibility of UI elements when it is not this players turn
     private void onPauseMode() {
         //Execute on runOnUIThread to enable calling this funiction in other thread
+
         runOnUiThread(() -> {
-            tV_guessQuestion.setText("wait till it is your turn..");   //TODO: Extend this to "it's playernames turn"
+            String currentPlayerName=playersStorage.getPlayerName(playersStorage.getCurrentTurn());
+            tV_guessQuestion.setText(currentPlayerName+" is playing.");
             bt_FirstOption.setVisibility(View.INVISIBLE);
             bt_SecondOption.setVisibility(View.INVISIBLE);
             bt_Spade.setVisibility(View.INVISIBLE);
@@ -289,7 +292,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             bt_Diamond.setVisibility(View.INVISIBLE);
             bt_Club.setVisibility(View.INVISIBLE);
             bt_cought.setVisibility(View.VISIBLE);
-
             tV_feedback.setVisibility(View.INVISIBLE);
         });
     }
@@ -306,10 +308,10 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             bt_SecondOption.setVisibility(View.VISIBLE);
             bt_cought.setVisibility(View.INVISIBLE);
 
-            tV_card1.setTextColor(Color.parseColor("#000000"));
-            tV_card2.setTextColor(Color.parseColor("#000000"));
-            tV_card3.setTextColor(Color.parseColor("#000000"));
-            tV_card4.setTextColor(Color.parseColor("#000000"));
+            tV_card1.setTextColor(Color.parseColor(white));
+            tV_card2.setTextColor(Color.parseColor(white));
+            tV_card3.setTextColor(Color.parseColor(white));
+            tV_card4.setTextColor(Color.parseColor(white));
 
             switch (playersStorage.getState()) {
                 case LAP1A:
@@ -340,7 +342,10 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                     bt_FirstOption.setVisibility(View.INVISIBLE);
                     bt_SecondOption.setVisibility(View.INVISIBLE);
                     break;
+                default:
+                    System.out.println("Invalid input");
             }
+
         });
     }
 
@@ -386,26 +391,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    }
-
-    // TODO  not needed anymore ?
-    //The following 4 onClick-methodes are just relevant for Sprint 1 where we want to be able to turn each card
-    //in the final edition, the cards are turned by clicking on the buttons
-    //This feature may be usefull regarding to cheating
-    public void onClickCard1(View v) {
-        // CardUtility.turnCard(tV_card1, cards[0]);
-    }
-
-    public void onClickCard2(View view) {
-        // CardUtility.turnCard(tV_card2, cards[1]);
-    }
-
-    public void onClickCard3(View view) {
-        // CardUtility.turnCard(tV_card3, cards[2]);
-    }
-
-    public void onClickCard4(View view) {
-        // CardUtility.turnCard(tV_card4, cards[3]);
     }
 
     // This methods shows the card in a Dialog Alert, if the player cheats.

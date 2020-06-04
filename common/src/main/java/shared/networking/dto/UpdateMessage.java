@@ -1,8 +1,6 @@
 package shared.networking.dto;
 
 import shared.model.PlayerDTO;
-
-import java.util.ArrayList;
 import java.util.List;
 
 //Dieses DTO wird nach jedem Zug der Raterunden an alle Clients gesendet
