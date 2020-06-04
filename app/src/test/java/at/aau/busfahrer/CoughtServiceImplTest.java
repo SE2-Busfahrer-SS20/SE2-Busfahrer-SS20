@@ -56,4 +56,11 @@ public class CoughtServiceImplTest {
         coughtService.isCheating();
         Assert.assertEquals(4,(int) playersStorage.getPlayerList().get(1).getScore());
     }
+    @Test
+    public void testIsCheatingFalseScore(){
+        playersStorage.setCurrentTurn(1);
+        playersStorage.setTempID(0);
+        coughtService.isCheating();
+        Assert.assertEquals(4,(int) playersStorage.getPlayerList().get(0).getScore());
+    }
 }
