@@ -23,6 +23,7 @@ import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class SelectCheatsActivity extends AppCompatActivity {
 
     private Button light;
@@ -44,7 +45,6 @@ public class SelectCheatsActivity extends AppCompatActivity {
 
     public void onClickStart(View v){
         if(sensortype != -1){
-            //SEND REGISTERMESSAGE TO SERVER
             SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
             String name=sharedPreferences.getString("Player","name");
             String hostname=sharedPreferences.getString("HostName","127.0.0.1");
@@ -61,7 +61,6 @@ public class SelectCheatsActivity extends AppCompatActivity {
     }
 
 
-    @SuppressWarnings("unused")
     public void onRadioButtonClicked(View view){
         if(light.isPressed()) {
             light.setBackgroundResource(R.drawable.bg_btn_orange);
@@ -85,9 +84,7 @@ public class SelectCheatsActivity extends AppCompatActivity {
     }
 
     private void hideAppTitleBar(){
-        //Remove title bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
