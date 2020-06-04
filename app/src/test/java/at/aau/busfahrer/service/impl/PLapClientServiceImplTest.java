@@ -94,6 +94,10 @@ public class PLapClientServiceImplTest {
         Assert.assertNull(pLapClientService.checkCardMatch(pCards[0].toString(), pCards, 4));
         Assert.assertNull(pLapClientService.checkCardMatch("invalid", pCards, 4));
     }
+    @Test
+    public void playerCardsGetterTest() {
+        Assert.assertEquals(10, pLapClientService.getPCards().length);
+    }
 
     /**
      * Helper Method to generate pyramid lap cards.
