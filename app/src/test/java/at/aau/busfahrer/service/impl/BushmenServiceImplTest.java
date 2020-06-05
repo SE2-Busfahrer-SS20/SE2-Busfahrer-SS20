@@ -36,13 +36,13 @@ public class BushmenServiceImplTest {
 
     @Test
     public void kartenCounter_is0() {
-        Assert.assertEquals(service.getKartenCounter(), 0);
+        Assert.assertEquals(0, service.getKartenCounter());
     }
 
     @Test
     public void kartenCounter_incrementBy1() {
         service.incrementKartenCounter();
-        Assert.assertEquals(service.getKartenCounter(), 1);
+        Assert.assertEquals(1, service.getKartenCounter());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class BushmenServiceImplTest {
         service.incrementKartenCounter();
         service.incrementKartenCounter();
 
-        Assert.assertEquals(service.getKartenCounter(), 4);
+        Assert.assertEquals(4, service.getKartenCounter());
         Assert.assertTrue(service.hasWon());
     }
 
@@ -62,12 +62,12 @@ public class BushmenServiceImplTest {
 
         service.resetKartenCounter();
 
-        Assert.assertEquals(service.getKartenCounter(), 0);
+        Assert.assertEquals(0, service.getKartenCounter());
     }
 
     @Test
     public void punkteAnzahlBusfahrer_is10() {
-        Assert.assertEquals(service.getPunkteAnzahlBusfahrer(), 10);
+        Assert.assertEquals(10, service.getPunkteAnzahlBusfahrer());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class BushmenServiceImplTest {
         service.addPunkteAnzahlBusfahrer(100);
         service.addPunkteAnzahlBusfahrer(-50);
 
-        Assert.assertEquals(service.getPunkteAnzahlBusfahrer(), 60);
+        Assert.assertEquals(60, service.getPunkteAnzahlBusfahrer());
     }
 
     @Test
@@ -84,7 +84,7 @@ public class BushmenServiceImplTest {
 
         service.resetPunkteAnzahlBusfahrer();
 
-        Assert.assertEquals(service.getPunkteAnzahlBusfahrer(), 10);
+        Assert.assertEquals(10, service.getPunkteAnzahlBusfahrer());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class BushmenServiceImplTest {
 
         BushmenCardMessage message = captor.getValue();
         Assert.assertEquals(message.getCard(), secondCard);
-        Assert.assertEquals(message.getCardId(), 1);
+        Assert.assertEquals(1,message.getCardId());
     }
 
     @Test

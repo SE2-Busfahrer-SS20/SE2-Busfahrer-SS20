@@ -2,7 +2,6 @@ package at.aau.busfahrer.presentation;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,7 +21,6 @@ import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.CheatService;
 import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
-
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.service.BushmenService;
 import at.aau.busfahrer.service.impl.BushmenServiceImpl;
@@ -38,7 +37,6 @@ public class BushmenActivity extends AppCompatActivity {
     private NetworkClient networkClient = NetworkClientKryo.getInstance();
 
     TextView TxtPunkte;
-
 
     private BushmenService bushmenService;
 
@@ -148,7 +146,6 @@ public class BushmenActivity extends AppCompatActivity {
         Thread startThread = new Thread(() -> {
             try {
               Log.i("Bushmen","Card turned"+cardId);
-//                this.networkClient.sendMessage(new BushmenCardMessage(cardId, cards[cardId]));
                 this.bushmenService.turnCard(cardId);
             } catch (Exception e) {
                 Log.e("Error in BushmenCard", e.toString(), e);
@@ -190,7 +187,7 @@ public class BushmenActivity extends AppCompatActivity {
             enableCards(findViewById(R.id.tV_card6), false);
             enableCards(findViewById(R.id.tV_card7), false);
 
-            AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this, R.style.AlertDialogStyleDark);
             dialog.setTitle("Verloren");
             dialog.setMessage("Busfahrerrunde beginnt von vorne");
             final Dialog dialog1 = dialog.create();
@@ -206,16 +203,13 @@ public class BushmenActivity extends AppCompatActivity {
             }, 2000);
 
 
-            // Update der Punkte wenn er Bildkarte erwischt +3, andere Karten -4 Punkte
-
-//            PunkteAnzahlBusfahrer += 3;
             bushmenService.addPunkteAnzahlBusfahrer(3);
             updateAnzeige();
         } else {
-//            PunkteAnzahlBusfahrer -= 4;
+
             bushmenService.addPunkteAnzahlBusfahrer(-4);
             updateAnzeige();
-//            KartenCounter++;
+
             bushmenService.incrementKartenCounter();
 
             if (bushmenService.hasWon()) {
@@ -228,7 +222,6 @@ public class BushmenActivity extends AppCompatActivity {
 
                 dialog.setCancelable(false);
                 dialog.setPositiveButton("OK", (dialog12, which) -> {
-                    //Zurück zum Hauptmenü nach Sieg
                     Intent intent = new Intent(BushmenActivity.this, MainMenuActivity.class);
                     startActivity(intent);
                     CheatServiceImpl.reset();
@@ -271,18 +264,12 @@ public class BushmenActivity extends AppCompatActivity {
         enableCards(findViewById(R.id.tV_card7), isLooser);
 
 
-        // Karten NEU Austeilen
-
-
-        //Kartenzähler zurückgesetzt
-//        KartenCounter = 0;
         bushmenService.resetKartenCounter();
         bushmenService.resetPunkteAnzahlBusfahrer();
 
         Thread startThread = new Thread(() -> {
             try {
                 Log.i("Bushmen Service", "Bushmen start was triggered.");
-//                this.networkClient.sendMessage(new BushmenMessage());
                 this.bushmenService.startBushmanRound();
             } catch (Exception e) {
                 Log.e("Error in BushmenService", e.toString(), e);
@@ -298,7 +285,7 @@ public class BushmenActivity extends AppCompatActivity {
     // removes android status bar on top, for fullscreen
     private void hideAppTitleBar() {
         //Remove title bar
-        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
