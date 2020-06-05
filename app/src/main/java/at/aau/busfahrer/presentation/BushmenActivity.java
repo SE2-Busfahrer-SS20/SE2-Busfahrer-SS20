@@ -92,8 +92,8 @@ public class BushmenActivity extends AppCompatActivity {
         // Für den Zuschauer wird angezeigt, dass er Zuschauer ist
         TextView textView = findViewById(R.id.headerBushmen);
 
-        bt_cought = findViewById(R.id.bt_caught);
-        tV_cought = findViewById(R.id.tV_Cought);
+        bt_cought = findViewById(R.id.button4);
+        tV_cought = findViewById(R.id.textView2);
         coughtService = CoughtServiceImpl.getInstance();
 
         if(bushmenService.isLooser()){

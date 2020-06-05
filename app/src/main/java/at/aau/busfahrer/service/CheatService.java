@@ -3,6 +3,7 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.widget.TextView;
 
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
@@ -10,6 +11,7 @@ import at.aau.busfahrer.service.impl.CheatServiceImpl;
 public interface CheatService extends SensorEventListener {
 
     void setContext(Context context, String name);
+    Context getContext();
     void startListen();
     void pauseListen();
     void resumeListen();
@@ -24,4 +26,14 @@ public interface CheatService extends SensorEventListener {
     void setPlayerId(int playerId);
     int randomNumber(int max);
     TextView generateCard(TextView tv, Context context);
+
+    SensorManager getSensorManager();
+    void setSensorManager(SensorManager sensorManager);
+    boolean isSensorListen();
+    Sensor getSensor();
+    void setTestMode(boolean testMode);
+    void getAccelerometer(float[] values, long time);
+    void getLight(float[] values, long time);
+
+
 }
