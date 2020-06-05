@@ -47,7 +47,7 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
             playerList.setVisibility(View.INVISIBLE);
             btStart.setVisibility(View.INVISIBLE);
             logo.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         //registerCallback
