@@ -95,6 +95,7 @@ public class BushmenActivity extends AppCompatActivity {
         bt_cought = findViewById(R.id.button4);
         tV_cought = findViewById(R.id.textView2);
         coughtService = CoughtServiceImpl.getInstance();
+        tV_cought.setVisibility(View.INVISIBLE);
 
         if(bushmenService.isLooser()){
 
