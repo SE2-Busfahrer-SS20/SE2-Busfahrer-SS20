@@ -142,10 +142,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     CoughtMessage coughtMessage = (CoughtMessage)object;
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).setScore(coughtMessage.getScoreCheater());
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
-
+                    //Listener for the Cheater for the TextView for the GuessRound
                     setTextViewVisible();
-                    //Kann zu problemen kommen wenn der boolean cheted auf false gesetzt wird,
-                    if(playersStorage.getTempID() == coughtMessage.getIndexCheater() && playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).isCheating() ){
+                    //Listener for the Cheater for the TextView in Plap
+                    if(playersStorage.getTempID() == coughtMessage.getIndexCheater() && playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).isCheating() &&playersStorage.getState() == GameState.LAP2 ){
                         setTextViewVisiblePlap();
                     }
                 }
