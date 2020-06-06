@@ -126,15 +126,15 @@ public class CoughtServiceImpl implements CoughtService {
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     public boolean isCheatingBushmen(){
-        pl = PlayersStorageImpl.getInstance();
-        playerList = pl.getPlayerList();
-        // Sort players on points attribute.
-        playerList.sort(Comparator.comparingInt(PlayerDTO::getScore));
-        //After sorting the list, is the last person in the list the Bushmen, and maybe the cheater.
-        indexCheater = playerList.size() - 1;
+
+        //INDEX Von cheater rausfinden, so geht es nicht !!!!!!!!!!!
+
+
         playerCheated = playerList.get(indexCheater);
         indexOfMe = pl.getTempID();
         myself = playerList.get(indexOfMe);
+
+
 
         if(playerCheated.isCheating()){
             //the player who cheated increases his score
