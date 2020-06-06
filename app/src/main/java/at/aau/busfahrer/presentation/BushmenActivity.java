@@ -387,7 +387,17 @@ public class BushmenActivity extends AppCompatActivity {
     }
 
     public void OnClick_bt_Cought(View view){
-
+        if(coughtService.isCheatingBushmen()){
+            tV_cought.setText("Cheater wurde erwischt!!");
+            tV_cought.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
+        }else{
+            tV_cought.setText("Cheater wurde NICHT erwischt!!");
+            tV_cought.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
+        }
 
     }
 
