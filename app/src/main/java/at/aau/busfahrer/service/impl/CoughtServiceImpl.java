@@ -130,11 +130,7 @@ public class CoughtServiceImpl implements CoughtService {
         pl = PlayersStorageImpl.getInstance();
         playerList = pl.getPlayerList();
         indexCheater = pl.getCurrentTurn();
-        System.out.println("_________________INDEX___________: "+indexCheater);
-
         playerCheated = playerList.get(indexCheater);
-        System.out.println("___________CHEATED: __________________"+playerCheated.isCheating());
-        System.out.println("___________BUS: __________________"+playerCheated.isBusdriver());
         indexOfMe = pl.getTempID();
         myself = playerList.get(indexOfMe);
 
