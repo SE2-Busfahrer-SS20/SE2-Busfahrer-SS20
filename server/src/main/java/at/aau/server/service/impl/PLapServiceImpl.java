@@ -13,8 +13,11 @@ import at.aau.server.service.GameService;
 import at.aau.server.service.PLapService;
 import shared.model.Game;
 import shared.model.Player;
+import shared.model.PlayerDTO;
+import shared.model.impl.PlayerDTOImpl;
 import shared.networking.dto.DealPointsMessage;
 import shared.networking.dto.StartPLapMessage;
+import shared.networking.dto.UpdateMessage;
 import shared.networking.dto.WinnerLooserMessage;
 
 
@@ -74,14 +77,62 @@ public class PLapServiceImpl implements PLapService {
     @Override
     public void updatePlayers() {
         List<Player> playerList = gameService.getGame().getPlayerList();
+        // save scoreList before sorting. It's important that this list is still in the legacy order.
+        List<PlayerDTO> scoreList = getScoreList(playerList);
         // Sort players on points attribute.
         playerList.sort(Comparator.comparingInt(Player::getScore));
+        // get the index of the busdriver in the unsorted list.
+        String tempBusdriverName = playerList.get(playerList.size()-1).getName();
+        int currentPlayerIndex = setBusdriver(tempBusdriverName, scoreList);
         for(Player p : playerList) {
             WinnerLooserMessage msg = new WinnerLooserMessage();
+            // Message to update the score list in the PlayerStorage Class in frontend
+            UpdateMessage updateMessage = new UpdateMessage();
+            updateMessage.setCurrentPlayer(currentPlayerIndex);
+            updateMessage.setPlayerList(scoreList);
             // set looser to true when the player is the last in the list (Looser).
             msg.setIsLooser(playerList.indexOf(p) == playerList.size() - 1);
             p.getConnection().sendTCP(msg);
+            p.getConnection().sendTCP(updateMessage);
         }
+    }
+
+    /**
+     * Set the boolean attribute of the looser (Busdriver) to true.
+     * Returns the index of the busdricer for the current player attribute in UpdateMessage.
+     * @param tempBusdriverName
+     * @param scoreList
+     * @return index of busdriver.
+     */
+    private int setBusdriver(String tempBusdriverName, List<PlayerDTO> scoreList) {
+        for(PlayerDTO p: scoreList){
+            if(p.getName().equals(tempBusdriverName)) {
+                p.setBusdriver();
+                return scoreList.indexOf(p);
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Function to Map a List of Player objects into List of PlayerDTO objects.
+     * @param playerList
+     * @return
+     */
+    private List<PlayerDTO> getScoreList(List<Player> playerList) {
+        List<PlayerDTO> dtoList = new ArrayList<>();
+        for (Player p: playerList)
+            dtoList.add(mapPlayer(p));
+        return dtoList;
+    }
+
+    /**
+     * Maps a Player Object into a PlayerDTO object.
+     * @param player
+     * @return
+     */
+    private PlayerDTO mapPlayer(Player player) {
+        return new PlayerDTOImpl(player.getName(), player.getScore(), player.isCheated());
     }
 
     /**

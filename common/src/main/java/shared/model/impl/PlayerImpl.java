@@ -17,7 +17,6 @@ public class PlayerImpl implements Player {
     private boolean cheatedThisRound;   //this variable is necessary to catch a cheater - This variable needs to be reseted after each round (because you can only catch a cheater in the round he/she cheated)
 
 
-
     //Constructor for Server Side
     public PlayerImpl(String name,String MACAdress, Card[] cards, Connection connection ) {
         tempID=-1;
