@@ -157,7 +157,9 @@ public class PlayersStorageImpl implements PlayersStorage {
     public void updateOnMessage(List<PlayerDTO> playerList, int currentTurn){
         this.playerList=playerList;
         this.currentTurn=currentTurn;
-        nextPlayersTurn(); //Callback
+        if(getState() != GameState.LAP2){
+            nextPlayersTurn(); //Callback
+        }
     }
     public void setPlayerFromDTO(List<PlayerDTO> playerDTOList){
         this.playerList=playerDTOList;

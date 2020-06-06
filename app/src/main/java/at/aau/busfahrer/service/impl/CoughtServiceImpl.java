@@ -126,17 +126,19 @@ public class CoughtServiceImpl implements CoughtService {
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     public boolean isCheatingBushmen(){
-
-        //INDEX Von cheater rausfinden, so geht es nicht !!!!!!!!!!!
-
+        gamePlayService = GamePlayServiceImpl.getInstance();
+        pl = PlayersStorageImpl.getInstance();
+        playerList = pl.getPlayerList();
+        indexCheater = pl.getCurrentTurn();
+        System.out.println("_________________INDEX___________: "+indexCheater);
 
         playerCheated = playerList.get(indexCheater);
+        System.out.println("___________CHEATED: __________________"+playerCheated.isCheating());
+        System.out.println("___________BUS: __________________"+playerCheated.isBusdriver());
         indexOfMe = pl.getTempID();
         myself = playerList.get(indexOfMe);
 
-
-
-        if(playerCheated.isCheating()){
+        if(playerCheated.isCheating() && playerCheated.isBusdriver()){
             //the player who cheated increases his score
             scoreCheater = playerCheated.getScore();
             scoreCheater++;
