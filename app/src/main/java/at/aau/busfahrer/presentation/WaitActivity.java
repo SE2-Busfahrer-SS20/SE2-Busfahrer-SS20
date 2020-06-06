@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 public class WaitActivity extends AppCompatActivity implements PreGameListener {
     private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
     GamePlayService gamesvc;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +36,18 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
         LinearLayout playerList = findViewById(R.id.playerList);
         Button btStart = findViewById(R.id.bt_start);
         ImageView logo = findViewById(R.id.logo);
+        progressBar =findViewById(R.id.progressBar2);
         if(playersStorage.isMaster()){
             playerList.setVisibility(View.VISIBLE);
             btStart.setVisibility(View.VISIBLE);
             logo.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
             updatePlayerList();
         }else{
             playerList.setVisibility(View.INVISIBLE);
             btStart.setVisibility(View.INVISIBLE);
             logo.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         //registerCallback
