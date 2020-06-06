@@ -1,15 +1,8 @@
 package at.aau.busfahrer.service.impl;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
-import java.util.Comparator;
 import java.util.List;
-
 import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.GamePlayService;
-import shared.model.Player;
 import shared.model.PlayerDTO;
 import shared.model.impl.PlayersStorageImpl;
 
@@ -124,7 +117,6 @@ public class CoughtServiceImpl implements CoughtService {
 
         return cheated;
     }
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public boolean isCheatingBushmen(){
         gamePlayService = GamePlayServiceImpl.getInstance();
         pl = PlayersStorageImpl.getInstance();
