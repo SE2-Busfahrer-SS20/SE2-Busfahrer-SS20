@@ -1,6 +1,8 @@
 package shared.model;
 
 public interface PlayerDTO {
+    boolean isBusdriver();
+    void setBusdriver();
     String getName();
     Integer getScore();
     boolean isCheating();

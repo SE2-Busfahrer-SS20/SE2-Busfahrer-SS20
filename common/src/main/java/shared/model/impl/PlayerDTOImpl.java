@@ -11,6 +11,7 @@ public class PlayerDTOImpl implements PlayerDTO {
     private String name;
     private Integer score;
     private boolean isCheating;
+    private boolean isBusdriver;
 
     public PlayerDTOImpl() {
     }
@@ -19,6 +20,16 @@ public class PlayerDTOImpl implements PlayerDTO {
         this.name = name;
         this.score = score;
         this.isCheating = isCheating;
+        this.isBusdriver = false;
+    }
+
+    @Override
+    public boolean isBusdriver() {
+        return isBusdriver;
+    }
+    @Override
+    public void setBusdriver() {
+        this.isBusdriver = true;
     }
 
     public void setName(String name) {
