@@ -12,7 +12,6 @@ public class CoughtServiceImpl implements CoughtService {
 
 
     private List<PlayerDTO> playerList;
-    private int currentPlayer;
     private PlayerDTO playerCheated;
     private PlayerDTO myself;
     private int scoreCheater;
@@ -33,6 +32,7 @@ public class CoughtServiceImpl implements CoughtService {
     }
 
     public boolean isCheating() {
+        int currentPlayer;
         gamePlayService = GamePlayServiceImpl.getInstance();
         pl = PlayersStorageImpl.getInstance();
         playerList = pl.getPlayerList();
