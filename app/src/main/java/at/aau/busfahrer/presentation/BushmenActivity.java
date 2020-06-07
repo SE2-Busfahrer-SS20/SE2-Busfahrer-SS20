@@ -101,7 +101,7 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
 
         //NetworkClientKryo networkClientKryo = (NetworkClientKryo) NetworkClientKryo.getInstance();
         //networkClientKryo.coughtCallbackBushmen(this);
-        networkClient.coughtCallbackBushmen(this);
+        //networkClient.coughtCallbackBushmen(this);
 
 
         if(bushmenService.isLooser()){
