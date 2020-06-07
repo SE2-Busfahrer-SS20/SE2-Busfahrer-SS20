@@ -51,6 +51,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
         client.addListener(createBushmenListener());
         client.addListener(createGameListener());
+        client.addListener(createCheatListener());
         client.addListener(createLeaderboardListener());
         client.addListener(new Listener() {
             @Override
@@ -82,6 +83,26 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     if(callbackMap.get(TextMessage.class)!=null)
                         callbackMap.get(TextMessage.class).callback((BaseMessage) object);
                 }
+            }
+        });
+    }
+    private Listener createLeaderboardListener() {
+        return new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+
+                if(object instanceof LeaderboardMessage) {
+                    Log.debug("LeaderboardMessage received");
+                    callbackMap.get(LeaderboardMessage.class).callback((LeaderboardMessage)object);
+                }
+            }
+        };
+    }
+    private Listener createCheatListener() {
+        return new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+
                 if (object instanceof CheatedMessage) {
                     Log.debug("CheatedMessage received");
                     Log.debug("\n\n\n CLIENT : "+((CheatedMessage) object).hasCheated()+"\n\n\n");
@@ -101,18 +122,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     if(playersStorage.getTempID() == coughtMessage.getIndexCheater() && playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).isCheating() &&playersStorage.getState() == GameState.LAP3 ){
                         setTextViewVisibleBushmen();
                     }
-                }
-            }
-        });
-    }
-    private Listener createLeaderboardListener() {
-        return new Listener(){
-            @Override
-            public void received(Connection connection, Object object) {
-
-                if(object instanceof LeaderboardMessage) {
-                    Log.debug("LeaderboardMessage received");
-                    callbackMap.get(LeaderboardMessage.class).callback((LeaderboardMessage)object);
                 }
             }
         };
