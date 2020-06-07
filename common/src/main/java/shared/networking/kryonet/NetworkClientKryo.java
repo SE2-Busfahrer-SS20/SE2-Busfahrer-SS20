@@ -49,6 +49,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client.connect(5000, host, NetworkConstants.TCP_PORT);
         //Here the client receives messages from the server !
 
+        client.addListener(createBasicListener());
         client.addListener(createBushmenListener());
         client.addListener(createGameListener());
         client.addListener(createCheatListener());
@@ -57,11 +58,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             @Override
             public void received(Connection connection, Object object) {
 
-                if(object instanceof UpdateMessage){
-                    UpdateMessage uM = (UpdateMessage)object;
-                    playersStorage.updateOnMessage(uM.getPlayerList(),uM.getCurrentPlayer());
 
-                }
 
                 if (object instanceof StartPLapMessage) {
                     Log.info("StartPlaBMesssage received");
@@ -76,13 +73,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 }
 
 
-                // just for debugging purposes.
-                if (object instanceof TextMessage) {
-                    Log.debug("Callback is instance of TextMessage");
-                    Log.debug("Text of TextMessage: "+((TextMessage) (object)).getText());
-                    if(callbackMap.get(TextMessage.class)!=null)
-                        callbackMap.get(TextMessage.class).callback((BaseMessage) object);
-                }
+
             }
         });
     }
@@ -94,6 +85,25 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 if(object instanceof LeaderboardMessage) {
                     Log.debug("LeaderboardMessage received");
                     callbackMap.get(LeaderboardMessage.class).callback((LeaderboardMessage)object);
+                }
+            }
+        };
+    }
+    private Listener createBasicListener() {
+        return new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+                if(object instanceof UpdateMessage){
+                    UpdateMessage uM = (UpdateMessage)object;
+                    playersStorage.updateOnMessage(uM.getPlayerList(),uM.getCurrentPlayer());
+
+                }
+                // just for debugging purposes.
+                if (object instanceof TextMessage) {
+                    Log.debug("Callback is instance of TextMessage");
+                    Log.debug("Text of TextMessage: "+((TextMessage) (object)).getText());
+                    if(callbackMap.get(TextMessage.class)!=null)
+                        callbackMap.get(TextMessage.class).callback((BaseMessage) object);
                 }
             }
         };
