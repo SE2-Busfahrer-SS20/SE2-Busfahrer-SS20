@@ -209,8 +209,8 @@ public class Database {
         }
         throw new SQLException("Could not query number of  all Users!");
     }
-    public List getLeaderboardAscending()throws SQLException{
-        List<PlayerDTO> playerlist=new ArrayList<PlayerDTO>();
+    public List<PlayerDTO> getLeaderboardAscending()throws SQLException{
+        List<PlayerDTO> playerlist=new ArrayList<>();
 
         String sql= "select users.name, scores.score \n" +
                     "from users\n" +
