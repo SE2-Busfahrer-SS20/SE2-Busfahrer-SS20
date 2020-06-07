@@ -82,7 +82,6 @@ public class BushmenActivity extends AppCompatActivity {
 
         // set looser variable. Value will be set in PLapFinished Activity.
         bushmenService.setLooser(getIntent().getBooleanExtra("LOST_GAME", false));
-
         // Neue Initialisieren
         resetGame();
         updateAnzeige();
