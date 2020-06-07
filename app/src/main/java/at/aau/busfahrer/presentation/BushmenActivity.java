@@ -49,7 +49,6 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
     private CoughtService coughtService;
     private Button bt_cought;
     private TextView tV_cought;
-    private PlayersStorageImpl pl;
 
     public BushmenActivity() {
 
