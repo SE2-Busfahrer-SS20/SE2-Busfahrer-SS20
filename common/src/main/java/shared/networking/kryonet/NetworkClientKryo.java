@@ -49,13 +49,12 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client.connect(5000, host, NetworkConstants.TCP_PORT);
         //Here the client receives messages from the server !
 
+        client.addListener(createBushmenListener());
         client.addListener(createGameListener());
         client.addListener(createLeaderboardListener());
         client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-
-
 
                 if(object instanceof UpdateMessage){
                     UpdateMessage uM = (UpdateMessage)object;
@@ -75,19 +74,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     callbackMap.get(WinnerLooserMessage.class).callback((BaseMessage) object);
                 }
 
-                if (object instanceof BushmenMessage) {
-                  // BushmenMessage bushmenMessage = (BushmenMessage) object;
-                    Log.info("Bushmen received");
-                   // playersStorage.setBushmenCards(bushmenMessage.getCards());
-                    callbackMap.get(BushmenMessage.class).callback((BaseMessage) object);
-
-                }
-
-                if (object instanceof BushmenCardMessage) {
-                    Log.info("BushmenCard received" + object);
-                    callbackMap.get(BushmenCardMessage.class).callback((BushmenCardMessage) object);
-
-                }
 
                 // just for debugging purposes.
                 if (object instanceof TextMessage) {
@@ -127,6 +113,27 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 if(object instanceof LeaderboardMessage) {
                     Log.debug("LeaderboardMessage received");
                     callbackMap.get(LeaderboardMessage.class).callback((LeaderboardMessage)object);
+                }
+            }
+        };
+    }
+    private Listener createBushmenListener() {
+        return new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+
+                if (object instanceof BushmenMessage) {
+                    // BushmenMessage bushmenMessage = (BushmenMessage) object;
+                    Log.info("Bushmen received");
+                    // playersStorage.setBushmenCards(bushmenMessage.getCards());
+                    callbackMap.get(BushmenMessage.class).callback((BaseMessage) object);
+
+                }
+
+                if (object instanceof BushmenCardMessage) {
+                    Log.info("BushmenCard received" + object);
+                    callbackMap.get(BushmenCardMessage.class).callback((BushmenCardMessage) object);
+
                 }
             }
         };
