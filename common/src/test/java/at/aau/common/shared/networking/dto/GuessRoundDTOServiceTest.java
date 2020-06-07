@@ -1,5 +1,6 @@
 package at.aau.common.shared.networking.dto;
 
+import shared.model.GameState;
 import shared.model.PlayerDTO;
 import shared.model.impl.PlayerDTOImpl;
 import shared.networking.dto.PlayedMessage;
@@ -58,5 +59,23 @@ public class GuessRoundDTOServiceTest {
         this.startGameMessage.setPlayerList(playerList);
         Assert.assertEquals(playerList, this.startGameMessage.getPlayerList());
     }
+
+    @Test
+    public void testPlayedMessage(){
+        //Test Constructor and getter
+        PlayedMessage pm2 = new PlayedMessage(GameState.LAP1A, 1, true);
+        Assert.assertEquals(GameState.LAP1A,pm2.getLap());
+        Assert.assertEquals(1,pm2.getTempID());
+        Assert.assertTrue(pm2.scored());
+
+        //Test Setter, Getter
+        this.playedMessage.setLap(GameState.LAP2);
+        this.playedMessage.setTempID(2);
+        this.playedMessage.setScored(false);
+        Assert.assertEquals(GameState.LAP2,playedMessage.getLap());
+        Assert.assertEquals(2,playedMessage.getTempID());
+        Assert.assertFalse(playedMessage.scored());
+    }
+
 
 }
