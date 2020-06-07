@@ -27,11 +27,13 @@ import at.aau.busfahrer.service.BushmenService;
 import at.aau.busfahrer.service.impl.BushmenServiceImpl;
 import at.aau.busfahrer.service.impl.CoughtServiceImpl;
 import shared.model.Card;
+import shared.model.CoughtServiceListenerBushmen;
+import shared.model.impl.PlayersStorageImpl;
 import shared.networking.NetworkClient;
 import shared.networking.kryonet.NetworkClientKryo;
 
 @SuppressWarnings("unused")
-public class BushmenActivity extends AppCompatActivity {
+public class BushmenActivity extends AppCompatActivity implements CoughtServiceListenerBushmen {
 
     private final int[] bushmenCards = {R.id.tV_card1, R.id.tV_card2, R.id.tV_card3, R.id.tV_card4, R.id.tV_card5, R.id.tV_card6, R.id.tV_card7};
     
@@ -47,6 +49,7 @@ public class BushmenActivity extends AppCompatActivity {
     private CoughtService coughtService;
     private Button bt_cought;
     private TextView tV_cought;
+    private PlayersStorageImpl pl;
 
     public BushmenActivity() {
 
@@ -95,6 +98,11 @@ public class BushmenActivity extends AppCompatActivity {
         tV_cought = findViewById(R.id.textView2);
         coughtService = CoughtServiceImpl.getInstance();
         tV_cought.setVisibility(View.INVISIBLE);
+
+        //NetworkClientKryo networkClientKryo = (NetworkClientKryo) NetworkClientKryo.getInstance();
+        //networkClientKryo.coughtCallbackBushmen(this);
+        networkClient.coughtCallbackBushmen(this);
+
 
         if(bushmenService.isLooser()){
 
@@ -398,6 +406,16 @@ public class BushmenActivity extends AppCompatActivity {
             tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
         }
 
+    }
+
+    @Override
+    public void coughtTextViewListenerBushmen() {
+        runOnUiThread(() -> {
+            tV_cought.setText("Erwischt!!!!");
+            tV_cought.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
+        });
     }
 
 }
