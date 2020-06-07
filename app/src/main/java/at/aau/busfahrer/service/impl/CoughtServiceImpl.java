@@ -1,7 +1,6 @@
 package at.aau.busfahrer.service.impl;
 
 import java.util.List;
-
 import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.GamePlayService;
 import shared.model.PlayerDTO;
@@ -13,7 +12,6 @@ public class CoughtServiceImpl implements CoughtService {
 
 
     private List<PlayerDTO> playerList;
-    private int currentPlayer;
     private PlayerDTO playerCheated;
     private PlayerDTO myself;
     private int scoreCheater;
@@ -21,6 +19,7 @@ public class CoughtServiceImpl implements CoughtService {
     private PlayersStorageImpl pl;
     private int indexOfMe;
     private GamePlayService gamePlayService;
+
 
     private CoughtServiceImpl() {
     }
@@ -33,6 +32,7 @@ public class CoughtServiceImpl implements CoughtService {
     }
 
     public boolean isCheating() {
+        int currentPlayer;
         gamePlayService = GamePlayServiceImpl.getInstance();
         pl = PlayersStorageImpl.getInstance();
         playerList = pl.getPlayerList();
@@ -92,16 +92,16 @@ public class CoughtServiceImpl implements CoughtService {
                 if (myScore != 0) {
                     myScore--;
                 }
-                //Idee boolean nachdem er erwischt wurde wieder auf false setzten, sodass beim neuerlichen kliken auf erwischt, dieser spieer nicht mehr erwischt werden kann.
+                myself.setScore(myScore);
                 gamePlayService.sendMsgCought(i, indexOfMe, scoreCheater, myScore, playerList.get(i).isCheating());
                 cheated = true;
             }
         }
-        //If I cought Nobody, i get one point
-        //Everyone else lost one point
+        //If I cought Nobody, i get one point everyone else lost one point
         if (!cheated) {
             myScore = myself.getScore();
             myScore++;
+            myself.setScore(myScore);
 
             for (int j = 0; j < playerList.size(); j++) {
                 if (j != indexOfMe) {
@@ -113,7 +113,44 @@ public class CoughtServiceImpl implements CoughtService {
                 }
             }
         }
-
         return cheated;
+    }
+    public boolean isCheatingBushmen(){
+        int indexCheater;
+        gamePlayService = GamePlayServiceImpl.getInstance();
+        pl = PlayersStorageImpl.getInstance();
+        playerList = pl.getPlayerList();
+        indexCheater = pl.getCurrentTurn();
+        playerCheated = playerList.get(indexCheater);
+        indexOfMe = pl.getTempID();
+        myself = playerList.get(indexOfMe);
+
+        if(playerCheated.isCheating() && playerCheated.isBusdriver()){
+            //the player who cheated increases his score
+            scoreCheater = playerCheated.getScore();
+            scoreCheater++;
+            playerCheated.setScore(scoreCheater);
+            //myScore will be decremented one time
+            myScore = myself.getScore();
+            if (myScore != 0) {
+                myScore--;
+                myself.setScore(myScore);
+            }
+            gamePlayService.sendMsgCought(indexCheater, indexOfMe, scoreCheater, myScore, playerCheated.isCheating());
+            return true;
+        }else{
+            //the player who has NOT cheated decreases his score
+            scoreCheater = playerCheated.getScore();
+            if (scoreCheater != 0) {
+                scoreCheater--;
+                playerCheated.setScore(scoreCheater);
+            }
+            //myScore will be increased one time
+            myScore = myself.getScore();
+            myScore++;
+            myself.setScore(myScore);
+            gamePlayService.sendMsgCought(indexCheater, indexOfMe, scoreCheater, myScore, playerCheated.isCheating());
+            return false;
+        }
     }
 }

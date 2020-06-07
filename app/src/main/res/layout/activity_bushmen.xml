@@ -147,7 +147,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="55dp"
         android:background="@drawable/bg_btn_black"
-        android:onClick="OnClick_bt_Cought"
+        android:onClick="onClick_bt_Cought"
         android:text="Erwischt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
