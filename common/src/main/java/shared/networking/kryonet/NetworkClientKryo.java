@@ -43,6 +43,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client.removeListener(listenLeaderboardmessage);
         client.close();
     }
+
     @Override
     public void connect(String host) throws IOException {
         client.start();
@@ -183,18 +184,23 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     public void coughtCallback(CoughtServiceListener coughtServiceListener){
         this.coughtServiceListener = coughtServiceListener;
     }
+
     public void setTextViewVisible(){
         new Thread(() -> coughtServiceListener.coughtTetxViewListener()).start();
     }
+
     public void coughtCallbackPlap(CoughtServiceListenerPlap coughtServiceListenerPlap){
         this.coughtServiceListenerPlap = coughtServiceListenerPlap;
     }
+
     public void setTextViewVisiblePlap(){
         new Thread(() -> coughtServiceListenerPlap.coughtTextViewListenerPlap()).start();
     }
+
     public void coughtCallbackBushmen(CoughtServiceListenerBushmen coughtServiceListenerBushmen){
         this.coughtServiceListenerBushmen = coughtServiceListenerBushmen;
     }
+
     public void setTextViewVisibleBushmen(){
         new Thread(() -> coughtServiceListenerBushmen.coughtTextViewListenerBushmen()).start();
     }

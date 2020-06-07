@@ -58,8 +58,6 @@ public class GameServerTest {
         assertTrue(responseHandled.get());
     }
 
-
-
     private void startServer() throws IOException {
         AtomicBoolean first = new AtomicBoolean(true);
 

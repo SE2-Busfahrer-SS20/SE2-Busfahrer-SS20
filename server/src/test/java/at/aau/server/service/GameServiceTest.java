@@ -16,6 +16,8 @@ import shared.model.Card;
 import shared.model.Game;
 import shared.model.GameState;
 import shared.model.Player;
+import shared.model.impl.DeckImpl;
+import shared.model.impl.GameImpl;
 import shared.model.impl.PlayerImpl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -112,6 +114,28 @@ public class GameServiceTest {
     public void checkSingletonImplementation() {
         Assert.assertEquals(gameService, GameServiceImpl.getInstance());
     }
+
+    @Test
+    public void TestGuessRound_Lap1A(){
+        //To make this method testable, class Game needs to become a to singleton pattern
+        Game game = new GameImpl();
+        game.addPlayer("playerOne","macAdress",null);
+        game.addPlayer("playerTwo","macAdress",null);
+
+
+        //gameService.guessRound(GameState.LAP1A,0,true);
+
+        //Assert.assertEquals(game.getPlayerList().get(0).getScore(),2);
+
+
+
+        //gameService.guessRound(GameState.LAP1A,2,false);
+
+
+    }
+
+
+
 
     /**
      * Destroy Singleton instance to create clean instance.

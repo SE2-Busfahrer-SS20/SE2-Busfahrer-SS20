@@ -111,7 +111,6 @@ public class GameImpl implements Game {
     }
     public void addPointsToPlayer(int tempID, int points){
         playerList.get(tempID).addPoints(points);
-
     }
 
 
