@@ -27,7 +27,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     // Callback Map to store callbacks for every DTO Class. HashMap to access object in O(1).
     private final Map<Class<?>, Callback<BaseMessage>> callbackMap = new HashMap<>();
     private static NetworkClient instance;
-    Listener listenLeaderboardmessage;
 
     private NetworkClientKryo() {
         client = new Client();
@@ -43,24 +42,25 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         //client.removeListener(listenLeaderboardmessage);
         client.close();
     }
+    private Listener createLeaderboardListener() {
+        return new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
 
+                if(object instanceof LeaderboardMessage) {
+                    Log.debug("LeaderboardMessage received");
+                    callbackMap.get(LeaderboardMessage.class).callback((LeaderboardMessage)object);
+                }
+            }
+        };
+    }
     @Override
     public void connect(String host) throws IOException {
         client.start();
         client.connect(5000, host, NetworkConstants.TCP_PORT);
         //Here the client receives messages from the server !
-        listenLeaderboardmessage= new Listener(){
-            @Override
-            public void received(Connection connection, Object object) {
 
-                if(object instanceof LeaderboardMessage) {
-                    Log.debug("\n=====================\nLeaderboardMessage received");
-                    callbackMap.get(LeaderboardMessage.class).callback((LeaderboardMessage)object);
-                }
-            }
-        };
-
-        client.addListener(listenLeaderboardmessage);
+        client.addListener(createLeaderboardListener());
         client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
