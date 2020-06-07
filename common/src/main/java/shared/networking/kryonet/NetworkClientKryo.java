@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import shared.model.CoughtServiceListener;
+import shared.model.CoughtServiceListenerBushmen;
 import shared.model.CoughtServiceListenerPlap;
 import shared.model.GameState;
 import shared.model.impl.PlayersStorageImpl;
@@ -142,11 +143,14 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     CoughtMessage coughtMessage = (CoughtMessage)object;
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).setScore(coughtMessage.getScoreCheater());
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
-
+                    //Listener for the Cheater for the TextView for the GuessRound
                     setTextViewVisible();
-                    //Kann zu problemen kommen wenn der boolean cheted auf false gesetzt wird,
-                    if(playersStorage.getTempID() == coughtMessage.getIndexCheater() && playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).isCheating() ){
+                    //Listener for the Cheater for the TextView in Plap
+                    if(playersStorage.getTempID() == coughtMessage.getIndexCheater() && playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).isCheating() &&playersStorage.getState() == GameState.LAP2 ){
                         setTextViewVisiblePlap();
+                    }
+                    if(playersStorage.getTempID() == coughtMessage.getIndexCheater() && playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).isCheating() &&playersStorage.getState() == GameState.LAP3 ){
+                        setTextViewVisibleBushmen();
                     }
                 }
             }
@@ -174,6 +178,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     private CoughtServiceListener coughtServiceListener;
     private CoughtServiceListenerPlap coughtServiceListenerPlap;
+    private CoughtServiceListenerBushmen coughtServiceListenerBushmen;
 
     public void coughtCallback(CoughtServiceListener coughtServiceListener){
         this.coughtServiceListener = coughtServiceListener;
@@ -186,6 +191,12 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
     public void setTextViewVisiblePlap(){
         new Thread(() -> coughtServiceListenerPlap.coughtTextViewListenerPlap()).start();
+    }
+    public void coughtCallbackBushmen(CoughtServiceListenerBushmen coughtServiceListenerBushmen){
+        this.coughtServiceListenerBushmen = coughtServiceListenerBushmen;
+    }
+    public void setTextViewVisibleBushmen(){
+        new Thread(() -> coughtServiceListenerBushmen.coughtTextViewListenerBushmen()).start();
     }
 
 

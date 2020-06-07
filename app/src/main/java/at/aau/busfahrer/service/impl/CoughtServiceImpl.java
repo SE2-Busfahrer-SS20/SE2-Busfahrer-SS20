@@ -1,7 +1,6 @@
 package at.aau.busfahrer.service.impl;
 
 import java.util.List;
-
 import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.GamePlayService;
 import shared.model.PlayerDTO;
@@ -21,6 +20,8 @@ public class CoughtServiceImpl implements CoughtService {
     private PlayersStorageImpl pl;
     private int indexOfMe;
     private GamePlayService gamePlayService;
+    private int indexCheater;
+
 
     private CoughtServiceImpl() {
     }
@@ -115,5 +116,42 @@ public class CoughtServiceImpl implements CoughtService {
         }
 
         return cheated;
+    }
+    public boolean isCheatingBushmen(){
+        gamePlayService = GamePlayServiceImpl.getInstance();
+        pl = PlayersStorageImpl.getInstance();
+        playerList = pl.getPlayerList();
+        indexCheater = pl.getCurrentTurn();
+        playerCheated = playerList.get(indexCheater);
+        indexOfMe = pl.getTempID();
+        myself = playerList.get(indexOfMe);
+
+        if(playerCheated.isCheating() && playerCheated.isBusdriver()){
+            //the player who cheated increases his score
+            scoreCheater = playerCheated.getScore();
+            scoreCheater++;
+            playerCheated.setScore(scoreCheater);
+            //myScore will be decremented one time
+            myScore = myself.getScore();
+            if (myScore != 0) {
+                myScore--;
+                myself.setScore(myScore);
+            }
+            gamePlayService.sendMsgCought(indexCheater, indexOfMe, scoreCheater, myScore, playerCheated.isCheating());
+            return true;
+        }else{
+            //the player who has NOT cheated decreases his score
+            scoreCheater = playerCheated.getScore();
+            if (scoreCheater != 0) {
+                scoreCheater--;
+                playerCheated.setScore(scoreCheater);
+            }
+            //myScore will be increased one time
+            myScore = myself.getScore();
+            myScore++;
+            myself.setScore(myScore);
+            gamePlayService.sendMsgCought(indexCheater, indexOfMe, scoreCheater, myScore, playerCheated.isCheating());
+            return false;
+        }
     }
 }
