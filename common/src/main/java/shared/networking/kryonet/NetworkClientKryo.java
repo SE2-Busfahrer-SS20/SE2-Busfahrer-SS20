@@ -38,7 +38,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     @Override
     public void close(){
-        client.removeListener(listenLeaderboardmessage);
+        //client.removeListener(listenLeaderboardmessage);
         client.close();
     }
     @Override
