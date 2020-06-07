@@ -49,4 +49,13 @@ public class CoughtDTOServiceTest {
         coughtMessage.setScoreCought(3);
         Assert.assertEquals(3,coughtMessage.getScoreCought());
     }
+    @Test
+    public void konstruktorTest(){
+        coughtMessage = new CoughtMessage(0,1,3,4,true);
+        Assert.assertEquals(0,coughtMessage.getIndexCheater());
+        Assert.assertEquals(1,coughtMessage.getIndexCought());
+        Assert.assertEquals(3,coughtMessage.getScoreCheater());
+        Assert.assertEquals(4,coughtMessage.getScoreCought());
+        Assert.assertEquals(true,coughtMessage.isCheated());
+    }
 }
