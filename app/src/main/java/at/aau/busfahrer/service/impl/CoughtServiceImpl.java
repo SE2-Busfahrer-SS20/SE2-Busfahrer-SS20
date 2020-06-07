@@ -93,13 +93,11 @@ public class CoughtServiceImpl implements CoughtService {
                     myScore--;
                 }
                 myself.setScore(myScore);
-                //Idee boolean nachdem er erwischt wurde wieder auf false setzten, sodass beim neuerlichen kliken auf erwischt, dieser spieer nicht mehr erwischt werden kann.
                 gamePlayService.sendMsgCought(i, indexOfMe, scoreCheater, myScore, playerList.get(i).isCheating());
                 cheated = true;
             }
         }
-        //If I cought Nobody, i get one point
-        //Everyone else lost one point
+        //If I cought Nobody, i get one point everyone else lost one point
         if (!cheated) {
             myScore = myself.getScore();
             myScore++;
@@ -115,7 +113,6 @@ public class CoughtServiceImpl implements CoughtService {
                 }
             }
         }
-
         return cheated;
     }
     public boolean isCheatingBushmen(){
