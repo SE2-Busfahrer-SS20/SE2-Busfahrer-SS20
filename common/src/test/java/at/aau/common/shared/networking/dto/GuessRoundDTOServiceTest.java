@@ -31,12 +31,21 @@ public class GuessRoundDTOServiceTest {
     private StartGameMessage startGameMessage;
     private PlayedMessage playedMessage;
     private UpdateMessage updateMessage;
+    private List<PlayerDTO> playerList;
 
     @Before
     public void setup(){
         this.startGameMessage=new StartGameMessage();
         this.playedMessage=new PlayedMessage();
         this.updateMessage=new UpdateMessage();
+        this.playerList = new ArrayList<PlayerDTO>();
+
+        PlayerDTO player1 = new PlayerDTOImpl("one", 5, false);
+        PlayerDTO player2 = new PlayerDTOImpl("two", 6, true);
+        PlayerDTO player3 = new PlayerDTOImpl("three", 2, false);
+        playerList.add(player1);
+        playerList.add(player2);
+        playerList.add(player3);
     }
 
     @Test
@@ -77,5 +86,17 @@ public class GuessRoundDTOServiceTest {
         Assert.assertFalse(playedMessage.scored());
     }
 
+    @Test
+    public void testUpdateMessage(){
+        //Test >Constructor and getter
+        UpdateMessage um2 = new UpdateMessage(4,playerList);
+        Assert.assertEquals(4, um2.getCurrentPlayer());
+        Assert.assertEquals(playerList, um2.getPlayerList());
 
+        //Test Setter, Getter
+        this.updateMessage.setCurrentPlayer(6);
+        this.updateMessage.setPlayerList(this.playerList);
+        Assert.assertEquals(6,this.updateMessage.getCurrentPlayer());
+        Assert.assertEquals(this.playerList,this.updateMessage.getPlayerList());
+    }
 }
