@@ -391,7 +391,7 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
         cheatService.resumeListen();
     }
 
-    public void OnClick_bt_Cought(View view){
+    public void onClick_bt_Cought(View view){
         if(coughtService.isCheatingBushmen()){
             tV_cought.setText("Cheater wurde erwischt!!");
             tV_cought.setVisibility(View.VISIBLE);
