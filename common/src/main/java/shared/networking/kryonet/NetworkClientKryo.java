@@ -54,28 +54,9 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client.addListener(createGameListener());
         client.addListener(createCheatListener());
         client.addListener(createLeaderboardListener());
-        client.addListener(new Listener() {
-            @Override
-            public void received(Connection connection, Object object) {
+        client.addListener(createStartPLapListener());
+        client.addListener(createWinnerLoserListener());
 
-
-
-                if (object instanceof StartPLapMessage) {
-                    Log.info("StartPlaBMesssage received");
-                    // call the correct callback to store cards and update UI Thread.
-                    callbackMap.get(StartPLapMessage.class).callback((BaseMessage) object);
-                }
-
-                if (object instanceof WinnerLooserMessage) {
-                    Log.info("WinnerLooserMessage received");
-                    // call the correct callback to store cards and update UI Thread.
-                    callbackMap.get(WinnerLooserMessage.class).callback((BaseMessage) object);
-                }
-
-
-
-            }
-        });
     }
     private Listener createLeaderboardListener() {
         return new Listener(){
@@ -86,6 +67,32 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     Log.debug("LeaderboardMessage received");
                     callbackMap.get(LeaderboardMessage.class).callback((LeaderboardMessage)object);
                 }
+            }
+        };
+    }
+    private Listener createWinnerLoserListener() {
+        return new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object instanceof WinnerLooserMessage) {
+                    Log.info("WinnerLooserMessage received");
+                    // call the correct callback to store cards and update UI Thread.
+                    callbackMap.get(WinnerLooserMessage.class).callback((BaseMessage) object);
+                }
+
+            }
+        };
+    }
+    private Listener createStartPLapListener() {
+        return new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object instanceof StartPLapMessage) {
+                    Log.info("StartPlaBMesssage received");
+                    // call the correct callback to store cards and update UI Thread.
+                    callbackMap.get(StartPLapMessage.class).callback((BaseMessage) object);
+                }
+
             }
         };
     }
