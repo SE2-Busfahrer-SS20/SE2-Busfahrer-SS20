@@ -80,4 +80,19 @@ public class CoughtServiceImplTest {
         playersStorage.setTempID(0);
         Assert.assertEquals(false,coughtService.isCheatingPlap());
     }
+    @Test
+    public void testIsCheatingBushmenFalse() {
+        playersStorage.setCurrentTurn(1);
+        playersStorage.getPlayerList().get(1).setBusdriver();
+        playersStorage.setTempID(0);
+        Assert.assertEquals(false, coughtService.isCheatingBushmen());
+    }
+    @Test
+    public void testIsCheatingBushmenTrue() {
+        playersStorage.setCurrentTurn(0);
+        playersStorage.getPlayerList().get(0).setBusdriver();
+        playersStorage.setTempID(1);
+        Assert.assertEquals(true, coughtService.isCheatingBushmen());
+    }
+
 }
