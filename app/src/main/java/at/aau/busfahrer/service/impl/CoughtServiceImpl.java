@@ -20,7 +20,6 @@ public class CoughtServiceImpl implements CoughtService {
     private PlayersStorageImpl pl;
     private int indexOfMe;
     private GamePlayService gamePlayService;
-    private int indexCheater;
 
 
     private CoughtServiceImpl() {
@@ -118,6 +117,7 @@ public class CoughtServiceImpl implements CoughtService {
         return cheated;
     }
     public boolean isCheatingBushmen(){
+        int indexCheater;
         gamePlayService = GamePlayServiceImpl.getInstance();
         pl = PlayersStorageImpl.getInstance();
         playerList = pl.getPlayerList();
