@@ -18,9 +18,7 @@ import com.esotericsoftware.minlog.Log;
 
 import static shared.networking.kryonet.NetworkConstants.getClassList;
 
-
 public class GameServer extends NetworkServerKryo {
-
 
     private static final String REQUEST_TEST = "request test";
     private static final String RESPONSE_TEST = "response test";
@@ -76,7 +74,7 @@ public class GameServer extends NetworkServerKryo {
                     Log.debug("Received Register Message");
                     try {
                         RegisterMessage msg = (RegisterMessage) object;
-                        gameService.createGame(msg.getPlayerName(), msg.getMACAddress(), connection);  //outsourced to GameService
+                        gameService.createGame(msg.getPlayerName(), msg.getMacAddress(), connection);  //outsourced to GameService
                         checkGameStates();
                         connectionToMaster = connection;
                     } catch (Exception ex) {
@@ -88,7 +86,7 @@ public class GameServer extends NetworkServerKryo {
                     Log.debug("Received Register Message");
 
                     RegisterMessage msg = (RegisterMessage) object;
-                    Player player = gameService.addPlayer(msg.getPlayerName(), msg.getMACAddress(), connection);
+                    Player player = gameService.addPlayer(msg.getPlayerName(), msg.getMacAddress(), connection);
 
                     if (player != null) { //if game is not full
                         Log.debug("new Player:" + player.getName());
@@ -194,6 +192,7 @@ public class GameServer extends NetworkServerKryo {
             }
         };
     }
+
     private Listener createLeaderboardListener() {
         return new Listener() {
             @Override
@@ -212,6 +211,7 @@ public class GameServer extends NetworkServerKryo {
             }
         };
     }
+
     private void checkGameStates() {
         new Thread(() -> {
             try {
@@ -235,6 +235,7 @@ public class GameServer extends NetworkServerKryo {
             }
         }).start();
     }
+
     private void registerClasses() {
         for (Class<?> c : getClassList())
             registerClass(c);

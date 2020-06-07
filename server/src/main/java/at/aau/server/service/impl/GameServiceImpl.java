@@ -76,6 +76,8 @@ public class GameServiceImpl implements GameService {
             case LAP2:
                 game.setState(GameState.LAP3);
                 break;
+            default:
+                Log.debug("incorrect input");
         }
 
     }
@@ -107,10 +109,10 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame(String masterName, String macAddress, Connection connection) {
+    public void createGame(String masterName, String MacAddress, Connection connection) {
         createGame();
 
-        Player player = addPlayer(masterName, macAddress, connection);
+        Player player = addPlayer(masterName, MacAddress, connection);
 
         ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player, true);
         connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,17 +19,20 @@ import androidx.core.content.ContextCompat;
 
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.CheatService;
+import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.service.BushmenService;
 import at.aau.busfahrer.service.impl.BushmenServiceImpl;
+import at.aau.busfahrer.service.impl.CoughtServiceImpl;
 import shared.model.Card;
+import shared.model.CoughtServiceListenerBushmen;
 import shared.networking.NetworkClient;
 import shared.networking.kryonet.NetworkClientKryo;
 
 @SuppressWarnings("unused")
-public class BushmenActivity extends AppCompatActivity {
+public class BushmenActivity extends AppCompatActivity implements CoughtServiceListenerBushmen {
 
     private final int[] bushmenCards = {R.id.tV_card1, R.id.tV_card2, R.id.tV_card3, R.id.tV_card4, R.id.tV_card5, R.id.tV_card6, R.id.tV_card7};
     
@@ -40,6 +44,10 @@ public class BushmenActivity extends AppCompatActivity {
     private BushmenService bushmenService;
 
     private CheatService cheatService;
+    //CoughtFunction
+    private CoughtService coughtService;
+    private Button bt_cought;
+    private TextView tV_cought;
 
     public BushmenActivity() {
 
@@ -77,7 +85,6 @@ public class BushmenActivity extends AppCompatActivity {
 
         // set looser variable. Value will be set in PLapFinished Activity.
         bushmenService.setLooser(getIntent().getBooleanExtra("LOST_GAME", false));
-
         // Neue Initialisieren
         resetGame();
         updateAnzeige();
@@ -85,14 +92,25 @@ public class BushmenActivity extends AppCompatActivity {
         // Für den Zuschauer wird angezeigt, dass er Zuschauer ist
         TextView textView = findViewById(R.id.headerBushmen);
 
+        bt_cought = findViewById(R.id.button4);
+        tV_cought = findViewById(R.id.textView2);
+        coughtService = CoughtServiceImpl.getInstance();
+        tV_cought.setVisibility(View.INVISIBLE);
+
+        //NetworkClientKryo networkClientKryo = (NetworkClientKryo) NetworkClientKryo.getInstance();
+        //networkClientKryo.coughtCallbackBushmen(this);
+        //networkClient.coughtCallbackBushmen(this);
+
 
         if(bushmenService.isLooser()){
 
             textView.setText("Oh dear! You have to drive with the bus");
             handleCheat();
+            bt_cought.setVisibility(View.INVISIBLE);
         }else {
             textView.setText("Your can only watch!");
             cheatService.stopListen();
+            bt_cought.setVisibility(View.VISIBLE);
         }
     }
 
@@ -373,6 +391,29 @@ public class BushmenActivity extends AppCompatActivity {
         cheatService.resumeListen();
     }
 
+    public void onClick_bt_Cought(View view){
+        if(coughtService.isCheatingBushmen()){
+            tV_cought.setText("Cheater wurde erwischt!!");
+            tV_cought.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
+        }else{
+            tV_cought.setText("Cheater wurde NICHT erwischt!!");
+            tV_cought.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
+        }
 
+    }
+
+    @Override
+    public void coughtTextViewListenerBushmen() {
+        runOnUiThread(() -> {
+            tV_cought.setText("Erwischt!!!!");
+            tV_cought.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
+        });
+    }
 
 }

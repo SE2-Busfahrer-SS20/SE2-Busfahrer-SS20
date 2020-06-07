@@ -13,25 +13,29 @@ public class CardUtility {
 
     private static final String BLACK = "#000000";
     private static final String RED = "#FF0000";
-
+    private static final String BACKSIDE = "\uD83C\uDCA0";
+    /**
+     * Set private Constructor, to prevent unwanted instantiation.
+     */
+    private CardUtility() {}
     public static void turnCard(TextView tV, Card c) {
         //Id suit is Pick or Kreuz -> change color to red
         if (c.getSuit() == 1 || c.getSuit() == 2) {
             tV.setTextColor(Color.parseColor(RED));//Red
         }
 
-        if (tV.getText().equals("\uD83C\uDCA0")) {//if it shows the cards back-side
+        if (tV.getText().equals(BACKSIDE)) {//if it shows the cards back-side
             tV.setText(c.toString());
         } else {
-            tV.setText("\uD83C\uDCA0");//set to card back side
+            tV.setText(BACKSIDE);//set to card back side
             tV.setTextColor(Color.parseColor(BLACK));//black
         }
     }
 
     // turns a card back
     public static void turnCardBack(TextView tV){
-        if(!tV.getText().equals("\uD83C\uDCA0")){
-            tV.setText("\uD83C\uDCA0");//set to card back side
+        if(!tV.getText().equals(BACKSIDE)){
+            tV.setText(BACKSIDE);//set to card back side
             tV.setTextColor(Color.parseColor(BLACK));//black
         }
     }
@@ -45,10 +49,10 @@ public class CardUtility {
         if (c.getSuit() == 1 || c.getSuit() == 2) {
             newCard.setTextColor(Color.parseColor(RED));//Red
         }
-        if (newCard.getText().equals("\uD83C\uDCA0")) {//if it shows the cards back-side
+        if (newCard.getText().equals(BACKSIDE)) {//if it shows the cards back-side
             newCard.setText(c.toString());
         } else {
-            newCard.setText("\uD83C\uDCA0");//set to card back side
+            newCard.setText(BACKSIDE);//set to card back side
             newCard.setTextColor(Color.parseColor(BLACK));//black
         }
         return newCard;

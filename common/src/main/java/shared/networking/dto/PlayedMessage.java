@@ -8,7 +8,7 @@ public class PlayedMessage extends BaseMessage {
 
     GameState lap;
     int tempID; //must be equal with Index in playerList.(ArrayList in Game Object)
-    boolean scored; //Ob der Client Richtig geraten hat
+    boolean scored; //stores if the client guessed correct
 
     public PlayedMessage(){}
 

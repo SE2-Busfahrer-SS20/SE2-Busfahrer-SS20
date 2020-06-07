@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import shared.model.CoughtServiceListener;
+import shared.model.CoughtServiceListenerBushmen;
+import shared.model.CoughtServiceListenerPlap;
 import shared.model.GameState;
 import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
@@ -20,10 +22,10 @@ import static shared.networking.kryonet.NetworkConstants.getClassList;
 
 public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
-    private Client client;
-    private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
+    private final Client client;
+    private final PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
     // Callback Map to store callbacks for every DTO Class. HashMap to access object in O(1).
-    private Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
+    private final Map<Class<?>, Callback<BaseMessage>> callbackMap = new HashMap<>();
     private static NetworkClient instance;
     Listener listenLeaderboardmessage;
 
@@ -32,7 +34,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         registerClasses();
     }
 
-    public void registerClass(Class c) {
+    public void registerClass(Class<?> c) {
         client.getKryo().register(c);
     }
 
@@ -41,6 +43,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         //client.removeListener(listenLeaderboardmessage);
         client.close();
     }
+
     @Override
     public void connect(String host) throws IOException {
         client.start();
@@ -59,11 +62,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
         client.addListener(listenLeaderboardmessage);
         client.addListener(new Listener() {
+            @Override
             public void received(Connection connection, Object object) {
-                // handle null objects or not known Objects.
-                if (!(object instanceof BaseMessage)) {
-                    // Log.info("Network Client Listener Error: Received Object is null or not from Type BaseMessage.");
-                } else if (object instanceof ConfirmRegisterMessage) {
+
+                if (object instanceof ConfirmRegisterMessage) {
                     Log.debug("Registration Confirmed");
                     playersStorage.setMaster(((ConfirmRegisterMessage)object).isMaster());
                     playersStorage.setCards(((ConfirmRegisterMessage)object).getCards());
@@ -74,7 +76,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 if(object instanceof NewPlayerMessage){
                     Log.debug("New Player in the Game");
                     boolean alreadyExists=false;
-                    //playersStorage.addPlayerName(((NewPlayerMessage)object).getPlayerName());
                     for(int i=0;i<playersStorage.getPlayerList().size();i++){
                         if(playersStorage.getPlayerList().get(i).getName().equals(((NewPlayerMessage)object).getPlayer().getName())){
                             alreadyExists=true;
@@ -88,9 +89,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 }
 
                 if(object instanceof StartGameMessage){
-                    StartGameMessage sgm = (StartGameMessage) object;
                     Log.debug("Game can start now");
-                    //playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
                     playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
 
                     playersStorage.setState(GameState.READY);
@@ -102,10 +101,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
                 }
 
-                if (object instanceof StartPLabMessage) {
+                if (object instanceof StartPLapMessage) {
                     Log.info("StartPlaBMesssage received");
                     // call the correct callback to store cards and update UI Thread.
-                    callbackMap.get(StartPLabMessage.class).callback((BaseMessage) object);
+                    callbackMap.get(StartPLapMessage.class).callback((BaseMessage) object);
                 }
 
                 if (object instanceof WinnerLooserMessage) {
@@ -133,11 +132,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     Log.debug("Callback is instance of TextMessage");
                     Log.debug("Text of TextMessage: "+((TextMessage) (object)).getText());
                     if(callbackMap.get(TextMessage.class)!=null)
-                    callbackMap.get(TextMessage.class).callback((BaseMessage) object);
+                        callbackMap.get(TextMessage.class).callback((BaseMessage) object);
                 }
                 if (object instanceof CheatedMessage) {
                     Log.debug("CheatedMessage received");
-                    System.out.println("\n\n\n CLIENT : "+((CheatedMessage) object).hasCheated()+"\n\n\n");
+                    Log.debug("\n\n\n CLIENT : "+((CheatedMessage) object).hasCheated()+"\n\n\n");
                     playersStorage.setCheating(((CheatedMessage) object).getTempID());
                 }
                 if(object instanceof CoughtMessage){
@@ -145,11 +144,15 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     CoughtMessage coughtMessage = (CoughtMessage)object;
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).setScore(coughtMessage.getScoreCheater());
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
-                    //Display the TextView on the currentPlayers Screen
-//                    if(coughtMessage.isCheated()){
-//
-//                    }
+                    //Listener for the Cheater for the TextView for the GuessRound
                     setTextViewVisible();
+                    //Listener for the Cheater for the TextView in Plap
+                    if(playersStorage.getTempID() == coughtMessage.getIndexCheater() && playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).isCheating() &&playersStorage.getState() == GameState.LAP2 ){
+                        setTextViewVisiblePlap();
+                    }
+                    if(playersStorage.getTempID() == coughtMessage.getIndexCheater() && playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).isCheating() &&playersStorage.getState() == GameState.LAP3 ){
+                        setTextViewVisibleBushmen();
+                    }
                 }
             }
         });
@@ -164,7 +167,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     private void registerClasses() {
-        for (Class c : getClassList())
+        for (Class<?> c : getClassList())
             registerClass(c);
     }
 
@@ -175,12 +178,31 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     private CoughtServiceListener coughtServiceListener;
+    private CoughtServiceListenerPlap coughtServiceListenerPlap;
+    private CoughtServiceListenerBushmen coughtServiceListenerBushmen;
 
     public void coughtCallback(CoughtServiceListener coughtServiceListener){
         this.coughtServiceListener = coughtServiceListener;
     }
+
     public void setTextViewVisible(){
         new Thread(() -> coughtServiceListener.coughtTetxViewListener()).start();
+    }
+
+    public void coughtCallbackPlap(CoughtServiceListenerPlap coughtServiceListenerPlap){
+        this.coughtServiceListenerPlap = coughtServiceListenerPlap;
+    }
+
+    public void setTextViewVisiblePlap(){
+        new Thread(() -> coughtServiceListenerPlap.coughtTextViewListenerPlap()).start();
+    }
+
+    public void coughtCallbackBushmen(CoughtServiceListenerBushmen coughtServiceListenerBushmen){
+        this.coughtServiceListenerBushmen = coughtServiceListenerBushmen;
+    }
+
+    public void setTextViewVisibleBushmen(){
+        new Thread(() -> coughtServiceListenerBushmen.coughtTextViewListenerBushmen()).start();
     }
 
 
