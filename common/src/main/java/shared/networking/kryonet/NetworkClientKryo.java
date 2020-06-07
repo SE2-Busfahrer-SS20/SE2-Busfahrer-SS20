@@ -42,58 +42,20 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         //client.removeListener(listenLeaderboardmessage);
         client.close();
     }
-    private Listener createLeaderboardListener() {
-        return new Listener(){
-            @Override
-            public void received(Connection connection, Object object) {
 
-                if(object instanceof LeaderboardMessage) {
-                    Log.debug("LeaderboardMessage received");
-                    callbackMap.get(LeaderboardMessage.class).callback((LeaderboardMessage)object);
-                }
-            }
-        };
-    }
     @Override
     public void connect(String host) throws IOException {
         client.start();
         client.connect(5000, host, NetworkConstants.TCP_PORT);
         //Here the client receives messages from the server !
 
+        client.addListener(createGameListener());
         client.addListener(createLeaderboardListener());
         client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
 
-                if (object instanceof ConfirmRegisterMessage) {
-                    Log.debug("Registration Confirmed");
-                    playersStorage.setMaster(((ConfirmRegisterMessage)object).isMaster());
-                    playersStorage.setCards(((ConfirmRegisterMessage)object).getCards());
-                    playersStorage.setTempID(((ConfirmRegisterMessage)object).getID());
 
-                }
-
-                if(object instanceof NewPlayerMessage){
-                    Log.debug("New Player in the Game");
-                    boolean alreadyExists=false;
-                    for(int i=0;i<playersStorage.getPlayerList().size();i++){
-                        if(playersStorage.getPlayerList().get(i).getName().equals(((NewPlayerMessage)object).getPlayer().getName())){
-                            alreadyExists=true;
-                        }
-                    }
-                    if(!alreadyExists){
-                        playersStorage.addPlayer(((NewPlayerMessage)object).getPlayer());
-                    }
-
-
-                }
-
-                if(object instanceof StartGameMessage){
-                    Log.debug("Game can start now");
-                    playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
-
-                    playersStorage.setState(GameState.READY);
-                }
 
                 if(object instanceof UpdateMessage){
                     UpdateMessage uM = (UpdateMessage)object;
@@ -156,6 +118,55 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 }
             }
         });
+    }
+    private Listener createLeaderboardListener() {
+        return new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+
+                if(object instanceof LeaderboardMessage) {
+                    Log.debug("LeaderboardMessage received");
+                    callbackMap.get(LeaderboardMessage.class).callback((LeaderboardMessage)object);
+                }
+            }
+        };
+    }
+    private Listener createGameListener() {
+        return new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object instanceof ConfirmRegisterMessage) {
+                    Log.debug("Registration Confirmed");
+                    playersStorage.setMaster(((ConfirmRegisterMessage)object).isMaster());
+                    playersStorage.setCards(((ConfirmRegisterMessage)object).getCards());
+                    playersStorage.setTempID(((ConfirmRegisterMessage)object).getID());
+
+                }
+
+                if(object instanceof NewPlayerMessage){
+                    Log.debug("New Player in the Game");
+                    boolean alreadyExists=false;
+                    for(int i=0;i<playersStorage.getPlayerList().size();i++){
+                        if(playersStorage.getPlayerList().get(i).getName().equals(((NewPlayerMessage)object).getPlayer().getName())){
+                            alreadyExists=true;
+                        }
+                    }
+                    if(!alreadyExists){
+                        playersStorage.addPlayer(((NewPlayerMessage)object).getPlayer());
+                    }
+
+
+                }
+
+                if(object instanceof StartGameMessage){
+                    Log.debug("Game can start now");
+                    playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
+
+                    playersStorage.setState(GameState.READY);
+                }
+
+            }
+        };
     }
 
     public void registerCallback(Class dtoClass, Callback<BaseMessage> callback) {
