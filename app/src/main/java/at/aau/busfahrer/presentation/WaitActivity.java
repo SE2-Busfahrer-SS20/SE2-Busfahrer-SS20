@@ -57,10 +57,8 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
     // click listener start game button
     public void onClickStartGame(View v){
         Intent i = new Intent(WaitActivity.this, GuessActivity.class);
-
         gamesvc.startGame();//Send StartGameMessage to other clients
         startActivity(i);
-
     }
 
     private void hideAppTitleBar(){
@@ -75,6 +73,7 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
     public void onAdditionalPlayer() {
         updatePlayerList();
     }
+
     //Callback to open new Activity when Master starts the game
     @Override
     public void onGameStart(){
