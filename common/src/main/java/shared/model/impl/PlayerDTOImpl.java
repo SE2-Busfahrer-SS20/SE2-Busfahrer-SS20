@@ -36,10 +36,12 @@ public class PlayerDTOImpl implements PlayerDTO {
         this.name = name;
     }
 
+    @Override
     public void setScore(Integer score) {
         this.score = score;
     }
 
+    @Override
     public void setCheating(boolean cheating) {
         this.isCheating = cheating;
     }

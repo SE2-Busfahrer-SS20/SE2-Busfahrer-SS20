@@ -13,6 +13,12 @@ public interface PlayersStorage {
 
     String getPlayerName(int index);
     ArrayList<String> getPlayerNamesList();
+    List<Integer> getScoreList();
+    //void addPlayerName(String name);
+
+    void addPlayer(PlayerDTO player);
+
+    void resetPlayers();
 
     boolean isMaster();
     void setMaster(boolean master);
