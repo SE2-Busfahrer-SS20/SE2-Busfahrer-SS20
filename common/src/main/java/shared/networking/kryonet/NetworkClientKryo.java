@@ -174,6 +174,9 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     playersStorage.setCards(((ConfirmRegisterMessage)object).getCards());
                     playersStorage.setTempID(((ConfirmRegisterMessage)object).getID());
 
+                    if(((ConfirmRegisterMessage)object).isMaster()){
+                        callbackMap.get(ConfirmRegisterMessage.class).callback((BaseMessage) object);
+                    }
                 }
 
                 if(object instanceof NewPlayerMessage){
