@@ -150,7 +150,7 @@ public class GameServiceImpl implements GameService {
     public void guessRound(GameState lap, int tempID, boolean scored) {
 
         if (scored)
-            game.addPointsToPlayer(tempID, 1);
+            game.addPointsToPlayer(tempID, -1);
 
         //ArrayList of all players scores
         List<PlayerDTO> playerList = PlayerDTOImpl.getDTOFromPlayerList(game.getPlayerList());
