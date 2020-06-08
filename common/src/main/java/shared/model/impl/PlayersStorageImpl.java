@@ -16,8 +16,8 @@ public class PlayersStorageImpl implements PlayersStorage {
     private List<PlayerDTO> playerList;
 
 
-    public static void reset() {
-        PlayersStorageImpl.instance = null;
+    public void resetPlayers() {
+        playerList= new ArrayList<>();
     }
 
     //Singleton Pattern
@@ -145,7 +145,7 @@ public class PlayersStorageImpl implements PlayersStorage {
         return this.playerList;
     }
 
-
+    @Override
     public List<Integer> getScoreList() {
         ArrayList<Integer> playerScores= new ArrayList<>();
         for(int i=0; i<playerList.size();i++){
