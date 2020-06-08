@@ -274,7 +274,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         } else {
             onPauseMode();
         }
-        //TODO: update Score in UI
 
     }
 
