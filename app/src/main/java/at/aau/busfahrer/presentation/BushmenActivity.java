@@ -226,8 +226,8 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
 
             if (bushmenService.hasWon()) {
 
-                AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this);
-                dialog.setTitle("Gewonnen");
+                AlertDialog.Builder dialog = new AlertDialog.Builder(BushmenActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+                dialog.setTitle("Spielende");
 
                 String gewinnerNachricht = bushmenService.isLooser() ? "Sie sind der Gewinner" : "Danke für's Zuschauen";
                 dialog.setMessage(gewinnerNachricht);
