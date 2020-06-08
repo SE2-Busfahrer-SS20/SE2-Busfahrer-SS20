@@ -1,5 +1,7 @@
 package at.aau.busfahrer.presentation;
+import android.content.SharedPreferences;
 import at.aau.busfahrer.*;
+import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.GamePlayService;
 import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
 import shared.model.PreGameListener;
@@ -32,26 +34,43 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
 
         gamesvc = GamePlayServiceImpl.getInstance();
 
+        //SEND REGISTERMESSAGE TO SERVER
+        SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
+        String name=sharedPreferences.getString("Player","name");
+        String hostname=sharedPreferences.getString("HostName","127.0.0.1");
+        gamesvc.setHostName(hostname);
+
+
         //Change visability
         LinearLayout playerList = findViewById(R.id.playerList);
         Button btStart = findViewById(R.id.bt_start);
         ImageView logo = findViewById(R.id.logo);
         progressBar =findViewById(R.id.progressBar2);
-        if(playersStorage.isMaster()){
-            playerList.setVisibility(View.VISIBLE);
-            btStart.setVisibility(View.VISIBLE);
-            logo.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.INVISIBLE);
-            updatePlayerList();
-        }else{
+
+
             playerList.setVisibility(View.INVISIBLE);
             btStart.setVisibility(View.INVISIBLE);
             logo.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.VISIBLE);
-        }
+
+        gamesvc.registerWaitScreenCallback(msg -> {
+            runOnUiThread(() -> {
+                if(playersStorage.isMaster()){
+                    playerList.setVisibility(View.VISIBLE);
+                    btStart.setVisibility(View.VISIBLE);
+                    logo.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
+                    updatePlayerList();
+                }
+            });
+
+        });
+
 
         //registerCallback
         playersStorage.registerPreGameListener(this);
+
+        gamesvc.playGame(name, CardUtility.getMacAddr());
     }
 
     // click listener start game button

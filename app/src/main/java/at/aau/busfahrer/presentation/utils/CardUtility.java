@@ -3,7 +3,12 @@ package at.aau.busfahrer.presentation.utils;
 import android.graphics.Color;
 import android.widget.TextView;
 
+import com.esotericsoftware.minlog.Log;
 import shared.model.Card;
+
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Contains shared utility functions for the GUI.
@@ -72,6 +77,33 @@ public class CardUtility {
                 return card;
         return null;
     }
+    public static String getMacAddr() {
+        //This code was found on StackOverFlow:
+        //https://stackoverflow.com/questions/33159224/getting-mac-address-in-android-6-0
+        try {
+            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface nif : all) {
+                if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
 
+                byte[] macBytes = nif.getHardwareAddress();
+                if (macBytes == null) {
+                    return "";
+                }
+
+                StringBuilder res1 = new StringBuilder();
+                for (byte b : macBytes) {
+                    res1.append(Integer.toHexString(b & 0xFF) + ":");
+                }
+
+                if (res1.length() > 0) {
+                    res1.deleteCharAt(res1.length() - 1);
+                }
+                return res1.toString();
+            }
+        } catch (Exception e) {
+            Log.error(e.toString());
+        }
+        return "";
+    }
 
 }

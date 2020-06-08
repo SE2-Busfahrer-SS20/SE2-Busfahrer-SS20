@@ -5,18 +5,16 @@ import com.esotericsoftware.minlog.Log;
 import at.aau.busfahrer.service.GamePlayService;
 import shared.model.Card;
 import shared.model.GameState;
+import shared.networking.Callback;
 import shared.networking.NetworkClient;
-import shared.networking.dto.CoughtMessage;
-import shared.networking.dto.CreateGameMessage;
-import shared.networking.dto.RegisterMessage;
-import shared.networking.dto.StartGameMessage;
-import shared.networking.dto.PlayedMessage;
+import shared.networking.dto.*;
 import shared.networking.kryonet.NetworkClientKryo;
 
 public class GamePlayServiceImpl implements GamePlayService {
 
     private NetworkClient client;
     private String host;
+    private Callback<Boolean> waitScreenCallback;
 
     //SINGLETON PATTERN
     private static GamePlayServiceImpl instance;
@@ -29,7 +27,9 @@ public class GamePlayServiceImpl implements GamePlayService {
     }
 
     private GamePlayServiceImpl() {
+
         this.client = NetworkClientKryo.getInstance();
+
         this.host = "127.0.0.1"; // set default HostName value.
     }
 
@@ -47,7 +47,15 @@ public class GamePlayServiceImpl implements GamePlayService {
         });
         thread.start();
     }
+    @Override
+    public void registerWaitScreenCallback(Callback<Boolean> callback){
+        this.waitScreenCallback=callback;
+        client.registerCallback(ConfirmRegisterMessage.class,msg -> {
+            boolean isMaster=((ConfirmRegisterMessage)msg).isMaster();
+            waitScreenCallback.callback(isMaster);
 
+        });
+    }
     @Override
     public void startGame() {
         Thread thread = new Thread(() -> {

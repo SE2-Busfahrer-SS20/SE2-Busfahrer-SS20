@@ -26,6 +26,7 @@ public interface PlayersStorage {
     GameState getState();
     void setState(GameState state);
 
-
+    int getCurrentTurn();
+    List<PlayerDTO> getPlayerList();
 
 }
