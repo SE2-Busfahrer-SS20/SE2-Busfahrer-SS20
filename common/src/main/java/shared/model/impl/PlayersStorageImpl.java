@@ -16,6 +16,10 @@ public class PlayersStorageImpl implements PlayersStorage {
     private List<PlayerDTO> playerList;
 
 
+  public static void reset(){
+      PlayersStorageImpl.instance=null;
+  }
+
     public void resetPlayers() {
         playerList= new ArrayList<>();
     }
