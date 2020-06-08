@@ -32,6 +32,13 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
 
         gamesvc = GamePlayServiceImpl.getInstance();
 
+        //SEND REGISTERMESSAGE TO SERVER
+        SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
+        String name=sharedPreferences.getString("Player","name");
+        String hostname=sharedPreferences.getString("HostName","127.0.0.1");
+        gamesvc.setHostName(hostname);
+
+
         //Change visability
         LinearLayout playerList = findViewById(R.id.playerList);
         Button btStart = findViewById(R.id.bt_start);
@@ -52,6 +59,8 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
 
         //registerCallback
         playersStorage.registerPreGameListener(this);
+
+        gamesvc.playGame(name, CardUtility.getMacAddr());
     }
 
     // click listener start game button

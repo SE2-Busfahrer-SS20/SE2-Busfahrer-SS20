@@ -17,11 +17,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.esotericsoftware.minlog.Log;
-
-import java.net.NetworkInterface;
-import java.util.Collections;
-import java.util.List;
 
 public class SelectCheatsActivity extends AppCompatActivity {
 
@@ -30,7 +25,7 @@ public class SelectCheatsActivity extends AppCompatActivity {
     Button shake;
     Button fair;
     int sensortype = -1;
-
+    GamePlayService gamesvc = GamePlayServiceImpl.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
