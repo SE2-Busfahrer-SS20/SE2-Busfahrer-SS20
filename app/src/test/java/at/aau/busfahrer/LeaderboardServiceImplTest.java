@@ -32,12 +32,17 @@ public class LeaderboardServiceImplTest {
         this.leaderboardService = LeaderboardServiceImpl.getInstance();
         hostname="127.0.0.1";
         MockitoAnnotations.initMocks(this);
-
+        client=NetworkClientKryo.getInstance();
     }
     @After
     public void destroy(){
         leaderboardService = null;
         LeaderboardServiceImpl.destroyInstance();
+    }
+    @Test
+    public void getLeaderboardInstanceNotNULLTest(){
+        this.leaderboardService = LeaderboardServiceImpl.getInstance();
+        Assert.assertNotNull(leaderboardService);
     }
     @Test
     public void getLeaderboardInstanceTest(){
