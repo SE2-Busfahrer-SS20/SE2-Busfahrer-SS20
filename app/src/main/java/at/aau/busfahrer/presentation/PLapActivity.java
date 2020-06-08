@@ -1,5 +1,7 @@
 package at.aau.busfahrer.presentation;
 
+import android.os.Handler;
+import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -43,11 +45,14 @@ public class PLapActivity extends AppCompatActivity implements CoughtServiceList
     private TextView tV_cought;
     private CoughtService coughtService;
 
+    Handler uiHandler;
+    private Button btn_score;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         pLapClientService = PLapClientServiceImpl.getInstance();
         setContentView(R.layout.activity_p_lap);
         pLapClientService.registerCardCallback(pCards -> runOnUiThread(() -> {
@@ -77,9 +82,12 @@ public class PLapActivity extends AppCompatActivity implements CoughtServiceList
         coughtService = CoughtServiceImpl.getInstance();
         tV_cought.setVisibility(View.INVISIBLE);
 
+        uiHandler=new Handler();
+        btn_score = findViewById(R.id.bt_score2);
+
         NetworkClientKryo networkClientKryo = (NetworkClientKryo) NetworkClientKryo.getInstance();
         networkClientKryo.coughtCallbackPlap(this);
-
+        updateScoreButton(pLapClientService.getPlayerStorage().getPlayerList().get(pLapClientService.getPlayerStorage().getCurrentTurn()).getScore());
     }
     public void onClickBtCought(View view) {
         if(coughtService.isCheatingPlap()){
@@ -130,6 +138,22 @@ public class PLapActivity extends AppCompatActivity implements CoughtServiceList
         cheatService.stopListen();
         Intent i = new Intent(PLapActivity.this, PLabFinished.class);
         startActivity(i);
+    }
+    public void onClickScore(View v){
+
+        System.out.println("TEST");
+        ScoreFragment scoreFragment = new ScoreFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("menu")
+                .replace(R.id.score_fragment,scoreFragment,"SCORE_FRAGMENT")
+                .commit();
+    }
+    private void updateScoreButton(int score){
+        runOnUiThread(()->{
+            btn_score.setText("Score: "+score);
+        });
+
     }
     /**
      * Turns all Player cards at the beginning of the lab.
