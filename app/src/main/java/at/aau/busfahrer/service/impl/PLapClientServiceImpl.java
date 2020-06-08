@@ -145,7 +145,9 @@ public class PLapClientServiceImpl implements PLapClientService {
         instance = null;
     }
     public Card[] getPlayerCards() {return playersStorage.getCards();}
-
+    public PlayersStorage getPlayerStorage(){
+        return this.playersStorage;
+    }
     /**
      * needed for unit testing.
      * @param cards

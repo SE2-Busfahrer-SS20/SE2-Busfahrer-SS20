@@ -2,6 +2,7 @@ package at.aau.busfahrer.service;
 
 import java.util.List;
 import shared.model.Card;
+import shared.model.PlayersStorage;
 import shared.networking.Callback;
 
 public interface PLapClientService {
@@ -15,4 +16,5 @@ public interface PLapClientService {
     List<String> getPlayerNames();
     void startLab();
     Card[] getPCards();
+    PlayersStorage getPlayerStorage();
 }
