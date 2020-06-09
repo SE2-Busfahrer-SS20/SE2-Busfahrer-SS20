@@ -5,6 +5,7 @@ import com.esotericsoftware.minlog.Log;
 import at.aau.busfahrer.service.GamePlayService;
 import shared.model.Card;
 import shared.model.GameState;
+import shared.model.PlayerDTO;
 import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.*;
@@ -158,4 +159,13 @@ public class GamePlayServiceImpl implements GamePlayService {
         thread.start();
     }
 
+    @Override
+    public void sendScoreDataToServer(PlayerDTO scoreData){
+        Thread thread = new Thread(() -> {
+
+            SaveGameDataMessage sgdm= new SaveGameDataMessage(scoreData);
+            client.sendMessage(sgdm);
+        });
+        thread.start();
+    }
 }
