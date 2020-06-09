@@ -1,5 +1,7 @@
 package shared.model.impl;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import shared.model.*;
@@ -125,7 +127,7 @@ public class PlayersStorageImpl implements PlayersStorage {
         } else
             this.state = state;
     }
-
+    @Override
     public int getTempID() {
         return tempID;
     }
@@ -147,6 +149,17 @@ public class PlayersStorageImpl implements PlayersStorage {
     }
     public List<PlayerDTO> getPlayerList(){
         return this.playerList;
+    }
+    public List<PlayerDTO> getPlayerListAscending(){
+        List<PlayerDTO> playerListAscending= this.playerList;
+
+                Collections.sort(playerListAscending, new Comparator<PlayerDTO>() {
+                    @Override public int compare(PlayerDTO p1, PlayerDTO p2) {
+                        return p1.getScore() - p2.getScore(); // Ascending
+                    }
+
+                });
+        return playerListAscending;
     }
 
     @Override

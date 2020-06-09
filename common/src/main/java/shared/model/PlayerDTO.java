@@ -8,4 +8,6 @@ public interface PlayerDTO {
     boolean isCheating();
     void setCheating(boolean cheated);
     void setScore(Integer score);
+    String getMAC();
+    void setMAC(String mac);
 }

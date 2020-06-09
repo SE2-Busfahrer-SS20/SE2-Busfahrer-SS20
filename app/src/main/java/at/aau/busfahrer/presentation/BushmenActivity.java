@@ -228,7 +228,7 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
 
                 dialog.setCancelable(false);
                 dialog.setPositiveButton("OK", (dialog12, which) -> {
-                    Intent intent = new Intent(BushmenActivity.this, MainMenuActivity.class);
+                    Intent intent = new Intent(BushmenActivity.this, GameOverviewActivity.class);
                     startActivity(intent);
                     CheatServiceImpl.reset();
                 });

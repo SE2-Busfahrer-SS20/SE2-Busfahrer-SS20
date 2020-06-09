@@ -2,6 +2,7 @@ package at.aau.busfahrer.service;
 
 import shared.model.Card;
 import shared.model.GameState;
+import shared.model.PlayerDTO;
 import shared.networking.Callback;
 
 public interface GamePlayService {
@@ -22,4 +23,5 @@ public interface GamePlayService {
     void setHostName(String hostname);
     void sendMsgCought(final int indexCheater, final int indexCought, final int scoreCheater, final int scoreCought,final boolean cheated);
     void registerWaitScreenCallback(Callback<Boolean> callback);
+    void sendScoreDataToServer(PlayerDTO scoreData);
 }
