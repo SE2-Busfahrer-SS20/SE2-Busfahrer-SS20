@@ -87,7 +87,7 @@ public class PLapActivity extends AppCompatActivity implements CoughtServiceList
 
         NetworkClientKryo networkClientKryo = (NetworkClientKryo) NetworkClientKryo.getInstance();
         networkClientKryo.coughtCallbackPlap(this);
-        updateScoreButton(pLapClientService.getPlayerStorage().getPlayerList().get(pLapClientService.getPlayerStorage().getCurrentTurn()).getScore());
+        updateScoreButton(pLapClientService.getPlayerStorage().getPlayerList().get(pLapClientService.getPlayerStorage().getTempID()).getScore());
     }
     public void onClickBtCought(View view) {
         if(coughtService.isCheatingPlap()){
@@ -150,9 +150,7 @@ public class PLapActivity extends AppCompatActivity implements CoughtServiceList
                 .commit();
     }
     private void updateScoreButton(int score){
-        runOnUiThread(()->{
-            btn_score.setText("Score: "+score);
-        });
+        runOnUiThread(()-> btn_score.setText("Score: "+score));
 
     }
     /**
