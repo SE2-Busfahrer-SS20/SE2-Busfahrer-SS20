@@ -3,6 +3,7 @@ package at.aau.server;
 import java.io.IOException;
 import java.util.List;
 import at.aau.server.database.Database;
+import at.aau.server.database.table.User;
 import at.aau.server.service.GameService;
 import at.aau.server.service.PLapService;
 import at.aau.server.service.impl.GameServiceImpl;
@@ -50,7 +51,7 @@ public class GameServer extends NetworkServerKryo {
         super.addListener(createBushmenListener());
         super.addListener(createGameListener());
         super.addListener(createGuessListener());
-        super.addListener(createLeaderboardListener());
+        super.addListener(createDBAccessListener());
     }
 
     private Listener createGuessListener() {
@@ -193,7 +194,7 @@ public class GameServer extends NetworkServerKryo {
         };
     }
 
-    private Listener createLeaderboardListener() {
+    private Listener createDBAccessListener() {
         return new Listener() {
             @Override
             public void received(Connection connection, Object object) {
@@ -206,6 +207,20 @@ public class GameServer extends NetworkServerKryo {
                     }
                     catch (Exception e){
                         Log.error("Failed to query db!", e);
+                    }
+                }
+                if(object instanceof SaveGameDataMessage){
+                    Log.info("SaveGameDataMessage received!");
+                    try {
+                        PlayerDTO playerDTO=((SaveGameDataMessage)object).getPlayer();
+
+                        User user = db.addUser(playerDTO.getMAC(), playerDTO.getName());
+                        db.addScore(user.getId(), playerDTO.getScore());
+
+                        //connection.close();
+                    }
+                    catch (Exception e){
+                        Log.error("Failed save data in DB!!", e);
                     }
                 }
             }
