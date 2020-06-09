@@ -28,5 +28,6 @@ public interface PlayersStorage {
 
     int getCurrentTurn();
     List<PlayerDTO> getPlayerList();
-
+    List<PlayerDTO> getPlayerListAscending();
+    int getTempID();
 }
