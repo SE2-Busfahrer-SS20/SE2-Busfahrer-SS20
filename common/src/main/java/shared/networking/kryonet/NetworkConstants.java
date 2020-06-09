@@ -38,7 +38,8 @@ public class NetworkConstants {
             BushmenMessage.class,
             BushmenCardMessage.class,
             CoughtMessage.class,
-            LeaderboardMessage.class
+            LeaderboardMessage.class,
+            SaveGameDataMessage.class
     };
     public static Class<?>[] getClassList() {
         return CLASS_LIST;
