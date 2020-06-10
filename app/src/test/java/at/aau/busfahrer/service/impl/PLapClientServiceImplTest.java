@@ -105,19 +105,7 @@ public class PLapClientServiceImplTest {
     public void playerCardsGetterTest() {
         Assert.assertEquals(10, pLapClientService.getPCards().length);
     }
-    @Test
-    public  void testCallback() {
 
-        plapMockService.registerCardCallback(cards -> {
-            Assert.assertEquals(10, cards.length);
-        });
-        plapMockService.startLab();
-        (networkClient)
-                .getCallbackMap()
-                .get(StartPLapMessage.class)
-                .callback(new StartPLapMessage(new Card[10]));
-
-    }
 
     /**
      * Helper Method to generate pyramid lap cards.
