@@ -252,6 +252,12 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         new Thread(() -> coughtServiceListenerBushmen.coughtTextViewListenerBushmen()).start();
     }
 
+    /**
+     * Just for Testing purposes.
+     */
+    public Map<Class<?>, Callback<BaseMessage>> getCallbackMap() {
+        return callbackMap;
+    }
 
 
 }
