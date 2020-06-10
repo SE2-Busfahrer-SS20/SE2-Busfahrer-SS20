@@ -1,6 +1,8 @@
 package at.aau.busfahrer.service.impl;
 
 import java.util.List;
+
+import android.util.Log;
 import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.GamePlayService;
 import shared.model.PlayerDTO;
@@ -122,7 +124,7 @@ public class CoughtServiceImpl implements CoughtService {
 
         if(playerCheated.isCheating() && playerCheated.isBusdriver()){
             //the player who cheated increases his score
-
+            Log.d("Caught Service", "\n\n --- Bushmen caught ------- \n\n");
             scoreCheater++;
             playerCheated.setScore(scoreCheater);
             //myScore will be decremented one time
@@ -134,6 +136,7 @@ public class CoughtServiceImpl implements CoughtService {
             gamePlayService.sendMsgCought(indexCheater, indexOfMe, scoreCheater, myScore, playerCheated.isCheating());
             return true;
         }else{
+            Log.d("Caught Service", "\n\n --- Bushmen NOT caught ------- \n\n");
             //the player who has NOT cheated decreases his score
             if (scoreCheater != 0) {
                 scoreCheater--;

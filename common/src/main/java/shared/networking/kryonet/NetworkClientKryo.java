@@ -126,7 +126,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     playersStorage.setCheating(((CheatedMessage) object).getTempID());
                 }
                 if(object instanceof CoughtMessage){
-                    Log.debug("CoughtMessage received");
+                    Log.error("CoughtMessage received");
                     CoughtMessage coughtMessage = (CoughtMessage)object;
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).setScore(coughtMessage.getScoreCheater());
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
@@ -135,9 +135,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     //Listener for the Cheater for the TextView in Plap
                     if(playersStorage.getTempID() == coughtMessage.getIndexCheater() && playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).isCheating() &&playersStorage.getState() == GameState.LAP2 ){
                         setTextViewVisiblePlap();
+                        Log.error("Listener Cheater received PLAP Caught.");
                     }
                     if(playersStorage.getTempID() == coughtMessage.getIndexCheater() && playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).isCheating() &&playersStorage.getState() == GameState.LAP3 ){
                         setTextViewVisibleBushmen();
+                        Log.error("Listener Cheater received Bushmen Caught.");
                     }
                 }
             }
@@ -152,7 +154,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     // BushmenMessage bushmenMessage = (BushmenMessage) object;
                     Log.info("Bushmen received");
                     // playersStorage.setBushmenCards(bushmenMessage.getCards());
-                    callbackMap.get(BushmenMessage.class).callback((BaseMessage) object);
+                    if(callbackMap.get(BushmenMessage.class) != null)
+                        callbackMap.get(BushmenMessage.class).callback((BaseMessage) object);
+                    else
+                        Log.error("BushmenMessage.class callback is null!");
 
                 }
 

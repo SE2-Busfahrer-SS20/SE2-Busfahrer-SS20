@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import at.aau.busfahrer.service.BushmenService;
+import at.aau.busfahrer.service.GamePlayService;
 import shared.model.Card;
 import shared.networking.NetworkClient;
 import shared.networking.dto.BushmenCardMessage;
@@ -17,7 +18,7 @@ public class BushmenServiceImpl implements BushmenService {
 
     private NetworkClient networkClient;
     private List<Card> cards;
-
+    private GamePlayService gamePlayService;
     private int kartenCounter;
     private int punkteAnzahlBusfahrer;
     private boolean isLooser; // is true in case that the player is a looser.
@@ -113,4 +114,5 @@ public class BushmenServiceImpl implements BushmenService {
     public boolean hasWon() {
         return kartenCounter == 4;
     }
+
 }
