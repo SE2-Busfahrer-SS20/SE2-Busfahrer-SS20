@@ -44,8 +44,7 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
     private CheatService cheatService;
     //CoughtFunction
     private CoughtService coughtService;
-    private Button bt_cought;
-    private TextView tV_cought;
+    private Button btCought;
 
     public BushmenActivity() {
 
@@ -90,25 +89,20 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
         // Für den Zuschauer wird angezeigt, dass er Zuschauer ist
         TextView textView = findViewById(R.id.headerBushmen);
 
-        bt_cought = findViewById(R.id.button4);
-        tV_cought = findViewById(R.id.textView2);
+        btCought = findViewById(R.id.button4);
         coughtService = CoughtServiceImpl.getInstance();
-        tV_cought.setVisibility(View.INVISIBLE);
+        findViewById(R.id.tvCought).setVisibility(View.INVISIBLE);
 
-        //NetworkClientKryo networkClientKryo = (NetworkClientKryo) NetworkClientKryo.getInstance();
-        //networkClientKryo.coughtCallbackBushmen(this);
-        //networkClient.coughtCallbackBushmen(this);
-
+        ((NetworkClientKryo)networkClient).coughtCallbackBushmen(this);
 
         if(bushmenService.isLooser()){
-
             textView.setText("Oh dear! You have to drive with the bus");
             handleCheat();
-            bt_cought.setVisibility(View.INVISIBLE);
+            btCought.setVisibility(View.INVISIBLE);
         }else {
             textView.setText("Your can only watch!");
             cheatService.stopListen();
-            bt_cought.setVisibility(View.VISIBLE);
+            btCought.setVisibility(View.VISIBLE);
         }
     }
 
@@ -378,29 +372,32 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
         cheatService.resumeListen();
     }
 
-    public void onClick_bt_Cought(View view){
-        if(coughtService.isCheatingBushmen()){
-            tV_cought.setText("Cheater wurde erwischt!!");
-            tV_cought.setVisibility(View.VISIBLE);
-            //after 5s the TextView is invisible
-            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
-        }else{
-            tV_cought.setText("Cheater wurde NICHT erwischt!!");
-            tV_cought.setVisibility(View.VISIBLE);
-            //after 5s the TextView is invisible
-            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
-        }
+    public void onClickBtCought(View view){
 
+        TextView tVCought = findViewById(R.id.tvCought);
+        if(coughtService.isCheatingBushmen()){
+            tVCought.setText("Cheater wurde erwischt!!");
+        }else{
+            tVCought.setText("Cheater wurde NICHT erwischt!!");
+        }
+        changeVisibility(tVCought);
     }
 
     @Override
     public void coughtTextViewListenerBushmen() {
         runOnUiThread(() -> {
-            tV_cought.setText("Erwischt!!!!");
-            tV_cought.setVisibility(View.VISIBLE);
-            //after 5s the TextView is invisible
-            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
+            TextView tVCought = findViewById(R.id.tvCought);
+            tVCought.setText("Erwischt!!!!");
+            Log.d("Cheater:", "\n\n\n---------- erwischt!! ----------\n\n\n");
+            changeVisibility(tVCought);
         });
+    }
+
+    private void changeVisibility(TextView tv) {
+
+        tv.setVisibility(View.VISIBLE);
+        //after 5s the TextView is invisible
+        tv.postDelayed(() -> tv.setVisibility(View.INVISIBLE), 5000);
     }
 
 }

@@ -14,6 +14,7 @@ import java.util.List;
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.service.PLapClientService;
 import at.aau.busfahrer.service.impl.PLapClientServiceImpl;
+import org.w3c.dom.Text;
 
 public class PLabFinished extends AppCompatActivity {
 
@@ -32,6 +33,7 @@ public class PLabFinished extends AppCompatActivity {
             startActivity(bushmenIntent);
         }));
         findViewById(R.id.progressBar_pfinished).setVisibility(View.INVISIBLE);
+        ((TextView) findViewById(R.id.tV_points_todeal)).setText("You have" +pLapClientService.getMatchCount() + "points to deal with.");
     }
 
     public void dealButtonClick(View v) {

@@ -12,10 +12,15 @@ import shared.model.Card;
 import shared.model.Deck;
 import shared.model.impl.CardImpl;
 import shared.model.impl.DeckImpl;
+import shared.networking.Callback;
+import shared.networking.dto.BushmenCardMessage;
+import shared.networking.dto.StartPLapMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doAnswer;
 
 public class PLapClientServiceImplTest {
 
@@ -24,6 +29,8 @@ public class PLapClientServiceImplTest {
     @Mock
     NetworkClientKryo networkClient;
 
+    @Mock
+    PLapClientService plapMockService;
 
     @Before
     public void setup() {
@@ -97,6 +104,19 @@ public class PLapClientServiceImplTest {
     @Test
     public void playerCardsGetterTest() {
         Assert.assertEquals(10, pLapClientService.getPCards().length);
+    }
+    @Test
+    public  void testCallback() {
+
+        plapMockService.registerCardCallback(cards -> {
+            Assert.assertEquals(10, cards.length);
+        });
+        plapMockService.startLab();
+        (networkClient)
+                .getCallbackMap()
+                .get(StartPLapMessage.class)
+                .callback(new StartPLapMessage(new Card[10]));
+
     }
 
     /**

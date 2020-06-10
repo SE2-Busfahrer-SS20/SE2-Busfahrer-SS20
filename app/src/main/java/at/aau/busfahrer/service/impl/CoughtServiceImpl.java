@@ -1,6 +1,8 @@
 package at.aau.busfahrer.service.impl;
 
 import java.util.List;
+
+import android.util.Log;
 import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.GamePlayService;
 import shared.model.PlayerDTO;
@@ -19,9 +21,12 @@ public class CoughtServiceImpl implements CoughtService {
     private PlayersStorageImpl pl;
     private int indexOfMe;
     private GamePlayService gamePlayService;
+    private int currentPlayer;
 
 
     private CoughtServiceImpl() {
+        pl = PlayersStorageImpl.getInstance();
+        gamePlayService = GamePlayServiceImpl.getInstance();
     }
 
     public static CoughtService getInstance() {
@@ -30,7 +35,6 @@ public class CoughtServiceImpl implements CoughtService {
         }
         return instance;
     }
-
     public boolean isCheating() {
         int currentPlayer;
         gamePlayService = GamePlayServiceImpl.getInstance();
