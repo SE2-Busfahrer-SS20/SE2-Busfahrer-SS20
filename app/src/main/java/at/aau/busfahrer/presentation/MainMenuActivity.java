@@ -1,15 +1,26 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
+import at.aau.busfahrer.service.GamePlayService;
+import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.esotericsoftware.minlog.Log;
+
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
+
 
 public class MainMenuActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +71,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
     // click listener PlayerEdit button
     public void onClickPlayGame(View v){
+
         Intent i = new Intent(MainMenuActivity.this, SelectCheatsActivity.class);
         startActivity(i);
     }
@@ -71,6 +83,8 @@ public class MainMenuActivity extends AppCompatActivity {
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
+
+
 
 
 

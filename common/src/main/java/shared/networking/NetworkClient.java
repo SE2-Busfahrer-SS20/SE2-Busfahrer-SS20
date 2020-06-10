@@ -1,7 +1,6 @@
 package shared.networking;
 
 import java.io.IOException;
-
 import shared.networking.dto.BaseMessage;
 
 public interface NetworkClient {

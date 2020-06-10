@@ -76,6 +76,8 @@ public class GameServiceImpl implements GameService {
             case LAP2:
                 game.setState(GameState.LAP3);
                 break;
+            default:
+                Log.debug("incorrect input");
         }
 
     }
@@ -107,10 +109,10 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame(String masterName, String macAddress, Connection connection) {
+    public void createGame(String masterName, String MacAddress, Connection connection) {
         createGame();
 
-        Player player = addPlayer(masterName, macAddress, connection);
+        Player player = addPlayer(masterName, MacAddress, connection);
 
         ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player, true);
         connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client
@@ -148,7 +150,7 @@ public class GameServiceImpl implements GameService {
     public void guessRound(GameState lap, int tempID, boolean scored) {
 
         if (scored)
-            game.addPointsToPlayer(tempID, 1);
+            game.addPointsToPlayer(tempID, -1);
 
         //ArrayList of all players scores
         List<PlayerDTO> playerList = PlayerDTOImpl.getDTOFromPlayerList(game.getPlayerList());

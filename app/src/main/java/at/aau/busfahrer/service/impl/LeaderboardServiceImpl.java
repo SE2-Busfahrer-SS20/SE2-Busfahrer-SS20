@@ -13,7 +13,6 @@ import java.util.List;
 public class LeaderboardServiceImpl implements LeaderboardService{
     private static LeaderboardService instance;
     private NetworkClient client;
-    private List<String> ScoreList;
     private String hostname;
     private Callback<List<PlayerDTO>> playerCallback;
 
@@ -25,7 +24,6 @@ public class LeaderboardServiceImpl implements LeaderboardService{
     public void setHostname(String hostname) {
         this.hostname = hostname;
     }
-
     private LeaderboardServiceImpl(){
         this.hostname = "127.0.0.1"; // set default HostName value.
     }
@@ -34,6 +32,9 @@ public class LeaderboardServiceImpl implements LeaderboardService{
             instance = new LeaderboardServiceImpl();
         }
         return instance;
+    }
+    public static void destroyInstance() {
+        instance = null;
     }
     @Override
     public void connect(){

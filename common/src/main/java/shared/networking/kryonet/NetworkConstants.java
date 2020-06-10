@@ -31,14 +31,15 @@ public class NetworkConstants {
             UpdateMessage.class,
             CheatedMessage.class,
             PlayerDTOImpl.class,
-            StartPLabMessage.class,
+            StartPLapMessage.class,
             DealPointsMessage.class,
             WinnerLooserMessage.class,
             ArrayList.class,
             BushmenMessage.class,
             BushmenCardMessage.class,
             CoughtMessage.class,
-            LeaderboardMessage.class
+            LeaderboardMessage.class,
+            SaveGameDataMessage.class
     };
     public static Class<?>[] getClassList() {
         return CLASS_LIST;

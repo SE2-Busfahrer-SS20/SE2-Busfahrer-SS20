@@ -1,7 +1,8 @@
 package at.aau.busfahrer.presentation;
 
+import android.os.Handler;
+import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -9,26 +10,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.presentation.utils.CardUtility;
-
 import at.aau.busfahrer.service.CheatService;
 import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.impl.CheatServiceImpl;
 import at.aau.busfahrer.service.PLapClientService;
 import at.aau.busfahrer.service.impl.CoughtServiceImpl;
 import at.aau.busfahrer.service.impl.PLapClientServiceImpl;
-
 import shared.model.Card;
+import shared.model.CoughtServiceListenerPlap;
+import shared.networking.kryonet.NetworkClientKryo;
 
 
-public class PLapActivity extends AppCompatActivity {
+public class PLapActivity extends AppCompatActivity implements CoughtServiceListenerPlap {
 
     // contains the cards on the hand of the Player.
     private Card[] cards;
@@ -47,18 +45,20 @@ public class PLapActivity extends AppCompatActivity {
     private TextView tV_cought;
     private CoughtService coughtService;
 
+    Handler uiHandler;
+    private Button btn_score;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         pLapClientService = PLapClientServiceImpl.getInstance();
         setContentView(R.layout.activity_p_lap);
-        pLapClientService.registerCardCallback(pCards -> {
-            runOnUiThread(() -> {
-                turnCards(pCardIds, pCards);
-                turnCards(pCardIds, pCards);
-            });
-        });
+        pLapClientService.registerCardCallback(pCards -> runOnUiThread(() -> {
+            turnCards(pCardIds, pCards);
+            turnCards(pCardIds, pCards);
+        }));
         pLapClientService.startLab();
         // load Player Cards, player cards will be stored in PlayerStorage.
         cards = pLapClientService.getPlayerCards();
@@ -78,12 +78,16 @@ public class PLapActivity extends AppCompatActivity {
         handleCheatPLab();
 
         //CoughtService
-        //CoughtService
-        Button bt_cought = findViewById(R.id.bt_caught);
         tV_cought = findViewById(R.id.tV_Cought);
         coughtService = CoughtServiceImpl.getInstance();
         tV_cought.setVisibility(View.INVISIBLE);
 
+        uiHandler=new Handler();
+        btn_score = findViewById(R.id.bt_score2);
+
+        NetworkClientKryo networkClientKryo = (NetworkClientKryo) NetworkClientKryo.getInstance();
+        networkClientKryo.coughtCallbackPlap(this);
+        updateScoreButton(pLapClientService.getPlayerStorage().getPlayerList().get(pLapClientService.getPlayerStorage().getTempID()).getScore());
     }
     public void onClickBtCought(View view) {
         if(coughtService.isCheatingPlap()){
@@ -97,6 +101,16 @@ public class PLapActivity extends AppCompatActivity {
             //after 5s the TextView is invisible
             tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
         }
+    }
+
+    @Override
+    public void coughtTextViewListenerPlap() {
+        runOnUiThread(() -> {
+            tV_cought.setText("Erwischt!!!!");
+            tV_cought.setVisibility(View.VISIBLE);
+            //after 5s the TextView is invisible
+            tV_cought.postDelayed(() -> tV_cought.setVisibility(View.INVISIBLE), 5000);
+        });
     }
 
 
@@ -124,6 +138,20 @@ public class PLapActivity extends AppCompatActivity {
         cheatService.stopListen();
         Intent i = new Intent(PLapActivity.this, PLabFinished.class);
         startActivity(i);
+    }
+    public void onClickScore(View v){
+
+        System.out.println("TEST");
+        ScoreFragment scoreFragment = new ScoreFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("menu")
+                .replace(R.id.score_fragment,scoreFragment,"SCORE_FRAGMENT")
+                .commit();
+    }
+    private void updateScoreButton(int score){
+        runOnUiThread(()-> btn_score.setText("Score: "+score));
+
     }
     /**
      * Turns all Player cards at the beginning of the lab.
@@ -193,9 +221,9 @@ public class PLapActivity extends AppCompatActivity {
 
         // if random card is already turned
         if (cheatedCard.getText().equals("\uD83C\uDCA0")){
-            for (int i = 0; i < pCardIds.length ; i++) {
-                if (cheatedCard.getText().equals("\uD83C\uDCA0")){
-                    cheatedCard = cheatService.generateCard(findViewById(pCardIds[i]), this);
+            for (int pCardId : pCardIds) {
+                if (cheatedCard.getText().equals("\uD83C\uDCA0")) {
+                    cheatedCard = cheatService.generateCard(findViewById(pCardId), this);
                 }
             }
         }

@@ -1,5 +1,7 @@
 package at.aau.busfahrer.presentation;
+import android.content.SharedPreferences;
 import at.aau.busfahrer.*;
+import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.GamePlayService;
 import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
 import shared.model.PreGameListener;
@@ -14,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 public class WaitActivity extends AppCompatActivity implements PreGameListener {
     private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
     GamePlayService gamesvc;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,32 +34,50 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
 
         gamesvc = GamePlayServiceImpl.getInstance();
 
+        //SEND REGISTERMESSAGE TO SERVER
+        SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences",MODE_PRIVATE);
+        String name=sharedPreferences.getString("Player","name");
+        String hostname=sharedPreferences.getString("HostName","127.0.0.1");
+        gamesvc.setHostName(hostname);
+
+
         //Change visability
         LinearLayout playerList = findViewById(R.id.playerList);
         Button btStart = findViewById(R.id.bt_start);
         ImageView logo = findViewById(R.id.logo);
-        if(playersStorage.isMaster()){
-            playerList.setVisibility(View.VISIBLE);
-            btStart.setVisibility(View.VISIBLE);
-            logo.setVisibility(View.INVISIBLE);
-            updatePlayerList();
-        }else{
+        progressBar =findViewById(R.id.progressBar2);
+
+
             playerList.setVisibility(View.INVISIBLE);
             btStart.setVisibility(View.INVISIBLE);
             logo.setVisibility(View.VISIBLE);
-        }
+            progressBar.setVisibility(View.VISIBLE);
+
+        gamesvc.registerWaitScreenCallback(msg -> {
+            runOnUiThread(() -> {
+                if(playersStorage.isMaster()){
+                    playerList.setVisibility(View.VISIBLE);
+                    btStart.setVisibility(View.VISIBLE);
+                    logo.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
+                    updatePlayerList();
+                }
+            });
+
+        });
+
 
         //registerCallback
         playersStorage.registerPreGameListener(this);
+
+        gamesvc.playGame(name, CardUtility.getMacAddr());
     }
 
     // click listener start game button
     public void onClickStartGame(View v){
         Intent i = new Intent(WaitActivity.this, GuessActivity.class);
-
         gamesvc.startGame();//Send StartGameMessage to other clients
         startActivity(i);
-
     }
 
     private void hideAppTitleBar(){
@@ -70,6 +92,7 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
     public void onAdditionalPlayer() {
         updatePlayerList();
     }
+
     //Callback to open new Activity when Master starts the game
     @Override
     public void onGameStart(){

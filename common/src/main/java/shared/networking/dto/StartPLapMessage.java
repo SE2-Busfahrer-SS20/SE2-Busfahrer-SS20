@@ -6,7 +6,7 @@ import java.util.Set;
 import shared.model.Card;
 import shared.model.Player;
 
-public class StartPLabMessage extends BaseMessage {
+public class StartPLapMessage extends BaseMessage {
 
     // 10 cards for the "Pyramidenrunde".
     private Card[] plabCards;
@@ -15,16 +15,16 @@ public class StartPLabMessage extends BaseMessage {
     /**
      * Kryonet needs Constructor without parameters.
      */
-    public StartPLabMessage() {}
+    public StartPLapMessage() {}
     /**
      * @param plabCards
      */
-    public StartPLabMessage(Card[] plabCards, List<String> playerNames) {
+    public StartPLapMessage(Card[] plabCards, List<String> playerNames) {
         this.plabCards = plabCards;
         this.playerNames = playerNames;
     }
 
-    public StartPLabMessage(Card[] plabCards) {
+    public StartPLapMessage(Card[] plabCards) {
         this.plabCards = plabCards;
     }
 

@@ -62,4 +62,10 @@ public class CardImplTest {
         }
 
     }
+    @Test
+    public void constructorTest(){
+        CardImpl card = new CardImpl();
+        Assert.assertEquals(0,card.getRank());
+        Assert.assertEquals(0,card.getSuit());
+    }
 }

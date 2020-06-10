@@ -11,6 +11,8 @@ public class PlayerDTOImpl implements PlayerDTO {
     private String name;
     private Integer score;
     private boolean isCheating;
+    private boolean isBusdriver;
+    private String mac;
 
     public PlayerDTOImpl() {
     }
@@ -19,16 +21,35 @@ public class PlayerDTOImpl implements PlayerDTO {
         this.name = name;
         this.score = score;
         this.isCheating = isCheating;
+        this.isBusdriver = false;
+    }
+    public PlayerDTOImpl(String name, Integer score, boolean isCheating, String mac) {
+        this.name = name;
+        this.score = score;
+        this.isCheating = isCheating;
+        this.isBusdriver = false;
+        this.mac =mac;
+    }
+
+    @Override
+    public boolean isBusdriver() {
+        return isBusdriver;
+    }
+    @Override
+    public void setBusdriver() {
+        this.isBusdriver = true;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public void setScore(Integer score) {
         this.score = score;
     }
 
+    @Override
     public void setCheating(boolean cheating) {
         this.isCheating = cheating;
     }
@@ -46,6 +67,16 @@ public class PlayerDTOImpl implements PlayerDTO {
     @Override
     public boolean isCheating() {
         return isCheating;
+    }
+
+    @Override
+    public String getMAC() {
+        return this.mac;
+    }
+
+    @Override
+    public void setMAC(String mac) {
+        this.mac=mac;
     }
 
     public static List<PlayerDTO> getDTOFromPlayerList(List<Player> playerList){

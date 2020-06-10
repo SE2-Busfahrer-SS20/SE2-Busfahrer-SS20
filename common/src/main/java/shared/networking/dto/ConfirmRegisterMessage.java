@@ -2,7 +2,6 @@ package shared.networking.dto;
 
 import shared.model.Card;
 import shared.model.Player;
-import shared.model.impl.CardImpl;
 
 public class ConfirmRegisterMessage extends BaseMessage {
 

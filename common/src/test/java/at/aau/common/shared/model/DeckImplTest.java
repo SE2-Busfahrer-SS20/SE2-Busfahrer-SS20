@@ -59,4 +59,8 @@ public class DeckImplTest {
         Assert.assertEquals(52,strings.size());
 
     }
+    @Test
+    public void testSize(){
+        Assert.assertEquals(52,deck.size());
+    }
 }

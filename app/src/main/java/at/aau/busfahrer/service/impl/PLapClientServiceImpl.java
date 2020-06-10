@@ -2,7 +2,6 @@ package at.aau.busfahrer.service.impl;
 
 
 import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 import at.aau.busfahrer.presentation.utils.CardUtility;
@@ -13,7 +12,7 @@ import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
 import shared.networking.NetworkClient;
 import shared.networking.dto.DealPointsMessage;
-import shared.networking.dto.StartPLabMessage;
+import shared.networking.dto.StartPLapMessage;
 import shared.networking.dto.WinnerLooserMessage;
 import shared.networking.kryonet.NetworkClientKryo;
 
@@ -30,7 +29,10 @@ public class PLapClientServiceImpl implements PLapClientService {
     private PlayersStorage playersStorage;
     private static PLapClientService instance;
     // constants for rows.
-    private final int ROW1 = 1, ROW2 = 2, ROW3 = 3, ROW4 = 4;
+    private final static int ROW1 = 1;
+    private final static int ROW2 = 2;
+    private final static int ROW3 = 3;
+    private final static int ROW4 = 4;
 
     private PLapClientServiceImpl() {
         this.client = NetworkClientKryo.getInstance();
@@ -59,7 +61,7 @@ public class PLapClientServiceImpl implements PLapClientService {
                     matchCounter += 3;
                 else if (row == ROW3)
                     matchCounter += 2;
-                else
+                else if (row == ROW4)
                     matchCounter += 1;
                 return card;
             }
@@ -73,17 +75,17 @@ public class PLapClientServiceImpl implements PLapClientService {
      * The registered Callback turn the cards, after the client received it.
      */
     public void startLab() {
-        this.client.registerCallback(StartPLabMessage.class, msg -> {
+        this.client.registerCallback(StartPLapMessage.class, msg -> {
             Log.i("Callback started.", "");
-            this.pCards = ((StartPLabMessage) msg).getPlabCards();
-            this.playerNames = ((StartPLabMessage) msg).getPlayerNames();
+            this.pCards = ((StartPLapMessage) msg).getPlabCards();
+            this.playerNames = ((StartPLapMessage) msg).getPlayerNames();
             cardCallback.callback(pCards);
         });
 
         Thread startThread = new Thread(() -> {
             try {
                 Log.i("PLab Service", "PLab start was triggered.");
-                this.client.sendMessage(new StartPLabMessage());
+                this.client.sendMessage(new StartPLapMessage());
             } catch (Exception e) {
                 Log.e("Error in PLabService", e.toString(),e);
             }
@@ -143,7 +145,9 @@ public class PLapClientServiceImpl implements PLapClientService {
         instance = null;
     }
     public Card[] getPlayerCards() {return playersStorage.getCards();}
-
+    public PlayersStorage getPlayerStorage(){
+        return this.playersStorage;
+    }
     /**
      * needed for unit testing.
      * @param cards
