@@ -35,21 +35,19 @@ public class CoughtServiceImpl implements CoughtService {
         }
         return instance;
     }
-    private void getProperties() {
+    public boolean isCheating() {
+        int currentPlayer;
+        gamePlayService = GamePlayServiceImpl.getInstance();
+        pl = PlayersStorageImpl.getInstance();
         playerList = pl.getPlayerList();
         //Check wich player's turn it is
         //get the index of the curren player on the playerList
         currentPlayer = pl.getCurrentTurn();
         //get the Index of myself from the player list
         indexOfMe = pl.getTempID();
+
         myself = playerList.get(indexOfMe);
         playerCheated = playerList.get(currentPlayer);
-        myScore = myself.getScore();
-
-    }
-
-    public boolean isCheating() {
-        getProperties();
         //if the currentplayer has cheated, he get one point and I lose one point
         if (playerCheated.isCheating()) {
             //the player who cheated increases his score
@@ -57,6 +55,7 @@ public class CoughtServiceImpl implements CoughtService {
             scoreCheater++;
             playerCheated.setScore(scoreCheater);
             //myScore will be decremented one time
+            myScore = myself.getScore();
             if (myScore != 0) {
                 myScore--;
                 myself.setScore(myScore);
@@ -82,14 +81,18 @@ public class CoughtServiceImpl implements CoughtService {
     }
 
     public boolean isCheatingPlap() {
-        getProperties();
-
+        gamePlayService = GamePlayServiceImpl.getInstance();
+        pl = PlayersStorageImpl.getInstance();
+        playerList = pl.getPlayerList();
+        indexOfMe = pl.getTempID();
+        myself = playerList.get(indexOfMe);
         boolean cheated = false;
 
         for (int i = 0; i < playerList.size(); i++) {
             if (i != indexOfMe && playerList.get(i).isCheating()) {
                 scoreCheater = playerList.get(i).getScore();
                 scoreCheater++;
+                myScore = myself.getScore();
                 if (myScore != 0) {
                     myScore--;
                 }
@@ -100,6 +103,7 @@ public class CoughtServiceImpl implements CoughtService {
         }
         //If I cought Nobody, i get one point everyone else lost one point
         if (!cheated) {
+            myScore = myself.getScore();
             myScore++;
             myself.setScore(myScore);
 
@@ -116,19 +120,22 @@ public class CoughtServiceImpl implements CoughtService {
         return cheated;
     }
     public boolean isCheatingBushmen(){
-
-        getProperties();
-
-        int indexCheater = currentPlayer;
-        scoreCheater = playerCheated.getScore();
+        int indexCheater;
+        gamePlayService = GamePlayServiceImpl.getInstance();
+        pl = PlayersStorageImpl.getInstance();
+        playerList = pl.getPlayerList();
+        indexCheater = pl.getCurrentTurn();
+        playerCheated = playerList.get(indexCheater);
+        indexOfMe = pl.getTempID();
+        myself = playerList.get(indexOfMe);
 
         if(playerCheated.isCheating() && playerCheated.isBusdriver()){
             //the player who cheated increases his score
-            Log.d("Caught Service", "\n\n --- Bushmen caught ------- \n\n");
+            scoreCheater = playerCheated.getScore();
             scoreCheater++;
             playerCheated.setScore(scoreCheater);
             //myScore will be decremented one time
-
+            myScore = myself.getScore();
             if (myScore != 0) {
                 myScore--;
                 myself.setScore(myScore);
@@ -136,13 +143,14 @@ public class CoughtServiceImpl implements CoughtService {
             gamePlayService.sendMsgCought(indexCheater, indexOfMe, scoreCheater, myScore, playerCheated.isCheating());
             return true;
         }else{
-            Log.d("Caught Service", "\n\n --- Bushmen NOT caught ------- \n\n");
             //the player who has NOT cheated decreases his score
+            scoreCheater = playerCheated.getScore();
             if (scoreCheater != 0) {
                 scoreCheater--;
                 playerCheated.setScore(scoreCheater);
             }
             //myScore will be increased one time
+            myScore = myself.getScore();
             myScore++;
             myself.setScore(myScore);
             gamePlayService.sendMsgCought(indexCheater, indexOfMe, scoreCheater, myScore, playerCheated.isCheating());
