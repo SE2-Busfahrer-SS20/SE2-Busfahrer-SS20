@@ -30,11 +30,13 @@ public class NewPlayerMessageDToTest {
 
         newPlayerMessage = new NewPlayerMessage(playerDTO);
         Assert.assertEquals(playerDTO,newPlayerMessage.getPlayer());
+        Assert.assertTrue(newPlayerMessage.getPlayer() instanceof  PlayerDTOImpl);
     }
     @Test
     public void gettersetterTest(){
         newPlayerMessage = new NewPlayerMessage(playerDTO);
         newPlayerMessage.setPlayer(playerTest);
         Assert.assertEquals(playerTest,newPlayerMessage.getPlayer());
+        Assert.assertTrue(newPlayerMessage.getPlayer() instanceof  PlayerDTOImpl);
     }
 }
