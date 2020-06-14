@@ -217,7 +217,6 @@ public class GameServer extends NetworkServerKryo {
                         User user = db.addUser(playerDTO.getMAC(), playerDTO.getName());
                         db.addScore(user.getId(), playerDTO.getScore());
 
-                        //connection.close();
                     }
                     catch (Exception e){
                         Log.error("Failed save data in DB!!", e);
