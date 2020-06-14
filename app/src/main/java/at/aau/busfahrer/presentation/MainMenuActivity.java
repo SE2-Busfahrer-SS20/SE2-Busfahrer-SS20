@@ -1,22 +1,12 @@
 package at.aau.busfahrer.presentation;
 import at.aau.busfahrer.*;
-import at.aau.busfahrer.service.GamePlayService;
-import at.aau.busfahrer.service.impl.GamePlayServiceImpl;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.esotericsoftware.minlog.Log;
-
-import java.net.NetworkInterface;
-import java.util.Collections;
-import java.util.List;
 
 
 public class MainMenuActivity extends AppCompatActivity {
