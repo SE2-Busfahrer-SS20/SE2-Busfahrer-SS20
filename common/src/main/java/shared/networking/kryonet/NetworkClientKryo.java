@@ -39,7 +39,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     @Override
     public void close(){
-        //client.removeListener(listenLeaderboardmessage);
         client.close();
     }
 
@@ -151,9 +150,9 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             public void received(Connection connection, Object object) {
 
                 if (object instanceof BushmenMessage) {
-                    // BushmenMessage bushmenMessage = (BushmenMessage) object;
+
                     Log.info("Bushmen received");
-                    // playersStorage.setBushmenCards(bushmenMessage.getCards());
+
                     if(callbackMap.get(BushmenMessage.class) != null)
                         callbackMap.get(BushmenMessage.class).callback((BaseMessage) object);
                     else

@@ -141,7 +141,6 @@ public class PLapActivity extends AppCompatActivity implements CoughtServiceList
     }
     public void onClickScore(View v){
 
-        System.out.println("TEST");
         ScoreFragment scoreFragment = new ScoreFragment();
         getSupportFragmentManager()
                 .beginTransaction()

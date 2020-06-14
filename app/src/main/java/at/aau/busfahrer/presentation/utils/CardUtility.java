@@ -25,8 +25,6 @@ public class CardUtility {
     private CardUtility() {}
     public static void turnCard(TextView tV, Card c) {
 
-        System.out.println("Suit: "+c.getSuit());
-
         //If suit is Pick or Kreuz -> change color to red
         if (c.getSuit() == 1 || c.getSuit() == 2) {
             tV.setTextColor(Color.parseColor(RED));//Red

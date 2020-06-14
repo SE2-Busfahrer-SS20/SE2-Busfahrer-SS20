@@ -46,7 +46,7 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
 
     //CoughtFunction
     private CoughtService coughtService;
-    private Button btCought;
+
 
     Handler uiHandler;
     private Button btn_score;
@@ -60,9 +60,7 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
         bushmenService.setUpCardTurnCallback((cardId, card) -> {
             Log.i("Bushmen","BushmenCards recieved"+cardId + " " + card);
 
-            runOnUiThread(() -> {
-                turnCardRecieved(cardId, card);
-            });
+            runOnUiThread(() -> turnCardRecieved(cardId, card));
         });
 
 
@@ -74,7 +72,7 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
         super.onCreate(savedInstanceState);
         hideAppTitleBar();
         setContentView(R.layout.activity_bushmen);
-
+        Button btCought;
         uiHandler=new Handler();
         btn_score = findViewById(R.id.bt_score3);
         // Cheat service init

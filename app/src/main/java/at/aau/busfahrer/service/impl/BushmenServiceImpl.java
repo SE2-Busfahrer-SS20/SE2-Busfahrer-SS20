@@ -18,7 +18,6 @@ public class BushmenServiceImpl implements BushmenService {
 
     private NetworkClient networkClient;
     private List<Card> cards;
-    private GamePlayService gamePlayService;
     private int kartenCounter;
     private int punkteAnzahlBusfahrer;
     private boolean isLooser; // is true in case that the player is a looser.

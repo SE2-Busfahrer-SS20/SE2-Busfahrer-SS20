@@ -14,7 +14,6 @@ import java.util.List;
 import at.aau.busfahrer.R;
 import at.aau.busfahrer.service.PLapClientService;
 import at.aau.busfahrer.service.impl.PLapClientServiceImpl;
-import org.w3c.dom.Text;
 
 public class PLabFinished extends AppCompatActivity {
 

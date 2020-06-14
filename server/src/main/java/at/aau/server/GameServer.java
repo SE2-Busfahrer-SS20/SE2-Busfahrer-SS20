@@ -126,7 +126,6 @@ public class GameServer extends NetworkServerKryo {
                     for (int i = 0; i < gameService.getPlayerCount(); i++) {
                         gameService.getPlayerList().get(i).getConnection().sendTCP(object);
                     }
-                    System.out.println("Send card to players" + object + gameService.getPlayerList());
                 }
             }
         };
@@ -217,7 +216,6 @@ public class GameServer extends NetworkServerKryo {
                         User user = db.addUser(playerDTO.getMAC(), playerDTO.getName());
                         db.addScore(user.getId(), playerDTO.getScore());
 
-                        //connection.close();
                     }
                     catch (Exception e){
                         Log.error("Failed save data in DB!!", e);
