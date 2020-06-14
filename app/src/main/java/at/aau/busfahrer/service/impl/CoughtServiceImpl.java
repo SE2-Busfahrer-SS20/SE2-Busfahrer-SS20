@@ -1,7 +1,6 @@
 package at.aau.busfahrer.service.impl;
 
 import java.util.List;
-
 import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.GamePlayService;
 import shared.model.PlayerDTO;
@@ -10,8 +9,6 @@ import shared.model.impl.PlayersStorageImpl;
 public class CoughtServiceImpl implements CoughtService {
 
     private static CoughtService instance;
-
-
     private List<PlayerDTO> playerList;
     private PlayerDTO playerCheated;
     private PlayerDTO myself;
@@ -59,21 +56,16 @@ public class CoughtServiceImpl implements CoughtService {
             scoreCheater++;
             playerCheated.setScore(scoreCheater);
             //myScore will be decremented one time
-
-            if (myScore != 0) {
-                myScore--;
-                myself.setScore(myScore);
-            }
+            myScore = decrementScore(myScore);
+            myself.setScore(myScore);
             gamePlayService.sendMsgCought(currentPlayer, indexOfMe, scoreCheater, myScore, playerCheated.isCheating());
             return true;
 
         } else {
             //the player who has NOT cheated decreases his score
             scoreCheater = playerCheated.getScore();
-            if (scoreCheater != 0) {
-                scoreCheater--;
-                playerCheated.setScore(scoreCheater);
-            }
+            scoreCheater = decrementScore(scoreCheater);
+            playerCheated.setScore(scoreCheater);
             //myScore will be increased one time
             myScore++;
             myself.setScore(myScore);
@@ -91,9 +83,7 @@ public class CoughtServiceImpl implements CoughtService {
             if (i != indexOfMe && playerList.get(i).isCheating()) {
                 scoreCheater = playerList.get(i).getScore();
                 scoreCheater++;
-                if (myScore != 0) {
-                    myScore--;
-                }
+                myScore = decrementScore(myScore);
                 myself.setScore(myScore);
                 gamePlayService.sendMsgCought(i, indexOfMe, scoreCheater, myScore, playerList.get(i).isCheating());
                 cheated = true;
@@ -107,15 +97,20 @@ public class CoughtServiceImpl implements CoughtService {
             for (int j = 0; j < playerList.size(); j++) {
                 if (j != indexOfMe) {
                     scoreCheater = playerList.get(j).getScore();
-                    if (scoreCheater != 0) {
-                        scoreCheater--;
-                    }
+                    scoreCheater = decrementScore(scoreCheater);
                     gamePlayService.sendMsgCought(j, indexOfMe, scoreCheater, myScore, playerList.get(j).isCheating());
                 }
             }
         }
         return cheated;
     }
+    public int decrementScore(int score){
+        if(score!=0){
+            score--;
+        }
+        return score;
+    }
+
     public boolean isCheatingBushmen(){
         int indexCheater;
         getProperties();
