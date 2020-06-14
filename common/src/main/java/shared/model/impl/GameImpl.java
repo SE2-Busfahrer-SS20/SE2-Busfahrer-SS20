@@ -33,13 +33,13 @@ public class GameImpl implements Game {
         plapFinishedCounter = 0;
     }
 
-    public Player addPlayer(String name, String MACAdress, Connection connection){
+    public Player addPlayer(String name, String macAdress, Connection connection){
         if(playerList.size()<8) {
             Card[] cards = new CardImpl[4];
             for (int i = 0; i < 4; i++) {
                 cards[i] = cardStack.drawCard();
             }
-            Player newPlayer = new PlayerImpl(name, MACAdress, cards, connection);
+            Player newPlayer = new PlayerImpl(name, macAdress, cards, connection);
             newPlayer.setTempID(playerList.size()); //Index starts with 0, so size returns highest index + 1
             playerList.add(newPlayer);
             return newPlayer;
@@ -95,7 +95,8 @@ public class GameImpl implements Game {
     public Card[] getpCards() {
         if (pCards != null)
             return pCards;
-        return (pCards = generatePCardStack());
+        pCards = generatePCardStack();
+        return pCards;
     }
 
     /**
