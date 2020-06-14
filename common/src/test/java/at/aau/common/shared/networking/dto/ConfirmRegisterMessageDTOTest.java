@@ -33,6 +33,7 @@ public class ConfirmRegisterMessageDTOTest {
     }
     @Test
     public void testInheritance() {
+        confirmRegisterMessage = new ConfirmRegisterMessage();
         Assert.assertTrue(confirmRegisterMessage instanceof BaseMessage);
     }
     @Test

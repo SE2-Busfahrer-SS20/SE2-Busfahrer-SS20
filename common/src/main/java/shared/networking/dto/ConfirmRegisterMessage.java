@@ -9,7 +9,7 @@ public class ConfirmRegisterMessage extends BaseMessage {
     private int ID;
     private Card[] cards;
 
-    ConfirmRegisterMessage() {
+    public ConfirmRegisterMessage() {
 
     }
 
