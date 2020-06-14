@@ -51,6 +51,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client.addListener(createBasicListener());
         client.addListener(createBushmenListener());
         client.addListener(createGameListener());
+        client.addListener(createnewPlayerListener());
         client.addListener(createCheatListener());
         client.addListener(createLeaderboardListener());
         client.addListener(createStartPLapListener());
@@ -208,7 +209,26 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             }
         };
     }
+    private Listener createnewPlayerListener() {
+        return new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+                if(object instanceof NewPlayerMessage){
+                    Log.debug("New Player in the Game");
+                    boolean alreadyExists=false;
+                    for(int i=0;i<playersStorage.getPlayerList().size();i++){
+                        if(playersStorage.getPlayerList().get(i).getName().equals(((NewPlayerMessage)object).getPlayer().getName())){
+                            alreadyExists=true;
+                        }
+                    }
+                    if(!alreadyExists){
+                        playersStorage.addPlayer(((NewPlayerMessage)object).getPlayer());
+                    }
 
+                }
+            }
+        };
+    }
     public void registerCallback(Class dtoClass, Callback<BaseMessage> callback) {
         this.callbackMap.put(dtoClass, callback);
     }
