@@ -1,10 +1,8 @@
 package shared.networking.dto;
 
 import java.util.List;
-import java.util.Set;
 
 import shared.model.Card;
-import shared.model.Player;
 
 public class StartPLapMessage extends BaseMessage {
 
