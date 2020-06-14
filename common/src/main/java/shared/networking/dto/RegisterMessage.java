@@ -6,9 +6,9 @@ public class RegisterMessage extends BaseMessage {
     private String MacAddress;
 
     public RegisterMessage() {}
-    public RegisterMessage(String playerName, String MACAdress) {
+    public RegisterMessage(String playerName, String macAddress) {
         this.playerName = playerName;
-        this.MacAddress = MACAdress;
+        this.MacAddress = macAddress;
     }
 
     public String getPlayerName() {
