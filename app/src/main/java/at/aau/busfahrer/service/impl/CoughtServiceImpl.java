@@ -2,7 +2,6 @@ package at.aau.busfahrer.service.impl;
 
 import java.util.List;
 
-import android.util.Log;
 import at.aau.busfahrer.service.CoughtService;
 import at.aau.busfahrer.service.GamePlayService;
 import shared.model.PlayerDTO;
