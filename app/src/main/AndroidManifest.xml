@@ -39,9 +39,6 @@
             android:name=".presentation.SelectCheatsActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".presentation.StartServerActivity"
-            android:screenOrientation="sensorPortrait" />
-        <activity
             android:name=".presentation.MainMenuActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
