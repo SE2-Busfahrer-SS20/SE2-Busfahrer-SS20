@@ -1,6 +1,7 @@
 package at.aau.busfahrer.presentation;
 
 import android.os.Handler;
+import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -27,7 +28,7 @@ import shared.model.GameState;
 import shared.model.GuessRoundListener;
 import shared.model.impl.PlayersStorageImpl;
 import shared.networking.kryonet.NetworkClientKryo;
-import com.esotericsoftware.minlog.Log;
+import com.esotericsoftware.minlog.*;
 
 // *TODO remove card click listener in guess xml, because on click app can crash
 
@@ -378,7 +379,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 playersStorage.setState(GameState.LAP2);//Pyramid Round
                 return true;
             default:
-                Log.error("Error in nextGameState()");
+                Log.e("Error","Error in nextGameState()");
         }
         return false;
     }
