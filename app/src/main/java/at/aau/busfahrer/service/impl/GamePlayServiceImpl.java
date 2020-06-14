@@ -35,10 +35,10 @@ public class GamePlayServiceImpl implements GamePlayService {
     }
 
     @Override
-    public void playGame(final String name, final String MACAddress) {
+    public void playGame(final String name, final String macAddress) {
 
         Thread thread = new Thread(() -> {
-            RegisterMessage rm = new RegisterMessage(name, MACAddress);
+            RegisterMessage rm = new RegisterMessage(name, macAddress);
             try {
                 client.connect(host);
                 client.sendMessage(rm);
