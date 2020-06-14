@@ -27,6 +27,7 @@ import at.aau.busfahrer.service.impl.BushmenServiceImpl;
 import at.aau.busfahrer.service.impl.CoughtServiceImpl;
 import shared.model.Card;
 import shared.model.CoughtServiceListenerBushmen;
+import shared.model.impl.PlayersStorageImpl;
 import shared.networking.NetworkClient;
 import shared.networking.kryonet.NetworkClientKryo;
 
@@ -42,9 +43,15 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
     private BushmenService bushmenService;
 
     private CheatService cheatService;
+
     //CoughtFunction
     private CoughtService coughtService;
     private Button btCought;
+
+    Handler uiHandler;
+    private Button btn_score;
+
+    private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
 
     public BushmenActivity() {
 
@@ -68,7 +75,8 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
         hideAppTitleBar();
         setContentView(R.layout.activity_bushmen);
 
-
+        uiHandler=new Handler();
+        btn_score = findViewById(R.id.bt_score3);
         // Cheat service init
         cheatService = CheatServiceImpl.getInstance();
         cheatService.setContext(getApplicationContext(), getClass().getName());
@@ -85,6 +93,7 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
         // Neue Initialisieren
         resetGame();
         updateAnzeige();
+        updateScoreButton(playersStorage.getScoreList().get(playersStorage.getTempID()));
         
         // Für den Zuschauer wird angezeigt, dass er Zuschauer ist
         TextView textView = findViewById(R.id.headerBushmen);
@@ -105,7 +114,19 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
             btCought.setVisibility(View.VISIBLE);
         }
     }
+    private void updateScoreButton(int score){
+        uiHandler.post(() -> btn_score.setText("Score: "+score));
+    }
 
+    public void onClickScore(View v){
+
+        ScoreFragment scoreFragment = new ScoreFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("menu")
+                .replace(R.id.score_fragment,scoreFragment,"SCORE_FRAGMENT")
+                .commit();
+    }
 
     private void updateAnzeige() {
         TxtPunkte.setText("" + bushmenService.getPunkteAnzahlBusfahrer());

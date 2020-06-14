@@ -19,114 +19,101 @@
 
     <TextView
         android:id="@+id/tV_card4"
-        android:layout_width="91dp"
-        android:layout_height="153dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="350dp"
+        android:layout_marginEnd="50dp"
         android:clickable="true"
         android:onClick="onClickCard4"
         android:text="🂠"
         android:textColor="#000000"
         android:textSize="130sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.778"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerBushmen"
-        app:layout_constraintVertical_bias="0.765" />
+        app:layout_constraintTop_toBottomOf="@+id/headerBushmen" />
 
     <TextView
         android:id="@+id/tV_card1"
-        android:layout_width="96dp"
-        android:layout_height="139dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="350dp"
         android:clickable="true"
         android:onClick="onClickCard1"
         android:text="🂠"
         android:textColor="#000000"
         android:textSize="130sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.115"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerBushmen"
-        app:layout_constraintVertical_bias="0.718" />
+        app:layout_constraintTop_toBottomOf="@+id/headerBushmen" />
 
     <TextView
         android:id="@+id/tV_card5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="50dp"
         android:clickable="true"
         android:onClick="onClickCard5"
         android:text="🂠"
         android:textColor="#000000"
         android:textSize="130sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.774"
-        app:layout_constraintStart_toEndOf="@+id/tV_card1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.158" />
+        app:layout_constraintTop_toBottomOf="@+id/headerBushmen" />
 
     <TextView
         android:id="@+id/tV_card2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="200dp"
         android:clickable="true"
         android:onClick="onClickCard2"
         android:text="🂠"
         android:textColor="#000000"
         android:textSize="130sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tV_card6"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerBushmen"
-        app:layout_constraintVertical_bias="0.455" />
+        app:layout_constraintTop_toBottomOf="@+id/headerBushmen" />
 
     <TextView
         android:id="@+id/tV_card6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
         android:clickable="true"
         android:onClick="onClickCard6"
         android:text="🂠"
         android:textColor="#000000"
         android:textSize="130sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.475"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.174" />
+        app:layout_constraintEnd_toStartOf="@+id/tV_card7"
+        app:layout_constraintStart_toEndOf="@+id/tV_card2"
+        app:layout_constraintTop_toBottomOf="@+id/headerBushmen" />
 
     <TextView
         android:id="@+id/tV_card3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="50dp"
         android:clickable="true"
         android:onClick="onClickCard3"
         android:text="🂠"
         android:textColor="#000000"
         android:textSize="130sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.113"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerBushmen"
-        app:layout_constraintVertical_bias="0.094" />
+        app:layout_constraintTop_toBottomOf="@+id/headerBushmen" />
 
     <TextView
         android:id="@+id/tV_card7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="50dp"
         android:clickable="true"
         android:onClick="onClickCard7"
         android:text="🂠"
         android:textColor="#000000"
         android:textSize="130sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.653"
-        app:layout_constraintStart_toEndOf="@+id/tV_card2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.493" />
+        app:layout_constraintTop_toBottomOf="@+id/headerBushmen" />
 
     <TextView
         android:id="@+id/punkte"
@@ -144,13 +131,24 @@
         android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="55dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="5dp"
         android:background="@drawable/bg_btn_black"
         android:onClick="onClickBtCought"
         android:text="Erwischt"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/bt_score3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="50dp"
+        android:onClick="onClickScore"
+        android:text="Score: 0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvCought"
@@ -162,5 +160,13 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/score_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="5dp"
+        tools:layout_editor_absoluteY="16dp">
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
