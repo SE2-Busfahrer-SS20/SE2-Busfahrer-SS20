@@ -29,5 +29,11 @@ public interface PlayersStorage {
     int getCurrentTurn();
     List<PlayerDTO> getPlayerList();
     List<PlayerDTO> getPlayerListAscending();
+    void setTempID(int tempID);
     int getTempID();
+    void setCurrentTurn(int currentTurn);
+    void setPlayerList(List<PlayerDTO> players);
+    boolean isCheating(int index);
+    void setCheating(int index);
+
 }
