@@ -7,6 +7,10 @@ import shared.networking.dto.*;
 
 public class NetworkConstants {
 
+    private NetworkConstants() {
+        throw new IllegalStateException("NetworkConstants");
+    }
+
     public static final int TCP_PORT = 53213;
     // public static final int UDP_PORT = 54777; //needs to stay commented, because on AAU server there is only one port available
 
