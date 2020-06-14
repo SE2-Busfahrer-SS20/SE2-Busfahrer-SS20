@@ -53,18 +53,15 @@ public class WaitActivity extends AppCompatActivity implements PreGameListener {
             logo.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.VISIBLE);
 
-        gamesvc.registerWaitScreenCallback(msg -> {
-            runOnUiThread(() -> {
-                if(playersStorage.isMaster()){
-                    playerList.setVisibility(View.VISIBLE);
-                    btStart.setVisibility(View.VISIBLE);
-                    logo.setVisibility(View.INVISIBLE);
-                    progressBar.setVisibility(View.INVISIBLE);
-                    updatePlayerList();
-                }
-            });
-
-        });
+        gamesvc.registerWaitScreenCallback(msg -> runOnUiThread(() -> {
+            if(playersStorage.isMaster()){
+                playerList.setVisibility(View.VISIBLE);
+                btStart.setVisibility(View.VISIBLE);
+                logo.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
+                updatePlayerList();
+            }
+        }));
 
 
         //registerCallback
