@@ -64,7 +64,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private CheatService cheatService;
     private CoughtService coughtService;
 
-    final String white ="#000000";
+    final static String white ="#000000";
 
 
     @Override
