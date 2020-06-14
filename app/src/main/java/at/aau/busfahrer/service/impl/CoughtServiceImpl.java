@@ -20,7 +20,6 @@ public class CoughtServiceImpl implements CoughtService {
     private PlayersStorageImpl pl;
     private int indexOfMe;
     private GamePlayService gamePlayService;
-    private int currentPlayer;
 
 
     private CoughtServiceImpl() {
