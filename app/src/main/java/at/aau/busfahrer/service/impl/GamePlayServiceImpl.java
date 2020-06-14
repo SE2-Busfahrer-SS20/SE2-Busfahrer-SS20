@@ -15,7 +15,7 @@ public class GamePlayServiceImpl implements GamePlayService {
 
     private NetworkClient client;
     private String host;
-    private Callback<Boolean> waitScreenCallback;
+
 
     //SINGLETON PATTERN
     private static GamePlayServiceImpl instance;
@@ -50,10 +50,10 @@ public class GamePlayServiceImpl implements GamePlayService {
     }
     @Override
     public void registerWaitScreenCallback(Callback<Boolean> callback){
-        this.waitScreenCallback=callback;
+
         client.registerCallback(ConfirmRegisterMessage.class,msg -> {
             boolean isMaster=((ConfirmRegisterMessage)msg).isMaster();
-            waitScreenCallback.callback(isMaster);
+            callback.callback(isMaster);
 
         });
     }
