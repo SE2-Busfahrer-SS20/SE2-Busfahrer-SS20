@@ -24,24 +24,26 @@ public class CardUtility {
      */
     private CardUtility() {}
     public static void turnCard(TextView tV, Card c) {
-        //Id suit is Pick or Kreuz -> change color to red
+
+        System.out.println("Suit: "+c.getSuit());
+
+        //If suit is Pick or Kreuz -> change color to red
         if (c.getSuit() == 1 || c.getSuit() == 2) {
             tV.setTextColor(Color.parseColor(RED));//Red
         }
-
-        if (tV.getText().equals(BACKSIDE)) {//if it shows the cards back-side
+        if (tV.getText().equals(BACKSIDE)) {
             tV.setText(c.toString());
         } else {
-            tV.setText(BACKSIDE);//set to card back side
-            tV.setTextColor(Color.parseColor(BLACK));//black
+            tV.setText(BACKSIDE);
+            tV.setTextColor(Color.parseColor(BLACK));
         }
     }
 
     // turns a card back
     public static void turnCardBack(TextView tV){
         if(!tV.getText().equals(BACKSIDE)){
-            tV.setText(BACKSIDE);//set to card back side
-            tV.setTextColor(Color.parseColor(BLACK));//black
+            tV.setText(BACKSIDE);
+            tV.setTextColor(Color.parseColor(BLACK));
         }
     }
 
@@ -52,7 +54,7 @@ public class CardUtility {
         newCard.setTextSize(tV.getTextSize());
         newCard.setTextColor(tV.getCurrentTextColor());
         if (c.getSuit() == 1 || c.getSuit() == 2) {
-            newCard.setTextColor(Color.parseColor(RED));//Red
+            newCard.setTextColor(Color.parseColor(RED));
         }
         if (newCard.getText().equals(BACKSIDE)) {//if it shows the cards back-side
             newCard.setText(c.toString());
