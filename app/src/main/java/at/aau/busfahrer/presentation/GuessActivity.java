@@ -64,7 +64,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private CheatService cheatService;
     private CoughtService coughtService;
 
-    final static String white ="#000000";
+    final static String WHITE ="#000000";
 
 
     @Override
@@ -204,7 +204,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 CardUtility.turnCard(tV_card3, cards[2]);
                 break;
             default:
-                Log.e("error","Invalid input");
+
         }
         onAnswer(scored);
     }
@@ -226,7 +226,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 CardUtility.turnCard(tV_card3, cards[2]);
                 break;
             default:
-                Log.e("error","Invalid input");
+
         }
         onAnswer(scored);
     }
@@ -307,10 +307,10 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             bt_SecondOption.setVisibility(View.VISIBLE);
             bt_cought.setVisibility(View.INVISIBLE);
 
-            tV_card1.setTextColor(Color.parseColor(white));
-            tV_card2.setTextColor(Color.parseColor(white));
-            tV_card3.setTextColor(Color.parseColor(white));
-            tV_card4.setTextColor(Color.parseColor(white));
+            tV_card1.setTextColor(Color.parseColor(WHITE));
+            tV_card2.setTextColor(Color.parseColor(WHITE));
+            tV_card3.setTextColor(Color.parseColor(WHITE));
+            tV_card4.setTextColor(Color.parseColor(WHITE));
 
             switch (playersStorage.getState()) {
                 case LAP1A:
@@ -342,7 +342,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                     bt_SecondOption.setVisibility(View.INVISIBLE);
                     break;
                 default:
-                    Log.e("error","Invalid input");
+
             }
 
         });

@@ -5,7 +5,6 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import at.aau.busfahrer.service.BushmenService;
-import at.aau.busfahrer.service.GamePlayService;
 import shared.model.Card;
 import shared.networking.NetworkClient;
 import shared.networking.dto.BushmenCardMessage;
