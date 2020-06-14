@@ -153,11 +153,8 @@ public class PlayersStorageImpl implements PlayersStorage {
     public List<PlayerDTO> getPlayerListAscending(){
         List<PlayerDTO> playerListAscending= this.playerList;
 
-                Collections.sort(playerListAscending, new Comparator<PlayerDTO>() {
-                    @Override public int compare(PlayerDTO p1, PlayerDTO p2) {
-                        return p1.getScore() - p2.getScore(); // Ascending
-                    }
-
+                Collections.sort(playerListAscending, (p1, p2) -> {
+                    return p1.getScore() - p2.getScore(); // Ascending
                 });
         return playerListAscending;
     }
