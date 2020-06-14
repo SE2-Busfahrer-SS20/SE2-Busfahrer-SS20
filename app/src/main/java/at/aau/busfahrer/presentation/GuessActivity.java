@@ -204,7 +204,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 CardUtility.turnCard(tV_card3, cards[2]);
                 break;
             default:
-                System.out.println("Invalid input");
+                Log.e("error","Invalid input");
         }
         onAnswer(scored);
     }
@@ -226,7 +226,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 CardUtility.turnCard(tV_card3, cards[2]);
                 break;
             default:
-                System.out.println("Invalid input");
+                Log.e("error","Invalid input");
         }
         onAnswer(scored);
     }
@@ -342,7 +342,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                     bt_SecondOption.setVisibility(View.INVISIBLE);
                     break;
                 default:
-                    System.out.println("Invalid input");
+                    Log.e("error","Invalid input");
             }
 
         });
