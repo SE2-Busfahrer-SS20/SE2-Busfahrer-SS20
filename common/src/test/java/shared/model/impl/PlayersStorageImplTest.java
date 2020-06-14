@@ -1,9 +1,12 @@
 package shared.model.impl;
 
+import org.junit.Assert;
 import org.junit.Test;
 import shared.model.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -83,5 +86,53 @@ public class PlayersStorageImplTest {
     //Hilfsmethode die neuen Spieler erzeugt
     public static PlayerDTO createPlayerDto(String name, int score) {
         return new PlayerDTOImpl(name, score, false);
+    }
+    @Test
+    public void resetInstanceTest(){
+        PlayersStorageImpl.reset();
+        Assert.assertNotEquals(null,PlayersStorageImpl.getInstance());
+    }
+    @Test
+    public void getterSetterTempID(){
+        PlayersStorage playersStorage = PlayersStorageImpl.getInstance();
+        playersStorage.setTempID(3);
+        Assert.assertEquals(3,playersStorage.getTempID());
+    }
+    @Test
+    public void getterSetterCurrentTurn(){
+        PlayersStorage playersStorage = PlayersStorageImpl.getInstance();
+        playersStorage.setCurrentTurn(4);
+        Assert.assertEquals(4,playersStorage.getCurrentTurn());
+    }
+    @Test
+    public void getterSetterPlayerList(){
+        List<PlayerDTO> playerList = new ArrayList<>();
+        playerList.add(new PlayerDTOImpl("Lars",45,true));
+        playerList.add((new PlayerDTOImpl("Hanis",23,false)));
+        PlayersStorage playersStorage = PlayersStorageImpl.getInstance();
+        playersStorage.setPlayerList(playerList);
+        Assert.assertNotEquals(null,playersStorage.getPlayerList());
+
+    }
+    @Test
+    public void getterSetterPlayerListAscending(){
+        List<PlayerDTO> playerList = new ArrayList<>();
+        playerList.add(new PlayerDTOImpl("Lars",45,true));
+        playerList.add((new PlayerDTOImpl("Hanis",23,false)));
+        PlayersStorage playersStorage = PlayersStorageImpl.getInstance();
+        playersStorage.setPlayerList(playerList);
+        Assert.assertNotEquals(null,playersStorage.getPlayerListAscending());
+
+    }
+    @Test
+    public void getterSetterisCheating(){
+        PlayersStorage playersStorage = PlayersStorageImpl.getInstance();
+        List<PlayerDTO> playerList = new ArrayList<>();
+        playerList.add(new PlayerDTOImpl("Lars",45,true));
+        playerList.add((new PlayerDTOImpl("Hanis",23,false)));
+        playersStorage.setPlayerList(playerList);
+        Assert.assertEquals(false,playersStorage.isCheating(1));
+        playersStorage.setCheating(1);
+        Assert.assertEquals(true,playersStorage.isCheating(1));
     }
 }
