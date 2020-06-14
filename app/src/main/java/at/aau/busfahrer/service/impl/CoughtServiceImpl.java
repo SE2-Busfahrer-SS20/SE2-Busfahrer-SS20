@@ -123,19 +123,15 @@ public class CoughtServiceImpl implements CoughtService {
             scoreCheater++;
             playerCheated.setScore(scoreCheater);
             //myScore will be decremented one time
-            if (myScore != 0) {
-                myScore--;
-                myself.setScore(myScore);
-            }
+            myScore = decrementScore(myScore);
+            myself.setScore(myScore);
             gamePlayService.sendMsgCought(indexCheater, indexOfMe, scoreCheater, myScore, playerCheated.isCheating());
             return true;
         }else{
             //the player who has NOT cheated decreases his score
             scoreCheater = playerCheated.getScore();
-            if (scoreCheater != 0) {
-                scoreCheater--;
-                playerCheated.setScore(scoreCheater);
-            }
+            scoreCheater = decrementScore(scoreCheater);
+            playerCheated.setScore(scoreCheater);
             //myScore will be increased one time
             myScore++;
             myself.setScore(myScore);
