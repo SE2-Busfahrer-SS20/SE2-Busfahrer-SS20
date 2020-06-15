@@ -15,7 +15,6 @@ public interface PlayersStorage {
     ArrayList<String> getPlayerNamesList();
     List<Integer> getScoreList();
     void addScoreToCurrentPlayer(int score);
-    //void addPlayerName(String name);
 
     void addPlayer(PlayerDTO player);
 
