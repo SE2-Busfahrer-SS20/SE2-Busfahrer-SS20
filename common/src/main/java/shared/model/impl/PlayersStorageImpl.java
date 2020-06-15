@@ -131,6 +131,7 @@ public class PlayersStorageImpl implements PlayersStorage {
         return tempID;
     }
 
+    @Override
     public void setTempID(int tempID) {
         this.tempID = tempID;
     }
@@ -165,6 +166,16 @@ public class PlayersStorageImpl implements PlayersStorage {
             playerScores.add(playerList.get(i).getScore());
         }
         return playerScores;
+    }
+
+    //UpdateScoreBushmenActivity
+    @Override
+    public void addScoreToCurrentPlayer(int score) {
+        PlayerDTO currentPlayer = playerList.get(tempID);
+
+        if (currentPlayer != null) {
+            currentPlayer.setScore(currentPlayer.getScore() + score);
+        }
     }
 
     public void updateOnMessage(List<PlayerDTO> playerList, int currentTurn){

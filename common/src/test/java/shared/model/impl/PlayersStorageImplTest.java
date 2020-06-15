@@ -80,7 +80,27 @@ public class PlayersStorageImplTest {
         storage.addPlayer(p1);
         storage.addPlayer(p2);
 
-        assertEquals(Arrays.asList(100,42), storage.getScoreList());
+        assertEquals(Arrays.asList(100, 42), storage.getScoreList());
+    }
+
+    @Test
+    public void addScoreToCurrentPlayer() {
+        PlayerDTO p1 = createPlayerDto("foo", 100);
+        PlayerDTO p2 = createPlayerDto("bar", 42);
+        PlayerDTO p3 = createPlayerDto("baz", 0);
+
+        PlayersStorage storage = PlayersStorageImpl.getInstance();
+
+        storage.resetPlayers();
+        storage.addPlayer(p1);
+        storage.addPlayer(p2);
+        storage.addPlayer(p3);
+
+        storage.setTempID(1); // zweiter spieler
+
+        storage.addScoreToCurrentPlayer(100);
+
+        assertEquals(Arrays.asList(100, 142, 0 ), storage.getScoreList());
     }
 
     //Hilfsmethode die neuen Spieler erzeugt
