@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -28,9 +27,6 @@ import shared.model.GameState;
 import shared.model.GuessRoundListener;
 import shared.model.impl.PlayersStorageImpl;
 import shared.networking.kryonet.NetworkClientKryo;
-import com.esotericsoftware.minlog.*;
-
-// *TODO remove card click listener in guess xml, because on click app can crash
 
 
 public class GuessActivity extends AppCompatActivity implements GuessRoundListener, CoughtServiceListener {
