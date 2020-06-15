@@ -168,6 +168,16 @@ public class PlayersStorageImpl implements PlayersStorage {
         return playerScores;
     }
 
+    //UpdateScoreBushmenActivity
+    @Override
+    public void addScoreToCurrentPlayer(int score) {
+        PlayerDTO currentPlayer = playerList.get(tempID);
+
+        if (currentPlayer != null) {
+            currentPlayer.setScore(currentPlayer.getScore() + score);
+        }
+    }
+
     public void updateOnMessage(List<PlayerDTO> playerList, int currentTurn){
         this.playerList=playerList;
         this.currentTurn=currentTurn;
