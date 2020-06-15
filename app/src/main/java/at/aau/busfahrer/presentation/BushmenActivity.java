@@ -41,7 +41,7 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
 
     TextView TxtPunkte;
 
-    private PlayersStorage playerStorage = PlayersStorageImpl.getInstance();
+    private PlayersStorage playersStorage = PlayersStorageImpl.getInstance();
     private BushmenService bushmenService;
 
     private CheatService cheatService;
@@ -53,7 +53,6 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
     Handler uiHandler;
     private Button btn_score;
 
-    private PlayersStorageImpl playersStorage = PlayersStorageImpl.getInstance();
 
     public BushmenActivity() {
 
@@ -244,7 +243,7 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
                 dialog.setCancelable(false);
                 dialog.setPositiveButton("OK", (dialog12, which) -> {
                     if (bushmenService.isLooser()) {
-                        playerStorage.addScoreToCurrentPlayer(bushmenService.getPunkteAnzahlBusfahrer());
+                        playersStorage.addScoreToCurrentPlayer(bushmenService.getPunkteAnzahlBusfahrer());
                     }
                     Intent intent = new Intent(BushmenActivity.this, GameOverviewActivity.class);
                     startActivity(intent);
