@@ -229,7 +229,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             }
         };
     }
-    public void registerCallback(Class dtoClass, Callback<BaseMessage> callback) {
+    public void registerCallback(Class<?> dtoClass, Callback<BaseMessage> callback) {
         this.callbackMap.put(dtoClass, callback);
     }
 
