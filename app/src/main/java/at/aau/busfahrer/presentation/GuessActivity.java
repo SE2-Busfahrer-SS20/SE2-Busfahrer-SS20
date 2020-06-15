@@ -135,6 +135,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         }
 
     }
+
     public void coughtTetxViewListener(){
         runOnUiThread(() -> {
             if (playersStorage.getTempID() == playersStorage.getCurrentTurn() &&
@@ -151,7 +152,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
 
     public void onClickScore(View v){
-
         ScoreFragment scoreFragment = new ScoreFragment();
         getSupportFragmentManager()
                 .beginTransaction()
@@ -204,14 +204,12 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 CardUtility.turnCard(tV_card3, cards[2]);
                 break;
             default:
-
         }
         onAnswer(scored);
     }
 
     //Second Button used in Guess round 1 to 3 as: red, lower, between
     public void onClickSecondOption(View view) {
-
         switch (playersStorage.getState()) {
             case LAP1A:
                 scored = gamePlayService.guessColor(cards[0], false);
@@ -226,7 +224,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 CardUtility.turnCard(tV_card3, cards[2]);
                 break;
             default:
-
         }
         onAnswer(scored);
     }
@@ -280,7 +277,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     //This methode changes visibility of UI elements when it is not this players turn
     private void onPauseMode() {
         //Execute on runOnUIThread to enable calling this funiction in other thread
-
         runOnUiThread(() -> {
             String currentPlayerName=playersStorage.getPlayerName(playersStorage.getCurrentTurn());
             tV_guessQuestion.setText(currentPlayerName+" is playing.");
@@ -306,11 +302,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             bt_FirstOption.setVisibility(View.VISIBLE);
             bt_SecondOption.setVisibility(View.VISIBLE);
             bt_cought.setVisibility(View.INVISIBLE);
-
-            tV_card1.setTextColor(Color.parseColor(WHITE));
-            tV_card2.setTextColor(Color.parseColor(WHITE));
-            tV_card3.setTextColor(Color.parseColor(WHITE));
-            tV_card4.setTextColor(Color.parseColor(WHITE));
 
             switch (playersStorage.getState()) {
                 case LAP1A:
