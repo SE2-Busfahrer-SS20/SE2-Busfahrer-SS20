@@ -65,7 +65,7 @@ public class LeaderboardServiceImpl implements LeaderboardService{
             thread=null;
         }
         catch (Exception e){
-
+        Log.error("Error in LeaderboardService!", e);
         }
     }
     @Override
