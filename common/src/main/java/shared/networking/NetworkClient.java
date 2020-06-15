@@ -19,7 +19,7 @@ public interface NetworkClient {
      * @param dtoClass
      * @param callback
      */
-    void registerCallback(Class dtoClass, Callback<BaseMessage> callback);
+    void registerCallback(Class<?> dtoClass, Callback<BaseMessage> callback);
 
     /**
      * Sends a message to the server.

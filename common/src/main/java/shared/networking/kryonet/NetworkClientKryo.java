@@ -182,24 +182,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     if(((ConfirmRegisterMessage)object).isMaster()){
                         callbackMap.get(ConfirmRegisterMessage.class).callback((BaseMessage) object);
                     }
-                }
-
-                if(object instanceof NewPlayerMessage){
-                    Log.debug("New Player in the Game");
-                    boolean alreadyExists=false;
-                    for(int i=0;i<playersStorage.getPlayerList().size();i++){
-                        if(playersStorage.getPlayerList().get(i).getName().equals(((NewPlayerMessage)object).getPlayer().getName())){
-                            alreadyExists=true;
-                        }
-                    }
-                    if(!alreadyExists){
-                        playersStorage.addPlayer(((NewPlayerMessage)object).getPlayer());
-                    }
-
-
-                }
-
-                if(object instanceof StartGameMessage){
+                } else if(object instanceof StartGameMessage){
                     Log.debug("Game can start now");
                     playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
 
@@ -229,7 +212,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             }
         };
     }
-    public void registerCallback(Class dtoClass, Callback<BaseMessage> callback) {
+    public void registerCallback(Class<?> dtoClass, Callback<BaseMessage> callback) {
         this.callbackMap.put(dtoClass, callback);
     }
 

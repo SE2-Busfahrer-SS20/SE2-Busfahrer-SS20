@@ -83,8 +83,8 @@ public class PlayerDTOImpl implements PlayerDTO {
 
         List<PlayerDTO> playerListDTO= new ArrayList<>();
 
-        for (int i = 0; i < playerList.size(); i++) {
-            playerListDTO.add(new PlayerDTOImpl(playerList.get(i).getName(), playerList.get(i).getScore(), playerList.get(i).isCheated()));
+        for (Player player : playerList) {
+            playerListDTO.add(new PlayerDTOImpl(player.getName(), player.getScore(), player.isCheated()));
         }
         return playerListDTO;
     }
