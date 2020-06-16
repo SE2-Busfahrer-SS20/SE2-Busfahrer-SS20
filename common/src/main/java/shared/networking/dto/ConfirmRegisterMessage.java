@@ -9,7 +9,7 @@ public class ConfirmRegisterMessage extends BaseMessage {
     private int ID;
     private Card[] cards;
 
-    ConfirmRegisterMessage() {
+    public ConfirmRegisterMessage() {
 
     }
 
@@ -47,7 +47,7 @@ public class ConfirmRegisterMessage extends BaseMessage {
         return ID;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setID(int id) {
+        this.ID = id;
     }
 }

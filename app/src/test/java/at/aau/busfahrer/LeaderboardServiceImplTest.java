@@ -54,7 +54,7 @@ public class LeaderboardServiceImplTest {
     @Test
     public void HostnameTest(){
         leaderboardService.setHostname(hostname);
-        Assert.assertTrue(leaderboardService.getHostname().equals(hostname));
+        Assert.assertEquals(leaderboardService.getHostname(),hostname);
     }
     @Test
     public void connectTest(){

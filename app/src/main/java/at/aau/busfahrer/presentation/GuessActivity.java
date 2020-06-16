@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -28,8 +27,6 @@ import shared.model.GameState;
 import shared.model.GuessRoundListener;
 import shared.model.impl.PlayersStorageImpl;
 import shared.networking.kryonet.NetworkClientKryo;
-
-// *TODO remove card click listener in guess xml, because on click app can crash
 
 
 public class GuessActivity extends AppCompatActivity implements GuessRoundListener, CoughtServiceListener {
@@ -63,7 +60,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     private CheatService cheatService;
     private CoughtService coughtService;
 
-    final String white ="#000000";
+    final static String WHITE ="#000000";
 
 
     @Override
@@ -134,6 +131,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         }
 
     }
+
     public void coughtTetxViewListener(){
         runOnUiThread(() -> {
             if (playersStorage.getTempID() == playersStorage.getCurrentTurn() &&
@@ -150,7 +148,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
 
 
     public void onClickScore(View v){
-
         ScoreFragment scoreFragment = new ScoreFragment();
         getSupportFragmentManager()
                 .beginTransaction()
@@ -203,14 +200,12 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 CardUtility.turnCard(tV_card3, cards[2]);
                 break;
             default:
-                System.out.println("Invalid input");
         }
         onAnswer(scored);
     }
 
     //Second Button used in Guess round 1 to 3 as: red, lower, between
     public void onClickSecondOption(View view) {
-
         switch (playersStorage.getState()) {
             case LAP1A:
                 scored = gamePlayService.guessColor(cards[0], false);
@@ -225,7 +220,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 CardUtility.turnCard(tV_card3, cards[2]);
                 break;
             default:
-                System.out.println("Invalid input");
         }
         onAnswer(scored);
     }
@@ -257,7 +251,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
         
         updateScoreButton(playersStorage.getScoreList().get(playersStorage.getTempID()));
 
-  
         if (playersStorage.getCurrentTurn() == 0) {
             //This means that every player has finished the turn of the current round and the next round can be started
             boolean end = nextGameState();
@@ -280,7 +273,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
     //This methode changes visibility of UI elements when it is not this players turn
     private void onPauseMode() {
         //Execute on runOnUIThread to enable calling this funiction in other thread
-
         runOnUiThread(() -> {
             String currentPlayerName=playersStorage.getPlayerName(playersStorage.getCurrentTurn());
             tV_guessQuestion.setText(currentPlayerName+" is playing.");
@@ -306,11 +298,6 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
             bt_FirstOption.setVisibility(View.VISIBLE);
             bt_SecondOption.setVisibility(View.VISIBLE);
             bt_cought.setVisibility(View.INVISIBLE);
-
-            tV_card1.setTextColor(Color.parseColor(white));
-            tV_card2.setTextColor(Color.parseColor(white));
-            tV_card3.setTextColor(Color.parseColor(white));
-            tV_card4.setTextColor(Color.parseColor(white));
 
             switch (playersStorage.getState()) {
                 case LAP1A:
@@ -342,7 +329,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                     bt_SecondOption.setVisibility(View.INVISIBLE);
                     break;
                 default:
-                    System.out.println("Invalid input");
+
             }
 
         });
@@ -379,7 +366,7 @@ public class GuessActivity extends AppCompatActivity implements GuessRoundListen
                 playersStorage.setState(GameState.LAP2);//Pyramid Round
                 return true;
             default:
-                //ERROR
+                Log.e("Error","Error in nextGameState()");
         }
         return false;
     }

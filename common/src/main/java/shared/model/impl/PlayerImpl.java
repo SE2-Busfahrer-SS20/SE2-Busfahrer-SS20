@@ -18,10 +18,10 @@ public class PlayerImpl implements Player {
 
 
     //Constructor for Server Side
-    public PlayerImpl(String name,String MACAdress, Card[] cards, Connection connection ) {
+    public PlayerImpl(String name,String macAdress, Card[] cards, Connection connection ) {
         tempID=-1;
         this.name = name;
-        this.MacAdress=MACAdress;
+        this.MacAdress=macAdress;
         this.cards=cards;
         this.connection = connection;
         this.score=0;

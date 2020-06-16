@@ -7,6 +7,7 @@ import java.util.List;
 import at.aau.busfahrer.presentation.utils.CardUtility;
 import at.aau.busfahrer.service.PLapClientService;
 import shared.model.Card;
+import shared.model.GameState;
 import shared.model.PlayersStorage;
 import shared.model.impl.PlayersStorageImpl;
 import shared.networking.Callback;
@@ -120,6 +121,7 @@ public class PLapClientServiceImpl implements PLapClientService {
             }
         });
         thread.start();
+        playersStorage.setState(GameState.LAP3);//Bushmen Round
     }
 
     @Override

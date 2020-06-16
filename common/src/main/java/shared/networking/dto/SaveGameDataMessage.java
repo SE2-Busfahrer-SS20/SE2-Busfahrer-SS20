@@ -2,8 +2,6 @@ package shared.networking.dto;
 
 import shared.model.PlayerDTO;
 
-import java.util.List;
-
 public class SaveGameDataMessage extends BaseMessage{
 
 

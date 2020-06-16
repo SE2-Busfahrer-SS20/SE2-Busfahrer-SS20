@@ -115,28 +115,6 @@ public class GameServiceTest {
         Assert.assertEquals(gameService, GameServiceImpl.getInstance());
     }
 
-    @Test
-    public void TestGuessRound_Lap1A(){
-        //To make this method testable, class Game needs to become a to singleton pattern
-        Game game = new GameImpl();
-        game.addPlayer("playerOne","macAdress",null);
-        game.addPlayer("playerTwo","macAdress",null);
-
-
-        //gameService.guessRound(GameState.LAP1A,0,true);
-
-        //Assert.assertEquals(game.getPlayerList().get(0).getScore(),2);
-
-
-
-        //gameService.guessRound(GameState.LAP1A,2,false);
-
-
-    }
-
-
-
-
     /**
      * Destroy Singleton instance to create clean instance.
      */

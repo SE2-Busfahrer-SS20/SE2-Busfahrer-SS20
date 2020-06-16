@@ -15,7 +15,7 @@ public class LeaderboardServiceImpl implements LeaderboardService{
     private NetworkClient client;
     private String hostname;
     private Callback<List<PlayerDTO>> playerCallback;
-
+    Thread thread;
     @Override
     public String getHostname() {
         return hostname;
@@ -39,7 +39,7 @@ public class LeaderboardServiceImpl implements LeaderboardService{
     @Override
     public void connect(){
         client = NetworkClientKryo.getInstance();
-        Thread thread = new Thread(() -> {
+        thread = new Thread(() -> {
             LeaderboardMessage lbm = new LeaderboardMessage();
             try {
                 client.connect(hostname);
@@ -60,6 +60,13 @@ public class LeaderboardServiceImpl implements LeaderboardService{
     @Override
     public void disconnect(){
         client.close();
+        try {
+            thread.join();
+            thread=null;
+        }
+        catch (Exception e){
+        Log.error("Error in LeaderboardService!", e);
+        }
     }
     @Override
     public void registerPlayerListCallback(Callback<List<PlayerDTO>> callback) {

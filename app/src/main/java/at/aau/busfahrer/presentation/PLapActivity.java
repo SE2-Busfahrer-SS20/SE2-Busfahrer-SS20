@@ -141,7 +141,6 @@ public class PLapActivity extends AppCompatActivity implements CoughtServiceList
     }
     public void onClickScore(View v){
 
-        System.out.println("TEST");
         ScoreFragment scoreFragment = new ScoreFragment();
         getSupportFragmentManager()
                 .beginTransaction()
@@ -218,12 +217,13 @@ public class PLapActivity extends AppCompatActivity implements CoughtServiceList
     private TextView getRandomCardFromPyramid() {
         int randomIndex = cheatService.randomNumber(pCardIds.length);
         TextView cheatedCard = cheatService.generateCard(findViewById(pCardIds[randomIndex]), this);
-
-        // if random card is already turned
-        if (cheatedCard.getText().equals("\uD83C\uDCA0")){
-            for (int pCardId : pCardIds) {
-                if (cheatedCard.getText().equals("\uD83C\uDCA0")) {
+        Card randomCard = CardUtility.getCardFromString(cheatedCard.getText().toString(), pLapClientService.getPCards());
+        // if random card is already turned and if card is not a number card between 0 - 10
+        if (cheatedCard.getText().equals("\uD83C\uDCA0") || !(randomCard.getRank() > 0 && randomCard.getRank() < 10)){
+                for (int pCardId : pCardIds) {
+                if (cheatedCard.getText().equals("\uD83C\uDCA0") || !(randomCard.getRank() > 0 && randomCard.getRank() < 10)) {
                     cheatedCard = cheatService.generateCard(findViewById(pCardId), this);
+                    randomCard = CardUtility.getCardFromString(cheatedCard.getText().toString(), pLapClientService.getPCards());
                 }
             }
         }

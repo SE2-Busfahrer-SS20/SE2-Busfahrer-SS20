@@ -39,7 +39,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     @Override
     public void close(){
-        //client.removeListener(listenLeaderboardmessage);
         client.close();
     }
 
@@ -52,6 +51,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client.addListener(createBasicListener());
         client.addListener(createBushmenListener());
         client.addListener(createGameListener());
+        client.addListener(createnewPlayerListener());
         client.addListener(createCheatListener());
         client.addListener(createLeaderboardListener());
         client.addListener(createStartPLapListener());
@@ -126,7 +126,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     playersStorage.setCheating(((CheatedMessage) object).getTempID());
                 }
                 if(object instanceof CoughtMessage){
-                    Log.debug("CoughtMessage received");
+                    Log.error("CoughtMessage received");
                     CoughtMessage coughtMessage = (CoughtMessage)object;
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).setScore(coughtMessage.getScoreCheater());
                     playersStorage.getPlayerList().get(coughtMessage.getIndexCought()).setScore(coughtMessage.getScoreCought());
@@ -135,9 +135,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     //Listener for the Cheater for the TextView in Plap
                     if(playersStorage.getTempID() == coughtMessage.getIndexCheater() && playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).isCheating() &&playersStorage.getState() == GameState.LAP2 ){
                         setTextViewVisiblePlap();
+                        Log.error("Listener Cheater received PLAP Caught.");
                     }
                     if(playersStorage.getTempID() == coughtMessage.getIndexCheater() && playersStorage.getPlayerList().get(coughtMessage.getIndexCheater()).isCheating() &&playersStorage.getState() == GameState.LAP3 ){
                         setTextViewVisibleBushmen();
+                        Log.error("Listener Cheater received Bushmen Caught.");
                     }
                 }
             }
@@ -149,10 +151,13 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             public void received(Connection connection, Object object) {
 
                 if (object instanceof BushmenMessage) {
-                    // BushmenMessage bushmenMessage = (BushmenMessage) object;
+
                     Log.info("Bushmen received");
-                    // playersStorage.setBushmenCards(bushmenMessage.getCards());
-                    callbackMap.get(BushmenMessage.class).callback((BaseMessage) object);
+
+                    if(callbackMap.get(BushmenMessage.class) != null)
+                        callbackMap.get(BushmenMessage.class).callback((BaseMessage) object);
+                    else
+                        Log.error("BushmenMessage.class callback is null!");
 
                 }
 
@@ -177,8 +182,20 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                     if(((ConfirmRegisterMessage)object).isMaster()){
                         callbackMap.get(ConfirmRegisterMessage.class).callback((BaseMessage) object);
                     }
+                } else if(object instanceof StartGameMessage){
+                    Log.debug("Game can start now");
+                    playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
+
+                    playersStorage.setState(GameState.READY);
                 }
 
+            }
+        };
+    }
+    private Listener createnewPlayerListener() {
+        return new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
                 if(object instanceof NewPlayerMessage){
                     Log.debug("New Player in the Game");
                     boolean alreadyExists=false;
@@ -191,21 +208,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                         playersStorage.addPlayer(((NewPlayerMessage)object).getPlayer());
                     }
 
-
                 }
-
-                if(object instanceof StartGameMessage){
-                    Log.debug("Game can start now");
-                    playersStorage.setPlayerFromDTO(((StartGameMessage)object).getPlayerList());
-
-                    playersStorage.setState(GameState.READY);
-                }
-
             }
         };
     }
-
-    public void registerCallback(Class dtoClass, Callback<BaseMessage> callback) {
+    public void registerCallback(Class<?> dtoClass, Callback<BaseMessage> callback) {
         this.callbackMap.put(dtoClass, callback);
     }
 
@@ -252,6 +259,12 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         new Thread(() -> coughtServiceListenerBushmen.coughtTextViewListenerBushmen()).start();
     }
 
+    /**
+     * Just for Testing purposes.
+     */
+    public Map<Class<?>, Callback<BaseMessage>> getCallbackMap() {
+        return callbackMap;
+    }
 
 
 }

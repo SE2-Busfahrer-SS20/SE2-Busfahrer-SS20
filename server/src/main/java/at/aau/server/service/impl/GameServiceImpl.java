@@ -109,10 +109,10 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame(String masterName, String MacAddress, Connection connection) {
+    public void createGame(String masterName, String macAddress, Connection connection) {
         createGame();
 
-        Player player = addPlayer(masterName, MacAddress, connection);
+        Player player = addPlayer(masterName, macAddress, connection);
 
         ConfirmRegisterMessage crm = new ConfirmRegisterMessage(player, true);
         connection.sendTCP(crm);//sendet ConfirmRegisterMessage an Client

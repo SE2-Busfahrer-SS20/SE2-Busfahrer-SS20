@@ -42,7 +42,7 @@ public interface GameService {
     void endGame();
     Game getGame();
     void createGame();
-    void createGame(String masterName, String MacAddress, Connection connection) throws PlayerLimitExceededException;
+    void createGame(String masterName, String macAddress, Connection connection) throws PlayerLimitExceededException;
     boolean gameExists();
     Card[] getPlayersCards(int player);
     //Guess-Rounds
