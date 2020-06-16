@@ -15,11 +15,11 @@ public interface PlayersStorage {
     ArrayList<String> getPlayerNamesList();
     List<Integer> getScoreList();
     void addScoreToCurrentPlayer(int score);
-
+    void setScoreCurrentPlayer(int score);
     void addPlayer(PlayerDTO player);
 
     void resetPlayers();
-
+    void resetPlayerList();
     boolean isMaster();
     void setMaster(boolean master);
 

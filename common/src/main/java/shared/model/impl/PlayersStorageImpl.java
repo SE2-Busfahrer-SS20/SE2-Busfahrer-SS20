@@ -17,10 +17,12 @@ public class PlayersStorageImpl implements PlayersStorage {
     private List<PlayerDTO> playerList;
 
 
-  public static void reset(){
-      PlayersStorageImpl.instance=null;
-  }
-
+    public static void reset(){
+        PlayersStorageImpl.instance=null;
+    }
+    public void resetPlayerList(){
+        this.playerList=new ArrayList<>();
+    }
     public void resetPlayers() {
         playerList= new ArrayList<>();
     }
@@ -177,7 +179,15 @@ public class PlayersStorageImpl implements PlayersStorage {
             currentPlayer.setScore(currentPlayer.getScore() + score);
         }
     }
+    //UpdateScoreBushmenActivity
+    @Override
+    public void setScoreCurrentPlayer(int score) {
+        PlayerDTO currentPlayer = playerList.get(tempID);
 
+        if (currentPlayer != null) {
+            currentPlayer.setScore(score);
+        }
+    }
     public void updateOnMessage(List<PlayerDTO> playerList, int currentTurn){
         this.playerList=playerList;
         this.currentTurn=currentTurn;

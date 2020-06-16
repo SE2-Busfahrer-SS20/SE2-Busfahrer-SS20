@@ -163,6 +163,9 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
                 if (object instanceof BushmenCardMessage) {
                     Log.info("BushmenCard received" + object);
+                    System.out.println("Score1: "+((BushmenCardMessage) object).getPlayerList().get(0).getScore());
+                    System.out.println("Score2: "+((BushmenCardMessage) object).getPlayerList().get(1).getScore());
+
                     callbackMap.get(BushmenCardMessage.class).callback((BushmenCardMessage) object);
 
                 }

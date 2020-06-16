@@ -6,6 +6,9 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import at.aau.busfahrer.service.BushmenService;
 import shared.model.Card;
+import shared.model.PlayerDTO;
+import shared.model.PlayersStorage;
+import shared.model.impl.PlayersStorageImpl;
 import shared.networking.NetworkClient;
 import shared.networking.dto.BushmenCardMessage;
 import shared.networking.dto.BushmenMessage;
@@ -20,11 +23,13 @@ public class BushmenServiceImpl implements BushmenService {
     private int kartenCounter;
     private int punkteAnzahlBusfahrer;
     private boolean isLooser; // is true in case that the player is a looser.
+    private PlayersStorage playersStorage = PlayersStorageImpl.getInstance();
 
     public BushmenServiceImpl(NetworkClient networkClient) {
         this.networkClient = networkClient;
         kartenCounter = 0;
-        punkteAnzahlBusfahrer = 10;
+        punkteAnzahlBusfahrer = playersStorage.getScoreList().get(playersStorage.getTempID())+ 10;
+
         isLooser = true;
     }
 
@@ -44,6 +49,7 @@ public class BushmenServiceImpl implements BushmenService {
             BushmenCardMessage bushmenCardMessage = (BushmenCardMessage) msg;
             Log.i("Bushmen", "BushmenCards recieved" + bushmenCardMessage.getCardId());
             callback.accept(bushmenCardMessage.getCardId(), bushmenCardMessage.getCard());
+            playersStorage.setPlayerList(bushmenCardMessage.getPlayerList());
         });
     }
 
@@ -64,7 +70,9 @@ public class BushmenServiceImpl implements BushmenService {
 
     @Override
     public void turnCard(int cardId) {
-        this.networkClient.sendMessage(new BushmenCardMessage(cardId, cards.get(cardId)));
+        List<PlayerDTO> playerList = playersStorage.getPlayerList();
+        playerList.get(playersStorage.getTempID()).setScore(punkteAnzahlBusfahrer);
+        this.networkClient.sendMessage(new BushmenCardMessage(cardId, cards.get(cardId), playerList));
     }
 
     @Override
@@ -80,6 +88,9 @@ public class BushmenServiceImpl implements BushmenService {
     @Override
     public void addPunkteAnzahlBusfahrer(int punkte) {
         punkteAnzahlBusfahrer += punkte;
+        if(isLooser()){
+            playersStorage.setScoreCurrentPlayer(punkteAnzahlBusfahrer);
+        }
     }
 
     @Override
@@ -90,7 +101,7 @@ public class BushmenServiceImpl implements BushmenService {
     @Override
     public void resetPunkteAnzahlBusfahrer() {
         // Kommt man zum Busfahrer startet man mit 10 Punkten
-        punkteAnzahlBusfahrer = 10;
+        //punkteAnzahlBusfahrer = 10;
     }
 
     @Override

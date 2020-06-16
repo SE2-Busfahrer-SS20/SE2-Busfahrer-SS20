@@ -92,7 +92,7 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
         // Neue Initialisieren
         resetGame();
         updateAnzeige();
-        updateScoreButton(playersStorage.getScoreList().get(playersStorage.getTempID()));
+
 
         // Für den Zuschauer wird angezeigt, dass er Zuschauer ist
         TextView textView = findViewById(R.id.headerBushmen);
@@ -107,11 +107,14 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
             textView.setText("Oh dear! You have to drive with the bus");
             handleCheat();
             btCought.setVisibility(View.INVISIBLE);
+            playersStorage.setScoreCurrentPlayer(bushmenService.getPunkteAnzahlBusfahrer());
         }else {
             textView.setText("Your can only watch!");
             cheatService.stopListen();
             btCought.setVisibility(View.VISIBLE);
         }
+
+        updateScoreButton(playersStorage.getScoreList().get(playersStorage.getTempID()));
     }
     private void updateScoreButton(int score){
         uiHandler.post(() -> btn_score.setText("Score: "+score));
@@ -129,6 +132,7 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
 
     private void updateAnzeige() {
         TxtPunkte.setText("" + bushmenService.getPunkteAnzahlBusfahrer());
+        updateScoreButton(playersStorage.getPlayerList().get(playersStorage.getTempID()).getScore());
     }
 
 
@@ -242,9 +246,10 @@ public class BushmenActivity extends AppCompatActivity implements CoughtServiceL
 
                 dialog.setCancelable(false);
                 dialog.setPositiveButton("OK", (dialog12, which) -> {
-                    if (bushmenService.isLooser()) {
+                    /*if (bushmenService.isLooser()) {
                         playersStorage.addScoreToCurrentPlayer(bushmenService.getPunkteAnzahlBusfahrer());
-                    }
+                    }*/
+
                     Intent intent = new Intent(BushmenActivity.this, GameOverviewActivity.class);
                     startActivity(intent);
                     CheatServiceImpl.reset();

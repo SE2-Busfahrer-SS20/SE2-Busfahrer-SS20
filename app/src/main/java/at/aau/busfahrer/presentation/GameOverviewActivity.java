@@ -35,6 +35,8 @@ public class GameOverviewActivity extends AppCompatActivity {
 
     // click listener BackToMainMenu button
     public void onClickBackToMainMenu(View v){
+        playersStorage.resetPlayerList();
+        gamePlayService.disconnect();
         Intent i = new Intent(GameOverviewActivity.this, MainMenuActivity.class);
         startActivity(i);
     }

@@ -10,7 +10,7 @@ public interface GamePlayService {
     //void createGame(int playercount); //Was only needed in version with create game / join game structure
 
     void playGame(String name, String macAddress);
-
+    void disconnect();
     void startGame();
 
     //GuessRound

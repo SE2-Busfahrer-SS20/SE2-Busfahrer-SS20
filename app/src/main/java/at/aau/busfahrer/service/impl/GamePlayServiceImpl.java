@@ -49,6 +49,10 @@ public class GamePlayServiceImpl implements GamePlayService {
         thread.start();
     }
     @Override
+    public void disconnect(){
+        client.close();
+    }
+    @Override
     public void registerWaitScreenCallback(Callback<Boolean> callback){
 
         client.registerCallback(ConfirmRegisterMessage.class,msg -> {
